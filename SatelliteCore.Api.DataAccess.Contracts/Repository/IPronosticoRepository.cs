@@ -8,8 +8,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
     public interface IPronosticoRepository
     {
-        public Task<List<PedidosItemTransitoModel>> ListarDetalleTransitoItem();
-        public Task<List<SeguimientoCandidatoModel>> ListaSeguimientoCandidatos(string periodo, bool menorPC, bool mayorPC, bool pedidosAtrasados);
+        public Task<SeguimientoProductoArimaModel> SeguimientoProductosArima(string periodo);
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);
         public Task<SeguimientoCandMPAGenericModel> ListaSeguimientoCandidatosMP(string regla);
     }

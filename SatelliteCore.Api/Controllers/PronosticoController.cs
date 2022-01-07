@@ -22,10 +22,11 @@ namespace SatelliteCore.Api.Controllers
             _pronosticoServices = pronosticoServices;
         }
 
-        [HttpGet("SegimientoCandidatos")]
-        public async Task<ActionResult> SeguimientoCandidato(string periodo, bool primerFiltro, bool segundoFiltro, bool tercerFiltro)
+        [HttpGet("ProductosArima")]
+        public async Task<ActionResult> SeguimientoProductosArima(string periodo)
         {
-            List<SeguimientoCandidatoModel> listaCandidatos = await _pronosticoServices.ListaSeguimientoCandidatos(periodo, primerFiltro, segundoFiltro, tercerFiltro);
+            List<ProductoArimaModel> listaCandidatos = await _pronosticoServices.SeguimientoProductosArima(periodo);
+
             return Ok(listaCandidatos);
         }
 

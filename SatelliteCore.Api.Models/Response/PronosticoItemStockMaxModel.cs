@@ -21,10 +21,10 @@ namespace SatelliteCore.Api.Models.Response
         public int StockAFabricar { get; set; }
         public DateTime FechaRegistro { get; set; }
         public int DiferenciaDias { get; set; }
-        public List<PedidosItemTransitoModel> PedidosTransito { get; set; }
+        public List<TransitoProductoArimaModel> PedidosTransito { get; set; }
         public PronosticoItemStockMaxModel()
         {
-            PedidosTransito = new List<PedidosItemTransitoModel>();
+            PedidosTransito = new List<TransitoProductoArimaModel>();
         }
     }
 }

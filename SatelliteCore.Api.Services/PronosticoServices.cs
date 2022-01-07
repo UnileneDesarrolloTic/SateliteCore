@@ -17,20 +17,21 @@ namespace SatelliteCore.Api.Services
             _pronosticoRepository = pronosticoRepository;
         }
 
-        public async Task<List<SeguimientoCandidatoModel>> ListaSeguimientoCandidatos(string periodo, bool menorPC, bool mayorPC, bool pedidosAtrasados)
+        public async Task<List<ProductoArimaModel>> SeguimientoProductosArima(string periodo)
         {
-            List<SeguimientoCandidatoModel> listaPronosticos = await _pronosticoRepository.ListaSeguimientoCandidatos(periodo, menorPC, mayorPC, pedidosAtrasados);
-            List<PedidosItemTransitoModel> pedidosItemTransitos = await _pronosticoRepository.ListarDetalleTransitoItem();
+            SeguimientoProductoArimaModel productosArima = await _pronosticoRepository.SeguimientoProductosArima(periodo);
+            List<TransitoProductoArimaModel> aux = null;            
 
-            foreach (SeguimientoCandidatoModel pronostico in listaPronosticos)
+            foreach (ProductoArimaModel pronostico in productosArima.Productos)
             {
-                List<PedidosItemTransitoModel> aux = pedidosItemTransitos.FindAll(x => x.Item == pronostico.Item);
+                aux = null;
+                aux = productosArima.DetalleTransito.FindAll(x => x.Item == pronostico.Item);
+
                 if (aux.Count > 0)
                     pronostico.PedidosTransito.AddRange(aux);
-
             }
 
-            return listaPronosticos;
+            return productosArima.Productos;
         }
 
         public async Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro)

@@ -7,6 +7,7 @@ using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -20,39 +21,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             _appConfig = appConfig;
         }
 
-        public async Task<List<PedidosItemTransitoModel>> ListarDetalleTransitoItem()
+        public async Task<SeguimientoProductoArimaModel> SeguimientoProductosArima(string periodo)
         {
-            List<PedidosItemTransitoModel> result = new List<PedidosItemTransitoModel>();
+            SeguimientoProductoArimaModel result = new SeguimientoProductoArimaModel();
 
-            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
             {
-                string sql = "DECLARE @FechaActual DATETIME = GETDATE(), @Periodo CHAR(6) = CONVERT(CHAR(6), GETDATE(), 112) "
-                    + "; WITH Temp_PronosticoPeriodo AS(SELECT '01000000' CompaniaSocio, ItemSpring FROM ML_Pronostico a WHERE Periodo = @Periodo AND LEFT(a.Regla, 2) IN ('PT','ExtPT')) "
-                    + ",temp_PedidosItemPronostico AS(SELECT a.ItemSpring Item, b.NumeroLote, c.PedidoNumero, c.FechaPreparacion, DATEDIFF(DAY, c.FechaPreparacion, @FechaActual) DifDias, b.CantidadPedida, b.AlmacenCodigo "
-                    + "FROM Temp_PronosticoPeriodo a INNER JOIN EP_PedidoDetalle b ON a.ItemSpring = b.Item AND a.CompaniaSocio = b.CompaniaSocio "
-                    + "INNER JOIN EP_Pedido c ON b.CompaniaSocio = c.CompaniaSocio AND b.PedidoNumero = c.PedidoNumero AND c.ESTADO<> 'AN' AND c.TipoVenta = 'STP' "
-                    + "),temp_ItemStockEnTransito AS(SELECT b.Item, b.Lote, SUM(b.Cantidad) CantidadIngresada FROM temp_PedidosItemPronostico a INNER JOIN WH_TransaccionDetalle b WITH(NOLOCK) "
-                    + "ON b.TipoDocumento = 'NI' AND a.Item = b.Item AND a.NumeroLote = b.Lote INNER JOIN WH_TransaccionHeader c WITH(NOLOCK) ON c.CompaniaSocio = '01000000' AND b.TipoDocumento = c.TipoDocumento "
-                    + "AND b.NumeroDocumento = c.NumeroDocumento AND c.TipoDocumento = 'NI' AND c.TransaccionCodigo = 'CCI' WHERE c.Estado <> 'AN' GROUP BY b.Item, b.Lote ) "
-                    + "SELECT a.PedidoNumero, ISNULL(a.NumeroLote, 'Sin lote') NumeroLote, a.Item, ISNULL(a.CantidadPedida, 0) CantidadPedida, ISNULL(b.CantidadIngresada, 0) CantidadIngresada, "
-                    + "(ISNULL(a.CantidadPedida, 0) - ISNULL(b.CantidadIngresada, 0)) CantidadPendiente, a.FechaPreparacion, a.DifDias "
-                    + "FROM temp_PedidosItemPronostico a LEFT JOIN temp_ItemStockEnTransito b ON a.Item = b.Item AND a.NumeroLote = b.Lote WHERE ISNULL(a.CantidadPedida, 0) - ISNULL(b.CantidadIngresada, 0) > 0";
-
-                result = (List<PedidosItemTransitoModel>)await connection.QueryAsync<PedidosItemTransitoModel>(sql);
-                connection.Dispose();
-            }
-
-            return result;
-        }
-
-        public async Task<List<SeguimientoCandidatoModel>> ListaSeguimientoCandidatos(string periodo, bool menorPC, bool mayorPC, bool pedidosAtrasados )
-        {
-            List<SeguimientoCandidatoModel> result =  new List<SeguimientoCandidatoModel>();
-
-            using (var satelliteContext = new SqlConnection(_appConfig.contextSpring))
-            {
-                result = (List<SeguimientoCandidatoModel>) await satelliteContext.QueryAsync<SeguimientoCandidatoModel>("usp_Pro_SeguimientoCandidatos", new { periodo, menorPC, mayorPC, pedidosAtrasados },  commandType: CommandType.StoredProcedure);
-                satelliteContext.Dispose();
+                using (var multi = await springContext.QueryMultipleAsync("usp_Satelite_SeguimientoProductosArima", new { periodo }, commandType: CommandType.StoredProcedure))
+                {
+                    result.Productos = multi.Read<ProductoArimaModel>().ToList();
+                    result.DetalleTransito = multi.Read<TransitoProductoArimaModel>().ToList();
+                }
             }
 
             return result;
@@ -64,7 +43,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var satelliteContext = new SqlConnection(_appConfig.contextSpring))
             {
-                result.SeguimientoCandidatosMPA =  await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
+                result.SeguimientoCandidatosMPA = await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
                 result.OrdenComprasPendientes = await satelliteContext.QueryAsync<DetalleSeguimientoCandMPAModel>("usp_pro_SeguimientoDetalleCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
 
                 satelliteContext.Dispose();
@@ -97,7 +76,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        
+
 
 
     }
