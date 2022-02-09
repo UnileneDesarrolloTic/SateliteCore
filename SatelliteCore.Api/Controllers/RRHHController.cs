@@ -1,23 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class RRHHController : ControllerBase
     {
         private readonly IAppConfig _appConfig;
 
-        public RRHHController( IAppConfig appConfig)
+        public RRHHController(IAppConfig appConfig)
         {
             _appConfig = appConfig;
         }
@@ -27,10 +27,10 @@ namespace SatelliteCore.Api.Controllers
         {
             try
             {
-                string Reporte = "ReporteDiarioAsistencia&rs:Command=Render";                
+                string Reporte = "ReporteDiarioAsistencia&rs:Command=Render";
                 string Formato = "&rs:Format=excel";
-                string Parametros = "&Fecha=" + datos.FechaReporte.ToString().Substring(0,10);
-                
+                string Parametros = "&Fecha=" + datos.FechaReporte.ToString().Substring(0, 10);
+
 
                 var theURL = _appConfig.ReportRRHH + Reporte + Parametros + Formato;
 

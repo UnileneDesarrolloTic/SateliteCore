@@ -14,12 +14,10 @@ namespace SatelliteCore.Api.Models.Response
         public int LimiteSuperior { get; set; }
         public int PuntoControl { get; set; }
         public int StockMax { get; set; }
-        public int StockActual { get; set; }
-        public int StockComprometido { get; set; }
         public int StockDisponible { get; set; }
         public int StockEnTransito { get; set; }
         public decimal Alerta { get; set; }
-        public int DiferenciaMax { get; set; }
+        public bool PedidoAtrasado{ get; set; }
         public List<TransitoProductoArimaModel> PedidosTransito { get; set; }
 
         public ProductoArimaModel()

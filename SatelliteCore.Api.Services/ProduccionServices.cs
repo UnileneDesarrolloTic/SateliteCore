@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Services
 {
-    public class PronosticoServices : IPronosticoServices
+    public class ProduccionServices : IProduccionServices
     {
-        private readonly IPronosticoRepository _pronosticoRepository;
+        private readonly IProduccionRepository _pronosticoRepository;
 
-        public PronosticoServices(IPronosticoRepository pronosticoRepository)
+        public ProduccionServices(IProduccionRepository pronosticoRepository)
         {
             _pronosticoRepository = pronosticoRepository;
         }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Config;
@@ -12,13 +7,19 @@ using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 
 
 namespace SatelliteCore.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ControlCalidadController : ControllerBase
     {
         private readonly IControlCalidadServices _controlCalidadServices;
@@ -32,7 +33,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListarCertificados")]
         public async Task<ActionResult> ListarCertificados(DatosListarCertificadoPaginado datos)
         {
-            try {
+            try
+            {
                 if (!ModelState.IsValid)
                 {
                     ResponseModel<string> responseError =
@@ -47,12 +49,12 @@ namespace SatelliteCore.Api.Controllers
                         = new PaginacionModel<CertificadoEsterilizacionEntity>(certificados.lista, datos.Pagina, datos.RegistrosPorPagina, certificados.totalRegistros);
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
                 return BadRequest(ex.Message);
             }
-           
+
         }
 
         [HttpPost("RegistrarCertificado")]
@@ -64,13 +66,13 @@ namespace SatelliteCore.Api.Controllers
 
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ResponseModel<string> response
                         = new ResponseModel<string>(true, "No se completó ", ex.Message);
                 return BadRequest(response);
             }
-            
+
 
         }
 
@@ -113,17 +115,16 @@ namespace SatelliteCore.Api.Controllers
 
                 Byte[] result = await webClient.GetByteArrayAsync(theURL);
                 string base64String = Convert.ToBase64String(result, 0, result.Length);
-                ResponseModel<string> response
-                        = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
+                ResponseModel<string> response = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ResponseModel<string> response
                         = new ResponseModel<string>(true, "El reporte no se generó", ex.Message);
                 return BadRequest(response);
             }
-            
+
         }
 
         [HttpPost("RegistrarLote")]

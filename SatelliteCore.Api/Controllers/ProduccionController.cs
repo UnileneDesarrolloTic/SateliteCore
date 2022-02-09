@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class PronosticoController : ControllerBase
+    public class ProduccionController : ControllerBase
     {
-        private readonly IPronosticoServices _pronosticoServices;
+        private readonly IProduccionServices _pronosticoServices;
 
-        public PronosticoController(IPronosticoServices pronosticoServices)
+        public ProduccionController(IProduccionServices pronosticoServices)
         {
             _pronosticoServices = pronosticoServices;
         }

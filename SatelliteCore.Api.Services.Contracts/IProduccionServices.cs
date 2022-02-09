@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Services.Contracts
 {
-    public interface IPronosticoServices
+    public interface IProduccionServices
     {
         public Task<List<ProductoArimaModel>> SeguimientoProductosArima(string periodo);
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);

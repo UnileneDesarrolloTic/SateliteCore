@@ -26,14 +26,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             UsuarioEntity usuario = new UsuarioEntity ();
 
+            string script = "SELECT IDUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, TipoDocumento, " +
+                    "NroDocumento, Sexo, Pais, Correo, Estado, FechaNacimiento, Celular FROM TBMUsuario " +
+                    "WHERE IDUsuario = @Id";
+
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                string script = "SELECT IDUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, TipoDocumento, " +
-                    "NroDocumento, Sexo, Pais, Correo, Estado, FechaNacimiento, Celular FROM TBMUsuario " +
-                    "WHERE IDUsuario = @IdUsuario AND ApellidoPaterno = @Apellido";
-                usuario = await connection.QueryFirstOrDefaultAsync<UsuarioEntity>(script, new { datos.IdUsuario, datos.Apellido });
-
-                connection.Dispose();
+                usuario = await connection.QueryFirstOrDefaultAsync<UsuarioEntity>(script, new { Id = datos.IdUsuario });
             }
 
             return usuario;
@@ -50,8 +49,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
                     " INNER JOIN PROD_UNILENE2.dbo.PersonaMast b ON a.CodUsuario = b.Persona " +
                     "WHERE a.Estado = 'A' AND b.Estado = 'A' AND Usuario = @Usuario AND Clave = @Clave";
                 usuario = await connection.QueryFirstOrDefaultAsync<AuthResponse>(sql, datosUsuario);
-
-                connection.Dispose();
             }
             return usuario;
 

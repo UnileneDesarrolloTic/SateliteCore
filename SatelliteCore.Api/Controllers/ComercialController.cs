@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Config;
@@ -13,23 +7,26 @@ using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
 {
-    //[Authorize]
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ComercialController : ControllerBase
     {
         private readonly IComercialServices _comercialServices;
         private readonly IAppConfig _appConfig;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ComercialController(IComercialServices comercialServices, IAppConfig appConfig, IWebHostEnvironment webHostEnvironment)
+        public ComercialController(IComercialServices comercialServices, IAppConfig appConfig)
         {
             _comercialServices = comercialServices;
             _appConfig = appConfig;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost("ListarCotizaciones")]
@@ -55,7 +52,6 @@ namespace SatelliteCore.Api.Controllers
         public async Task<ActionResult> ObtenerEstructuraFormato(DatosEstructuraFormatoCotizacion datos)
         {
             FormatoCotizacionEntity estructura = await _comercialServices.ObtenerEstructuraFormato(datos);
-
             return Ok(estructura);
         }
 
@@ -120,13 +116,13 @@ namespace SatelliteCore.Api.Controllers
                         = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ResponseModel<string> response
                         = new ResponseModel<string>(true, "El reporte no se generó", ex.Message);
                 return BadRequest(response);
             }
-            
+
         }
 
         [HttpPost("RegistrarRespuestas")]
@@ -155,6 +151,7 @@ namespace SatelliteCore.Api.Controllers
                 HttpClient webClient = new HttpClient(httpClientHandler);
 
                 Byte[] result = await webClient.GetByteArrayAsync(theURL);
+
                 string base64String = Convert.ToBase64String(result, 0, result.Length);
                 ResponseModel<string> response
                         = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
@@ -181,12 +178,12 @@ namespace SatelliteCore.Api.Controllers
 
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ResponseModel<string> response
                         = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
                 return BadRequest(response);
-            }           
+            }
         }
 
         [HttpPost("ListarClientes")]
@@ -195,7 +192,7 @@ namespace SatelliteCore.Api.Controllers
             try
             {
                 List<DetalleClientes> result = await _comercialServices.ListarClientes();
-                ResponseModel<List<DetalleClientes>> response 
+                ResponseModel<List<DetalleClientes>> response
                         = new ResponseModel<List<DetalleClientes>>(true, "La lista se cargó correctamente", result);
 
                 return Ok(response);

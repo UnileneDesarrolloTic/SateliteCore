@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
 {
-    public class PronosticoRepository : IPronosticoRepository
+    public class ProduccionRepository : IProduccionRepository
     {
         private readonly IAppConfig _appConfig;
 
-        public PronosticoRepository(IAppConfig appConfig)
+        public ProduccionRepository(IAppConfig appConfig)
         {
             _appConfig = appConfig;
         }
@@ -27,7 +27,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
             {
-                using (var multi = await springContext.QueryMultipleAsync("usp_Satelite_SeguimientoProductosArima", new { periodo }, commandType: CommandType.StoredProcedure))
+                using (SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_ProductoTerminadoArima", new { periodo }, commandType: CommandType.StoredProcedure))
                 {
                     result.Productos = multi.Read<ProductoArimaModel>().ToList();
                     result.DetalleTransito = multi.Read<TransitoProductoArimaModel>().ToList();
@@ -74,10 +74,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
-
-
-
-
 
     }
 }

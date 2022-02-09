@@ -20,7 +20,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IUsuarioRepository, UsuarioRepository>();
             service.AddScoped<IAccesosRepository, AccesosRepository>();
             service.AddScoped<ICommonRepository, CommonRepository>();
-            service.AddScoped<IPronosticoRepository, PronosticoRepository>();
+            service.AddScoped<IProduccionRepository, ProduccionRepository>();
             service.AddScoped<IControlCalidadRepository, ControlCalidadRepository>();
             service.AddScoped<IComercialRepository, ComercialRepository>();
 
@@ -32,7 +32,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IAuthServices, AuthServices>();
             service.AddScoped<IValidacionesServices, ValidacionesServices>();
             service.AddScoped<ICommonServices, CommonServices>();
-            service.AddScoped<IPronosticoServices, PronosticoServices>();
+            service.AddScoped<IProduccionServices, ProduccionServices>();
             service.AddScoped<IControlCalidadServices, ControlCalidadServices>();
             service.AddScoped<IComercialServices, ComercialServices>();
             return service;

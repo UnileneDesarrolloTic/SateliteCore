@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
-    public interface IPronosticoRepository
+    public interface IProduccionRepository
     {
         public Task<SeguimientoProductoArimaModel> SeguimientoProductosArima(string periodo);
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class CommonController : ControllerBase

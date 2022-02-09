@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
-using SatelliteCore.Api.Services.Contracts; 
+using SatelliteCore.Api.Services.Contracts;
+using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class UsuarioController : ControllerBase
@@ -23,9 +22,9 @@ namespace SatelliteCore.Api.Controllers
             _usuarioService = usuarioService;
         }
 
-       
+
         [HttpPost("ObtenerUsuario")]
-        public async Task<ActionResult> ObtenerUsuario( DatoUsuarioBasico user)
+        public async Task<ActionResult> ObtenerUsuario(DatoUsuarioBasico user)
         {
             if (!ModelState.IsValid)
             {
@@ -81,7 +80,7 @@ namespace SatelliteCore.Api.Controllers
 
             int result = await _usuarioService.CambiarClave(datos);
 
-            ResponseModel <int> response
+            ResponseModel<int> response
                     = new ResponseModel<int>(true, "La clave se ha cambiado correcamente", result);
 
             return Ok(response);
