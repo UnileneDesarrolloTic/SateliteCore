@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -54,5 +55,14 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaUsuario);
         }
 
+
+        [HttpGet("ListarFamiliaMP")]
+        public async Task<ActionResult> ListarFamiliaMP()
+        {
+            List<FamiliaMP> listarFamiliaMP = await _commonService.ListarFamiliaMP();
+            return Ok(listarFamiliaMP);
+        }
+
+        
     }
 }

@@ -43,5 +43,22 @@ namespace SatelliteCore.Api.Services
         {
             return await _pronosticoRepository.ListaSeguimientoCandidatosMP(regla);
         }
+
+        public async Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato)
+        {
+            SeguimientoComprasMPArima productosMPArima = await _pronosticoRepository.SeguimientoCompraMPArima(dato);
+            List<DCompraMPArimaModel> aux = null;
+
+            foreach (CompraMPArimaModel pronostico in productosMPArima.Productos)
+            {
+                aux = null;
+                aux = productosMPArima.DetalleTransito.FindAll(x => x.Item == pronostico.Item);
+
+                if (aux.Count > 0)
+                    pronostico.DetalleCompra.AddRange(aux);
+            }
+
+            return productosMPArima.Productos;
+        }
     }
 }

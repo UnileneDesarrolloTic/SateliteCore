@@ -75,5 +75,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<SeguimientoComprasMPArima> SeguimientoCompraMPArima(PronosticoCompraMP dato)
+        {
+            SeguimientoComprasMPArima result = new SeguimientoComprasMPArima();
+
+            using (SqlConnection DMVentasContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                using (SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Satelite_CompraMateriaPrimaArima", dato , commandType: CommandType.StoredProcedure))
+                {
+                    result.Productos = multi.Read<CompraMPArimaModel>().ToList();
+                    result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
+                }
+            }
+
+            return result;
+        }
     }
 }

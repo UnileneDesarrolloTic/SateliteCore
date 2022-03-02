@@ -1,4 +1,5 @@
 ﻿using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,5 +14,7 @@ namespace SatelliteCore.Api.Services.Contracts
 
         public Task<List<MenuxUsuarioModel>> ListarMenuxUsuario(int usuario);
         public Task<IEnumerable<RolEntity>> ListarRoles(string estado);
+
+        public Task<List<FamiliaMP>> ListarFamiliaMP();
     }
 }

@@ -19,6 +19,6 @@ namespace SatelliteCore.Api.Models.Config
         public string ReportComercialFormatoCotizacion => _configuration.GetSection("ReportServer:FormatosCotizacion").Value;
         public string ReportComercialProtocoloAnalisis => _configuration.GetSection("ReportServer:ProtocoloAnalisis").Value;
         public string ReportRRHH => _configuration.GetSection("ReportServer:RRHH").Value;
-
+        public string ContextDMVentas => _configuration.GetSection("ConnectionStrings:DMVentasContext").Value;
     }
 }

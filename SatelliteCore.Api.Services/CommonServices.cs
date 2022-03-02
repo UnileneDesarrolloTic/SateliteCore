@@ -1,5 +1,6 @@
 ﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -118,6 +119,11 @@ namespace SatelliteCore.Api.Services
         public async Task<IEnumerable<RolEntity>> ListarRoles(string estado)
         {
             return await _commonRepository.ListarRoles(estado);
+        }
+
+        public async Task<List<FamiliaMP>> ListarFamiliaMP()
+        {
+            return await _commonRepository.ListarFamiliaMP();
         }
     }
 }

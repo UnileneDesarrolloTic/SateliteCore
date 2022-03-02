@@ -13,5 +13,6 @@ namespace SatelliteCore.Api.Models.Config
         string ReportComercialFormatoCotizacion { get; }
         string ReportComercialProtocoloAnalisis { get; }
         string ReportRRHH { get; }
+        string ContextDMVentas { get; }
     }
 }

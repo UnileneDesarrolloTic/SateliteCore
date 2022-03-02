@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -77,5 +78,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return listaRol;
         }
+
+
+        //Listar Familias
+        public async Task<List<FamiliaMP>> ListarFamiliaMP()
+        {
+            List<FamiliaMP> lista = new List<FamiliaMP>();
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = (List<FamiliaMP>) await connection.QueryAsync<FamiliaMP>("SELECT Codigo, Valor1 FROM TBDCatalogo WHERE Estado='A' and CatalogoID=6");
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+     
+
     }
 }

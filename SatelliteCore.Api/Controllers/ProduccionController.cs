@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
@@ -47,5 +48,25 @@ namespace SatelliteCore.Api.Controllers
             SeguimientoCandMPAGenericModel listaCandidatos = await _pronosticoServices.ListaSeguimientoCandidatosMP(regla);
             return Ok(listaCandidatos);
         }
+
+
+        // vamos a agregar el controlador de compra materia prima
+
+        [HttpPost("CompraMateriaPrima")]
+        public async Task<ActionResult> PronosticoCompraMP(PronosticoCompraMP dato)
+        {
+            if (!ModelState.IsValid)
+            {
+                ResponseModel<string> responseError =
+                             new ResponseModel<string>(false, Constant.MODEL_VALIDATION_FAILED,"");
+
+                return BadRequest(responseError);
+            }
+
+            List<CompraMPArimaModel> listaProductos = await _pronosticoServices.SeguimientoCompraMPArima(dato);
+
+            return Ok(listaProductos);
+        }
+
     }
 }
