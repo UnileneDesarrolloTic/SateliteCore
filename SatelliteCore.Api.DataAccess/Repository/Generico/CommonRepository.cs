@@ -79,8 +79,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return listaRol;
         }
 
-
-        //Listar Familias
         public async Task<List<FamiliaMP>> ListarFamiliaMP()
         {
             List<FamiliaMP> lista = new List<FamiliaMP>();
