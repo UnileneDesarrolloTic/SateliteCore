@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using SatelliteCore.Api.Filters;
 using SatelliteCore.Api.Models.Config;
+using SystemsIntegration.Api.Middlewares;
 
 namespace SatelliteCore.Api
 {
@@ -82,6 +83,7 @@ namespace SatelliteCore.Api
 
             //app.UseCors("ApiCorsPolicy");
             app.UseRouting();
+            app.UseMiddleware<ExceptionManagerMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -1,6 +1,5 @@
 ﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
-using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Services
 {
-    public class CommonServices: ICommonServices
+    public class CommonServices : ICommonServices
     {
         private readonly ICommonRepository _commonRepository;
 
@@ -54,9 +53,9 @@ namespace SatelliteCore.Api.Services
                 }
                 else
                 {
-                    index =  menuResponse.FindIndex(x => x.Codigo == menu.MenuPadre && x.MenuPadre == 0);
+                    index = menuResponse.FindIndex(x => x.Codigo == menu.MenuPadre && x.MenuPadre == 0);
 
-                    if(index != -1)
+                    if (index != -1)
                     {
                         menuResponse.Add(new MenuxUsuarioModel()
                         {
@@ -93,7 +92,8 @@ namespace SatelliteCore.Api.Services
                             });
                         }
 
-                        else {
+                        else
+                        {
                             menuResponse.Add(new MenuxUsuarioModel()
                             {
                                 Codigo = menu.Codigo,

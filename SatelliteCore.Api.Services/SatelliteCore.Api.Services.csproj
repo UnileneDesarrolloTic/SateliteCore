@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SatelliteCore.Api.CrossCutting\SatelliteCore.Api.CrossCutting.csproj" />
     <ProjectReference Include="..\SatelliteCore.Api.DataAccess.Contracts\SatelliteCore.Api.DataAccess.Contracts.csproj" />
     <ProjectReference Include="..\SatelliteCore.Api.Models\SatelliteCore.Api.Models.csproj" />
+    <ProjectReference Include="..\SatelliteCore.Api.ReportServices.Contracts\SatelliteCore.Api.ReportServices.Contracts.csproj" />
     <ProjectReference Include="..\SatelliteCore.Api.Services.Contracts\SatelliteCore.Api.Services.Contracts.csproj" />
   </ItemGroup>
 

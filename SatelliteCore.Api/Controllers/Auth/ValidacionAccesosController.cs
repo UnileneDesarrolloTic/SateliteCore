@@ -33,13 +33,13 @@ namespace SatelliteCore.Api.Controllers.Auth
             {
                 var listaErrores = ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage).ToList();
                 ResponseModel<IEnumerable<string>> responseError =
-                        new ResponseModel<IEnumerable<string>>(false, Constant.MODEL_VALIDATION_FAILED, listaErrores);
+                        new ResponseModel<IEnumerable<string>>(false, Constante.MODEL_VALIDATION_FAILED, listaErrores);
                 return BadRequest(responseError);
             }
 
             (int codigo, string mensaje) result = await _validacionesServices.ValidarAccesoRuta(model);
 
-            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constant.MESSAGE_SUCCESS, new{ result.codigo, result.mensaje });
+            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new{ result.codigo, result.mensaje });
             return Ok(responseSuccesss);
         }
 

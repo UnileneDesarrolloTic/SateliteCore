@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="5.8.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SatelliteCore.Api.CrossCutting\SatelliteCore.Api.CrossCutting.csproj" />
+    <ProjectReference Include="..\SatelliteCore.Api.Models\SatelliteCore.Api.Models.csproj" />
+  </ItemGroup>
+
+</Project>

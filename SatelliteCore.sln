@@ -21,13 +21,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteCore.Api.Models", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.4 Data-Access", "1.4 Data-Access", "{0ADD95A0-CF85-4380-BAE2-44645E2D1940}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5 Cross-Cutting", "1.5 Cross-Cutting", "{D12D2743-33B6-49BC-955E-83913F35C718}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.6 Cross-Cutting", "1.6 Cross-Cutting", "{D12D2743-33B6-49BC-955E-83913F35C718}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteCore.Api.CrossCutting", "SatelliteCore.Api.CrossCutting\SatelliteCore.Api.CrossCutting.csproj", "{9404FD18-8EB9-44A9-8460-7CF416C0CDC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteCore.Api.DataAccess.Contracts", "SatelliteCore.Api.DataAccess.Contracts\SatelliteCore.Api.DataAccess.Contracts.csproj", "{5988934A-58B8-4C27-93A8-6A96418AAF76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteCore.Api.DataAccess", "SatelliteCore.Api.DataAccess\SatelliteCore.Api.DataAccess.csproj", "{FC735D05-1CE6-43AE-BC32-F842DA42DA97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.5 Report", "1.5 Report", "{E1E13ACC-B408-4B06-B68F-21A1C775D743}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatelliteCore.Api.ReportServices", "SatelliteCore.Api.ReportServices\SatelliteCore.Api.ReportServices.csproj", "{4C90DC50-D24F-437D-8C98-99422880CD89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatelliteCore.Api.ReportServices.Contracts", "SatelliteCore.Api.ReportServices.Contracts\SatelliteCore.Api.ReportServices.Contracts.csproj", "{17057EE1-1F81-40A2-9DC6-D6F71B8988C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +69,14 @@ Global
 		{FC735D05-1CE6-43AE-BC32-F842DA42DA97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC735D05-1CE6-43AE-BC32-F842DA42DA97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC735D05-1CE6-43AE-BC32-F842DA42DA97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C90DC50-D24F-437D-8C98-99422880CD89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C90DC50-D24F-437D-8C98-99422880CD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C90DC50-D24F-437D-8C98-99422880CD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C90DC50-D24F-437D-8C98-99422880CD89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17057EE1-1F81-40A2-9DC6-D6F71B8988C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17057EE1-1F81-40A2-9DC6-D6F71B8988C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17057EE1-1F81-40A2-9DC6-D6F71B8988C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17057EE1-1F81-40A2-9DC6-D6F71B8988C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +94,9 @@ Global
 		{9404FD18-8EB9-44A9-8460-7CF416C0CDC0} = {D12D2743-33B6-49BC-955E-83913F35C718}
 		{5988934A-58B8-4C27-93A8-6A96418AAF76} = {0ADD95A0-CF85-4380-BAE2-44645E2D1940}
 		{FC735D05-1CE6-43AE-BC32-F842DA42DA97} = {0ADD95A0-CF85-4380-BAE2-44645E2D1940}
+		{E1E13ACC-B408-4B06-B68F-21A1C775D743} = {A7578F13-2D7E-4A17-AD91-F0E6A67F49B4}
+		{4C90DC50-D24F-437D-8C98-99422880CD89} = {E1E13ACC-B408-4B06-B68F-21A1C775D743}
+		{17057EE1-1F81-40A2-9DC6-D6F71B8988C4} = {E1E13ACC-B408-4B06-B68F-21A1C775D743}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8A5A7DD-9314-41EA-95E4-F24952A40215}

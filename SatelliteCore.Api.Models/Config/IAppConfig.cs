@@ -14,5 +14,6 @@ namespace SatelliteCore.Api.Models.Config
         string ReportComercialProtocoloAnalisis { get; }
         string ReportRRHH { get; }
         string ContextDMVentas { get; }
+        string ContextMongoDB { get; }
     }
 }

@@ -30,7 +30,7 @@ namespace SatelliteCore.Api.Controllers
             {
                 //IEnumerable<string> errorList = ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage).ToList();
                 ResponseModel<string> responseError =
-                        new ResponseModel<string>(false, Constant.MODEL_VALIDATION_FAILED, "Los datos enviados no son válidos");
+                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "Los datos enviados no son válidos");
 
                 return BadRequest(responseError);
             }
@@ -44,7 +44,7 @@ namespace SatelliteCore.Api.Controllers
             }
 
             ResponseModel<UsuarioEntity> responseSuccesss =
-                new ResponseModel<UsuarioEntity>(true, Constant.MESSAGE_SUCCESS, usuario);
+                new ResponseModel<UsuarioEntity>(true, Constante.MESSAGE_SUCCESS, usuario);
 
             return Ok(responseSuccesss);
         }
@@ -56,7 +56,7 @@ namespace SatelliteCore.Api.Controllers
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError =
-                        new ResponseModel<string>(false, Constant.MODEL_VALIDATION_FAILED, "");
+                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
 
                 return BadRequest(responseError);
             }
@@ -73,7 +73,7 @@ namespace SatelliteCore.Api.Controllers
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError =
-                        new ResponseModel<string>(false, Constant.MODEL_VALIDATION_FAILED, "");
+                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
 
                 return BadRequest(responseError);
             }

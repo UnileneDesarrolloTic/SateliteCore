@@ -1,5 +1,4 @@
-﻿using SatelliteCore.Api.CrossCutting.Helpers;
-using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;

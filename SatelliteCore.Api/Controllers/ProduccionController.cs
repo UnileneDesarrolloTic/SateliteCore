@@ -58,7 +58,7 @@ namespace SatelliteCore.Api.Controllers
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError =
-                             new ResponseModel<string>(false, Constant.MODEL_VALIDATION_FAILED,"");
+                             new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED,"");
 
                 return BadRequest(responseError);
             }
