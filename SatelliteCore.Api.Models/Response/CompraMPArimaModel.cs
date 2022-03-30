@@ -24,15 +24,18 @@ namespace SatelliteCore.Api.Models.Response
         public decimal PendienteOC { get; set; }
         public decimal StockDisponible { get; set; }
         public decimal Alerta { get; set; }
-
-
+        public decimal Duracion { get; set; }
         public List<DCompraMPArimaModel> DetalleCompra { get; set; }
-
+            
+        public List<CompraMPArimaDetalleControlCalidad> DetalleCalidad { get; set; }
 
         public CompraMPArimaModel()
         {
             DetalleCompra = new List<DCompraMPArimaModel>();
+            DetalleCalidad = new List<CompraMPArimaDetalleControlCalidad>();
         }
+
+     
 
 
     }

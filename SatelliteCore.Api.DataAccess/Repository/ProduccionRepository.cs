@@ -85,7 +85,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 {
                     result.Productos = multi.Read<CompraMPArimaModel>().ToList();
                     result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
+                    result.DetalleCalidad = multi.Read<CompraMPArimaDetalleControlCalidad>().ToList();
+
                 }
+
             }
 
             return result;

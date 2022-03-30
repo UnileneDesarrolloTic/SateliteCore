@@ -46,16 +46,26 @@ namespace SatelliteCore.Api.Services
 
         public async Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato)
         {
+
+
+
             SeguimientoComprasMPArima productosMPArima = await _pronosticoRepository.SeguimientoCompraMPArima(dato);
             List<DCompraMPArimaModel> aux = null;
+            List<CompraMPArimaDetalleControlCalidad> auxcalidad = null;
+
 
             foreach (CompraMPArimaModel pronostico in productosMPArima.Productos)
             {
                 aux = null;
+                auxcalidad = null;
                 aux = productosMPArima.DetalleTransito.FindAll(x => x.Item == pronostico.Item);
+                auxcalidad = productosMPArima.DetalleCalidad.FindAll(x => x.Item == pronostico.Item);
 
                 if (aux.Count > 0)
                     pronostico.DetalleCompra.AddRange(aux);
+
+                if (auxcalidad.Count > 0)
+                    pronostico.DetalleCalidad.AddRange(auxcalidad);
             }
 
             return productosMPArima.Productos;
