@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace SatelliteCore.Api.Models.Report.Cotizacion
 {
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
-    public class Coti_Formato3_Model : CotizacionAbstract
+    public class Formato3_Model : CotizacionAbstract
     {
         // DATOS DEL PROVEEDOR (UNILENE)
         public string Prov_RazonSocial { get; set; }
@@ -38,12 +38,12 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
 
         public decimal Total { get; set; }
 
-        public List<Coti_Formato3_Detalle> Detalle { get; set; }
+        public List<Formato3_Detalle> Detalle { get; set; }
 
     }
 
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
-    public class Coti_Formato3_Detalle
+    public class Formato3_Detalle
     {
         public int NroItem { get; set; }
         public string CodigoSAP { get; set; }

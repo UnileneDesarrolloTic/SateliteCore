@@ -76,9 +76,9 @@ namespace SatelliteCore.Api.Controllers
 
             int usuarioSesion = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-            await _cotizacionServices.Guardar(reporte, usuarioSesion);
+            ResponseModel<string> result = await _cotizacionServices.Guardar(reporte, usuarioSesion);
 
-            return Ok(reporte);
+            return Ok(result);
         }
 
         [HttpGet("ObtenerReporte")]
@@ -104,9 +104,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("FormatosPorCliente")]
-        public async Task<IActionResult> FormatosPorCliente()
+        public async Task<IActionResult> FormatosPorCliente(int idCliente)
         {
-            IEnumerable<FormatosPorClienteModel> listaFormatos = await _cotizacionServices.FormatosPorCliente();
+            IEnumerable<FormatosPorClienteModel> listaFormatos = await _cotizacionServices.FormatosPorCliente(idCliente);
 
             return Ok(listaFormatos);
         }

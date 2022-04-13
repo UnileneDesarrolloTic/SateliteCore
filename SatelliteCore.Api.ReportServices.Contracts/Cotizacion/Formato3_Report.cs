@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato3_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato3_Model cotizacion)
+        public static string Exportar(Image logoUnilene, Formato3_Model cotizacion)
         {
             byte[] file;
 
@@ -19,7 +19,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
             using (var excelPackage = new ExcelPackage())
             {
-                ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("Cotización Almenara");
+                ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("EsSalud Almenara");
 
                 ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("Unilene", logoUnilene);
                 imagenUnilene.SetPosition(1, 5, 0, 9);
@@ -421,7 +421,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 int index = 20;
 
-                foreach (Coti_Formato3_Detalle item in cotizacion.Detalle)
+                foreach (Formato3_Detalle item in cotizacion.Detalle)
                 {
                     workSheet.Cells["A" + index].Value = index - 19;
                     workSheet.Cells["A" + index].Style.Font.Size = 16;

@@ -106,17 +106,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return response;
         }
 
-        public async Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente()
+        public async Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente(int idCliente)
         {
             IEnumerable<FormatosPorClienteModel> listaFormato = new List<FormatosPorClienteModel>();
 
-            string scriptSql = "SELECT a.IdFormato, b.Titulo Formato, a.CodCliente, RTRIM(c.NombreCompleto) Cliente " +
+            string scriptSql = "SELECT a.IdFormato, b.Titulo Formato " +
                 "FROM TBDFormatoPorClienteCotizacion a INNER JOIN TBMFormatoCotizacion b ON a.IdFormato = b.IDFormato " +
-                "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c ON a.CodCliente = c.Persona WHERE c.Estado = 'A'";
+                "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c ON a.CodCliente = c.Persona " +
+                "WHERE c.Estado = 'A' AND a.CodCliente = @idCliente";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                listaFormato = await context.QueryAsync<FormatosPorClienteModel>(scriptSql);
+                listaFormato = await context.QueryAsync<FormatosPorClienteModel>(scriptSql, new { idCliente });
             }
 
             return listaFormato;

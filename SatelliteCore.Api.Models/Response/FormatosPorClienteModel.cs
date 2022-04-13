@@ -4,7 +4,5 @@
     {
         public int IdFormato { get; set; }
         public string Formato { get; set; }
-        public int CodCliente { get; set; }
-        public string Cliente { get; set; }
     }
 }

@@ -44,12 +44,14 @@ namespace SatelliteCore.Api.Services
             return datos;
         }
 
-        public async Task Guardar(ObtenerFormatoCotizacion cotizacion, int usuarioSesion)
+        public async Task<ResponseModel<string>> Guardar(ObtenerFormatoCotizacion cotizacion, int usuarioSesion)
         {
             BsonDocument documentoBson = BsonDocument.Parse(cotizacion.Cotizacion.ToString());
             string idBson = await _cotizacionRepository.Registrar(documentoBson);
 
             await _cotizacionRepository.Guardar(idBson, cotizacion.NroCotizacion, cotizacion.IdFormato, usuarioSesion);
+
+            return new ResponseModel<string>(true, "Se ha guardado la cotización", idBson);
         }
 
         public async Task<ResponseModel<string>> ObtenerReporte(string codigoReporte)
@@ -83,9 +85,9 @@ namespace SatelliteCore.Api.Services
             return cotizacionReporte;
         }
 
-        public async Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente()
+        public async Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente(int idCliente)
         {
-            IEnumerable<FormatosPorClienteModel> listaDeFormatos = await _cotizacionRepository.FormatosPorCliente();
+            IEnumerable<FormatosPorClienteModel> listaDeFormatos = await _cotizacionRepository.FormatosPorCliente(idCliente);
             return listaDeFormatos;
         }
 

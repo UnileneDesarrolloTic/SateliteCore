@@ -15,7 +15,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(object cabecera, object detalle)> FormatoDatos(int idFormato, string cotizacion);
         public Task<string> Registrar(BsonDocument cotizacion);
         public Task Guardar(string id, string cotizacion, int idFormato, int usuarioSesion);
-        public Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente();
+        public Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente(int idCliente);
         public Task<IEnumerable<ReportesGeneradosPorCotizacionModel>> ReportesPorCotizacion(string cotizacion);
         public Task<BsonDocument> ObtenerDatosReporte(string idObject);
         public Task<CotizacionRegistroEntity> ObtenerDatosRegistro(string codReporte);

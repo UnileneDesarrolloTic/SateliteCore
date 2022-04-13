@@ -4,9 +4,8 @@ using System.Collections.Generic;
 namespace SatelliteCore.Api.Models.Report.Cotizacion
 {
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
-    public class Coti_Formato5_Model : CotizacionAbstract
+    public class Formato5_Model : CotizacionAbstract
     {
-
         public string NroCotizacion { get; set; }
         public string Prov_RazonSocial { get; set; }
         public string Prov_Direccion { get; set; }
@@ -23,11 +22,11 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
         public string Ctac_Email1 { get; set; }
         public string Ctac_Email2 { get; set; }
         public decimal Foot_Total { get; set; }
-        public List<Coti_Formato5_Detalle> Detalle { get; set; }
+        public List<Formato5_Detalle> Detalle { get; set; }
     }
 
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
-    public class Coti_Formato5_Detalle
+    public class Formato5_Detalle
     {
         public int NroItem { get; set; }
         public string CodigoSap { get; set; }
