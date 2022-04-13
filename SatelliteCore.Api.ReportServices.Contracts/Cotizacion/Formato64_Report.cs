@@ -303,7 +303,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     workSheet.Cells["N" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells["N" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     workSheet.Cells["N" + index].Style.WrapText = true;
-                    workSheet.Cells["M" + index].Style.Numberformat.Format = "#,##0.00";
+                    workSheet.Cells["N" + index].Style.Numberformat.Format = "#,##0.00";
                     index++;
                 }
                 
@@ -325,6 +325,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["N" + index].Style.WrapText = true;
                 workSheet.Cells["N" + index].Merge = true;
                 workSheet.Cells["N" + index].Style.Font.Bold = true;
+                workSheet.Cells["N" + index].Style.Numberformat.Format = "#,##0.00";
 
                 index++;
                 workSheet.Row(index).Height = 17.25;

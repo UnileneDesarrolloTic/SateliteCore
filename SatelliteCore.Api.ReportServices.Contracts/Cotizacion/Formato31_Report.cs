@@ -458,7 +458,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     workSheet.Cells["I" + index].Style.WrapText = true;
 
                     workSheet.Cells["J" + index].Value = item.MarcaLaboratorio;
-                    workSheet.Cells["J" + index].Style.Font.Size = 9;
+                    workSheet.Cells["J" + index].Style.Font.Size = 7;
                     workSheet.Cells["J" + index].Style.Font.Name = "Calibri";
                     workSheet.Cells["J" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["J" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -474,7 +474,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     workSheet.Cells["K" + index].Style.WrapText = true;
 
                     workSheet.Cells["L" + index].Value = item.ForPresentProducto;
-                    workSheet.Cells["L" + index].Style.Font.Size = 9;
+                    workSheet.Cells["L" + index].Style.Font.Size = 7;
                     workSheet.Cells["L" + index].Style.Font.Name = "Calibri";
                     workSheet.Cells["L" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["L" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

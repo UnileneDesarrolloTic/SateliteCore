@@ -449,7 +449,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
 
                     workSheet.Cells["G" + index].Value = item.Presentacion;
-                    workSheet.Cells["G" + index].Style.Font.Size = 8;
+                    workSheet.Cells["G" + index].Style.Font.Size = 7;
                     workSheet.Cells["G" + index].Style.Font.Name = "Arial";
                     workSheet.Cells["G" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["G" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

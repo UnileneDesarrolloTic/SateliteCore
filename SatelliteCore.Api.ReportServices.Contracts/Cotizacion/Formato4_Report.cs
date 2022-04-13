@@ -294,6 +294,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                         workSheet.Cells["C" + index].Value = item.Denominacion;
                         workSheet.Row(index).Height = 70.00;
                         workSheet.Cells["C" + index].Style.Font.Size = 9;
+                        workSheet.Cells["C" + index].Style.WrapText = true;
                         workSheet.Cells["C" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["C" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["C" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -325,6 +326,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                         workSheet.Cells["G" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["G" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["G" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        workSheet.Cells["G" + index].Style.Numberformat.Format = "#,##0";
 
                         workSheet.Cells["H" + index].Value = item.PreUnitarioIgv;
                         workSheet.Row(index).Height = 70.00;
@@ -332,9 +334,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                         workSheet.Cells["H" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["H" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["H" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        workSheet.Cells["H" + index].Style.Numberformat.Format = "#,##0.00";
 
                         workSheet.Cells["I" + index].Value = item.PreTotaligv;
                         workSheet.Row(index).Height = 70.00;
+                        workSheet.Cells["I" + index].Style.Numberformat.Format = "#,##0.00";
                         workSheet.Cells["I" + index].Style.Font.Size = 9;
                         workSheet.Cells["I" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["I" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -372,6 +376,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                         workSheet.Cells["N" + index].Value = item.MarcapaisProcedencia;
                         workSheet.Row(index).Height = 70.00;
                         workSheet.Cells["N" + index].Style.Font.Size = 9;
+                        workSheet.Cells["N" + index].Style.WrapText = true;
                         workSheet.Cells["N" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["N" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["N" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -382,19 +387,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                         workSheet.Cells["O" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["O" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["O" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        workSheet.Cells["O" + index].Style.WrapText = true;
 
                         workSheet.Cells["P" + index].Value = item.PlazaEntrega;
                         workSheet.Row(index).Height = 70.00;
                         workSheet.Cells["P" + index].Style.Font.Size = 9;
+                        workSheet.Cells["P" + index].Style.WrapText = true;
                         workSheet.Cells["P" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         workSheet.Cells["P" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells["P" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
 
+                        index++;
                 }
                 
 
-                    index++;
+                    
                     workSheet.Cells["B" + index + ":J" + index].Merge = true;
                     workSheet.Cells["B" + index].Value = "(*) Los datos solicitados deberan ser llenados en su totalidad (Numero de RUC, numero de Reg. Sanitario, vigencia, marcas, procedencia, plazos de entrega y demas).";
                     workSheet.Cells["B" + index].Style.Font.Size = 11;

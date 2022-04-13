@@ -21,7 +21,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("Cotización Almenara");
 
                 ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("Unilene", logoUnilene);
-                imagenUnilene.SetPosition(1, 0, 3, 9);
+                imagenUnilene.SetPosition(2, 0, 0, 0);
                 imagenUnilene.SetSize(197, 99);
 
                 workSheet.PrinterSettings.PaperSize = ePaperSize.A4;
@@ -384,6 +384,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 foreach (Coti_Formato62_Detalle item in cotizacion.Detalle)
                 {
 
+                   
+                    workSheet.Row(index).Height = 29.25;
                     workSheet.Cells["A" + index].Value = index - 18;
                     workSheet.Cells["A" + index].Style.Font.Size = 14;
                     workSheet.Cells["A" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -427,10 +429,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     workSheet.Cells["J" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                     workSheet.Cells["K" + index].Value = item.Marca;
-                    workSheet.Cells["K" + index].Style.Font.Size = 14;
+                    workSheet.Cells["K" + index].Style.Font.Size = 11;
                     workSheet.Cells["K" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["K" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells["K" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    workSheet.Cells["K" + index].Style.WrapText = true;
 
                     workSheet.Cells["L" + index + ":M" + index].Merge = true;
                     workSheet.Cells["L" + index].Value = item.Procedencia;
@@ -441,10 +444,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                     
                     workSheet.Cells["N" + index].Value = item.Presentacion;
-                    workSheet.Cells["N" + index].Style.Font.Size = 14;
+                    workSheet.Cells["N" + index].Style.Font.Size = 11;
                     workSheet.Cells["N" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["N" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells["N" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    workSheet.Cells["N" + index].Style.WrapText = true;
 
 
                     workSheet.Cells["O" + index].Value = item.Voferta;
@@ -472,10 +476,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     workSheet.Cells["R" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                     workSheet.Cells["S" + index].Value = item.PlazoEntrega;
-                    workSheet.Cells["S" + index].Style.Font.Size = 14;
+                    workSheet.Cells["S" + index].Style.Font.Size = 11;
                     workSheet.Cells["S" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells["S" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells["S" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    workSheet.Cells["S" + index].Style.WrapText = true;
 
                     workSheet.Cells["T" + index + ":U" + index].Merge = true;
                     workSheet.Cells["T" + index].Value = item.PreUnitario;
@@ -767,6 +772,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             workSheet.Cells["A8:B8"].Merge = true;
             workSheet.Cells["C8:I8"].Merge = true;
             workSheet.Cells["K8:L8"].Merge = true;
+            workSheet.Cells["O8:Q8"].Merge = true;
 
             workSheet.Cells["A9:B9"].Merge = true;
             workSheet.Cells["C9:I9"].Merge = true;

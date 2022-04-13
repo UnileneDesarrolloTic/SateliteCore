@@ -25,7 +25,7 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
     public class Coti_Formato31_Detalle
     {
-        public decimal NrItem { get; set; }
+        public decimal NroItem { get; set; }
         public string SoliPediDelegado { get; set; }
         public string Posicion { get; set; }
         public string CodigoSAP { get; set; }
