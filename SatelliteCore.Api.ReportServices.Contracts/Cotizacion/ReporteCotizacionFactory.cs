@@ -108,6 +108,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     reporte = Formato31_Report.Exportar(logoUnilene, formato31);
                     return reporte;
 
+                case Constante.FORMATO_66_ESSALUD_CUSCO_F2:
+                    Formato66_Model formato66 = BsonSerializer.Deserialize<Formato66_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato66_Report.Exportar(logoUnilene, formato66);
+                    return reporte;
+
                 default:
                     throw new EntryPointNotFoundException();
             }
@@ -190,6 +195,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 case Constante.FORMATO31_ESSALUD_TUMBES:
                     Coti_Formato31_Model formato31 = BsonSerializer.Deserialize<Coti_Formato31_Model>(cotizacion.AsBsonDocument);
                     return formato31;
+
+
+                case Constante.FORMATO_66_ESSALUD_CUSCO_F2:
+                    Formato66_Model formato66 = BsonSerializer.Deserialize<Formato66_Model>(cotizacion.AsBsonDocument);
+                    return formato66;
 
                 default:
                     throw new EntryPointNotFoundException();
