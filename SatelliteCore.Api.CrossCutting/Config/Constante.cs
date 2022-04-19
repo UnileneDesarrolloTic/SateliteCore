@@ -24,5 +24,6 @@
         public const int FORMATO_17_ESSALUD_ICA_F1 = 17;
         public const int FORMATO_18_ESSALUD_JULIACA_F1 = 18;
         public const int FORMATO_31_ESSALUD_TUMBES = 31;
+        public const int FORMATO_66_ESSALUD_CUSCO_F2 = 66;
     }
 }
