@@ -31,8 +31,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 workSheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
 
-
-
                 workSheet.Cells["I1"].Value = "Cotización "+ cotizacion.Prov_NroCotizacion + " - Unilene SAC";
                 workSheet.Cells["I1"].Style.Font.Size = 9;
                 workSheet.Cells["I1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
