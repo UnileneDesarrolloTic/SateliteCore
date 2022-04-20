@@ -54,9 +54,8 @@ namespace SatelliteCore.Api.Controllers
             if (string.IsNullOrEmpty(cotizacion) || idFormato == 0)
                 throw new ValidationModelException("El formato y el código de la cotización es obligatorio");
 
-            (object cabecera, object detalle) estructura = await _cotizacionServices.FormatoDatos(idFormato, cotizacion);
-
-            object result = new { estructura.cabecera, estructura.detalle };
+            (object cabecera, object detalle) = await _cotizacionServices.FormatoDatos(idFormato, cotizacion);
+            object result = new { cabecera, detalle };
 
             return Ok(result);
         }

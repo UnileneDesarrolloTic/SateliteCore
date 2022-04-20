@@ -23,8 +23,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("Cotización Almenara");
 
                     ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("Unilene", logoUnilene);
-                    imagenUnilene.SetPosition(2, 5, 10, 9);
-                    imagenUnilene.SetSize(197, 99);
+                    imagenUnilene.SetPosition(2, 0, 10, 10);
+                    imagenUnilene.SetSize(190, 95);
 
 
                     workSheet.Cells.Style.Font.Name = "Arial";

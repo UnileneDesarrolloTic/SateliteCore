@@ -12,8 +12,8 @@
         public const int FORMATO_61_ESSALUD_INCOR = 61;
         public const int FORMATO_10_ESSALUD_AREQUIPA = 10;
         public const int FORMATO_65_GENERAL = 65;
-        public const int FORMATO_4_ESSALUD_REBAGLIATI = 4;
-        public const int FORMATO_62_ESSALUD_REBAGLIATI = 62;
+        public const int FORMATO_4_ESSALUD_REBAGLIATI_F2 = 4;
+        public const int FORMATO_62_ESSALUD_REBAGLIATI_F1 = 62;
         public const int FORMATO_13_ESSALUD_CUSCO_F1 = 13;
         public const int FORMATO_21_ESSALUD_LAMBAYEQUE = 21;
         public const int FORMATO_24_ESSALUD_MOQUEGUA = 24;

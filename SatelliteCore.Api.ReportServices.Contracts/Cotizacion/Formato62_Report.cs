@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato62_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato62_Model cotizacion)
+        public static string Exportar(Image firma, Image logo, Coti_Formato62_Model cotizacion)
         {
             byte[] file;
 
@@ -20,9 +20,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             {
                 ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("Cotización Almenara");
 
-                ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("Unilene", logoUnilene);
-                imagenUnilene.SetPosition(2, 0, 0, 0);
-                imagenUnilene.SetSize(197, 99);
+                ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("Unilene", logo);
+                imagenUnilene.SetPosition(0, 10, 2, -25);
+                imagenUnilene.SetSize(190, 78);
 
                 workSheet.PrinterSettings.PaperSize = ePaperSize.A4;
                 workSheet.PrinterSettings.Orientation = eOrientation.Landscape;
@@ -246,12 +246,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["F14"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
-
-
                 ConfigurarTamanioDeCeldas(workSheet);
                 UnirCeldas(workSheet);
                 BordesCeldas(workSheet);
-                TextoNegrita(workSheet);
                 PintarCeldas(workSheet);
 
                 //DETALLE
@@ -533,13 +530,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["K" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 workSheet.Cells["K" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-
-              
-        
-
-
-
                 index++;
+
                 workSheet.Cells["G" + index].Value = "SI";
                 workSheet.Cells["G" + index].Style.Font.Size = 12;
                 workSheet.Cells["G" + index].Style.WrapText = true;
@@ -560,6 +552,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 index++;
+
                 workSheet.Cells["A" + index].Value = "DECLARO EL CUMPLIMIENTO DE LAS ESPECIFICACIONES TECNICAS";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
                 workSheet.Cells["A" + index].Style.WrapText = true;
@@ -575,9 +568,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["I" + index].Style.Font.Bold = true;
                 workSheet.Cells["I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
-
                 index++;
+
                 workSheet.Cells["A" + index].Value = "CUENTO CON REGISTRO NACIONAL DE PROVEEDORES (RNP)";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
                 workSheet.Cells["A" + index].Style.WrapText = true;
@@ -593,9 +585,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["I" + index].Style.Font.Bold = true;
                 workSheet.Cells["I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
-
                 index++;
+
                 workSheet.Cells["A" + index].Value = "GARANTÍA MINIMA (indicar meses o años) ";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
                 workSheet.Cells["A" + index].Style.WrapText = true;
@@ -609,8 +600,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["G" + index + ":I" + index].Merge = true;
                 workSheet.Cells["G" + index + ":I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
                 index++;
+
                 workSheet.Cells["A" + index].Value = "FORMA DE PAGO";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
                 workSheet.Cells["A" + index].Style.WrapText = true;
@@ -625,6 +616,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["G" + index + ":I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 index++;
+
                 workSheet.Cells["A" + index].Value = "VIGENCIA DE LA COTIZACIÓN";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
                 workSheet.Cells["A" + index].Style.WrapText = true;
@@ -633,14 +625,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index + ":F" + index].Merge = true;
                 workSheet.Cells["A" + index + ":F" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
                 workSheet.Cells["G" + index].Value = cotizacion.Prov_Vigcotizacion;
                 workSheet.Cells["G" + index + ":I" + index].Style.Font.Bold = true;
                 workSheet.Cells["G" + index + ":I" + index].Merge = true;
                 workSheet.Cells["G" + index + ":I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
                 index++;
+
                 workSheet.Row(index).Height =73.50;
                 workSheet.Cells["A" + index].Value = "MEJORAS A OFRECER:";
                 workSheet.Cells["A" + index].Style.Font.Size = 12;
@@ -655,12 +646,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 workSheet.Cells["A" + index].Style.WrapText = true;
 
-
                 workSheet.Cells["C" + index + ":I" + index].Style.Font.Bold = true;
                 workSheet.Cells["C" + index + ":I" + index].Merge = true;
                 workSheet.Cells["C" + index + ":I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 index++;
+
                 workSheet.Row(index).Height = 66.75;
                 workSheet.Cells["A" + index].Value = "(*)OBSERVACIONES";
                 workSheet.Cells["A" + index].Style.Font.Size = 9;
@@ -673,16 +664,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 workSheet.Cells["A" + index].Style.WrapText = true;
 
-
                 workSheet.Cells["C" + index + ":I" + index].Style.Font.Bold = true;
                 workSheet.Cells["C" + index + ":I" + index].Merge = true;
                 workSheet.Cells["C" + index + ":I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                index++;
-                index++;
+                index += 2;
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index-1, 10, 2, 120);
+                firmaCatizacion.SetSize(250, 103);
+
                 workSheet.Cells["C" + index + ":F" + (index+5)].Merge = true;
                 workSheet.Cells["C" + index + ":F" + (index + 5)].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-
 
                 workSheet.Cells["C" + (index + 6)].Value = "FIRMA Y SELLO  DEL REPRESENTANTE LEGAL DE LA EMPRESA O EL QUE HAGA SUS VECES";
                 workSheet.Cells["C" + (index + 6) + ":F" + (index + 8)].Style.Font.Bold = true;
@@ -692,7 +685,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["C" + (index + 6) + ":F" + (index + 8)].Style.WrapText = true;
                 workSheet.Cells["C" + (index + 6) + ":F" + (index + 8)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 workSheet.Cells["C" + (index + 6) + ":F" + (index + 8)].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-      
 
 
                 workSheet.View.ZoomScale = 80;
@@ -884,11 +876,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             workSheet.Cells["S16:S18"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             workSheet.Cells["T14:U18"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             workSheet.Cells["V14:V18"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-
-        }
-
-        private static void TextoNegrita(ExcelWorksheet workSheet)
-        {
 
         }
         private static void PintarCeldas(ExcelWorksheet workSheet)

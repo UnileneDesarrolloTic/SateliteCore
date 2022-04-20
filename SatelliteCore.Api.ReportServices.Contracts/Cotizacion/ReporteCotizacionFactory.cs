@@ -12,15 +12,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
     {
         public static string GenerarReporte(int formato, BsonDocument cotizacion)
         {
-            string rutaUnilene = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\unilene.jpg");
+            string rutaUnilene = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
             Image logoUnilene = Image.FromFile(rutaUnilene);
+
+            string rutaFirma = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Firma_Cotizaciones.jpeg");
+            Image firma = Image.FromFile(rutaFirma);
+
+            string rutaEsSalud = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_EsSalud.png");
+            Image logoEsSalud = Image.FromFile(rutaEsSalud);
+
             string reporte;
 
             switch (formato)
             {
                 case Constante.FORMATO_3_ESSALUD_ALMENARA:
                     Formato3_Model formato3 = BsonSerializer.Deserialize<Formato3_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato3_Report.Exportar(logoUnilene, formato3);
+                    reporte = Formato3_Report.Exportar(firma, logoUnilene, formato3);
                     return reporte;
 
                 case Constante.FORMATO_5_ESSALUD_SABOGAL:
@@ -30,12 +37,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 case Constante.FORMATO_60_ESSALUD_PRESTACIONAL_ALMENARA:
                     Formato60_Model formato60 = BsonSerializer.Deserialize<Formato60_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato60_Report.Exportar(logoUnilene, formato60);
+                    reporte = Formato60_Report.Exportar(firma, logoUnilene, formato60);
                     return reporte;
 
                 case Constante.FORMATO_61_ESSALUD_INCOR:
                     Formato61_Model formato61 = BsonSerializer.Deserialize<Formato61_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato61_Report.Exportar(logoUnilene, formato61);
+                    reporte = Formato61_Report.Exportar(firma, logoUnilene, formato61);
                     return reporte;
 
                 case Constante.FORMATO_10_ESSALUD_AREQUIPA:
@@ -48,19 +55,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     reporte = Formato65_Report.Exportar(logoUnilene, formato65);
                     return reporte;
 
-                case Constante.FORMATO_4_ESSALUD_REBAGLIATI:
+                case Constante.FORMATO_4_ESSALUD_REBAGLIATI_F2:
                     Coti_Formato4_Model formato4 = BsonSerializer.Deserialize<Coti_Formato4_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato4_Report.Exportar(logoUnilene, formato4);
+                    reporte = Formato4_Report.Exportar(logoEsSalud, formato4);
                     return reporte;
 
-                case Constante.FORMATO_62_ESSALUD_REBAGLIATI:
+                case Constante.FORMATO_62_ESSALUD_REBAGLIATI_F1:
                     Coti_Formato62_Model formato62 = BsonSerializer.Deserialize<Coti_Formato62_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato62_Report.Exportar(logoUnilene, formato62);
+                    reporte = Formato62_Report.Exportar(firma, logoEsSalud, formato62);
                     return reporte;
 
                 case Constante.FORMATO_13_ESSALUD_CUSCO_F1:
                     Coti_Formato13_Model formato13 = BsonSerializer.Deserialize<Coti_Formato13_Model>(cotizacion.AsBsonDocument);
-                    reporte = Formato13_Report.Exportar(logoUnilene, formato13);
+                    reporte = Formato13_Report.Exportar(firma, logoUnilene, formato13);
                     return reporte;
 
                 case Constante.FORMATO_21_ESSALUD_LAMBAYEQUE:
@@ -147,11 +154,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     Formato65_Model formato65 = BsonSerializer.Deserialize<Formato65_Model>(cotizacion.AsBsonDocument);
                     return formato65;
 
-                case Constante.FORMATO_4_ESSALUD_REBAGLIATI:
+                case Constante.FORMATO_4_ESSALUD_REBAGLIATI_F2:
                     Coti_Formato4_Model formato4 = BsonSerializer.Deserialize<Coti_Formato4_Model>(cotizacion.AsBsonDocument);
                     return formato4; 
 
-                case Constante.FORMATO_62_ESSALUD_REBAGLIATI:
+                case Constante.FORMATO_62_ESSALUD_REBAGLIATI_F1:
                     Coti_Formato62_Model formato62 = BsonSerializer.Deserialize<Coti_Formato62_Model>(cotizacion.AsBsonDocument);
                     return formato62;
 

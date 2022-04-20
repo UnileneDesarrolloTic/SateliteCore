@@ -168,7 +168,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 ConfigurarTamanioDeCeldas(worksheet);
                 UnirCeldas(worksheet);
                 BordesCeldas(worksheet);
-                TextoNegrita(worksheet);
                 PintarCeldas(worksheet);
 
                 int index = 12;
@@ -497,11 +496,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
         private static void BordesCeldas(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A11,B11,C11,D11,E11,F11,G11,H11,I11,J11,K11,L11,M11"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-        }
-
-        private static void TextoNegrita(ExcelWorksheet worksheet)
-        {
-
         }
 
         private static void PintarCeldas(ExcelWorksheet workSheet)

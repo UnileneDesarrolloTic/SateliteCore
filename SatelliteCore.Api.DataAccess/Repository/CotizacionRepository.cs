@@ -31,7 +31,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var connection = new SqlConnection(_appConfig.contextSpring))
             {
-                using (var result_db = await connection.QueryMultipleAsync("usp_Cotizacion_ListarCotizaciones", datos, commandType: CommandType.StoredProcedure))
+                using (var result_db = await connection.QueryMultipleAsync("usp_Cotizacion_Listar", datos, commandType: CommandType.StoredProcedure))
                 {
                     result.ListaCertificados = result_db.Read<CotizacionEntity>().ToList();
                     result.totalRegistros = result_db.Read<int>().First();
@@ -52,11 +52,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using (var result = await context.QueryMultipleAsync(script, new { codFormato }))
-                {
-                    estructura.Cabecera = result.Read<EstructuraFormularioCotizacionModel>().ToList();
-                    estructura.Detalle = result.Read<EstructuraFormularioCotizacionModel>().ToList();
-                }
+                using var result = await context.QueryMultipleAsync(script, new { codFormato });
+                estructura.Cabecera = result.Read<EstructuraFormularioCotizacionModel>().ToList();
+                estructura.Detalle = result.Read<EstructuraFormularioCotizacionModel>().ToList();
             }
 
             return estructura;
@@ -73,11 +71,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 if (formatobd == 0)
                     throw new NotFoundException("El formato enviado no exíste.");
 
-                using (var result = await context.QueryMultipleAsync("usp_Cotizacion_ObtenerDatos", new { idFormato, cotizacion }, commandType: CommandType.StoredProcedure))
-                {
-                    datosCotizacion.cabecera = result.Read().FirstOrDefault();
-                    datosCotizacion.detalle = result.Read().ToList();
-                }
+                using var result = await context.QueryMultipleAsync("usp_Cotizacion_ObtenerDatos", new { idFormato, cotizacion }, commandType: CommandType.StoredProcedure);
+                datosCotizacion.cabecera = result.Read().FirstOrDefault();
+                datosCotizacion.detalle = result.Read().ToList();
             }
 
             return datosCotizacion;
@@ -87,10 +83,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             string sqlScript = "INSERT INTO TBMRegistroCotizacion (ObjectID, Cotizacion, IdFormato, UsuarioRegistro) VALUES (@id, @cotizacion, @idFormato, @usuarioSesion)";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                await context.ExecuteAsync(sqlScript, new { id, cotizacion, idFormato, usuarioSesion });
-            }
+            using SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB);
+            await context.ExecuteAsync(sqlScript, new { id, cotizacion, idFormato, usuarioSesion });
         }
 
         public async Task<CotizacionRegistroEntity> ObtenerDatosRegistro(string codReporte)
@@ -110,10 +104,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<FormatosPorClienteModel> listaFormato = new List<FormatosPorClienteModel>();
 
-            string scriptSql = "SELECT a.IdFormato, b.Titulo Formato " +
+            string scriptSql = "SELECT * FROM (SELECT a.IdFormato, b.Titulo Formato " +
                 "FROM TBDFormatoPorClienteCotizacion a INNER JOIN TBMFormatoCotizacion b ON a.IdFormato = b.IDFormato " +
-                "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c ON a.CodCliente = c.Persona " +
-                "WHERE c.Estado = 'A' AND a.CodCliente = @idCliente";
+                "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c ON a.CodCliente = c.Persona WHERE c.Estado = 'A' AND a.CodCliente = @idCliente " +
+                "UNION SELECT IDFormato,Titulo Formato FROM TBMFormatoCotizacion WHERE IDFormato = 65) x ORDER BY x.Formato";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -129,7 +123,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string scriptSql = "SELECT a.ObjectID Codigo, a.IDFormato IdFormato, b.Titulo Formato, c.Usuario UsuarioRegistro, a.FechaRegistro, d.Usuario UsuarioModificacion, a.FechaModificacion " +
                 "FROM TBMRegistroCotizacion a INNER JOIN TBMFormatoCotizacion b ON a.IDFormato = b.IDFormato INNER JOIN TBMUsuario c ON a.UsuarioRegistro = c.CodUsuario " +
-                "LEFT JOIN TBMUsuario d ON a.UsuarioModificacion = d.CodUsuario WHERE a.Cotizacion = @cotizacion";
+                "LEFT JOIN TBMUsuario d ON a.UsuarioModificacion = d.CodUsuario WHERE a.Cotizacion = @cotizacion ORDER BY a.FechaRegistro DESC, a.FechaModificacion DESC";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -173,10 +167,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             await _requestModel.ReplaceOneAsync(new BsonDocument { { "_id", new ObjectId(id) } }, cotizacion);
 
-            using (SqlConnection context =  new SqlConnection(_appConfig.contextSatelliteDB) )
-            {
-                _ = await  context.ExecuteAsync("UPDATE TBMRegistroCotizacion SET FechaModificacion=GETDATE(), UsuarioModificacion=@usuarioSesion WHERE ObjectID=@id", new { usuarioSesion, id });
-            }
+            using SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB);
+            _ = await context.ExecuteAsync("UPDATE TBMRegistroCotizacion SET FechaModificacion=GETDATE(), UsuarioModificacion=@usuarioSesion WHERE ObjectID=@id", new { usuarioSesion, id });
 
         }
 

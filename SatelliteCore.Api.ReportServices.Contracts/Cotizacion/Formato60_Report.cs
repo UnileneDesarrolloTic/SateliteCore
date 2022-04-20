@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
 using SatelliteCore.Api.Models.Report.Cotizacion;
 using System;
@@ -8,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public static class Formato60_Report
     {
-        public static string Exportar(Image logoUnilene, Formato60_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Formato60_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -17,9 +18,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             using (var excelPackage = new ExcelPackage())
             {
                 var workSheet = excelPackage.Workbook.Worksheets.Add("Red Prestacional Almenara");
-                //ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("unilene", logoUnilene);
-                //imagenUnilene.SetPosition(3, 2, 1, 7);
-                //imagenUnilene.SetSize(220, 60);
+                ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("unilene", logoUnilene);
+                imagenUnilene.SetPosition(2, 2, 0, 11);
+                imagenUnilene.SetSize(190, 69);
 
                 workSheet.Cells.Style.Font.Name = "Arial";
                 workSheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -466,6 +467,24 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                     row++;
                 }
+
+                row += 16;
+                workSheet.Row(row).Height = 52.5 + 0.71; 
+                workSheet.Cells["C" + row].Value = "FIRMA DEL REPRESENTANTE LEGAL DE LA EMPRESA O EL QUE HAGA SUS VECES";
+                workSheet.Cells["C" + row].Style.WrapText = true;
+                workSheet.Cells["C" + row].Style.Font.Bold = true;
+                workSheet.Cells["C" + row].Style.Font.Size = 18;
+                workSheet.Cells["C" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                workSheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["C" + row].Style.Border.Top.Style = ExcelBorderStyle.Medium;
+
+
+                row -= 12;
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(row, 0, 2, 140);
+                firmaCatizacion.SetSize(360, 175);
+
+
 
                 TextoNegrita(workSheet);
 

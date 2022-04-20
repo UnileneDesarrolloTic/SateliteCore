@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato3_Report
     {
-        public static string Exportar(Image logoUnilene, Formato3_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Formato3_Model cotizacion)
         {
             byte[] file;
 
@@ -613,7 +613,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index].Style.Font.Size = 20;
                 workSheet.Cells["A" + index].Style.Font.Bold = true;
 
-                index = index + 2;
+                index += 2;
 
                 workSheet.Cells["A" + index + ":B" + index].Merge = true;
 
@@ -625,7 +625,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["C" + index].Style.Font.Size = 18;
                 workSheet.Cells["C" + index].Style.Font.Bold = true;
 
-                index = index + 2;
+                index += 2;
 
                 workSheet.Cells["B" + index + ":C" + (index + 6)].Merge = true;
                 workSheet.Cells["B" + index + ":C" + (index + 6)].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -640,6 +640,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["B" + (index + 7)].Style.Font.Size = 11;
 
                 TextoNegrita(workSheet);
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 workSheet.View.ZoomScale = 80;
                 file = excelPackage.GetAsByteArray();

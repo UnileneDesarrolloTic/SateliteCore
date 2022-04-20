@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public static class Formato61_Report
     {
-        public static string Exportar(Image logoUnilene, Formato61_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Formato61_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -387,10 +387,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["E" + row].Style.Font.Size = 10;
                 workSheet.Cells["E" + row].Value = cotizacion.Prov_Vigencia;
 
-                row += 6;
+                row++;
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(row, -10, 6, 60);
+                firmaCatizacion.SetSize(130, 85);
+
+                row += 5;
 
                 workSheet.Cells["B" + row + ":M" + row].Merge = true;
-                workSheet.Cells["B" + row + ":M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                workSheet.Cells["B" + row + ":M" + (row + 1)].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 workSheet.Cells["B" + row].Style.Font.Size = 8;
                 workSheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 workSheet.Cells["B" + row].Value = "Firma, nombres y apellidos del proveedor o representante legal";
@@ -398,7 +404,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 row++;
 
                 workSheet.Cells["B" + row + ":M" + row].Merge = true;
-                workSheet.Cells["B" + row + ":M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 workSheet.Cells["B" + row].Style.Font.Size = 8;
                 workSheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 workSheet.Cells["B" + row].Value = "o persona autorizada para emitir cotizaciones ";
