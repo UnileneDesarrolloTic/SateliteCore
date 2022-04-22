@@ -172,5 +172,39 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
+        //----
+        public async Task<IEnumerable<ListaFormatoCotizacion>> ListarFormatoCotizacion()
+        {
+            IEnumerable<ListaFormatoCotizacion> ListaCotizaciones = new List<ListaFormatoCotizacion>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                string sql = "SELECT IDFormato,Titulo,Descripcion,Estado FROM TBMFormatoCotizacion";
+
+                ListaCotizaciones = await connection.QueryAsync<ListaFormatoCotizacion>(sql);
+            }
+
+            return ListaCotizaciones;
+
+        }
+
+       public async Task<IEnumerable<CamposFormatoCotizacionModel>> CamposFormatosCotizacion(int idFormato)
+        {
+            IEnumerable<CamposFormatoCotizacionModel> CamposFormatoCotizacion = new List<CamposFormatoCotizacionModel>();
+
+            string scriptSql = "SELECT IDFormato, TipoDetalle, CodCampo, Etiqueta, ColumnaResp, TipoDatoTs, Requerido, ValorDefecto, ColumnaScript FROM TBDCamposFormatoCotizacion WHERE IDFormato = @idFormato";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                CamposFormatoCotizacion = await context.QueryAsync<CamposFormatoCotizacionModel>(scriptSql, new { idFormato });
+            }
+
+            return CamposFormatoCotizacion;
+
+        }
+
+
+
+
     }
 }

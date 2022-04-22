@@ -120,6 +120,41 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     reporte = Formato66_Report.Exportar(logoUnilene, formato66);
                     return reporte;
 
+                case Constante.FORMATO_27_ESSALUD_PIURA:
+                    Coti_Formato27_Model formato27 = BsonSerializer.Deserialize<Coti_Formato27_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato27_Report.Exportar(logoUnilene, formato27);
+                    return reporte;
+
+                case Constante.FORMATO_67_INS_NACIONAL_NINIO_SAN_BORJA:
+                    Coti_Formato_67_Model formato67 = BsonSerializer.Deserialize<Coti_Formato_67_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato67_Report.Exportar(logoUnilene, formato67);
+                    return reporte;
+
+                case Constante.FORMATO_30_ESSALUD_TARAPOTO:
+                    Coti_Formato_30_Model formato30 = BsonSerializer.Deserialize<Coti_Formato_30_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato30_Report.Exportar(logoUnilene, formato30);
+                    return reporte;
+
+                case Constante.FORMATO_68_MARINA_GUERRA_PERU:
+                    Coti_Formato_68_Model formato68 = BsonSerializer.Deserialize<Coti_Formato_68_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato68_Report.Exportar(logoUnilene, formato68);
+                    return reporte;
+
+                case Constante.FORMATO_9_ESSALUD_APURIMAC:
+                    Coti_Formato_9_Model formato9 = BsonSerializer.Deserialize<Coti_Formato_9_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato9_Report.Exportar(logoUnilene, formato9);
+                    return reporte;
+
+                case Constante.FORMATO_70_ESSALUD_JULIACA_F2:
+                    Coti_Formato_70_Model formato70 = BsonSerializer.Deserialize<Coti_Formato_70_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato70_Report.Exportar(logoUnilene, formato70);
+                    return reporte;
+
+                case Constante.FORMATO_71_ESSALUD_SABOGAL_F2:
+                    Coti_Formato71_Model formato71 = BsonSerializer.Deserialize<Coti_Formato71_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato71_Report.Exportar(logoUnilene, formato71);
+                    return reporte;
+
                 default:
                     throw new NotFoundException("No se puedo encontrar el formato solicitado");
             }
@@ -207,6 +242,38 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 case Constante.FORMATO_66_ESSALUD_CUSCO_F2:
                     Formato66_Model formato66 = BsonSerializer.Deserialize<Formato66_Model>(cotizacion.AsBsonDocument);
                     return formato66;
+
+
+                case Constante.FORMATO_27_ESSALUD_PIURA:
+                    Coti_Formato27_Model formato27 = BsonSerializer.Deserialize<Coti_Formato27_Model>(cotizacion.AsBsonDocument);
+                    return formato27;
+
+
+                case Constante.FORMATO_67_INS_NACIONAL_NINIO_SAN_BORJA:
+                    Coti_Formato_67_Model formato67 = BsonSerializer.Deserialize<Coti_Formato_67_Model>(cotizacion.AsBsonDocument);
+                    return formato67;
+
+
+                case Constante.FORMATO_30_ESSALUD_TARAPOTO:
+                    Coti_Formato_30_Model formato30 = BsonSerializer.Deserialize<Coti_Formato_30_Model>(cotizacion.AsBsonDocument);
+                    return formato30;
+
+                case Constante.FORMATO_68_MARINA_GUERRA_PERU:
+                    Coti_Formato_68_Model formato68 = BsonSerializer.Deserialize<Coti_Formato_68_Model>(cotizacion.AsBsonDocument);
+                    return formato68;
+
+                case Constante.FORMATO_9_ESSALUD_APURIMAC:
+                    Coti_Formato_9_Model formato9 = BsonSerializer.Deserialize<Coti_Formato_9_Model>(cotizacion.AsBsonDocument);
+                    return formato9;
+
+
+                case Constante.FORMATO_70_ESSALUD_JULIACA_F2:
+                    Coti_Formato_70_Model formato70 = BsonSerializer.Deserialize<Coti_Formato_70_Model>(cotizacion.AsBsonDocument);
+                    return formato70;
+
+                case Constante.FORMATO_71_ESSALUD_SABOGAL_F2:
+                    Coti_Formato71_Model formato71 = BsonSerializer.Deserialize<Coti_Formato71_Model>(cotizacion.AsBsonDocument);
+                    return formato71;
 
                 default:
                     throw new NotFoundException("No se puedo encontrar el formato solicitado");

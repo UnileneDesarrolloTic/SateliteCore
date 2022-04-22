@@ -109,5 +109,16 @@ namespace SatelliteCore.Api.Services
             await _cotizacionRepository.Actualizar(reporte.IdObject, usuarioSesion, documentoBson);
         }
 
+        public async Task<IEnumerable<ListaFormatoCotizacion>> ListarFormatoCotizacion()
+        {
+            return await _cotizacionRepository.ListarFormatoCotizacion();
+
+        }
+
+        public async Task<IEnumerable<CamposFormatoCotizacionModel>> CamposFormatosCotizacion(int idFormato)
+        {
+            return await _cotizacionRepository.CamposFormatosCotizacion(idFormato);
+        }
+
     }
 }
