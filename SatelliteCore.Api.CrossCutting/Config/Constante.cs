@@ -25,5 +25,12 @@
         public const int FORMATO_18_ESSALUD_JULIACA_F1 = 18;
         public const int FORMATO_31_ESSALUD_TUMBES = 31;
         public const int FORMATO_66_ESSALUD_CUSCO_F2 = 66;
+        public const int FORMATO_27_ESSALUD_PIURA = 27;
+        public const int FORMATO_67_INS_NACIONAL_NINIO_SAN_BORJA = 67;
+        public const int FORMATO_30_ESSALUD_TARAPOTO = 30;
+        public const int FORMATO_68_MARINA_GUERRA_PERU = 68;
+        public const int FORMATO_9_ESSALUD_APURIMAC = 9;
+        public const int FORMATO_70_ESSALUD_JULIACA_F2 = 70;
+        public const int FORMATO_71_ESSALUD_SABOGAL_F2 = 71;
     }
 }

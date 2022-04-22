@@ -19,5 +19,10 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<CotizacionAbstract> ObtenerDatosReporte(string codigoReporte);
         public Task<IEnumerable<FormatosPorClienteModel>> FormatosPorCliente(int idCliente);
         public Task Actualizar(ActualizarReporteCotizacionModel reporte, int usuarioSesion);
+
+        public Task<IEnumerable<ListaFormatoCotizacion>> ListarFormatoCotizacion();
+        public Task<IEnumerable<CamposFormatoCotizacionModel>> CamposFormatosCotizacion(int idFormato);
+
+
     }
 }

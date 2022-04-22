@@ -137,5 +137,25 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok();
         }
+
+
+        [HttpGet("ListarFormatoCotizacion")]
+        public async Task<ActionResult> ListarFormatoCotizacion()
+        {
+            IEnumerable<ListaFormatoCotizacion> listaFormato = await _cotizacionServices.ListarFormatoCotizacion();
+            return Ok(listaFormato);
+        }
+
+
+        [HttpGet("EncontrarFormatoCotizacion")]
+        public async Task<IActionResult> CamposFormatosCotizacion(int idFormato)
+        {
+            IEnumerable<CamposFormatoCotizacionModel> listaFormatos = await _cotizacionServices.CamposFormatosCotizacion(idFormato);
+            return Ok(listaFormatos);
+        }
+
+
+
+
     }
 }
