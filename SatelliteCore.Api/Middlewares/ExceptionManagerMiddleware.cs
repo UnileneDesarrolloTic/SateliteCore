@@ -47,7 +47,7 @@ namespace SystemsIntegration.Api.Middlewares
                         break;
                     case SqlException ex:
                         response.StatusCode = (int)HttpStatusCode.BadGateway;
-                        responseModel.Message = ex.Message; // "A ocurrido un error inesperado en servidores externos"; //
+                        responseModel.Message = ex.Message; // "A ocurrido un error inesperado en servidores externos";
                         break;
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;

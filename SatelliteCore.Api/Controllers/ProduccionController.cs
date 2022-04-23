@@ -34,10 +34,10 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListaPedidosCreadoAuto")]
         public async Task<ActionResult> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro)
         {
-            (IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros) result = await _pronosticoServices.ListaPedidosCreadoAuto(filtro);
+            (IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros) = await _pronosticoServices.ListaPedidosCreadoAuto(filtro);
 
             PaginacionModel<PedidosCreadosAutoLogModel> PedidosPaginados = 
-                new PaginacionModel<PedidosCreadosAutoLogModel>((List<PedidosCreadosAutoLogModel>)result.ListaPedidos, filtro.Pagina, filtro.RegistrosPorPagina, result.TotalRegistros);
+                new PaginacionModel<PedidosCreadosAutoLogModel>((List<PedidosCreadosAutoLogModel>)ListaPedidos, filtro.Pagina, filtro.RegistrosPorPagina, TotalRegistros);
                 
             return Ok(PedidosPaginados);
         }

@@ -209,7 +209,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 ConfigurarTamanioDeCeldas(workSheet);
                 UnirCeldas(workSheet);
-                PintarCeldas(workSheet);
                 BordesCeldas(workSheet);
 
                 workSheet.Cells["A14"].Value = "N° ITEM";
@@ -833,16 +832,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             workSheet.Cells["S14:S18"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             workSheet.Cells["T14:T18"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-
-        }
-
-        private static void TextoNegrita(ExcelWorksheet workSheet)
-        {
-
-        }
-
-        private static void PintarCeldas(ExcelWorksheet workSheet)
-        {
 
         }
     }

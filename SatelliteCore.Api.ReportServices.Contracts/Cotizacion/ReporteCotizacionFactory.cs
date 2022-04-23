@@ -65,7 +65,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     reporte = Formato62_Report.Exportar(firma, logoEsSalud, formato62);
                     return reporte;
 
-                case Constante.FORMATO_13_ESSALUD_CUSCO_F1:
+                case Constante.FORMATO_13_ESSALUD_CUSCO_F1: //
                     Coti_Formato13_Model formato13 = BsonSerializer.Deserialize<Coti_Formato13_Model>(cotizacion.AsBsonDocument);
                     reporte = Formato13_Report.Exportar(firma, logoUnilene, formato13);
                     return reporte;
@@ -118,6 +118,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 case Constante.FORMATO_66_ESSALUD_CUSCO_F2:
                     Formato66_Model formato66 = BsonSerializer.Deserialize<Formato66_Model>(cotizacion.AsBsonDocument);
                     reporte = Formato66_Report.Exportar(logoUnilene, formato66);
+                    return reporte;
+
+                case Constante.FORMATO_69_ESSALUD_LORETO_F2:
+                    Formato69_Model formato69 = BsonSerializer.Deserialize<Formato69_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato69_Report.Exportar(firma, logoUnilene, formato69);
+                    return reporte;
+
+                case Constante.FORMATO_28_ESSALUD_PUNO:
+                    Formato28_Model formato28 = BsonSerializer.Deserialize<Formato28_Model>(cotizacion.AsBsonDocument);
+                    reporte = Formato28_Report.Exportar(firma, logoUnilene, formato28);
                     return reporte;
 
                 default:
@@ -198,15 +208,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     Coti_Formato18_Model formato18 = BsonSerializer.Deserialize<Coti_Formato18_Model>(cotizacion.AsBsonDocument);
                     return formato18;
 
-
                 case Constante.FORMATO_31_ESSALUD_TUMBES:
                     Coti_Formato31_Model formato31 = BsonSerializer.Deserialize<Coti_Formato31_Model>(cotizacion.AsBsonDocument);
                     return formato31;
 
-
                 case Constante.FORMATO_66_ESSALUD_CUSCO_F2:
                     Formato66_Model formato66 = BsonSerializer.Deserialize<Formato66_Model>(cotizacion.AsBsonDocument);
                     return formato66;
+
+                case Constante.FORMATO_69_ESSALUD_LORETO_F2:
+                    Formato69_Model formato69 = BsonSerializer.Deserialize<Formato69_Model>(cotizacion.AsBsonDocument);
+                    return formato69;
+
+                case Constante.FORMATO_28_ESSALUD_PUNO:
+                    Formato28_Model formato28 = BsonSerializer.Deserialize<Formato28_Model>(cotizacion.AsBsonDocument);
+                    return formato28;
 
                 default:
                     throw new NotFoundException("No se puedo encontrar el formato solicitado");

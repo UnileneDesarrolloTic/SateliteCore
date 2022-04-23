@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
-    class Formato66_Report
+    public class Formato66_Report
     {
         public static string Exportar(Image logoUnilene, Formato66_Model cotizacion)
         {
@@ -28,9 +28,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 worksheet.Cells.Style.Font.Size = 11;
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
-
-
-        
 
                 worksheet.Cells["A2"].Value = "ANEXO Nº 05";
                 worksheet.Cells["A2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

@@ -148,7 +148,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     UnirCeldas(workSheet);
                     BordesCeldas(workSheet);
                     PintarCeldas(workSheet);
-                    TextoNegrita(workSheet);
 
                 //DETALLE 
 
@@ -569,11 +568,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
 
         }
-
-            private static void TextoNegrita(ExcelWorksheet workSheet)
-            {
-                
-             }
 
     }
 }

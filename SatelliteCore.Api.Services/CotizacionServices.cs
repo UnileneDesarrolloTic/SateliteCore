@@ -25,9 +25,9 @@ namespace SatelliteCore.Api.Services
 
         public async Task<PaginacionModel<CotizacionEntity>> Listar(DatosListarCotizacionesPaginado datos)
         {
-            (List<CotizacionEntity> lista, int totalRegistros) result = await _cotizacionRepository.Listar(datos);
+            (List<CotizacionEntity> lista, int totalRegistros) = await _cotizacionRepository.Listar(datos);
 
-            PaginacionModel<CotizacionEntity> response = new PaginacionModel<CotizacionEntity>(result.lista, datos.Pagina, datos.RegistrosPorPagina, result.totalRegistros);
+            PaginacionModel<CotizacionEntity> response = new PaginacionModel<CotizacionEntity>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
 
             return response;
         }
