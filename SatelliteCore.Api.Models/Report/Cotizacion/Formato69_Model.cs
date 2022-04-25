@@ -36,7 +36,7 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
     [BsonIgnoreExtraElements(ignoreExtraElements: true)]
     public class Formato69_Detalle
     {
-        public int Item { get; set; }
+        public int NroItem { get; set; }
         public string Cod_sut { get; set; }
         public string Descripcion { get; set; }
         public string Marca { get; set; }
