@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
     class Formato17_Report
     {
 
-        public static string Exportar(Image logoUnilene, Coti_Formato17_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Coti_Formato17_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -346,7 +346,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Merge = true;
                 workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Style.Font.Bold = true;
-                workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Value = cotizacion.Prov_PlazoEntrega;
+                workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Value = cotizacion.Prov_FormaPago;
                 workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 workSheet.Cells["D" + (index + 9) + ":J" + (index + 9)].Style.Font.Size = 10;
@@ -403,7 +403,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Merge = true;
                 workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Style.Font.Bold = true;
-                workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Value = cotizacion.Prov_Email;
+                workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Value = cotizacion.Prov_ContTelefono+","+ cotizacion.Prov_ContCelular;
                 workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 workSheet.Cells["D" + (index + 12) + ":J" + (index + 12)].Style.Font.Size = 10;
@@ -484,15 +484,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
 
 
-                workSheet.Row(index + 22).Height = 27.5;
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Merge = true;
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Value = "Firma, nombres y apellidos del proveedor o representante legal o Persona autorizada para emitir cotizaciones";
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Style.Font.Size = 10;
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Style.Font.Name = "Arial";
-                workSheet.Cells["C" + (index + 22) + ":F" + (index + 22)].Style.WrapText = true;
+                workSheet.Row(index + 25).Height = 27.5;
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Merge = true;
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Value = "Firma, nombres y apellidos del proveedor o representante legal o Persona autorizada para emitir cotizaciones";
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Style.Font.Size = 10;
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Style.Font.Name = "Arial";
+                workSheet.Cells["C" + (index + 25) + ":F" + (index + 25)].Style.WrapText = true;
 
-
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index+17, -8, 2, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 workSheet.View.ZoomScale = 85;
 

@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public static class Formato5_Report
     {
-        public static string Exportar(Image logoUnilene, Formato5_Model cotizacion)
+        public static string Exportar(Image firma,Image logoUnilene, Formato5_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -560,6 +560,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index].Value = "7.- Otras consideraciones se encuentran descritas en el requerimiento del area usuaria.";
                 workSheet.Cells["A" + index].Style.Font.Size = 10;
                 workSheet.Cells["A" + index].Style.WrapText = true;
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index+1, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 TextoNegrita(workSheet);
 

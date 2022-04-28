@@ -183,7 +183,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["J9"].Style.Font.Size = 20;
                 workSheet.Cells["J9"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                workSheet.Cells["J10"].Value = cotizacion.Prov_Telefono;
+                workSheet.Cells["J10"].Value = cotizacion.Prov_Celular;
                 workSheet.Cells["J10"].Style.Font.Size = 19;
                 workSheet.Cells["J10"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 

@@ -24,7 +24,10 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
         public string Validez_oferta { get; set; }
         public string Plazo_entrega { get; set; }
         public string Lugar_entrega { get; set; }
-        public string Incorterms { get; set; }
+        public string Garantia { get; set; }
+        public string Prov_VigProducto { get; set; }
+
+        public string Prov_Ref { get; set; }
         public decimal Monto_total { get; set; }
         public List<Formato65_Detalle> Detalle { get; set; }
     }
@@ -35,10 +38,14 @@ namespace SatelliteCore.Api.Models.Report.Cotizacion
         public int NroItem { get; set; }
         public string Codsut { get; set; }
         public string Descripcion { get; set; }
-        public string Descripcion_unilene { get; set; }
+        public string Marca { get; set; }
         public decimal Cantidad { get; set; }
         public decimal Precio_unitario { get; set; }
         public decimal Total { get; set; }
+        public string Presentacion { get; set; }    
+        public string Procedencia { get; set; }
+        public string Unidadmedida { get; set; }
+        public string PlazoEntrega { get; set; }
 
     }
 

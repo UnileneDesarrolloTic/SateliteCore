@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato24_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato24_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Coti_Formato24_Model cotizacion)
         {
             byte[] file;
 
@@ -667,6 +667,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index + ":S" + index].Merge = true;
                 workSheet.Cells["A" + index].Value = "La propuesta se emite considerando todas las condiciones señaladas en el requerimiento e incluye totos los tributos, seguros, transporte, inspecciones, pruebas y, de ser el caso, los costos laborales conforme la legislación vigente, así como cualquier otro concepto que peda tener incidenca sobre el costo del bien y/o servicio a contratar, excepto la de aquellos proveeores que gocen de alguna exoneración legal, no incluiran en el precio de su oferta los tributos respectivos. Asimismo, declaro bajo juramento que, mi persona y/o representada no cuenta con impedimentos para contratar con el Estado, conforme lo establece el artículo 11 del Texto Único Ordenado de la Ley Nº 30225, Ley de Contrataciones del Estado, aprobado por Declreto N. 082-2019-EF.";
                 workSheet.Cells["A" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
+
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index+1, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
 
                 workSheet.View.ZoomScale = 80;

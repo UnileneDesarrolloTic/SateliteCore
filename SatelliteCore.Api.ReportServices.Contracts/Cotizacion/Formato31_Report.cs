@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     class Formato31_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato31_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Coti_Formato31_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -632,22 +632,26 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
 
 
-                workSheet.Cells["H" + (index+4) + ":K" + (index + 4)].Merge = true;
-                workSheet.Cells["H" + (index + 4) + ":K" + (index + 4)].Value = "Firma del Representante de la Empresa";
-                workSheet.Cells["H" + (index + 4) + ":K" + (index + 4)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells["H" + (index + 4) + ":K" + (index + 4)].Style.WrapText = true;
-                workSheet.Cells["H" + (index + 4) + ":K" + (index + 4)].Style.Font.Size = 8;
-                workSheet.Cells["H" + (index + 4) + ":K" + (index + 4)].Style.Font.Name = "Arial";
+                workSheet.Cells["H" + (index+5) + ":K" + (index + 5)].Merge = true;
+                workSheet.Cells["H" + (index + 5) + ":K" + (index + 5)].Value = "Firma del Representante de la Empresa";
+                workSheet.Cells["H" + (index + 5) + ":K" + (index + 5)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["H" + (index + 5) + ":K" + (index + 5)].Style.WrapText = true;
+                workSheet.Cells["H" + (index + 5) + ":K" + (index + 5)].Style.Font.Size = 8;
+                workSheet.Cells["H" + (index + 5) + ":K" + (index + 5)].Style.Font.Name = "Arial";
 
 
 
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Merge = true;
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Value = "Lugar …..…………….fecha, ….....de…….………….....del 2019.";
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Style.WrapText = true;
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Style.Font.Size = 8;
-                workSheet.Cells["N" + (index + 4) + ":U" + (index + 4)].Style.Font.Name = "Arial";
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Merge = true;
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Value = "Lugar …..…………….fecha, ….....de…….………….....del 2019.";
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Style.WrapText = true;
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Style.Font.Size = 8;
+                workSheet.Cells["N" + (index + 5) + ":U" + (index + 5)].Style.Font.Name = "Arial";
 
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index, -8, 6, 85);
+                firmaCatizacion.SetSize(250, 80);
 
                 workSheet.View.ZoomScale = 85;
 

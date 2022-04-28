@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato19_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato19_Model cotizacion)
+        public static string Exportar(Image firma,Image logoUnilene, Coti_Formato19_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -486,7 +486,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Row(index).Height = 21.75;
                 index++;
                 workSheet.Row(index).Height = 19.5;
-                index++;
+
+                index=index+2;
                 workSheet.Row(index).Height = 15;
                 workSheet.Cells["B" + index + ":H" + index].Merge = true;
                 workSheet.Cells["B" + index + ":H" + index].Value = "Firma, nombre y apellido del proveedoro representante legal o";
@@ -498,6 +499,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["B" + index + ":H" + index].Value = "persona autorizada para emitir cotizaciones";
                 workSheet.Cells["B" + index + ":H" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index-7, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 TextoNegrita(workSheet);
 

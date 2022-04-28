@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     public class Formato63_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato63_Model cotizacion)
+        public static string Exportar(Image firma,Image logoUnilene, Coti_Formato63_Model cotizacion)
         {
             byte[] file;
 
@@ -661,6 +661,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 workSheet.Cells["A" + index].Style.Font.Size = 10;
                 workSheet.Cells["A" + index].Style.Font.Name = "Arial";
+
+
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index+1, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 workSheet.View.ZoomScale = 80;
                 file = excelPackage.GetAsByteArray();

@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     class Formato27_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato27_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Coti_Formato27_Model cotizacion)
         {
 
             byte[] file;
@@ -453,14 +453,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 worksheet.Cells["D" + (index + 17) + ":" + "J" + (index + 17)].Style.Font.Size = 9;
 
 
-                worksheet.Row(index + 24).Height = 27.5;
-                worksheet.Cells["C" + (index + 24) + ":" + "F" + (index + 24)].Merge = true;
-                worksheet.Cells["C" + (index + 24) + ":" + "F" + (index + 24)].Value = "Firma, nombres y apellidos del proveedor o representante legal o Persona autorizada para emitir cotizaciones";
-                worksheet.Cells["C" + (index + 24) + ":" + "F" + (index + 24)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                worksheet.Cells["C" + (index + 24) + ":" + "F" + (index + 24)].Style.Font.Size = 9;
-                worksheet.Cells["C" + (index + 24) + ":" + "F" + (index + 24)].Style.WrapText = true;
+                worksheet.Row(index + 25).Height = 27.5;
+                worksheet.Cells["C" + (index + 25) + ":" + "F" + (index + 25)].Merge = true;
+                worksheet.Cells["C" + (index + 25) + ":" + "F" + (index + 25)].Value = "Firma, nombres y apellidos del proveedor o representante legal o Persona autorizada para emitir cotizaciones";
+                worksheet.Cells["C" + (index + 25) + ":" + "F" + (index + 25)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["C" + (index + 25) + ":" + "F" + (index + 25)].Style.Font.Size = 9;
+                worksheet.Cells["C" + (index + 25) + ":" + "F" + (index + 25)].Style.WrapText = true;
 
-
+                ExcelPicture firmaCatizacion = worksheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index+18, -5, 2, 85);
+                firmaCatizacion.SetSize(265, 120);
 
                 worksheet.View.ZoomScale = 100;
 

@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 {
     class Formato18_Report
     {
-        public static string Exportar(Image logoUnilene, Coti_Formato18_Model cotizacion)
+        public static string Exportar(Image firma, Image logoUnilene, Coti_Formato18_Model cotizacion)
         {
             byte[] file;
             string reporte = null;
@@ -21,7 +21,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 var workSheet = excelPackage.Workbook.Worksheets.Add("Cotización LoretoF1");
                 ExcelPicture imagenUnilene = workSheet.Drawings.AddPicture("unilene", logoUnilene);
                 imagenUnilene.SetPosition(0, 0, 0, 0);
-                imagenUnilene.SetSize(120, 30);
+                imagenUnilene.SetSize(180, 40);
 
                 workSheet.Cells.Style.Font.Name = "Arial";
                 workSheet.Cells.Style.Font.Size = 11;
@@ -77,10 +77,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 workSheet.Cells["A7"].Style.Font.Bold = true;
                 workSheet.Cells["A7"].Style.Font.Size = 10;
+                workSheet.Cells["A7"].Style.WrapText = true;
 
                 workSheet.Cells["C7"].Value = cotizacion.Prov_RazonSocial;
                 workSheet.Cells["C7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                workSheet.Cells["C7"].Style.Font.Size = 10;
+                workSheet.Cells["C7"].Style.Font.Size = 9;
+                workSheet.Cells["A7"].Style.WrapText = true;
 
                 workSheet.Cells["J7"].Value = "Email:";
                 workSheet.Cells["J7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -577,6 +579,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 workSheet.Cells["A" + index + ":W" + index].Merge = true;
 
 
+                ExcelPicture firmaCatizacion = workSheet.Drawings.AddPicture("Firma_Unilene", firma);
+                firmaCatizacion.SetPosition(index-2, -8, 1, 85);
+                firmaCatizacion.SetSize(265, 120);
 
 
                 workSheet.View.ZoomScale = 85;
@@ -602,7 +607,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             workSheet.Column(5).Width = 6 + 0.71;
 
             workSheet.Column(6).Width = 8.57 + 0.71;
-            workSheet.Column(7).Width = 3.21 + 0.71;
+            workSheet.Column(7).Width = 8.21 + 0.71;
             workSheet.Column(8).Width = 0.0;
             workSheet.Column(9).Width = 6.29 + 0.71;
             workSheet.Column(10).Width = 1.14 + 0.71;
