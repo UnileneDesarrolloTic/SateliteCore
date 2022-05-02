@@ -29,7 +29,10 @@ namespace SatelliteCore.Api.Controllers
             _controlCalidadServices = controlCalidadServices;
             _appConfig = appConfig;
         }
+        //put es actualizar
+        //post es para insertar
 
+        #region CERTIFICADO DE ESTERILIZACION
         [HttpPost("ListarCertificados")]
         public async Task<ActionResult> ListarCertificados(DatosListarCertificadoPaginado datos)
         {
@@ -72,8 +75,6 @@ namespace SatelliteCore.Api.Controllers
                         = new ResponseModel<string>(true, "No se completó ", ex.Message);
                 return BadRequest(response);
             }
-
-
         }
 
         [HttpPost("ListarLotes")]
@@ -140,7 +141,8 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpPost("ListarCotizaciones")]
-        public async Task<ActionResult> ListarCotizaciones(DatosListarCotizacionesPaginado datos)
+ 
+       public async Task<ActionResult> ListarCotizaciones(DatosListarCotizacionesPaginado datos)
         {
             if (!ModelState.IsValid)
             {
@@ -157,5 +159,44 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok(response);
         }
+        #endregion
+
+        #region ANALISIS DE AGUJA
+
+        [HttpPost("RegistrarControlAgujas")]
+        public async Task<ActionResult> RegistrarControlAgujas(ControlAgujasModel matricula)
+        {
+            int result = await _controlCalidadServices.RegistrarControlAgujas(matricula);
+
+            ResponseModel<int> response
+                    = new ResponseModel<int>(true, "El lote se registró correctamente", result);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("ListarAnalisisAguja")]
+        public async Task<IActionResult> ListarAnalisisAguja(string lote)
+        {
+            IEnumerable<AnalisisAgujaModel> listaAnalisis = await _controlCalidadServices.ListarAnalisisAguja(lote);
+            return Ok(listaAnalisis);
+        }
+
+        [HttpGet("ListaOrdenesCompra")]
+        public async Task<IActionResult> ListaOrdenesCompra(string NumeroOrden)
+        {
+            IEnumerable<AnalisisAgujaModel> listaOrdenesCompra = await _controlCalidadServices.ListaOrdenesCompra(NumeroOrden);
+            return Ok(listaOrdenesCompra);
+        }
+
+        [HttpGet("ListarCiclos")]
+        public async Task<IActionResult> ListarCiclos(string identificador)
+        {
+            IEnumerable<AnalisisAgujaModel> listarCiclos = await _controlCalidadServices.ListarCiclos(identificador);
+            return Ok(listarCiclos);
+        }
+
+        #endregion
+
     }
 }

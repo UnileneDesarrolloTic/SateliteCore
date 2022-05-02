@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -19,6 +20,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             _appConfig = appConfig;
         }
+
+        #region CERTIFICADO DE ESTERILIZACION
         public async Task<(List<CertificadoEsterilizacionEntity>, int)> ListarCertificados(DatosListarCertificadoPaginado datos)
         {
             (List<CertificadoEsterilizacionEntity> ListaCertificados, int totalRegistros) result;
@@ -111,6 +114,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return si;
         }
+        
 
         public async Task<int> RegistrarLote(LoteEntity lote)
         {
@@ -145,5 +149,52 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+        #endregion
+
+        #region ANALISIS DE AGUJAS - 2022
+        public async Task<int> RegistrarControlAgujas(ControlAgujasModel matricula)
+        {
+            int result;
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryFirstAsync<int>("SP_AA_INSERTAR_ANALISIS_AGUJA_CABECERA", matricula, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<AnalisisAgujaModel>> ListarAnalisisAguja(string lote)
+        {
+            IEnumerable<AnalisisAgujaModel> result = new List<AnalisisAgujaModel>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<AnalisisAgujaModel>("SP_AA_LISTAR_ANALISIS_AGUJA", new { lote }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<AnalisisAgujaModel>> ListaOrdenesCompra(string NumeroOrden)
+        {
+            IEnumerable<AnalisisAgujaModel> result = new List<AnalisisAgujaModel>();
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<AnalisisAgujaModel>("SP_AA_LISTAR_ANALISIS_ORDEN_COMPRA", new { NumeroOrden }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<AnalisisAgujaModel>>ListarCiclos(string identificador)
+        {
+            IEnumerable<AnalisisAgujaModel> result = new List<AnalisisAgujaModel>();
+            using(SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<AnalisisAgujaModel>("SP_AA_LISTAR_TABLA_CICLOS", new { identificador }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+        #endregion
     }
 }
