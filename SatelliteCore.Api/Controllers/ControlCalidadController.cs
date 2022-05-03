@@ -178,6 +178,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ListarAnalisisAguja")]
         public async Task<IActionResult> ListarAnalisisAguja(string lote)
         {
+
             IEnumerable<AnalisisAgujaModel> listaAnalisis = await _controlCalidadServices.ListarAnalisisAguja(lote);
             return Ok(listaAnalisis);
         }
