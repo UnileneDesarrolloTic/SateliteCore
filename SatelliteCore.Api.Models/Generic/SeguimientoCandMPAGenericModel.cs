@@ -7,5 +7,6 @@ namespace SatelliteCore.Api.Models.Generic
     {
        public IEnumerable<SeguimientoCandMPAModel> SeguimientoCandidatosMPA { get; set; }
        public IEnumerable<DetalleSeguimientoCandMPAModel> OrdenComprasPendientes { get; set; }
+       public IEnumerable<TotalesProductoMPArimaModel> DetalleTotalesProducto { get; set; }
     }
 }

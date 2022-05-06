@@ -7,5 +7,6 @@ namespace SatelliteCore.Api.Models.Generic
     {
         public List<ProductoArimaModel> Productos { get; set; }
         public List<TransitoProductoArimaModel> DetalleTransito { get; set; }
+        
     }
 }

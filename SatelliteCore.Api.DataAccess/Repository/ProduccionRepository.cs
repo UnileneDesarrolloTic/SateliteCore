@@ -45,6 +45,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             {
                 result.SeguimientoCandidatosMPA = await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
                 result.OrdenComprasPendientes = await satelliteContext.QueryAsync<DetalleSeguimientoCandMPAModel>("usp_pro_SeguimientoDetalleCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
+                result.DetalleTotalesProducto = await satelliteContext.QueryAsync<TotalesProductoMPArimaModel>("usp_pro_TotalesCanditosMPA", commandType: CommandType.StoredProcedure);
 
                 satelliteContext.Dispose();
             }
