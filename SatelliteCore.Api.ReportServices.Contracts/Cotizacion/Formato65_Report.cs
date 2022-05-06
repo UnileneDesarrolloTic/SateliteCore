@@ -25,7 +25,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 imagenUnilene.SetSize(204, 85);
 
                 worksheet.Cells.Style.Font.Name = "Arial";
-                worksheet.Cells.Style.Font.Size = 11;
+                worksheet.Cells.Style.Font.Size = 12;
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
 
@@ -39,17 +39,24 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 worksheet.Cells["K2"].Value = cotizacion.Fecha_1.ToString("dd/MM/yyyy");
                 worksheet.Cells["K3"].Value = "1 de 1";
 
-                worksheet.Cells["A4"].Value = "Cotización Nº " + cotizacion.Nro_Cotizacion;
+                worksheet.Cells["A4"].Value = "Cotización Nº " + cotizacion.Nro_Cotizacion +"-" +cotizacion.Fecha_1.ToString("yyyy") ;
                 worksheet.Cells["A4"].Style.Font.Size = 16;
 
-                worksheet.Cells["B5"].Value = "UNILENE S.A.C.";
-                worksheet.Cells["B5"].Style.Font.Size = 14;
+                worksheet.Cells["A5"].Value = "OFICINAS: JR. NAPO 450";
+                worksheet.Cells["A5"].Style.Font.Size = 12;
+                worksheet.Cells["A5"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                worksheet.Cells["B6"].Value = "JR. NAPO 450 - BREÑA";
-                worksheet.Cells["B6"].Style.Font.Size = 12;
+                worksheet.Cells["A6"].Value = "CENTRAL TELEFÓNICA: 997509088";
+                worksheet.Cells["A6"].Style.Font.Size = 12;
+                worksheet.Cells["A6"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                worksheet.Cells["B7"].Value = "Lima - Perú";
-                worksheet.Cells["B7"].Style.Font.Size = 12;
+                worksheet.Cells["A7"].Value = "info@unilene.com";
+                worksheet.Cells["A7"].Style.Font.Size = 12;
+                worksheet.Cells["A7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells["A8"].Value = "www.unilene.com";
+                worksheet.Cells["A8"].Style.Font.Size = 12;
+                worksheet.Cells["A8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
                 worksheet.Cells["A10"].Value = "Código";
                 worksheet.Cells["C10"].Value = ":";
@@ -133,38 +140,38 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                 //DETALLE
                 worksheet.Cells["A20"].Value = "CODSUT";
-                worksheet.Cells["A20"].Style.Font.Size = 10;
+                worksheet.Cells["A20"].Style.Font.Size = 12;
 
                 worksheet.Cells["D20"].Value = "DESCRIPCIÓN";
-                worksheet.Cells["D20"].Style.Font.Size = 10;
+                worksheet.Cells["D20"].Style.Font.Size = 12;
 
                 worksheet.Cells["E20"].Value = "MARCA";
-                worksheet.Cells["E20"].Style.Font.Size = 10;
+                worksheet.Cells["E20"].Style.Font.Size = 12;
 
                 worksheet.Cells["F20"].Value = "PRESENTACION";
-                worksheet.Cells["F20"].Style.Font.Size = 10;
+                worksheet.Cells["F20"].Style.Font.Size = 12;
 
                 worksheet.Cells["G20"].Value = "PROCED.";
-                worksheet.Cells["G20"].Style.Font.Size = 10;
+                worksheet.Cells["G20"].Style.Font.Size = 12;
 
                 worksheet.Cells["I20"].Value = "UND MEDIDA";
-                worksheet.Cells["I20"].Style.Font.Size = 10;
+                worksheet.Cells["I20"].Style.Font.Size = 12;
                 worksheet.Cells["I20"].Style.WrapText = true;
 
 
                 worksheet.Cells["J20"].Value = "CANTIDAD";
-                worksheet.Cells["J20"].Style.Font.Size = 10;
+                worksheet.Cells["J20"].Style.Font.Size = 12;
 
                 worksheet.Cells["K20"].Value = "PLAZOENTREGA";
-                worksheet.Cells["K20"].Style.Font.Size = 10;
+                worksheet.Cells["K20"].Style.Font.Size = 11;
                 worksheet.Cells["K20"].Style.WrapText = true;
 
                 worksheet.Cells["L20"].Value = "PRECIO UNITARIO";
-                worksheet.Cells["L20"].Style.Font.Size = 10;
+                worksheet.Cells["L20"].Style.Font.Size = 12;
                 worksheet.Cells["L20"].Style.WrapText = true;
 
                 worksheet.Cells["M20"].Value = "TOTAL";
-                worksheet.Cells["M20"].Style.Font.Size = 10;
+                worksheet.Cells["M20"].Style.Font.Size = 12;
                 worksheet.Cells["M20"].Style.WrapText = true;
 
                 //                worksheet.Cells["J20"].Value = "PREC. UNIT";
@@ -183,63 +190,54 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
                     worksheet.Cells["A" + row + ":C" + row].Merge = true;
                     worksheet.Cells["A" + row + ":C" + row].Value = item.Codsut;
-                    worksheet.Cells["A" + row + ":C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["A" + row + ":C" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["A" + row + ":C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     worksheet.Cells["A" + row + ":C" + row].Style.WrapText = true;
 
                     worksheet.Cells["D" + row].Value = item.Descripcion;
-                    worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["D" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     worksheet.Cells["D" + row].Style.WrapText = true;
-                    worksheet.Cells["D" + row].Style.Font.Size = 10;
+                    worksheet.Cells["D" + row].Style.Font.Size = 12;
 
 
                     worksheet.Cells["E" + row].Merge = true;
                     worksheet.Cells["E" + row].Value = item.Marca;
-                    worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["E" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     worksheet.Cells["E" + row].Style.WrapText = true;
 
 
                     worksheet.Cells["F" + row].Value = item.Presentacion;
-                    worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["F" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["F" + row].Style.WrapText = true;
                     worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["G" + row + ":H" + row].Merge = true;
                     worksheet.Cells["G" + row + ":H" + row ].Value = item.Procedencia;
-                    worksheet.Cells["G" + row + ":H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["G" + row + ":H" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["G" + row + ":H" + row].Style.WrapText = true;
                     worksheet.Cells["G" + row + ":H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["I" + row].Value = item.Unidadmedida;
-                    worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["I" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["I" + row].Style.WrapText = true;
                     worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["J" + row].Value = item.Cantidad;
-                    worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["J" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["J" + row].Style.WrapText = true;
                     worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     worksheet.Cells["J" + row].Style.Numberformat.Format = "#,##0";
 
                     worksheet.Cells["K" + row].Value = item.PlazoEntrega;
-                    worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["K" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells["K" + row].Style.Font.Size =10;
+                    worksheet.Cells["K" + row].Style.Font.Size = 11;
 
 
                     worksheet.Cells["L" + row].Value = item.Precio_unitario;
-                    worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["L" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["L" + row].Style.WrapText = true;
                     worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -247,7 +245,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
 
 
                     worksheet.Cells["M" + row].Value = item.Total;
-                    worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["M" + row].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheet.Cells["M" + row].Style.WrapText = true;
                     worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -386,16 +383,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
             worksheet.Column(1).Width = 6.86 + 0.71;
             worksheet.Column(2).Width = 13.86 + 0.71;
             worksheet.Column(3).Width = 2.29 + 0.71;
-            worksheet.Column(4).Width = 32.00 + 0.71;
+            worksheet.Column(4).Width = 34.00 + 0.71;
             worksheet.Column(5).Width = 45 + 0.71;
             worksheet.Column(6).Width = 30 + 0.71; 
             worksheet.Column(7).Width = 2.29 + 0.71;
             worksheet.Column(8).Width = 12.86 + 0.71;
             worksheet.Column(9).Width = 12.57 + 0.71;
             worksheet.Column(10).Width = 13.71 + 0.71;
-            worksheet.Column(11).Width = 12.86 + 0.71;
-            worksheet.Column(12).Width = 12.86 + 0.71;
-            worksheet.Column(13).Width = 12.86 + 0.71;
+            worksheet.Column(11).Width = 15.86 + 0.71;
+            worksheet.Column(12).Width = 14.86 + 0.71;
+            worksheet.Column(13).Width = 14.86 + 0.71;
 
             worksheet.Row(10).Height = 21;
             worksheet.Row(11).Height = 21;
@@ -412,6 +409,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A4:K4"].Merge = true;
+            worksheet.Cells["A5:D5"].Merge = true;
+            worksheet.Cells["A6:D6"].Merge = true;
+            worksheet.Cells["A7:D7"].Merge = true;
+            worksheet.Cells["A8:D8"].Merge = true;
+
             worksheet.Cells["A10:B10,A11:B11,A12:B12,A13:B13,A14:B14,A15:B15,A16:B16,A17:B17,A18:B18"].Merge = true;
 
             worksheet.Cells["D10:E10,D11:E11,D12:E12,D13:E13,D14:E14,D15:E15,D16:E16,D17:E17,D18:E18"].Merge = true;
