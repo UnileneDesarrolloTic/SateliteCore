@@ -39,7 +39,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                 worksheet.Cells["K2"].Value = cotizacion.Fecha_1.ToString("dd/MM/yyyy");
                 worksheet.Cells["K3"].Value = "1 de 1";
 
-                worksheet.Cells["A4"].Value = "Cotización Nº " + cotizacion.Nro_Cotizacion +"-" +cotizacion.Fecha_1.ToString("yyyy") ;
+                worksheet.Cells["A4"].Value = "Cotización Nº " + cotizacion.Nro_Cotizacion +"-" +cotizacion.Fecha_1.ToString("yyyy")+"-Unilene S.A.C" ;
                 worksheet.Cells["A4"].Style.Font.Size = 16;
 
                 worksheet.Cells["A5"].Value = "OFICINAS: JR. NAPO 450";
