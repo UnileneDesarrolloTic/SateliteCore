@@ -12,6 +12,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);
         public Task<SeguimientoCandMPAGenericModel> ListaSeguimientoCandidatosMP(string regla);
 
+        public Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item);
+
         public Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato);
 
     }

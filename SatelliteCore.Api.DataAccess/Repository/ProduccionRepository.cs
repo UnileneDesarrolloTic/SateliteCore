@@ -53,6 +53,23 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item)
+        {
+            List<DetalleControlCalidadItemMP> result;
+
+            using (var satelliteContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                using (var result_db = await satelliteContext.QueryMultipleAsync("usp_pro_DetalleControlCalidadMP", new { Item }, commandType: CommandType.StoredProcedure))
+                {
+                    result = result_db.Read<DetalleControlCalidadItemMP>().ToList();
+                } 
+                satelliteContext.Dispose();
+            }
+
+            return result;
+        }
+
+
         public async Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro)
         {
 

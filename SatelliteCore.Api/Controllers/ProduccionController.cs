@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
@@ -49,6 +50,12 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaCandidatos);
         }
 
+        [HttpGet("ControlCalidadItemMP")]
+        public async Task<ActionResult> ControlCalidadItemMP(string Item)
+        {
+            List<DetalleControlCalidadItemMP> listaDetalleControlCalidad = await _pronosticoServices.ControlCalidadItemMP(Item);
+            return Ok(listaDetalleControlCalidad);
+        }
 
         // vamos a agregar el controlador de compra materia prima
 
