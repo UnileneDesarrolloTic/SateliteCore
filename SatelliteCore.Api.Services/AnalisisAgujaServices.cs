@@ -1,5 +1,6 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -42,14 +43,11 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<int>(true, Constante.MESSAGE_SUCCESS, cantidad);
         }
 
-        //public async Task<IEnumerable<ListarAnalisisAgujaModel>> ListarCiclos(string identificador)
-        //{
-        //    return await _analisisAgujaRepository.ListarCiclos(identificador);
-        //}
+        public async Task<ResponseModel<object>> RegistrarAnalisisAguja(ControlAgujasModel matricula)
+        {
+            string cantidad = await _analisisAgujaRepository.RegistrarAnalisisAguja(matricula);
 
-        //public async Task<int> RegistrarControlAgujas(ControlAgujasModel matricula)
-        //{
-        //    return await _analisisAgujaRepository.RegistrarControlAgujas(matricula);
-        //}
+            return new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { numeroAnalisis = cantidad });
+        }
     }
 }

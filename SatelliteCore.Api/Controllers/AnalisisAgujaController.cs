@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Helpers;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -49,21 +52,19 @@ namespace SatelliteCore.Api.Controllers
             return Ok(cantidadPruebas);
         }
 
-        //[HttpGet("ListarCiclos")]
-        //public async Task<IActionResult> ListarCiclos(string identificador)
-        //{
-        //    IEnumerable<ListarAnalisisAgujaModel> listarCiclos = await _analisisAgujaServices.ListarCiclos(identificador);
-        //    return Ok(listarCiclos);
-        //}
+        [HttpPost("RegistrarAnalisisAguja")]
+        public async Task<IActionResult> RegistrarAnalisisAguja(ControlAgujasModel matricula)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<string> listaErrores = ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage).ToList();
+                throw new ValidationModelException(listaErrores);
+            }
 
-        //[HttpPost("RegistrarControlAgujas")]
-        //public async Task<ActionResult> RegistrarControlAgujas(ControlAgujasModel matricula)
-        //{
-        //    int result = await _analisisAgujaServices.RegistrarControlAgujas(matricula);
+            matricula.CodUsuarioSesion = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-        //    ResponseModel<int> response = new ResponseModel<int>(true, "El lote se registró correctamente", result);
-
-        //    return Ok(result);
-        //}
-    }
+            ResponseModel<object> cantidadPruebas = await _analisisAgujaServices.RegistrarAnalisisAguja(matricula);
+            return Ok(cantidadPruebas);
+        }
+    }   
 }

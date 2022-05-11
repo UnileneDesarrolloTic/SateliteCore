@@ -23,7 +23,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<ListarAnalisisAgujaModel> result = new List<ListarAnalisisAgujaModel>();
 
-            string script = "SELECT Lote, Item, DescripcionItem, OrdenCompra, Proveedor, Cantidad, FechaAnalisis, CantidadPruebas FROM TBMAnalisisAgujas AA " +
+            string script = "SELECT Lote, Item, DescripcionItem, OrdenCompra, Proveedor, Cantidad, FechaRegistro, CantidadPruebas FROM TBMAnalisisAgujas AA " +
                 "WHERE 1=1" + (string.IsNullOrEmpty(ordenCompra) ? "" : " AND OrdenCompra LIKE @ordenCompra") + (string.IsNullOrEmpty(lote) ? "" : " AND Lote LIKE @lote") +
                 (string.IsNullOrEmpty(item) ? "" : " AND DescripcionItem LIKE @item") + " ORDER BY FechaRegistro DESC OFFSET (@pagina - 1) * 20 ROWS FETCH NEXT 20 ROWS ONLY";
 
@@ -45,7 +45,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "LEFT JOIN WH_ControlCalidadDetalle aa WITH(NOLOCK) ON aa.CompaniaSocio = a.CompaniaSocio AND aa.ControlNumero = a.ControlNumero AND aa.Secuencia = a.Secuencia " +
                 "LEFT JOIN WH_OrdenCompraDetalle c WITH(NOLOCK)ON b.CompaniaSocio = c.CompaniaSocio AND b.NumeroOrden = c.NumeroOrden AND a.Secuencia = c.Secuencia " +
                 "LEFT JOIN WH_OrdenCompra d WITH(NOLOCK) ON b.CompaniaSocio = d.CompaniaSocio AND b.NumeroOrden = d.NumeroOrden " +
-                "LEFT JOIN SatelliteCore.dbo.TBMAnalisisAgujas e WITH(NOLOCK) ON e.OrdenCompra = b.NumeroOrden AND e.item = a.Item AND e.ReferenciaSecuencia = a.Secuencia " +
+                "LEFT JOIN SatelliteCore.dbo.TBMAnalisisAgujas e WITH(NOLOCK) ON e.ControlNumero = a.ControlNumero AND e.ReferenciaSecuencia = a.Linea " +
                 "WHERE a.CompaniaSocio = '01000000' AND b.ControlNumero >= '' AND b.NumeroOrden = @NumeroOrden AND LEFT(b.NumeroOrden, 2) <> 'PE' " +
                 "ORDER BY a.Linea";
 
@@ -72,27 +72,16 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> RegistrarControlAgujas(ControlAgujasModel matricula)
+        public async Task<string> RegistrarAnalisisAguja (ControlAgujasModel matricula)
         {
-            int result;
+            string result;
 
-            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await connection.QueryFirstAsync<int>("SP_AA_INSERTAR_ANALISIS_AGUJA_CABECERA", matricula, commandType: CommandType.StoredProcedure);
-                connection.Dispose();
+                result = await connection.QueryFirstAsync<string>("sp_AnalisisAguja_RegistrarAnalisis", matricula, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
 
-        //public async Task<IEnumerable<ListarAnalisisAgujaModel>> ListarCiclos(string identificador)
-        //{
-        //    IEnumerable<ListarAnalisisAgujaModel> result = new List<ListarAnalisisAgujaModel>();
-        //    using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-        //    {
-        //        result = await context.QueryAsync<ListarAnalisisAgujaModel>("SP_AA_LISTAR_TABLA_CICLOS", new { identificador }, commandType: CommandType.StoredProcedure);
-
-        //    }
-        //    return result;
-        //}
     }
 }
