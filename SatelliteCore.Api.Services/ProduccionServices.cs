@@ -44,6 +44,42 @@ namespace SatelliteCore.Api.Services
             return await _pronosticoRepository.ListaSeguimientoCandidatosMP(regla);
         }
 
+        public async Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item)
+        {
+            List<DetalleControlCalidadItemMP> productosArima = await _pronosticoRepository.ControlCalidadItemMP(Item);
+      
+            decimal acumulador = 0;
+            string NumeroOrden = "";
+            int cnt=1;
+            List<DetalleControlCalidadItemMP> aux = new List<DetalleControlCalidadItemMP>(); // List<Author> authors = new List<Author>  
+            List<DetalleControlCalidadItemMP> aux2 = new List<DetalleControlCalidadItemMP>(); // List<Author> authors = new List<Author>  
+            foreach (DetalleControlCalidadItemMP detalle in productosArima)
+            {
+                if (cnt == 1)
+                {
+                    NumeroOrden = detalle.ReferenciaNumeroDocumentoOrden;
+                    acumulador = detalle.Cantidad;
+                }
+                else
+                {
+                    acumulador = detalle.Cantidad + acumulador;
+                    if (acumulador == 0)
+                    {
+                        aux = new List<DetalleControlCalidadItemMP>();
+                    }
+                    else
+                    {
+                            aux.Add(detalle);
+                    }
+                }
+                    cnt++;
+
+            }
+
+                 
+                return aux;
+        }
+
         public async Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato)
         {
 
