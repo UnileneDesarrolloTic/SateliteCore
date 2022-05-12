@@ -13,6 +13,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<SeguimientoCandMPAGenericModel> ListaSeguimientoCandidatosMP(string regla);
 
         public Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item);
+
+        public Task<bool> MostrarColumnaMP(int Usuario);
         public Task<SeguimientoComprasMPArima> SeguimientoCompraMPArima(PronosticoCompraMP dato);
 
     }

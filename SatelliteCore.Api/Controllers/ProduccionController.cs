@@ -57,11 +57,29 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaDetalleControlCalidad);
         }
 
-        // vamos a agregar el controlador de compra materia prima
+        [HttpGet("MostrarColumnaMP")]
+        public async Task<ActionResult> MostrarColumnaMP()
+        {
+            if (!ModelState.IsValid)
+            {
+                ResponseModel<string> responseError =
+                             new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
 
+                return BadRequest(responseError);
+            }
+
+            int idUsuario =  Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            bool Permiso = await _pronosticoServices.MostrarColumnaMP(idUsuario);
+            ResponseModel<dynamic> responseSuccesss = new ResponseModel<dynamic>(true, Constante.MESSAGE_SUCCESS, new {permisoColumna=Permiso});
+
+            return Ok(responseSuccesss);
+        }
+
+        // vamos a agregar el controlador de compra materia prima
         [HttpPost("CompraMateriaPrima")]
         public async Task<ActionResult> PronosticoCompraMP(PronosticoCompraMP dato)
-        {
+        {   
+
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError =

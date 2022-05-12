@@ -80,6 +80,11 @@ namespace SatelliteCore.Api.Services
                 return aux;
         }
 
+        public async Task<bool> MostrarColumnaMP(int usuario)
+        {
+            return await _pronosticoRepository.MostrarColumnaMP(usuario);
+        }
+
         public async Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato)
         {
 

@@ -14,6 +14,8 @@ namespace SatelliteCore.Api.Services.Contracts
 
         public Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item);
 
+        public Task<bool> MostrarColumnaMP(int usuario);
+
         public Task<List<CompraMPArimaModel>> SeguimientoCompraMPArima(PronosticoCompraMP dato);
 
     }

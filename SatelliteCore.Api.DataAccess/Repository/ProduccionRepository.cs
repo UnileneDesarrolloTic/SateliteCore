@@ -46,7 +46,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 result.SeguimientoCandidatosMPA = await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
                 result.OrdenComprasPendientes = await satelliteContext.QueryAsync<DetalleSeguimientoCandMPAModel>("usp_pro_SeguimientoDetalleCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
                 result.DetalleTotalesProducto = await satelliteContext.QueryAsync<TotalesProductoMPArimaModel>("usp_pro_TotalesCanditosMPA", commandType: CommandType.StoredProcedure);
-
                 satelliteContext.Dispose();
             }
 
@@ -64,6 +63,23 @@ namespace SatelliteCore.Api.DataAccess.Repository
                     result = result_db.Read<DetalleControlCalidadItemMP>().ToList();
                 } 
                 satelliteContext.Dispose();
+            }
+
+            return result;
+        }
+
+        public async Task<bool> MostrarColumnaMP(int Usuario)
+        {
+            bool result;
+
+            using (var satelliteContext = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                 using (var result_db = await satelliteContext.QueryMultipleAsync("usp_pro_MostrarColumnaPorUsuarioMP", new { Usuario }, commandType: CommandType.StoredProcedure))
+                 {
+                     result = result_db.Read<bool>().First();
+                 }
+                 satelliteContext.Dispose();
+                
             }
 
             return result;
