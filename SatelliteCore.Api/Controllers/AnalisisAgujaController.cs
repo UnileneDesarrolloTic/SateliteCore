@@ -66,5 +66,29 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<object> cantidadPruebas = await _analisisAgujaServices.RegistrarAnalisisAguja(matricula);
             return Ok(cantidadPruebas);
         }
+
+        [HttpGet("ValidarLoteCreado")]
+        public async Task<IActionResult> ValidarLoteCreado(string controlNumero, int secuencia)
+        {
+            if (string.IsNullOrEmpty(controlNumero) || secuencia == 0 )
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            int codUsuarioSesion = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> cantidadPruebas = await _analisisAgujaServices.ValidarLoteCreado(controlNumero, secuencia, codUsuarioSesion);
+
+            return Ok(cantidadPruebas);
+        }
+
+        [HttpGet("ObtenerAnalisisAguja")]
+        public async Task<IActionResult> ObtenerAnalisisAguja(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ObtenerAnalisisAgujaModel result = await _analisisAgujaServices.ObtenerAnalisisAguja(loteAnalisis);
+
+            return Ok(result);
+        }
     }   
 }

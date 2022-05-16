@@ -39,7 +39,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<ListarOrdenCompra> result = new List<ListarOrdenCompra>();
             string script = "SELECT a.Linea Secuencia,RTRIM(b.ControlNumero) ControlNumero,RTRIM(ISNULL(c.Item, a.Item)) Item,c.Descripcion DescripcionItem,RTRIM(c.UnidadCodigo) UnidadCodigo," +
-                "CAST(c.CantidadPedida AS INT) CantidadPedida,CAST(c.CantidadRecibida AS INT) CantidadRecibida,ISNULL(aa.LoteAprobado, '') AS LoteAprobado," +
+                "CAST(c.CantidadPedida AS INT) CantidadPedida,CAST(c.CantidadRecibida AS INT) CantidadRecibida,ISNULL(e.Lote, aa.LoteAprobado) AS LoteAprobado," +
                 "ISNULL(aa.LoteRechazado, '') AS LoteRechazado,d.Proveedor CodProveedor,RTRIM(b.NumeroOrden) NumeroOrden, ISNULL(e.Lote, '') Analisis FROM WH_ControlCalidadDetalle a WITH(NOLOCK) " +
                 "INNER JOIN WH_ControlCalidad b WITH(NOLOCK) ON a.CompaniaSocio = b.CompaniaSocio AND a.ControlNumero = b.ControlNumero " +
                 "LEFT JOIN WH_ControlCalidadDetalle aa WITH(NOLOCK) ON aa.CompaniaSocio = a.CompaniaSocio AND aa.ControlNumero = a.ControlNumero AND aa.Secuencia = a.Secuencia " +
@@ -82,6 +82,29 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+        public async Task ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion)
+        {
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                await connection.ExecuteAsync("usp_AnalisisAguja_ValidarLoteCreado", new { controlNumero, secuencia, codUsuarioSesion }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<ObtenerAnalisisAgujaModel> ObtenerAnalisisAguja(string loteAnalisis)
+        {
+            ObtenerAnalisisAgujaModel result = new ObtenerAnalisisAgujaModel();
+
+            string script = "SELECT ControlNumero, OrdenCompra, Item, DescripcionItem, CodProveedor, Proveedor, CantidadPruebas FROM TBMAnalisisAgujas WHERE Lote = @loteAnalisis";
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryFirstAsync<ObtenerAnalisisAgujaModel>(script, new { loteAnalisis });
+            }
+
+            return result;
+        }
+
+
 
     }
 }

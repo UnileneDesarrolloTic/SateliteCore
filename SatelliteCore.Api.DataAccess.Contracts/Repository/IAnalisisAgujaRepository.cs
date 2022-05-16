@@ -11,5 +11,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<ListarOrdenCompra>> ListaOrdenesCompra(string NumeroOrden);
         public Task<int> CantidadPruebaFlexionPorItem(string controlNumero, int secuencia);
         public Task<string> RegistrarAnalisisAguja(ControlAgujasModel matricula);
+        public Task ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion);
+        public Task<ObtenerAnalisisAgujaModel> ObtenerAnalisisAguja(string loteAnalisis);
     }
 }

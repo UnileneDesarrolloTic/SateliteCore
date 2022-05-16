@@ -13,6 +13,5 @@
         public string LoteRechazado { get; set; }
         public int CodProveedor { get; set; }
         public string NumeroOrden { get; set; }
-        public string Analisis { get; set; }
     }
 }

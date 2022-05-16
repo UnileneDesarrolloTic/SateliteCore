@@ -49,5 +49,20 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { numeroAnalisis = cantidad });
         }
+
+        public async Task<ResponseModel<string>> ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion)
+        {
+            await _analisisAgujaRepository.ValidarLoteCreado(controlNumero, secuencia, codUsuarioSesion);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, null);
+        }
+
+        public async Task<ObtenerAnalisisAgujaModel> ObtenerAnalisisAguja(string loteAnalisis)
+        {
+            ObtenerAnalisisAgujaModel cantidad = await _analisisAgujaRepository.ObtenerAnalisisAguja(loteAnalisis);
+
+            return cantidad;
+        }
+
     }
 }
