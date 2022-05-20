@@ -1,12 +1,17 @@
-﻿using SatelliteCore.Api.CrossCutting.Helpers;
+﻿
+using OfficeOpenXml;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
-using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace SatelliteCore.Api.Services
 {
@@ -18,15 +23,22 @@ namespace SatelliteCore.Api.Services
         {
             _contabilidadRepository = contabilidadRepository;
         }
-        public async Task<PaginacionModel<DetraccionesEntity>> ListarDetraccion(DatosListarDetraccionPaginado datos)
+        public async Task<List<DetraccionesEntity>> ListarDetraccion()
         {
 
-            (List<DetraccionesEntity> lista, int totalRegistros) resultDb = await _contabilidadRepository.ListarDetraccion(datos);
+            List<DetraccionesEntity> lista  = await _contabilidadRepository.ListarDetraccion();
+            return lista;
+        }
 
-            PaginacionModel<DetraccionesEntity> response = new PaginacionModel<DetraccionesEntity>(resultDb.lista, datos.Pagina, datos.RegistrosPorPagina, resultDb.totalRegistros);
-
+        public async Task<int> ProcesarDetraccionContabilidad (List<FormatoComprobantePagoDetraccion> dato)
+        {
+            int response = await _contabilidadRepository.ProcesarDetraccionContabilidad(dato);
             return response;
         }
 
+      
+
+
+
+        }
     }
-}
