@@ -34,6 +34,5 @@
         public const int FORMATO_69_ESSALUD_LORETO_F2 = 69;
         public const int FORMATO_70_ESSALUD_JULIACA_F2 = 70;
         public const int FORMATO_71_ESSALUD_SABOGAL_F2 = 71;
-
     }
 }

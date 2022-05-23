@@ -1,11 +1,13 @@
 ﻿using Dapper;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
+using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -76,35 +78,56 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             string result;
 
-            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await connection.QueryFirstAsync<string>("sp_AnalisisAguja_RegistrarAnalisis", matricula, commandType: CommandType.StoredProcedure);
+                result = await context.QueryFirstAsync<string>("sp_AnalisisAguja_RegistrarAnalisis", matricula, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
 
         public async Task ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion)
         {
-            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
-            {
-                await connection.ExecuteAsync("usp_AnalisisAguja_ValidarLoteCreado", new { controlNumero, secuencia, codUsuarioSesion }, commandType: CommandType.StoredProcedure);
-            }
+            using SqlConnection context = new SqlConnection(_appConfig.contextSpring);
+            await context.ExecuteAsync("usp_AnalisisAguja_ValidarLoteCreado", new { controlNumero, secuencia, codUsuarioSesion }, commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<ObtenerAnalisisAgujaModel> ObtenerAnalisisAguja(string loteAnalisis)
+        public async Task<(ObtenerAnalisisAgujaModel, List<AnalisisAgujaFlexionEntity>)> AnalisisAgujaFlexion(string loteAnalisis)
         {
-            ObtenerAnalisisAgujaModel result = new ObtenerAnalisisAgujaModel();
+            (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) analisis;
 
-            string script = "SELECT ControlNumero, OrdenCompra, Item, DescripcionItem, CodProveedor, Proveedor, CantidadPruebas FROM TBMAnalisisAgujas WHERE Lote = @loteAnalisis";
-            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            string script = "SELECT ControlNumero, OrdenCompra, Item, DescripcionItem, CodProveedor, Proveedor, CantidadPruebas FROM TBMAnalisisAgujas WHERE Lote = @loteAnalisis " +
+                "SELECT IdAnalisis, Lote,TipoRegistro,Llave,Valor,UsuarioRegistro,FechaRegistro FROM TBDAnalisisAgujaFlexion WHERE Lote = @loteAnalisis";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryFirstAsync<ObtenerAnalisisAgujaModel>(script, new { loteAnalisis });
+                using SqlMapper.GridReader multi = await context.QueryMultipleAsync(script, new { loteAnalisis });
+                analisis.cabecera = multi.Read<ObtenerAnalisisAgujaModel>().First();
+                analisis.detalle = multi.Read<AnalisisAgujaFlexionEntity>().ToList();
             }
 
-            return result;
+            return analisis;
         }
 
+        public async Task EliminarPruebaFlexionAguja(string loteAnalisis)
+        {
+            string script = "DELETE TBDAnalisisAgujaFlexion WHERE Lote = @loteAnalisis";
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { loteAnalisis });
+            }
+
+        }
+
+        public async Task GuardarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis)
+        {
+            string script = "INSERT INTO TBDAnalisisAgujaFlexion(Lote, TipoRegistro, Llave, Valor, UsuarioRegistro) VALUES (@lote, @tipoRegistro, @llave, @valor, @usuarioRegistro)";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, analisis);
+            }
+        }
 
     }
 }

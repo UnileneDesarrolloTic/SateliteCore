@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Helpers;
+using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
@@ -80,15 +81,39 @@ namespace SatelliteCore.Api.Controllers
             return Ok(cantidadPruebas);
         }
 
-        [HttpGet("ObtenerAnalisisAguja")]
-        public async Task<IActionResult> ObtenerAnalisisAguja(string loteAnalisis)
+        [HttpGet("AnalisisAgujaFlexion")]
+        public async Task<IActionResult> AnalisisAgujaFlexion(string loteAnalisis)
         {
             if (string.IsNullOrEmpty(loteAnalisis))
                 throw new ValidationModelException("Los datos enviados no son válidos !!");
 
-            ObtenerAnalisisAgujaModel result = await _analisisAgujaServices.ObtenerAnalisisAguja(loteAnalisis);
+            object analisis = await _analisisAgujaServices.AnalisisAgujaFlexion(loteAnalisis);
+
+            return Ok(analisis);
+        }
+
+        [HttpPost("GuardarEditarPruebaFlexionAguja")]
+        public async Task<IActionResult> GuardarEditarPruebaFlexion(List<GuardarPruebaFlexionAgujaModel> analisis)
+        {
+            if (!ModelState.IsValid)
+                throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
+
+            ResponseModel<string> result = await _analisisAgujaServices.GuardarEditarPruebaFlexionAguja(analisis);
 
             return Ok(result);
         }
+
+        [HttpGet("ReporteAnalisisFlexion")]
+        public async Task<IActionResult> ReporteAnalisisFlexion(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ResponseModel<string> reporte = await _analisisAgujaServices.ReporteAnalisisFlexion(loteAnalisis);
+
+            return Ok(reporte);
+        }
+
+
     }   
 }

@@ -79,13 +79,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection DMVentasContext = new SqlConnection(_appConfig.contextSpring))
             {
-                using (SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Satelite_CompraMateriaPrimaArima", dato , commandType: CommandType.StoredProcedure))
-                {
-                    result.Productos = multi.Read<CompraMPArimaModel>().ToList();
-                    result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
-                    result.DetalleCalidad = multi.Read<CompraMPArimaDetalleControlCalidad>().ToList();
-
-                }
+                using SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Satelite_CompraMateriaPrimaArima", dato, commandType: CommandType.StoredProcedure);
+                result.Productos = multi.Read<CompraMPArimaModel>().ToList();
+                result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
+                result.DetalleCalidad = multi.Read<CompraMPArimaDetalleControlCalidad>().ToList();
 
             }
 

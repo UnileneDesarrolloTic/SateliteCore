@@ -1,10 +1,13 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
+using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -57,11 +60,44 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, null);
         }
 
-        public async Task<ObtenerAnalisisAgujaModel> ObtenerAnalisisAguja(string loteAnalisis)
+        public async Task<object> AnalisisAgujaFlexion(string loteAnalisis)
         {
-            ObtenerAnalisisAgujaModel cantidad = await _analisisAgujaRepository.ObtenerAnalisisAguja(loteAnalisis);
+            (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) = await _analisisAgujaRepository.AnalisisAgujaFlexion(loteAnalisis);
 
-            return cantidad;
+            if (string.IsNullOrEmpty(cabecera.ControlNumero))
+                throw new NotFoundException("No se encontró el análisis");
+
+            object result = new { cabecera, detalle };
+            return result;
+        }
+
+        public async Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis)
+        {
+            string loteAnalisis = analisis[0].Lote;
+
+            await _analisisAgujaRepository.EliminarPruebaFlexionAguja(loteAnalisis);
+            await _analisisAgujaRepository.GuardarPruebaFlexionAguja(analisis);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo los datos de la prueba de flexión !!");
+        }
+
+
+        public async Task<ResponseModel<string>> ReporteAnalisisFlexion(string loteAnalisis)
+        {
+            dynamic datosAnalisis = await AnalisisAgujaFlexion(loteAnalisis);
+
+            ObtenerAnalisisAgujaModel cabeceraAnalisis = datosAnalisis.cabecera;
+            List<AnalisisAgujaFlexionEntity> detalleAnalisis = datosAnalisis.detalle;
+
+            if (detalleAnalisis.Count < 1)
+                return new ResponseModel<string>(false, $"El análisis {loteAnalisis} no cuenta con registros", null);
+            
+
+            FlexionAguja flexionAguja = new FlexionAguja();
+            string reporte = flexionAguja.GenerarReporte(loteAnalisis, cabeceraAnalisis, detalleAnalisis);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
         }
 
     }

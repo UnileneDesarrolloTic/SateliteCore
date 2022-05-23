@@ -50,7 +50,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Cotizacion
                     reporte = Formato10_Report.Exportar(logoUnilene, formato10);
                     return reporte;
 
-                case Constante.FORMATO_13_ESSALUD_CUSCO_F1: //
+                case Constante.FORMATO_13_ESSALUD_CUSCO_F1:
                     Coti_Formato13_Model formato13 = BsonSerializer.Deserialize<Coti_Formato13_Model>(cotizacion.AsBsonDocument);
                     reporte = Formato13_Report.Exportar(firma, logoUnilene, formato13);
                     return reporte;

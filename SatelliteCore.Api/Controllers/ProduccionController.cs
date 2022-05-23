@@ -49,9 +49,6 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaCandidatos);
         }
 
-
-        // vamos a agregar el controlador de compra materia prima
-
         [HttpPost("CompraMateriaPrima")]
         public async Task<ActionResult> PronosticoCompraMP(PronosticoCompraMP dato)
         {
