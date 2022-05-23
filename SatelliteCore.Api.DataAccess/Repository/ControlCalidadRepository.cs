@@ -96,9 +96,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 parameter.Add("@tipoIB", certificado.TipoIB, DbType.String, ParameterDirection.Input);
                 parameter.Add("@codigoIB", certificado.CodigoIB, DbType.String, ParameterDirection.Input);
                 parameter.Add("@IDLoteIB", certificado.IDLoteIB, DbType.Int32, ParameterDirection.Input);
-                //parameter.Add("@descripcionIB", certificado.DescripcionIB, DbType.String, ParameterDirection.Input);
-                //parameter.Add("@loteIB", certificado.LoteIB, DbType.String, ParameterDirection.Input);
-                //parameter.Add("@expiraIB", certificado.ExpiraIB, DbType.String, ParameterDirection.Input);
                 parameter.Add("@IBExpuestos", certificado.IBExpuestos, DbType.Int32, ParameterDirection.Input);
                 parameter.Add("@IBExpuestosResultado", certificado.IBExpuestosResultado, DbType.Boolean, ParameterDirection.Input);
                 parameter.Add("@IBNoExpuestos", certificado.IBNoExpuestos, DbType.Int32, ParameterDirection.Input);
@@ -145,5 +142,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+
+
     }
 }

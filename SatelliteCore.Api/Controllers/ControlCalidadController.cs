@@ -41,10 +41,10 @@ namespace SatelliteCore.Api.Controllers
                     return BadRequest(responseError);
                 }
 
-                (List<CertificadoEsterilizacionEntity> lista, int totalRegistros) certificados = await _controlCalidadServices.ListarCertificados(datos);
+                (List<CertificadoEsterilizacionEntity> lista, int totalRegistros) = await _controlCalidadServices.ListarCertificados(datos);
 
                 PaginacionModel<CertificadoEsterilizacionEntity> response
-                        = new PaginacionModel<CertificadoEsterilizacionEntity>(certificados.lista, datos.Pagina, datos.RegistrosPorPagina, certificados.totalRegistros);
+                        = new PaginacionModel<CertificadoEsterilizacionEntity>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -85,10 +85,10 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            (List<LoteEntity> lista, int totalRegistros) lotes = await _controlCalidadServices.ListarLotes(datos);
+            (List<LoteEntity> lista, int totalRegistros) = await _controlCalidadServices.ListarLotes(datos);
 
             PaginacionModel<LoteEntity> response
-                    = new PaginacionModel<LoteEntity>(lotes.lista, datos.Pagina, datos.RegistrosPorPagina, lotes.totalRegistros);
+                    = new PaginacionModel<LoteEntity>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
 
             return Ok(response);
         }
@@ -148,10 +148,10 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            (List<CotizacionEntity> lista, int totalRegistros) certificados = await _controlCalidadServices.ListarCotizaciones(datos);
+            (List<CotizacionEntity> lista, int totalRegistros) = await _controlCalidadServices.ListarCotizaciones(datos);
 
             PaginacionModel<CotizacionEntity> response
-                    = new PaginacionModel<CotizacionEntity>(certificados.lista, datos.Pagina, datos.RegistrosPorPagina, certificados.totalRegistros);
+                    = new PaginacionModel<CotizacionEntity>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
 
             return Ok(response);
         }

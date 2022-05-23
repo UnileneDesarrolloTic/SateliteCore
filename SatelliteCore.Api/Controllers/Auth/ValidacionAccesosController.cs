@@ -37,9 +37,11 @@ namespace SatelliteCore.Api.Controllers.Auth
                 return BadRequest(responseError);
             }
 
-            (int codigo, string mensaje) result = await _validacionesServices.ValidarAccesoRuta(model);
+            var hola = ModelState["values"];
 
-            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new{ result.codigo, result.mensaje });
+            (int codigo, string mensaje) = await _validacionesServices.ValidarAccesoRuta(model);
+
+            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new{ codigo, mensaje });
             return Ok(responseSuccesss);
         }
 

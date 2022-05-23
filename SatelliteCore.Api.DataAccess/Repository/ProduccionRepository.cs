@@ -27,11 +27,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
             {
-                using (SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_ProductoTerminadoArima", new { periodo }, commandType: CommandType.StoredProcedure))
-                {
-                    result.Productos = multi.Read<ProductoArimaModel>().ToList();
-                    result.DetalleTransito = multi.Read<TransitoProductoArimaModel>().ToList();
-                }
+                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_ProductoTerminadoArima", new { periodo }, commandType: CommandType.StoredProcedure);
+                result.Productos = multi.Read<ProductoArimaModel>().ToList();
+                result.DetalleTransito = multi.Read<TransitoProductoArimaModel>().ToList();
             }
 
             return result;
@@ -115,13 +113,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection DMVentasContext = new SqlConnection(_appConfig.contextSpring))
             {
-                using (SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Satelite_CompraMateriaPrimaArima", dato , commandType: CommandType.StoredProcedure))
-                {
-                    result.Productos = multi.Read<CompraMPArimaModel>().ToList();
-                    result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
-                    result.DetalleCalidad = multi.Read<CompraMPArimaDetalleControlCalidad>().ToList();
-
-                }
+                using SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Satelite_CompraMateriaPrimaArima", dato, commandType: CommandType.StoredProcedure);
+                result.Productos = multi.Read<CompraMPArimaModel>().ToList();
+                result.DetalleTransito = multi.Read<DCompraMPArimaModel>().ToList();
+                result.DetalleCalidad = multi.Read<CompraMPArimaDetalleControlCalidad>().ToList();
 
             }
 

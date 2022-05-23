@@ -37,7 +37,6 @@ namespace SatelliteCore.Api.Controllers
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError = new ResponseModel<string>(false, "Los datos enviado no son válidos.", "");
-
                 return BadRequest(responseError);
             }
 

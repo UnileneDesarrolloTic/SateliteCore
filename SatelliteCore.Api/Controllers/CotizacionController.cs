@@ -153,8 +153,5 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaFormatos);
         }
 
-
-
-
     }
 }
