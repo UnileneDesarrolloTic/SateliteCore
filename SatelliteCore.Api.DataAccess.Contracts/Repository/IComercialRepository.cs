@@ -16,5 +16,9 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarRespuestas(FormatoCotizacionRespuesta datos);
         public Task<(List<DetalleProtocoloAnalisis>, int)> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos);
         public Task<List<DetalleClientes>> ListarClientes();
+
+        public Task<IEnumerable<FormatoLicitaciones>> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion dato);
+
+        public Task<FormatoReporteGuiaRemisionesModel> NumerodeGuiaLicitacion (string dato);
     }
 }
