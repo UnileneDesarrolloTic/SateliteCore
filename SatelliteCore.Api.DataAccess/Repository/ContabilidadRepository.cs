@@ -25,24 +25,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<List<DetraccionesEntity>> ListarDetraccion()
+        public async Task<IEnumerable<DetraccionesEntity>> ListarDetraccion()
         {
-            List<DetraccionesEntity> ListaUsuarios = new List<DetraccionesEntity>();
+            IEnumerable<DetraccionesEntity> result_db = new List<DetraccionesEntity>();
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using (var result_db = await connection.QueryMultipleAsync("usp_ListarDetraccionContabilidad" , commandType: CommandType.StoredProcedure))
-                {
-                    ListaUsuarios = result_db.Read<DetraccionesEntity>().ToList();
-                }
-
+                result_db = await connection.QueryAsync<DetraccionesEntity>("usp_ListarDetraccionContabilidad", commandType: CommandType.StoredProcedure);
                 connection.Dispose();
             }
 
-            return ListaUsuarios;
+            return result_db;
         }
 
-        public async Task<int> ProcesarDetraccionContabilidad(List<FormatoComprobantePagoDetraccion> dato)
+        public int ProcesarDetraccionContabilidad(List<FormatoComprobantePagoDetraccion> dato)
         {
                 
                 using (var satelliteContext = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -67,12 +63,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
                         parameter.Add("@SerieComprobante", item.Serie, DbType.String, ParameterDirection.Input);
                         parameter.Add("@NumeroComprobante", item.Numero, DbType.String, ParameterDirection.Input);
                         parameter.Add("@NumeroPagoDetracciones", item.PagoDetraccion, DbType.String, ParameterDirection.Input);
-                        using (var result_db = await satelliteContext.QueryMultipleAsync("usp_RegistrarDetraccionesContabilidad", parameter , commandType: CommandType.StoredProcedure))
-                        {
-                         
-                        }
-                    }
-                    satelliteContext.Dispose();
+                     
+                        satelliteContext.Execute("usp_RegistrarDetraccionesContabilidad", parameter, commandType: CommandType.StoredProcedure);
+
+
+                     }
+
+                        satelliteContext.Dispose();
                 }
                 
                 return 1;

@@ -8,8 +8,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
     public interface IContabilidadRepository
     {
-        public Task<List<DetraccionesEntity>> ListarDetraccion();
+        public Task<IEnumerable<DetraccionesEntity>> ListarDetraccion();
 
-        public Task<int> ProcesarDetraccionContabilidad(List<FormatoComprobantePagoDetraccion> dato);
+        public int ProcesarDetraccionContabilidad(List<FormatoComprobantePagoDetraccion> dato);
     }
 }

@@ -205,5 +205,21 @@ namespace SatelliteCore.Api.Controllers
             }
 
         }
+
+        [HttpPost("ListarDocumentoLicitacion")]
+        public async Task<ActionResult> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion datos)
+        {   
+            IEnumerable<FormatoLicitaciones> response = await _comercialServices.ListarDocumentoLicitacion(datos);
+            return Ok(response);
+        }
+
+       [HttpPost("NumerodeGuiaLicitacion")]
+       public async Task<ActionResult> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> datos)
+        {
+
+            List<CReporteGuiaRemisionModel> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
+            return Ok(response);
+        }
+
     }
 }
