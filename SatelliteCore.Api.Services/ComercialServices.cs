@@ -3,11 +3,11 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
-using System;
+using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SatelliteCore.Api.CrossCutting.Config;
 
 namespace SatelliteCore.Api.Services
 {
@@ -48,7 +48,7 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.ListarDocumentoLicitacion(dato);
         }
 
-        public async Task<List<CReporteGuiaRemisionModel>> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> dato)
+        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> dato)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var safePrime in dato)
@@ -70,10 +70,15 @@ namespace SatelliteCore.Api.Services
                     guia.DetalleGuia.AddRange(aux);
             }
 
+           if(respuesta.CabeceraReporteGuiaRemision.Count==0)
+                return new ResponseModel<string>(false, "No hay Elemento", "");
+
+            ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
+            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision);
          
                     
          
-            return respuesta.CabeceraReporteGuiaRemision;
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
 

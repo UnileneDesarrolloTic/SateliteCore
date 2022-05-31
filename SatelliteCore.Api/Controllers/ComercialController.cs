@@ -216,9 +216,17 @@ namespace SatelliteCore.Api.Controllers
        [HttpPost("NumerodeGuiaLicitacion")]
        public async Task<ActionResult> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> datos)
         {
-
-            List<CReporteGuiaRemisionModel> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
-            return Ok(response);
+          
+            try
+            {
+                ResponseModel<string> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
+                return BadRequest(response);
+            }
         }
 
     }

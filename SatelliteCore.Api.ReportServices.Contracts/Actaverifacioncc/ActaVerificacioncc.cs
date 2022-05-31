@@ -1,0 +1,639 @@
+﻿using iText.IO.Font.Constants;
+using iText.IO.Image;
+using iText.Kernel.Colors;
+using iText.Kernel.Events;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Canvas.Draw;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using SatelliteCore.Api.Models.Response;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
+{
+    public class ActaVerificacioncc
+    {
+        public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias)
+        {
+
+            int contador = 0;
+            int contadoArray = NumeroGuias.Count;
+            string reporte = null;
+            MemoryStream ms = new MemoryStream();
+            PdfWriter writer = new PdfWriter(ms);
+            PdfDocument pdf = new PdfDocument(writer);
+
+            PdfDocumentInfo docInfo = pdf.GetDocumentInfo();
+            docInfo.SetTitle("Análisis de aguja prueba de flexión");
+            docInfo.SetAuthor("Sistema Satelite");
+
+
+            Document document = new Document(pdf, PageSize.A4.Rotate());
+
+            document.SetMargins(5, 15, 30, 15);
+
+           // pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterFlexionAgujaEventHandler());
+
+            foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
+            {
+            
+                GenerarPdf(document, cabecera);
+                if (contador < contadoArray - 1)
+                {
+                    document.Add(new AreaBreak());
+                }
+                contador++;
+
+            }
+
+            document.Close();
+
+            byte[] file = ms.ToArray();
+
+            if (file == null || file.Length == 0)
+                return reporte;
+
+            reporte = Convert.ToBase64String(file, 0, file.Length);
+
+
+
+
+            pdf.Close();
+            writer.Close();
+            ms.Close();
+
+            return reporte;
+        }
+
+
+        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera)
+        {
+            Color bgColour = new DeviceRgb(161, 205, 241);
+            string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+
+            Image img = new Image(ImageDataFactory
+               .Create(rutaUnilene))
+               .SetWidth(150)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+            document.Add(img);
+
+            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            Paragraph saltoLinea = new Paragraph(new Text("\n"));
+            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
+
+            Style estiloTitulo = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetMarginTop(-8)
+                .SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.CENTER);
+
+            Style estiloCabecera = new Style()
+                .SetFontSize(6)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloDetalle = new Style()
+                .SetFontSize(6)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloTexto = new Style()
+                .SetFontSize(6)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloFechaVerificacion = new Style()
+                .SetFontSize(6)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+
+
+
+            Paragraph titulo1 = new Paragraph("ACTA DE VERIFICACION CUALITATIVA Y CUANTITATIVA").AddStyle(estiloTitulo);
+            Paragraph titulo2 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            document.Add(titulo1);
+            document.Add(titulo2);
+
+            Table tablaDatosGenerales = new Table(10).UseAllAvailableWidth();
+            tablaDatosGenerales.SetFixedLayout().SetFontSize(9);
+
+            Cell cellDG = new Cell(1, 7).Add(new Paragraph("")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("Fecha")
+            .AddStyle(estiloCabecera))
+            .SetFont(fuenteNegrita)
+            .SetTextAlignment(TextAlignment.RIGHT)
+            .SetBorder(Border.NO_BORDER);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 2).Add(new Paragraph(DateTime.Now.ToLongDateString())
+             .AddStyle(estiloCabecera))
+             .SetFont(fuenteNegrita)
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(Border.NO_BORDER);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("CONTRATISTA ")
+             .AddStyle(estiloCabecera))
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(new SolidBorder(1))
+             .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph("UNILENE S.A.C")
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("TIPO DE ADJUDICACION ")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(new SolidBorder(1))
+              .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso)
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("ORDEN DE COMPRA N° ")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(new SolidBorder(1))
+              .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.OrdenCompra + "- Pecosa N°: " + cabecera.Pecosa)
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("Contrato N°")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(new SolidBorder(1))
+              .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.Contrato)
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("Entrega N°")
+           .AddStyle(estiloCabecera))
+           .SetTextAlignment(TextAlignment.LEFT)
+           .SetBorder(new SolidBorder(1))
+           .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.NumeroEntrega)
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph("Usuario N°")
+           .AddStyle(estiloCabecera))
+           .SetTextAlignment(TextAlignment.LEFT)
+           .SetBorder(new SolidBorder(1))
+           .SetBackgroundColor(bgColour);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre)
+                .AddStyle(estiloCabecera))
+                .SetTextAlignment(TextAlignment.LEFT);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            document.Add(tablaDatosGenerales);
+
+
+            //Tabla 2 
+            Table tablaDatosParrafo = new Table(10).UseAllAvailableWidth();
+            tablaDatosParrafo.SetFixedLayout().SetFontSize(9);
+
+            Cell cellPresentacion = new Cell(1, 10).Add(new Paragraph("En la fecha los Representantes del Almacen y EL CONTRATISTA proceden a dar conformidad a los siguientes productos correspondiente a la orden de Compra referida :")
+              .AddStyle(estiloTexto))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+            tablaDatosParrafo.AddCell(cellPresentacion);
+            document.Add(tablaDatosParrafo);
+
+            //Detalle Item 
+
+            Table tablaDatosDetalle = new Table(24).UseAllAvailableWidth();
+            tablaDatosDetalle.SetFixedLayout().SetFontSize(9);
+
+            //bloque 1
+            Cell cellDetalle = new Cell(2, 1).Add(new Paragraph("ITEM")
+              .AddStyle(estiloDetalle))
+              .SetTextAlignment(TextAlignment.CENTER)
+              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+              .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(2, 4).Add(new Paragraph("NOMBRE DEL PRODUCTO(DCI)")
+             .AddStyle(estiloDetalle))
+             .SetTextAlignment(TextAlignment.CENTER)
+             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+             .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("UNIDAD DE MEDIDA")
+             .AddStyle(estiloDetalle))
+             .SetTextAlignment(TextAlignment.CENTER)
+             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+             .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("PRESENTACION")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("CANT. SOLICITADA")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("CANT. RECEPCIONADA")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("GUIA REMISION")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.CENTER)
+              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+              .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("LOTE")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            cellDetalle = new Cell(2, 1).Add(new Paragraph("Registro Sanitario")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            cellDetalle = new Cell(2, 2).Add(new Paragraph("N° DE PROTOCOLO DE ANALISIS")
+            .AddStyle(estiloCabecera))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(1, 4).Add(new Paragraph("LABORATORIO DE CONTROL DE CALIDAD")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+            //bloque 2 
+
+
+            cellDetalle = new Cell(1, 1).Add(new Paragraph("N°")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(1, 1).Add(new Paragraph("F.V")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("N° DE ACTA DE MUESTREO")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("N° INFORME DE ENSAYO")
+            .AddStyle(estiloDetalle))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBackgroundColor(bgColour);
+            tablaDatosDetalle.AddCell(cellDetalle);
+
+
+
+            //FOREARCH
+            foreach (DReportGuiaRemisionModel detalle in cabecera.DetalleGuia)
+            {
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.NumeroItem.ToString())
+                  .AddStyle(estiloDetalle))
+                  .SetTextAlignment(TextAlignment.CENTER)
+                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 4).Add(new Paragraph(detalle.Descripcion)
+                 .AddStyle(estiloDetalle))
+                 .SetTextAlignment(TextAlignment.CENTER)
+                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.UnidadCodigo)
+                .AddStyle(estiloDetalle))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CaractervaluesDescripcion)
+                .AddStyle(estiloDetalle))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CantidadRequerida.ToString())
+                   .AddStyle(estiloDetalle))
+                   .SetTextAlignment(TextAlignment.CENTER)
+                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CantidadGRD.ToString())
+                   .AddStyle(estiloDetalle))
+                   .SetTextAlignment(TextAlignment.CENTER)
+                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.Guia)
+                   .AddStyle(estiloDetalle))
+                   .SetTextAlignment(TextAlignment.CENTER)
+                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.Lote)
+                 .AddStyle(estiloDetalle))
+                 .SetTextAlignment(TextAlignment.CENTER)
+                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.FechaExpiracion.ToString("dd'/'MM'/'yyyy"))
+                .AddStyle(estiloDetalle).SetFontSize(5))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.RegistroSanitario)
+                .AddStyle(estiloDetalle))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.Protocolo)
+                .AddStyle(estiloDetalle))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo)
+                   .AddStyle(estiloDetalle))
+                   .SetTextAlignment(TextAlignment.CENTER)
+                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo)
+                 .AddStyle(estiloDetalle))
+                 .SetTextAlignment(TextAlignment.CENTER)
+                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                tablaDatosDetalle.AddCell(cellDetalle);
+
+            }
+
+
+            document.Add(tablaDatosDetalle);
+
+            //Tabla 4 
+            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            tablaDatosFecha.SetFixedLayout().SetFontSize(9);
+
+            Cell cellFecha = new Cell(1, 1).Add(new Paragraph("la verificación de los productos en almacen se realizo el Dia ...........  Mes ...........  Año ............")
+                  .AddStyle(estiloFechaVerificacion))
+                  .SetTextAlignment(TextAlignment.LEFT)
+                  .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+             .AddStyle(estiloFechaVerificacion))
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("OBSERVACIONES")
+             .AddStyle(estiloFechaVerificacion))
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+            .AddStyle(estiloFechaVerificacion))
+             .SetHeight(3)
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(new SolidBorder(1));
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+                 .AddStyle(estiloFechaVerificacion))
+                  .SetHeight(3)
+                 .SetTextAlignment(TextAlignment.LEFT)
+                 .SetBorder(new SolidBorder(1));
+            tablaDatosFecha.AddCell(cellFecha);
+
+            document.Add(tablaDatosFecha);
+            document.Add(saltoLinea);
+            //Tabla Finalizada
+            Table tablaDatosConforme = new Table(1).UseAllAvailableWidth();
+            tablaDatosConforme.SetFixedLayout().SetFontSize(9);
+
+            Cell cellConforme = new Cell(1, 1).Add(new Paragraph("FINALIZADA LA VERIFICACION DE LOS PRODUCTOS Y ESTADO CONFORME , SE PROCEDE A LA SUSCRIPCION DE LA PRESENTE ACTA ")
+                  .AddStyle(estiloFechaVerificacion))
+                  .SetTextAlignment(TextAlignment.LEFT)
+                  .SetBorder(Border.NO_BORDER);
+            tablaDatosConforme.AddCell(cellConforme);
+            document.Add(tablaDatosConforme);
+            document.Add(saltoLinea);
+
+            //FIRMA
+            Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
+            tablaDatosFirma.SetFixedLayout().SetFontSize(9);
+
+            Cell cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
+                .AddStyle(estiloFechaVerificacion))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
+                .AddStyle(estiloFechaVerificacion))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
+               .AddStyle(estiloFechaVerificacion))
+               .SetTextAlignment(TextAlignment.CENTER)
+               .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+
+
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("Firma y Sello de Representante")
+             .AddStyle(estiloFechaVerificacion))
+             .SetTextAlignment(TextAlignment.CENTER)
+             .SetVerticalAlignment(VerticalAlignment.TOP)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("Firma y Sello del Representante ALMACEN")
+             .AddStyle(estiloFechaVerificacion))
+             .SetTextAlignment(TextAlignment.CENTER)
+             .SetVerticalAlignment(VerticalAlignment.TOP)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("Firma y Sello del Representante PROVEEDOR")
+            .AddStyle(estiloFechaVerificacion))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.TOP)
+            .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            document.Add(tablaDatosFirma);
+            document.Add(saltoLinea);
+
+            Table tablaDatosinformacion = new Table(1).UseAllAvailableWidth();
+            tablaDatosinformacion.SetFixedLayout().SetFontSize(9);
+
+            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 9820343226 / 997509088 \n www.unilene.com \n contactenos@unilene.com")
+                  .AddStyle(estiloTexto))
+                  .SetTextAlignment(TextAlignment.LEFT)
+                  .SetBorder(Border.NO_BORDER);
+            tablaDatosinformacion.AddCell(cellInformacion);
+
+            document.Add(tablaDatosinformacion);
+            document.Add(saltoLinea);
+           
+
+        }
+
+
+       /* public class FooterFlexionAgujaEventHandler : IEventHandler
+        {
+            public void HandleEvent(Event @event)
+            {
+                PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+                PdfDocument pdf = documentoEvento.GetDocument();
+                PdfPage pagina = documentoEvento.GetPage();
+                PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamBefore(), pagina.GetResources(), pdf);
+
+
+                PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                Style estiloFooter = new Style().SetFontSize(8)
+                        .SetFont(fuenteNegrita)
+                        .SetFontColor(ColorConstants.BLACK)
+                        .SetMargin(0)
+                        .SetPadding(0)
+                        .SetFontSize(8)
+                        ;
+                Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
+
+                Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-078, Versión 01").AddStyle(estiloFooter)).SetBorder(new SolidBorder(1)).SetMargin(0).SetPadding(0);
+
+                tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
+
+                footer = new Cell(1, 1).Add(new Paragraph("Vigente desde: 28/06/2019").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+
+                tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
+
+                Rectangle rectangulo = new Rectangle(15, 0, pagina.GetPageSize().GetWidth() - 70, 50);
+
+                new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
+
+            }
+        }*/
+    }
+}

@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.ReportServices.Contracts.Detracciones;
 
 namespace SatelliteCore.Api.Services
 {
@@ -28,7 +30,7 @@ namespace SatelliteCore.Api.Services
             return lista;
         }
 
-        public int  ProcesarDetraccionContabilidad (string urlarchivo)
+        public int ProcesarDetraccionContabilidad (string urlarchivo)
         {
 
             string file = @"C:\" + urlarchivo;
@@ -41,7 +43,8 @@ namespace SatelliteCore.Api.Services
                 datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
             }
 
-            int response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
+            int response =  _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
+
             return response;
         }
 
@@ -82,9 +85,15 @@ namespace SatelliteCore.Api.Services
             return list;
         }
 
+        public string GenerarBlogNotasDetraccion(FormatoProcesoDetracciones dato)
+        {
+            GenerarBlogNotas Detraccion = new GenerarBlogNotas();
+            string reporte =  Detraccion.ProcesarGenerarBlogNotas(dato);
 
+            return reporte;
+        }
 
 
 
     }
-    }
+}
