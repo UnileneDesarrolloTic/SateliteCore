@@ -33,17 +33,29 @@ namespace SatelliteCore.Api.Services
         public int ProcesarDetraccionContabilidad (string urlarchivo)
         {
 
-            string file = @"C:\" + urlarchivo;
-            List<FormatoComprobantePagoDetraccion> datosArchivos;
-
-            using (ExcelPackage package = new ExcelPackage(new FileInfo(file)))
+          
+            int response = 0;
+            try
             {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                var sheet = package.Workbook.Worksheets["UNILENE"];
-                datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
-            }
+                string file = @"C:\" + urlarchivo;
+                List<FormatoComprobantePagoDetraccion> datosArchivos;
 
-            int response =  _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
+                using (ExcelPackage package = new ExcelPackage(new FileInfo(file)))
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var sheet = package.Workbook.Worksheets["UNILENE"];
+                    datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
+                }
+
+                 response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
+            }
+            catch
+            {
+                response = 0;
+            }
+            
+
+            
 
             return response;
         }
