@@ -26,6 +26,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<ICotizacionRepository, CotizacionRepository>();
             service.AddScoped<IContabilidadRepository, ContabilidadRepository>();
             service.AddScoped<IAnalisisAgujaRepository, AnalisisAgujaRepository>();
+            service.AddScoped<ILicitacionesRepository, LicitacionesRepository>();
 
             return service;
         }
@@ -41,6 +42,8 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<ICotizacionServices, CotizacionServices>();
             service.AddScoped<IContabilidadService, ContabilidadServices>();
             service.AddScoped<IAnalisisAgujaServices, AnalisisAgujaServices>();
+            service.AddScoped<ILicitacionesServices, LicitacionesServices>();
+
             return service;
         }
 
