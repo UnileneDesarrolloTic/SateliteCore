@@ -43,8 +43,52 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
-            
-                GenerarPdf(document, cabecera);
+                string Entrega = "";
+
+                switch (cabecera.NumeroEntrega)
+                {
+                    case "1":
+                        Entrega = "1ERA ENTREGA";
+                        break;
+                    case "2":
+                        Entrega = "2DA ENTREGA";
+                        break;
+                    case "3":
+                        Entrega = "3ERA ENTREGA";
+                        break;
+                    case "4":
+                        Entrega = "4TA ENTREGA";
+                        break;
+                    case "5":
+                        Entrega = "5TA ENTREGA";
+                        break;
+                    case "6":
+                        Entrega = "6TA ENTREGA";
+                        break;
+                    case "7":
+                        Entrega = "7MA ENTREGA";
+                        break;
+                    case "8":
+                        Entrega = "8VA ENTREGA";
+                        break;
+                    case "9":
+                        Entrega = "9NA ENTREGA";
+                        break;
+                    case "10":
+                        Entrega = "10MA ENTREGA";
+                        break;
+                    case "11":
+                        Entrega = "11VA ENTREGA";
+                        break;
+                    case "12":
+                        Entrega = "12VA ENTREGA";
+                        break;
+                    default:
+                        Entrega = "NO HAY ENTREGA";
+                        break;
+                }
+
+                GenerarPdf(document, cabecera, Entrega);
                 if (contador < contadoArray - 1)
                 {
                     document.Add(new AreaBreak());
@@ -73,7 +117,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
         }
 
 
-        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera)
+        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera,string Entrega)
         {
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -218,13 +262,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.NumeroEntrega)
+            cellDG = new Cell(1, 9).Add(new Paragraph(Entrega)
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("Usuario N°")
+            cellDG = new Cell(1, 1).Add(new Paragraph("Usuario")
            .AddStyle(estiloCabecera))
            .SetTextAlignment(TextAlignment.LEFT)
            .SetBorder(new SolidBorder(1))
@@ -232,7 +276,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre)
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD" )
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
@@ -536,7 +580,39 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
             tablaDatosFirma.SetFixedLayout().SetFontSize(9);
 
-            Cell cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(rutaUnilene2))
+               .SetWidth(100)
+               .SetHeight(25)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+
+
+            Cell cellFirma = new Cell(1, 1).Add(img2)
+                         .SetTextAlignment(TextAlignment.CENTER)
+                         .SetBorder(Border.NO_BORDER)
+                         .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("")
+                .AddStyle(estiloFechaVerificacion))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("")
+               .AddStyle(estiloFechaVerificacion))
+               .SetTextAlignment(TextAlignment.CENTER)
+               .SetBorder(Border.NO_BORDER);
+            tablaDatosFirma.AddCell(cellFirma);
+
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
                 .AddStyle(estiloFechaVerificacion))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetBorder(Border.NO_BORDER);
@@ -547,7 +623,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
-
 
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
@@ -588,7 +663,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosinformacion = new Table(1).UseAllAvailableWidth();
             tablaDatosinformacion.SetFixedLayout().SetFontSize(9);
 
-            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 9820343226 / 997509088 \n www.unilene.com \n contactenos@unilene.com")
+            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 997509088 \n www.unilene.com \n info@unilene.com")
                   .AddStyle(estiloTexto))
                   .SetTextAlignment(TextAlignment.LEFT)
                   .SetBorder(Border.NO_BORDER);

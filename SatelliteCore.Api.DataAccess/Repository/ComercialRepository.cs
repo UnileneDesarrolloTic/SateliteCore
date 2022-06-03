@@ -184,16 +184,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             FormatoReporteGuiaRemisionesModel result = new FormatoReporteGuiaRemisionesModel();
             
-            string script = "SELECT p.DescripcionProceso, e.OrdenCompra, e.Pecosa, e.Contrato, e.NumeroEntrega, RTRIM(do.ClienteNombre) ClienteNombre, d.NombreRegion, CONCAT(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) GuiaNumero  from TBMLIProceso p " +
+            string script = "SELECT p.DescripcionProceso, e.OrdenCompra, e.Pecosa, e.Contrato, e.NumeroEntrega, RTRIM(per.NombreCompleto) ClienteNombre, d.NombreRegion, CONCAT(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) GuiaNumero  from TBMLIProceso p " +
                          "INNER JOIN TBDLIProcesoDetalle d on p.IdProceso = d.IdProceso " +
                          "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle " +
                          "INNER JOIN PROD_UNILENE2..CO_DocumentoDetalle DD ON DD.NumeroDocumento = D.NumeroPedido AND DD.TipoDocumento = 'PE' AND DD.Linea = D.NumeroItem " +
                          "INNER JOIN PROD_UNILENE2..CO_Documento DO ON DO.NumeroDocumento = DD.NumeroDocumento AND DO.TipoDocumento = 'PE' " +
                          "INNER JOIN PROD_UNILENE2..WH_GuiaRemision g on do.NumeroDocumento = g.ReferenciaNumeroPedido " +
                          "INNER JOIN PROD_UNILENE2..WH_GuiaRemisionDetalle h on g.GuiaNumero = h.GuiaNumero and h.SerieNumero = g.SerieNumero and h.Lote = dd.Lote " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast per ON per.Persona=g.Destinatario " +
                          "WHERE e.NumeroEntrega = g.ReprogramacionPuntoPartida AND " +
                          "CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN (" + dato + ") " +
-                         "SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, RTRIM(C.Descripcion) CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero) ,'-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, pl.FECHAEXPIRACION  FechaExpiracion, '' RegistroSanitario, pl.NUMEROLOTE Protocolo, d.NumeroMuestreo, d.NumeroEnsayo from TBMLIProceso p " +
+                         "SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, RTRIM(C.Descripcion) CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero) ,'-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, pl.FECHAEXPIRACION  FechaExpiracion, RTRIM(rs.Descripcion) RegistroSanitario, pl.NUMEROLOTE Protocolo, d.NumeroMuestreo, d.NumeroEnsayo from TBMLIProceso p " +
                          "INNER JOIN TBDLIProcesoDetalle d on p.IdProceso=d.IdProceso " +
                          "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle " +
                          "INNER JOIN PROD_UNILENE2..CO_DocumentoDetalle DD ON DD.NumeroDocumento = D.NumeroPedido AND DD.TipoDocumento = 'PE' AND DD.Linea = D.NumeroItem " +
@@ -203,6 +204,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          "INNER JOIN PROD_UNILENE2..WH_ItemMast im on h.itemcodigo = im.item " +
                          "INNER JOIN PROD_UNILENE2..WH_CaracteristicaValues C ON IM.CaracteristicaValor01 = C.Valor AND C.Caracteristica = '01' " +
                          "INNER JOIN PROD_UNILENE2..EP_PROGRAMACIONLOTE pl on pl.NUMEROLOTE = h.Lote and pl.ESTADO <> 'an'" +
+                         "LEFT JOIN UNILENE_REPORTEADOR..TMAST_REGISTRO_SANITARIO rs ON rs.MARCA=SUBSTRING(im.NumeroDeParte,1,2) AND rs.HEBRA=SUBSTRING(im.NumeroDeParte,3,2) AND rs.PAIS='PER' AND rs.ESTADO='A' " +
                          "WHERE e.NumeroEntrega = g.ReprogramacionPuntoPartida AND " +
                          "CONCAT(RTRIM(g.SerieNumero) , '-', g.GuiaNumero)  IN (" + dato + ") ";
 
