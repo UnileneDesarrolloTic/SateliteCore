@@ -25,14 +25,21 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ListaDetallePedido")]
-        public async Task<IActionResult> ListaDetallePedido(string Pedido,int idCliente)
+        public async Task<IActionResult> ListaDetallePedido(string Pedido, int idCliente)
         {
             if (string.IsNullOrEmpty(Pedido))
                 throw new ValidationModelException("El Código Pedido es Obligatorio");
 
             IEnumerable<ListarDetallePedido> listarDetallePedidos = await _licitacionesServices.ListaDetallePedido(Pedido, idCliente);
-            
+
             return Ok(listarDetallePedidos);
         }
+
+        [HttpPost("RegistrarProceso")]
+        public async Task<IActionResult> RegistrarProceso(DatoFormatoProcesoModel dato)
+        {
+            ResponseModel<string> result = await _licitacionesServices.RegistrarProceso(dato);
+            return Ok(result);
+        }
     }
-}
+ }

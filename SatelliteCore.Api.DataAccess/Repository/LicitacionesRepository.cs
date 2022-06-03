@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -28,7 +29,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
             {
                 result = await context.QueryAsync<ListarDetallePedido>(script, new { Pedido, idCliente });
             }
+            return result;
+        }
 
+        public async Task<int> RegistrarProceso(DatoFormatoProcesoModel dato)
+        {
+            int result;
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                string sql1 = "INSERT INTO TBMLIProceso(DescripcionProceso, Cliente)" +
+                             "VALUES(@Proceso, @Cliente)";
+
+                result  = await context.ExecuteAsync(sql1, new { dato.Proceso, dato.Cliente });
+                        //await context.ExecuteAsync(sql2, analisis);
+
+            }
             return result;
         }
 
