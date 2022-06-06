@@ -29,17 +29,15 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ListarDetraccionContabilidad")]
         public async Task<ActionResult> ListarDetraccion()
         {
-
-      
             IEnumerable<DetraccionesEntity> response = await _ContabilidadService.ListarDetraccion();
-
             return Ok(response);
         }
 
-        [HttpGet("ProcesarDetraccionContabilidad")]
-        public ActionResult ProcesarDetraccionContabilidad(string urlarchivo)
+
+        [HttpPost("ProcesarDetraccionContabilidad")]
+        public ActionResult ProcesarDetraccionContabilidad(DatosFormato64 dato)
         {
-            int response =  _ContabilidadService.ProcesarDetraccionContabilidad(urlarchivo);
+            int response =  _ContabilidadService.ProcesarDetraccionContabilidad(dato);
             return Ok(response);
         }
 

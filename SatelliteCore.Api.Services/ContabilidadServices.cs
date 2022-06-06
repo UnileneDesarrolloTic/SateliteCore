@@ -30,17 +30,25 @@ namespace SatelliteCore.Api.Services
             return lista;
         }
 
-        public int ProcesarDetraccionContabilidad (string urlarchivo)
+        public int ProcesarDetraccionContabilidad (DatosFormato64 dato)
         {
 
           
             int response = 0;
             try
             {
-                string file = @"C:\" + urlarchivo;
+                string pathSRC = @"C:\Detracciones";
+                if (!Directory.Exists(pathSRC))
+                {
+                    Directory.CreateDirectory(pathSRC);
+                }
+                System.IO.File.WriteAllBytes(@"C:\Detracciones\" + dato.nombrearchivo, Convert.FromBase64String(dato.base64string));
+
+                string files = @"C:\Detracciones\" + dato.nombrearchivo;//servidor
+
                 List<FormatoComprobantePagoDetraccion> datosArchivos;
 
-                using (ExcelPackage package = new ExcelPackage(new FileInfo(file)))
+                using (ExcelPackage package = new ExcelPackage(new FileInfo(files)))
                 {
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     var sheet = package.Workbook.Worksheets["UNILENE"];
@@ -90,7 +98,7 @@ namespace SatelliteCore.Api.Services
                 parameter.TipodeComprobante = sheet.Cells[row, 14].Value.ToString();
                 parameter.Serie = sheet.Cells[row, 15].Value.ToString();
                 parameter.Numero = sheet.Cells[row, 16].Value.ToString();
-                parameter.PagoDetraccion = sheet.Cells[row, 17].Value.ToString();
+                parameter.PagoDetraccion = sheet.Cells[row, 17].Value == null ? "" : sheet.Cells[row, 17].Value.ToString();
 
                 list.Add(parameter);
             }
