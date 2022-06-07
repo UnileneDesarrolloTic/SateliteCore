@@ -219,7 +219,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso)
+            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle)
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
@@ -275,7 +275,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD")
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD " + cabecera.Region)
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
@@ -604,12 +604,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
-            cellFirma = new Cell(1, 1).Add(img2)
-                         .SetTextAlignment(TextAlignment.CENTER)
-                         .SetBorder(Border.NO_BORDER)
-                         .SetPaddingLeft(20);
+            cellFirma = new Cell(1, 1).Add(new Paragraph("")
+              .AddStyle(estiloFechaVerificacion))
+              .SetTextAlignment(TextAlignment.CENTER)
+              .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
+            /* cellFirma = new Cell(1, 1).Add(img2)
+                          .SetTextAlignment(TextAlignment.CENTER)
+                          .SetBorder(Border.NO_BORDER)
+                          .SetPaddingLeft(20);
+             tablaDatosFirma.AddCell(cellFirma);
+            */
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
                 .AddStyle(estiloFechaVerificacion))
@@ -678,6 +684,167 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             
         }
 
+        public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
+        {
+
+
+            Color bgColour = new DeviceRgb(161, 205, 241);
+
+            Image img = new Image(ImageDataFactory
+               .Create(rutaUnilene))
+               .SetWidth(150)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+            document.Add(img);
+
+            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            Paragraph saltoLinea = new Paragraph(new Text("\n"));
+            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
+
+            Style estiloTitulo = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetMarginTop(-8)
+                .SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.CENTER);
+
+            Style estiloCabecera = new Style()
+                .SetFontSize(10)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estilotextoNegrita = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloTexto = new Style()
+                .SetFontSize(9)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloFechaVerificacion = new Style()
+                .SetFontSize(6)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Paragraph titulo1 = new Paragraph("ANEXO N°9").AddStyle(estiloTitulo);
+            Paragraph titulo2 = new Paragraph("DECLARACIÓN JURADA DE COMPROMISO DE CANJE Y/O REPOSICIÓN POR VICIOS OCULTOS").AddStyle(estiloTitulo);
+            Paragraph titulo3 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+
+            document.Add(titulo1);
+            document.Add(titulo2);
+            document.Add(titulo3);
+            document.Add(saltoLinea);
+
+            Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
+            tablaDatosGenerales.SetFixedLayout();
+
+            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Señores:")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD - " + cabecera.Region)
+             .AddStyle(estiloCabecera))
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosGenerales.AddCell(cellDG);
+
+            document.Add(tablaDatosGenerales);
+
+            //Tabla 2 
+            Table tablaDatosParrafo = new Table(1).UseAllAvailableWidth();
+            tablaDatosParrafo.SetFixedLayout();
+
+            Cell cellPresente = new Cell(1, 1).Add(new Paragraph("Presente")
+                .AddStyle(estiloTexto))
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetBorder(Border.NO_BORDER);
+            tablaDatosParrafo.AddCell(cellPresente);
+
+            cellPresente = new Cell(1, 1).Add(new Paragraph("De Nuestra consideración: ")
+               .AddStyle(estiloTexto))
+               .SetTextAlignment(TextAlignment.LEFT)
+               .SetBorder(Border.NO_BORDER)
+               .SetPaddingBottom(20);
+            tablaDatosParrafo.AddCell(cellPresente);
+
+            document.Add(tablaDatosParrafo);
+
+
+
+            Paragraph LictacionPublica = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC 0002525").AddStyle(estilotextoNegrita);
+
+            //tabla 3
+            Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
+            tablaDatosContenido.SetFixedLayout();
+
+            Cell cellContenido = new Cell(1, 1).Add(new Paragraph("Nos es grato hacer llegar a usted, la presente “Declaración  Jurada de Compromiso de Canje y/o Reposición” en representación de  UNILENE S.A.C, por los productos que se nos adjudican en nuestra propuesta presentada al procedimiento de seleccion ").Add(LictacionPublica)
+              .AddStyle(estiloTexto))
+              .SetTextAlignment(TextAlignment.JUSTIFIED)
+              .SetBorder(Border.NO_BORDER)
+               .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            cellContenido = new Cell(1, 1).Add(new Paragraph("El canje será efectuado en el caso de que el producto haya sufrido alteración de sus características físicas-químicas  sin causa atribuible al usuario o cualquier otro defecto o vicio oculto antes de su fecha de expiración. El producto canjeado tendrá fecha de expiración igual o mayor a la ofertada en el proceso de selección, contada a partir de la fecha de entrega de canje.")
+             .AddStyle(estiloTexto))
+             .SetTextAlignment(TextAlignment.JUSTIFIED)
+             .SetBorder(Border.NO_BORDER)
+              .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            cellContenido = new Cell(1, 1).Add(new Paragraph("El canje se efectuará a solo requerimiento de ustedes, en un plazo no mayor a 60 días calendarios y no generará gastos adicionales a los pactados con vuestra entidad.")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.JUSTIFIED)
+            .SetBorder(Border.NO_BORDER)
+            .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            document.Add(tablaDatosContenido);
+            document.Add(saltoLinea);
+
+            //tabla 4
+            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            tablaDatosFecha.SetFixedLayout();
+
+            Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+             .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("Lima " + DateTime.Now.ToLongDateString())
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            document.Add(tablaDatosFecha);
+            document.Add(saltoLinea);
+
+            Table tablaDatosinformacion = new Table(1).UseAllAvailableWidth();
+            tablaDatosinformacion.SetFixedLayout().SetFontSize(9);
+
+            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 997509088 \n www.unilene.com \n info@unilene.com")
+                  .AddStyle(estiloTexto))
+                  .SetTextAlignment(TextAlignment.LEFT)
+                  .SetBorder(Border.NO_BORDER);
+            tablaDatosinformacion.AddCell(cellInformacion);
+
+            document.Add(tablaDatosinformacion);
+            document.Add(saltoLinea);
+
+        }
+
         public void Condiciones(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
         {
 
@@ -744,7 +911,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.ClienteNombre)
+            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD - " + cabecera.Region)
              .AddStyle(estiloCabecera))
              .SetTextAlignment(TextAlignment.LEFT)
              .SetBorder(Border.NO_BORDER);
@@ -898,165 +1065,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         }
 
-        public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
-        {
-
-
-            Color bgColour = new DeviceRgb(161, 205, 241);
-
-            Image img = new Image(ImageDataFactory
-               .Create(rutaUnilene))
-               .SetWidth(150)
-               .SetHeight(50)
-               .SetMarginBottom(0)
-               .SetPadding(0)
-               .SetTextAlignment(TextAlignment.LEFT);
-
-            document.Add(img);
-
-            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
-            Paragraph saltoLinea = new Paragraph(new Text("\n"));
-            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
-
-            Style estiloTitulo = new Style()
-                .SetFontSize(9)
-                .SetFont(fuenteNegrita)
-                .SetMarginTop(-8)
-                .SetFontColor(ColorConstants.BLACK)
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            Style estiloCabecera = new Style()
-                .SetFontSize(10)
-                .SetFont(fuenteNegrita)
-                .SetFontColor(ColorConstants.BLACK);
-
-            Style estilotextoNegrita = new Style()
-                .SetFontSize(9)
-                .SetFont(fuenteNegrita)
-                .SetFontColor(ColorConstants.BLACK);
-
-            Style estiloTexto = new Style()
-                .SetFontSize(9)
-                .SetFontColor(ColorConstants.BLACK);
-
-            Style estiloFechaVerificacion = new Style()
-                .SetFontSize(6)
-                .SetFont(fuenteNegrita)
-                .SetFontColor(ColorConstants.BLACK);
-
-            Paragraph titulo1 = new Paragraph("ANEXO N°9").AddStyle(estiloTitulo);
-            Paragraph titulo2 = new Paragraph("DECLARACIÓN JURADA DE COMPROMISO DE CANJE Y/O REPOSICIÓN POR VICIOS OCULTOS").AddStyle(estiloTitulo);
-            Paragraph titulo3 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
-
-            document.Add(titulo1);
-            document.Add(titulo2);
-            document.Add(titulo3);
-            document.Add(saltoLinea);
-
-            Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
-            tablaDatosGenerales.SetFixedLayout();
-
-            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Señores:")
-              .AddStyle(estiloCabecera))
-              .SetTextAlignment(TextAlignment.LEFT)
-              .SetBorder(Border.NO_BORDER);
-
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.ClienteNombre)
-             .AddStyle(estiloCabecera))
-             .SetTextAlignment(TextAlignment.LEFT)
-             .SetBorder(Border.NO_BORDER);
-            tablaDatosGenerales.AddCell(cellDG);
-
-            document.Add(tablaDatosGenerales);
-
-            //Tabla 2 
-            Table tablaDatosParrafo = new Table(1).UseAllAvailableWidth();
-            tablaDatosParrafo.SetFixedLayout();
-
-            Cell cellPresente = new Cell(1, 1).Add(new Paragraph("Presente")
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.LEFT)
-                .SetBorder(Border.NO_BORDER);
-            tablaDatosParrafo.AddCell(cellPresente);
-
-            cellPresente = new Cell(1, 1).Add(new Paragraph("De Nuestra consideración: ")
-               .AddStyle(estiloTexto))
-               .SetTextAlignment(TextAlignment.LEFT)
-               .SetBorder(Border.NO_BORDER)
-               .SetPaddingBottom(20);
-            tablaDatosParrafo.AddCell(cellPresente);
-
-            document.Add(tablaDatosParrafo);
-
-           
-            Paragraph LictacionPublica = new Paragraph("LICITACIÓN PUBLICA N° 022-2021-CENARES / MINSA  - ADQUISICION DE DISPOSITIVOS MEDICOS Y OTROS PRODUCTOS- COMPRA CORPORATIVA SECTORIAL PARA EL ABASTECIMIENTO 2020-2021 (92-ITEMS)-ITEM 11:CÁNULA BINASAL PARA OXIGENO ADULTO. Es perteneciente a la OC 0002525").AddStyle(estilotextoNegrita);
-
-            //tabla 3
-            Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
-            tablaDatosContenido.SetFixedLayout();
-
-            Cell cellContenido = new Cell(1, 1).Add(new Paragraph("Nos es grato hacer llegar a usted, la presente “Declaración  Jurada de Compromiso de Canje y/o Reposición” en representación de  UNILENE S.A.C, por los productos que se nos adjudican en nuestra propuesta presentada al procedimiento de seleccion ").Add(LictacionPublica)
-              .AddStyle(estiloTexto))
-              .SetTextAlignment(TextAlignment.JUSTIFIED)
-              .SetBorder(Border.NO_BORDER)
-               .SetPaddingBottom(20);
-            tablaDatosContenido.AddCell(cellContenido);
-
-            cellContenido = new Cell(1, 1).Add(new Paragraph("El canje será efectuado en el caso de que el producto haya sufrido alteración de sus características físicas-químicas  sin causa atribuible al usuario o cualquier otro defecto o vicio oculto antes de su fecha de expiración. El producto canjeado tendrá fecha de expiración igual o mayor a la ofertada en el proceso de selección, contada a partir de la fecha de entrega de canje.")
-             .AddStyle(estiloTexto))
-             .SetTextAlignment(TextAlignment.JUSTIFIED)
-             .SetBorder(Border.NO_BORDER)
-              .SetPaddingBottom(20);
-            tablaDatosContenido.AddCell(cellContenido);
-
-            cellContenido = new Cell(1, 1).Add(new Paragraph("El canje se efectuará a solo requerimiento de ustedes, en un plazo no mayor a 60 días calendarios y no generará gastos adicionales a los pactados con vuestra entidad.")
-            .AddStyle(estiloTexto))
-            .SetTextAlignment(TextAlignment.JUSTIFIED)
-            .SetBorder(Border.NO_BORDER)
-            .SetPaddingBottom(20); 
-            tablaDatosContenido.AddCell(cellContenido);
-
-            document.Add(tablaDatosContenido);
-            document.Add(saltoLinea);
-
-            //tabla 4
-            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
-            tablaDatosFecha.SetFixedLayout();
-
-            Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
-            .AddStyle(estiloTexto))
-            .SetTextAlignment(TextAlignment.LEFT)
-            .SetBorder(Border.NO_BORDER)
-             .SetPaddingBottom(20);
-            tablaDatosFecha.AddCell(cellFecha);
-
-
-            cellFecha = new Cell(1, 1).Add(new Paragraph("Lima " + DateTime.Now.ToLongDateString())
-            .AddStyle(estiloTexto))
-            .SetTextAlignment(TextAlignment.LEFT)
-            .SetBorder(Border.NO_BORDER);
-            tablaDatosFecha.AddCell(cellFecha);
-
-            document.Add(tablaDatosFecha);
-            document.Add(saltoLinea);
-
-            Table tablaDatosinformacion = new Table(1).UseAllAvailableWidth();
-            tablaDatosinformacion.SetFixedLayout().SetFontSize(9);
-
-            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 997509088 \n www.unilene.com \n info@unilene.com")
-                  .AddStyle(estiloTexto))
-                  .SetTextAlignment(TextAlignment.LEFT)
-                  .SetBorder(Border.NO_BORDER);
-            tablaDatosinformacion.AddCell(cellInformacion);
-
-            document.Add(tablaDatosinformacion);
-            document.Add(saltoLinea);
-
-        }
-
+       
     }
 }
