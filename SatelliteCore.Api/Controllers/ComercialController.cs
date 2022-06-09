@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -219,6 +221,12 @@ namespace SatelliteCore.Api.Controllers
           
             try
             {
+                if (datos.Count == 0)
+                {
+                    throw new ValidationModelException("Debe Seleccionar una o varias guias");
+                  
+                }
+
                 ResponseModel<string> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
                 return Ok(response);
             }
@@ -227,6 +235,36 @@ namespace SatelliteCore.Api.Controllers
                 ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
                 return BadRequest(response);
             }
+        }
+
+       [HttpGet("NumeroPedido")]
+        public async Task<IActionResult> NumeroPedido(string pedido)
+        {
+            if(string.IsNullOrEmpty(pedido))
+                throw new ValidationModelException("Los datos enviados no son válidos");
+            
+
+            DatoPedidoDocumentoModel  NumeroPedido = await _comercialServices.NumeroPedido(pedido);
+
+            if (NumeroPedido.NumeroDocumento == null) {
+                ResponseModel<DatoPedidoDocumentoModel> response = new ResponseModel<DatoPedidoDocumentoModel>(false, "No Existe ese Numero Pedido", NumeroPedido);
+                return Ok(response);
+            }
+            else
+            {
+                ResponseModel<DatoPedidoDocumentoModel> response = new ResponseModel<DatoPedidoDocumentoModel>(true, Constante.MESSAGE_SUCCESS, NumeroPedido);
+                return Ok(response);
+            }
+            
+        }
+
+        [HttpPost("RegistrarRotuladosPedido")]
+        public async Task<ActionResult> RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response = await _comercialServices.RegistrarRotuladosPedido(dato, idUsuario);
+
+            return Ok(response);
         }
 
     }

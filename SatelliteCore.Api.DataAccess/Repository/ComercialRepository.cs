@@ -218,5 +218,28 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+        public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
+        {
+            DatoPedidoDocumentoModel result  = new DatoPedidoDocumentoModel();
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                 result = await context.QueryFirstOrDefaultAsync<DatoPedidoDocumentoModel>("usp_ObtenerInformacionPedido", new { pedido }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato, int idUsuario)
+        {
+            
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync("usp_RegistarRotuladoPedido", new { dato.numeroDocumento, dato.Rexterno,dato.Rinterno, idUsuario }, commandType: CommandType.StoredProcedure);
+            }
+
+            
+        }
+
     }
 }

@@ -211,7 +211,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosGenerales.AddCell(cellDG);
 
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("TIPO DE ADJUDICACION ")
+            cellDG = new Cell(1, 1).Add(new Paragraph("TIPO DE ADJUDICACIÓN ")
               .AddStyle(estiloCabecera))
               .SetTextAlignment(TextAlignment.LEFT)
               .SetBorder(new SolidBorder(1))
@@ -219,7 +219,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle)
+            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle)
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
@@ -275,9 +275,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD " + cabecera.Region)
-                .AddStyle(estiloCabecera))
-                .SetTextAlignment(TextAlignment.LEFT);
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.ClienteNombre + " EN SALUD - " + cabecera.Region)
+            .AddStyle(estiloCabecera))
+            .SetTextAlignment(TextAlignment.LEFT);
 
             tablaDatosGenerales.AddCell(cellDG);
 
@@ -286,7 +286,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             //Tabla 2 
             Table tablaDatosParrafo = new Table(10).UseAllAvailableWidth();
-            tablaDatosParrafo.SetFixedLayout().SetFontSize(9);
+            tablaDatosParrafo.SetFixedLayout().SetFontSize(10);
 
             Cell cellPresentacion = new Cell(1, 10).Add(new Paragraph("En la fecha los Representantes del Almacen y EL CONTRATISTA proceden a dar conformidad a los siguientes productos correspondiente a la orden de Compra referida :")
               .AddStyle(estiloTexto))
@@ -567,7 +567,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosConforme = new Table(1).UseAllAvailableWidth();
             tablaDatosConforme.SetFixedLayout().SetFontSize(9);
 
-            Cell cellConforme = new Cell(1, 1).Add(new Paragraph("FINALIZADA LA VERIFICACION DE LOS PRODUCTOS Y ESTADO CONFORME , SE PROCEDE A LA SUSCRIPCION DE LA PRESENTE ACTA ")
+            Cell cellConforme = new Cell(1, 1).Add(new Paragraph("FINALIZADA LA VERIFICACIÓN DE LOS PRODUCTOS Y ESTADO CONFORME , SE PROCEDE A LA SUSCRIPCIÓN DE LA PRESENTE ACTA ")
                   .AddStyle(estiloFechaVerificacion))
                   .SetTextAlignment(TextAlignment.LEFT)
                   .SetBorder(Border.NO_BORDER);
@@ -594,6 +594,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Cell cellFirma = new Cell(1, 1).Add(new Paragraph("")
                 .AddStyle(estiloFechaVerificacion))
                 .SetTextAlignment(TextAlignment.CENTER)
+                .SetHeight(8)
                 .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
@@ -601,21 +602,23 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             cellFirma = new Cell(1, 1).Add(new Paragraph("")
                .AddStyle(estiloFechaVerificacion))
                .SetTextAlignment(TextAlignment.CENTER)
+               .SetHeight(8)
                .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("")
               .AddStyle(estiloFechaVerificacion))
               .SetTextAlignment(TextAlignment.CENTER)
+              .SetHeight(8)
               .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
-
+            
             /* cellFirma = new Cell(1, 1).Add(img2)
                           .SetTextAlignment(TextAlignment.CENTER)
                           .SetBorder(Border.NO_BORDER)
                           .SetPaddingLeft(20);
-             tablaDatosFirma.AddCell(cellFirma);
-            */
+             tablaDatosFirma.AddCell(cellFirma);*/
+            
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
                 .AddStyle(estiloFechaVerificacion))
@@ -732,9 +735,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
 
-            Paragraph titulo1 = new Paragraph("ANEXO N°9").AddStyle(estiloTitulo);
+            Paragraph titulo1 = new Paragraph("ANEXO N°9").AddStyle(estiloTitulo).SetMarginTop(10).SetMarginBottom(7);
             Paragraph titulo2 = new Paragraph("DECLARACIÓN JURADA DE COMPROMISO DE CANJE Y/O REPOSICIÓN POR VICIOS OCULTOS").AddStyle(estiloTitulo);
-            Paragraph titulo3 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            Paragraph titulo3 = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
 
             document.Add(titulo1);
             document.Add(titulo2);
@@ -744,7 +747,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
             tablaDatosGenerales.SetFixedLayout();
 
-            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Señores:")
+            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Señores: ")
               .AddStyle(estiloCabecera))
               .SetTextAlignment(TextAlignment.LEFT)
               .SetBorder(Border.NO_BORDER);
@@ -780,13 +783,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
 
-            Paragraph LictacionPublica = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC 0002525").AddStyle(estilotextoNegrita);
+            Paragraph LictacionPublica = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC " + cabecera.OrdenCompra).AddStyle(estilotextoNegrita);
 
             //tabla 3
             Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
             tablaDatosContenido.SetFixedLayout();
 
-            Cell cellContenido = new Cell(1, 1).Add(new Paragraph("Nos es grato hacer llegar a usted, la presente “Declaración  Jurada de Compromiso de Canje y/o Reposición” en representación de  UNILENE S.A.C, por los productos que se nos adjudican en nuestra propuesta presentada al procedimiento de seleccion ").Add(LictacionPublica)
+            Cell cellContenido = new Cell(1, 1).Add(new Paragraph("Nos es grato hacer llegar a usted, la presente “Declaración  Jurada de Compromiso de Canje y/o Reposición” en representación de  UNILENE S.A.C, por los productos que se nos adjudican en nuestra propuesta presentada al procedimiento de selección ").Add(LictacionPublica)
               .AddStyle(estiloTexto))
               .SetTextAlignment(TextAlignment.JUSTIFIED)
               .SetBorder(Border.NO_BORDER)
@@ -863,6 +866,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(img);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+            
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
@@ -894,12 +898,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
 
-            Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA  DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo);
-            Paragraph titulo2 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
-
+            Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA  DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo).SetMarginTop(10);
+            Paragraph titulo2 = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            
+            document.Add(saltoLinea);
             document.Add(titulo1);
             document.Add(titulo2);
-            document.Add(saltoLinea);
+            
 
             Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
             tablaDatosGenerales.SetFixedLayout();

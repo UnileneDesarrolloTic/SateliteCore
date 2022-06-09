@@ -44,6 +44,7 @@ namespace SatelliteCore.Api.Services
                 }
                 System.IO.File.WriteAllBytes(@"C:\Detracciones\" + dato.nombrearchivo, Convert.FromBase64String(dato.base64string));
 
+
                 string files = @"C:\Detracciones\" + dato.nombrearchivo;//servidor
 
                 List<FormatoComprobantePagoDetraccion> datosArchivos;
@@ -55,7 +56,9 @@ namespace SatelliteCore.Api.Services
                     datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
                 }
 
-                 response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
+                File.Delete(files);
+
+                response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
             }
             catch
             {
