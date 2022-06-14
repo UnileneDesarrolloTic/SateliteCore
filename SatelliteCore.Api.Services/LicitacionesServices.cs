@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-
+using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 
 namespace SatelliteCore.Api.Services
 {
@@ -20,11 +20,11 @@ namespace SatelliteCore.Api.Services
             _licitacionesRepository = licitacionesRepository;
         }
 
-        public async Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido, int idCliente)
+        public async Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido)
         {
             int NumeroPedido = Int32.Parse(Pedido);
 
-            IEnumerable<ListarDetallePedido> ListarDetalle = await _licitacionesRepository.ListaDetallePedido(NumeroPedido.ToString("D10"), idCliente);
+            IEnumerable<ListarDetallePedido> ListarDetalle = await _licitacionesRepository.ListaDetallePedido(NumeroPedido.ToString("D10"));
             return ListarDetalle;
         }
 
@@ -35,5 +35,7 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "");
         }
 
+
+        
     }
 }

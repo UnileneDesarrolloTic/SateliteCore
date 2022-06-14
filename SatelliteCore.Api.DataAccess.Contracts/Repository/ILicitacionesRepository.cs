@@ -7,8 +7,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
     public interface ILicitacionesRepository
     {
-        public Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido,int idCliente);
-
+        public Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido);
         public Task<int> RegistrarProceso(DatoFormatoProcesoModel matricula);
     }
 }

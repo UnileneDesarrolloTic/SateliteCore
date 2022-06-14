@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.Services.Contracts
     public interface IContabilidadService
     {
         public Task<IEnumerable<DetraccionesEntity>> ListarDetraccion();
-        public int ProcesarDetraccionContabilidad(string urlarchivo);
+        public int ProcesarDetraccionContabilidad(DatosFormato64 dato);
         public string GenerarBlogNotasDetraccion(FormatoProcesoDetracciones dato);
     }
 }

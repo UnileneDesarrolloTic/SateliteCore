@@ -11,8 +11,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Detracciones
             StringBuilder informacionBlogNota = new StringBuilder();
             string valorunilene = "P20197705249UNILENE SAC";
             var cuenta = "00002007770";
-            informacionBlogNota.Append(valorunilene.PadRight(47)).Append(dato.periodo.PadRight(10, '0') + dato.totalimporte.ToString("D15") + "\n");
 
+            informacionBlogNota.Append(valorunilene.PadRight(47)).Append(dato.periodo.PadRight(6,'0') + dato.totalimporte.ToString("D15") + "\n");
+           
             foreach (var detraccion in dato.proceso)
             {
                 var numero = Int32.Parse(detraccion.Numero);

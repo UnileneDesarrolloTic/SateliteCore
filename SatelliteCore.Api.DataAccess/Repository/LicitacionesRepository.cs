@@ -17,17 +17,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             _appConfig = appConfig;
         }
 
-        public async Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido, int idCliente)
+        public async Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido)
         {
 
             IEnumerable<ListarDetallePedido> result = new List<ListarDetallePedido>();
             string script = "SELECT RTRIM(a.NumeroDocumento) Pedido, a.Linea, RTRIM(a.ItemCodigo) Item, RTRIM(a.Descripcion) Descripcion, a.CantidadPedida , a.PrecioUnitario, a.Monto " +
                             "FROM CO_DocumentoDetalle a INNER JOIN CO_Documento b ON  a.CompaniaSocio=b.CompaniaSocio AND a.TipoDocumento=b.TipoDocumento AND a.NumeroDocumento=b.NumeroDocumento " +
-                            "WHERE  a.TipoDocumento = 'PE' AND  a.NumeroDocumento = @Pedido  AND b.ClienteNumero=@idCliente ";
+                            "WHERE  a.TipoDocumento = 'PE' AND  a.NumeroDocumento = @Pedido  AND b.ClienteNumero=2317";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<ListarDetallePedido>(script, new { Pedido, idCliente });
+                result = await context.QueryAsync<ListarDetallePedido>(script, new { Pedido });
             }
             return result;
         }

@@ -7,8 +7,8 @@ namespace SatelliteCore.Api.Services.Contracts
 {
     public interface ILicitacionesServices
     {
-        public Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido, int idCliente);
-
+        public Task<IEnumerable<ListarDetallePedido>> ListaDetallePedido(string Pedido);
         public Task<ResponseModel<string>> RegistrarProceso(DatoFormatoProcesoModel dato);
+       
     }
 }
