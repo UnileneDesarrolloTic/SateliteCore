@@ -37,26 +37,20 @@ namespace SatelliteCore.Api.Services
             int response = 0;
             try
             {
-                string pathSRC = @"E:\Detracciones";
-                if (!Directory.Exists(pathSRC))
-                {
-                    Directory.CreateDirectory(pathSRC);
-                }
-                System.IO.File.WriteAllBytes(@"E:\Detracciones\" + dato.nombrearchivo, Convert.FromBase64String(dato.base64string));
 
-
-                string files = @"E:\Detracciones\" + dato.nombrearchivo;//servidor
+                byte[] byteArray = Convert.FromBase64String(dato.base64string);
 
                 List<FormatoComprobantePagoDetraccion> datosArchivos;
 
-                using (ExcelPackage package = new ExcelPackage(new FileInfo(files)))
+                using (MemoryStream memStream = new MemoryStream(byteArray))
                 {
-                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    var sheet = package.Workbook.Worksheets["UNILENE"];
-                    datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
+                    using (ExcelPackage package = new ExcelPackage(memStream))
+                    {
+                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                        var sheet = package.Workbook.Worksheets["UNILENE"];
+                        datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
+                    }
                 }
-
-                File.Delete(files);
 
                 response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
             }
