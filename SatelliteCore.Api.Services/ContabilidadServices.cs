@@ -37,15 +37,15 @@ namespace SatelliteCore.Api.Services
             int response = 0;
             try
             {
-                string pathSRC = @"C:\Detracciones";
+                string pathSRC = @"E:\Detracciones";
                 if (!Directory.Exists(pathSRC))
                 {
                     Directory.CreateDirectory(pathSRC);
                 }
-                System.IO.File.WriteAllBytes(@"C:\Detracciones\" + dato.nombrearchivo, Convert.FromBase64String(dato.base64string));
+                System.IO.File.WriteAllBytes(@"E:\Detracciones\" + dato.nombrearchivo, Convert.FromBase64String(dato.base64string));
 
 
-                string files = @"C:\Detracciones\" + dato.nombrearchivo;//servidor
+                string files = @"E:\Detracciones\" + dato.nombrearchivo;//servidor
 
                 List<FormatoComprobantePagoDetraccion> datosArchivos;
 
