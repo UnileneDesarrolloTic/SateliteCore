@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
+using SatelliteCore.Api.Models.Entities;
 
 namespace SatelliteCore.Api.Services
 {
@@ -35,7 +36,40 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "");
         }
 
+        public async Task<IEnumerable<DatosFormatoDistribuccionLP>> ListarDistribuccionProceso(int NumeroProceso, string Item, string Mes)
+        {
+            return await _licitacionesRepository.ListarDistribuccionProceso(NumeroProceso, Item, Mes);
+            
+        }
+
+        public async Task<ResponseModel<string>> RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato)
+        {
+            await _licitacionesRepository.RegistrarDistribuccionProceso(dato);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
+        }
+        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso()
+        {
+            return await _licitacionesRepository.ListarProceso();
+
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega)
+        {
+            return await _licitacionesRepository.ListarProgramaMuestraLIP(IdProceso,NumeroEntrega);
+
+        }
 
         
+
+
+        public async Task<ResponseModel<string>> RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> dato)
+        {
+            await _licitacionesRepository.RegistrarProgramacionMuestreo(dato);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
+        }
+
     }
 }

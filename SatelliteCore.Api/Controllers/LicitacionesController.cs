@@ -42,7 +42,49 @@ namespace SatelliteCore.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("ListarDistribuccionProceso")]
+        public async Task<IActionResult> ListarDistribuccionProceso(int NumeroProceso, string Item , string Mes)
+        {
+            if (NumeroProceso==0)
+                throw new ValidationModelException("El Numero de Proceso Es Obligatorio");
+
+            IEnumerable<DatosFormatoDistribuccionLP> result = await _licitacionesServices.ListarDistribuccionProceso(NumeroProceso, Item, Mes);
+            
+            return Ok(result);
+        }
         
 
+        [HttpPost("RegistrarDistribuccionProceso")]
+        public async Task<IActionResult> RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato)
+        {
+            ResponseModel<string> result = await _licitacionesServices.RegistrarDistribuccionProceso(dato);
+
+            return Ok(result);
+        }
+
+        [HttpGet("ListarProceso")]
+        public async Task<IActionResult> ListarProceso()
+        {
+            IEnumerable<ListarProcesoEntity> result = await _licitacionesServices.ListarProceso();
+
+            return Ok(result);
+        }
+
+        [HttpGet("ListarProgramaMuestraLIP")]
+        public async Task<IActionResult> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega)
+        {
+            IEnumerable<DatosFormatoProgramacionMuestraModel> result = await _licitacionesServices.ListarProgramaMuestraLIP(IdProceso, NumeroEntrega);
+            return Ok(result);
+        }
+
+
+        [HttpPost("RegistrarProgramacionMuestreo")]
+        public async Task<IActionResult> RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> dato)
+        {
+            ResponseModel<string> result = await _licitacionesServices.RegistrarProgramacionMuestreo(dato);
+            return Ok(result);
+        }
+
+
     }
- }
+}
