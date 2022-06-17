@@ -147,7 +147,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<List<DetalleClientes>> ListarClientes()
         {
-            List<DetalleClientes>  result;
+            List<DetalleClientes> result;
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -159,5 +159,87 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+
+        public async Task<IEnumerable<FormatoLicitaciones>> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion dato)
+        {
+            IEnumerable<FormatoLicitaciones> result = new List<FormatoLicitaciones>();
+
+            string script = "SELECT FechaDocumento,RTRIM(Destinatario) Destinatario,RTRIM(SerieNumero) SerieNumero, RTRIM(GuiaNumero) GuiaNumero, DestinatarioDireccion , DestinatarioDireccionSecuencia , " +
+                            "RTRIM(FacturaNumero) FacturaNumero , RTRIM(AlmacenCodigo) AlmacenCodigo, RTRIM(ReferenciaNumeroPedido) ReferenciaNumeroPedido, RTRIM(Comentarios) Comentarios " +
+                            " FROM WH_GuiaRemision WHERE FechaDocumento >= CONCAT(@fechainicio ,' 00:00:00.000') AND FechaDocumento<= CONCAT(@fechafinal ,' 23:59:00.000') AND  Estado<>'AN' AND Destinatario = @idcliente ";
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryAsync<FormatoLicitaciones>(script, new { dato.fechainicio, dato.fechafinal, dato.idcliente });
+
+            }
+
+            return result;
+
+
+        }
+
+        public async Task<FormatoReporteGuiaRemisionesModel> NumerodeGuiaLicitacion(string dato)
+        {
+
+            FormatoReporteGuiaRemisionesModel result = new FormatoReporteGuiaRemisionesModel();
+            
+            string script = "SELECT p.DescripcionComercial DescripcionProceso, p.DescripcionComercialDetalle, ' ' as Region, e.OrdenCompra, e.Pecosa, e.Contrato, e.NumeroEntrega, RTRIM(per.NombreCompleto) ClienteNombre, d.NombreRegion, CONCAT(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) GuiaNumero , p.CantItems from TBMLIProceso p " +
+                         "INNER JOIN TBDLIProcesoDetalle d on p.IdProceso = d.IdProceso " +
+                         "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle " +
+                         "INNER JOIN PROD_UNILENE2..CO_DocumentoDetalle DD ON DD.NumeroDocumento = D.NumeroPedido AND DD.TipoDocumento = 'PE' AND DD.Linea = D.NumeroItem " +
+                         "INNER JOIN PROD_UNILENE2..CO_Documento DO ON DO.NumeroDocumento = DD.NumeroDocumento AND DO.TipoDocumento = 'PE' " +
+                         "INNER JOIN PROD_UNILENE2..WH_GuiaRemision g on do.NumeroDocumento = g.ReferenciaNumeroPedido " +
+                         "INNER JOIN PROD_UNILENE2..WH_GuiaRemisionDetalle h on g.GuiaNumero = h.GuiaNumero and h.SerieNumero = g.SerieNumero and h.Lote = dd.Lote " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast per ON per.Persona=g.Destinatario " +
+                         "WHERE e.NumeroEntrega = g.ReprogramacionPuntoPartida AND " +
+                         "CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN (" + dato + ") " +
+                         "SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, RTRIM(C.Descripcion) CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero) ,'-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, pl.FECHAEXPIRACION  FechaExpiracion, RTRIM(rs.Descripcion) RegistroSanitario, pl.NUMEROLOTE Protocolo, d.NumeroMuestreo, d.NumeroEnsayo from TBMLIProceso p " +
+                         "INNER JOIN TBDLIProcesoDetalle d on p.IdProceso=d.IdProceso " +
+                         "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle " +
+                         "INNER JOIN PROD_UNILENE2..CO_DocumentoDetalle DD ON DD.NumeroDocumento = D.NumeroPedido AND DD.TipoDocumento = 'PE' AND DD.Linea = D.NumeroItem " +
+                         "INNER JOIN PROD_UNILENE2..CO_Documento DO ON DO.NumeroDocumento = DD.NumeroDocumento AND DO.TipoDocumento = 'PE' " +
+                         "INNER JOIN PROD_UNILENE2..WH_GuiaRemision g on do.NumeroDocumento = g.ReferenciaNumeroPedido " +
+                         "INNER JOIN PROD_UNILENE2..WH_GuiaRemisionDetalle h on g.GuiaNumero = h.GuiaNumero and h.SerieNumero = g.SerieNumero and h.Lote = dd.Lote " +
+                         "INNER JOIN PROD_UNILENE2..WH_ItemMast im on h.itemcodigo = im.item " +
+                         "INNER JOIN PROD_UNILENE2..WH_CaracteristicaValues C ON IM.CaracteristicaValor01 = C.Valor AND C.Caracteristica = '01' " +
+                         "INNER JOIN PROD_UNILENE2..EP_PROGRAMACIONLOTE pl on pl.NUMEROLOTE = h.Lote and pl.ESTADO <> 'an'" +
+                         "LEFT JOIN UNILENE_REPORTEADOR..TMAST_REGISTRO_SANITARIO rs ON rs.MARCA=SUBSTRING(im.NumeroDeParte,1,2) AND rs.HEBRA=SUBSTRING(im.NumeroDeParte,3,2) AND rs.PAIS='PER' AND rs.ESTADO='A' " +
+                         "WHERE e.NumeroEntrega = g.ReprogramacionPuntoPartida AND " +
+                         "CONCAT(RTRIM(g.SerieNumero) , '-', g.GuiaNumero)  IN (" + dato + ") ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using (SqlMapper.GridReader reporte = await connection.QueryMultipleAsync(script))
+                {
+                    result.CabeceraReporteGuiaRemision = reporte.Read<CReporteGuiaRemisionModel>().ToList();
+                    result.DetalleReporteGuiaRemision = reporte.Read<DReportGuiaRemisionModel>().ToList();
+                }
+            }
+            return result;
+        }
+
+        public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
+        {
+            DatoPedidoDocumentoModel result  = new DatoPedidoDocumentoModel();
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                 result = await context.QueryFirstOrDefaultAsync<DatoPedidoDocumentoModel>("usp_ObtenerInformacionPedido", new { pedido }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato, int idUsuario)
+        {
+            
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync("usp_RegistarRotuladoPedido", new { dato.numeroDocumento, dato.Rexterno,dato.Rinterno, idUsuario }, commandType: CommandType.StoredProcedure);
+            }
+
+            
+        }
+
     }
 }

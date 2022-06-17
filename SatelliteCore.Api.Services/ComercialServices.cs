@@ -3,8 +3,11 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
+using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using SatelliteCore.Api.CrossCutting.Config;
 
 namespace SatelliteCore.Api.Services
 {
@@ -39,6 +42,56 @@ namespace SatelliteCore.Api.Services
         {
             return await _comercialRepository.ListarClientes();
         }
+
+        public async Task<IEnumerable<FormatoLicitaciones>> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion dato)
+        {
+            return await _comercialRepository.ListarDocumentoLicitacion(dato);
+        }
+
+        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> dato)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var safePrime in dato)
+            {
+                builder.Append("'" + safePrime.GuiasNumero + "'").Append(",");
+            }
+            string result = builder.ToString();
+            string final = result.Remove(result.Length - 1);
+
+            FormatoReporteGuiaRemisionesModel respuesta = await _comercialRepository.NumerodeGuiaLicitacion(final);
+            List<DReportGuiaRemisionModel> aux = null;
+
+            foreach (CReporteGuiaRemisionModel guia in respuesta.CabeceraReporteGuiaRemision)
+            {
+                aux = null;
+                aux = respuesta.DetalleReporteGuiaRemision.FindAll(x => x.Guia == guia.GuiaNumero);
+
+                if (aux.Count > 0)
+                    guia.DetalleGuia.AddRange(aux);
+            }
+
+            if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
+                return new ResponseModel<string>(false, "No hay Elemento", "");
+
+            ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
+            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision);
+
+
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        }
+
+        public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
+        {
+            return await _comercialRepository.NumeroPedido(pedido);
+        }
+
+        public async Task<ResponseModel<string>> RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato, int idUsuario)
+        {
+             await _comercialRepository.RegistrarRotuladosPedido(dato, idUsuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "");
+        }
+
 
     }
 }
