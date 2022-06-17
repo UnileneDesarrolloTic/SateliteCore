@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.Models.Entities;
-using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -63,6 +62,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listarFamiliaMP);
         }
 
-        
+        [HttpGet("ObtenerConfiguracionesSistema")]
+        public async Task<IActionResult> ObtenerConfiguracionesSistema(int idConfiguracion, string grupo)
+        {
+            ResponseModel<IEnumerable<ConfiguracionEntity>> configuraciones = await _commonService.ObtenerConfiguracionesSistema(idConfiguracion, grupo);
+            return Ok(configuraciones);
+        }
+
+
     }
 }

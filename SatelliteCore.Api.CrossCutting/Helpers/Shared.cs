@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Security.Principal;
 
 namespace SatelliteCore.Api.CrossCutting.Helpers
@@ -10,6 +11,22 @@ namespace SatelliteCore.Api.CrossCutting.Helpers
             ClaimsIdentity identity = context as ClaimsIdentity;
             int codigoUsuario = int.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
             return codigoUsuario;
+        }
+
+        public static bool ValidarFecha(object inValue)
+        {
+            bool bValid;
+            try
+            {
+                DateTime myDT = DateTime.Parse(inValue.ToString());
+                bValid = true;
+            }
+            catch (Exception)
+            {
+                bValid = false;
+            }
+
+            return bValid;
         }
     }
 }
