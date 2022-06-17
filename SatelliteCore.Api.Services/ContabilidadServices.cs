@@ -35,32 +35,22 @@ namespace SatelliteCore.Api.Services
 
           
             int response = 0;
-            try
+
+            byte[] byteArray = Convert.FromBase64String(dato.base64string);
+
+            List<FormatoComprobantePagoDetraccion> datosArchivos;
+
+            using (MemoryStream memStream = new MemoryStream(byteArray))
             {
-
-                byte[] byteArray = Convert.FromBase64String(dato.base64string);
-
-                List<FormatoComprobantePagoDetraccion> datosArchivos;
-
-                using (MemoryStream memStream = new MemoryStream(byteArray))
+                using (ExcelPackage package = new ExcelPackage(memStream))
                 {
-                    using (ExcelPackage package = new ExcelPackage(memStream))
-                    {
-                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                        var sheet = package.Workbook.Worksheets["UNILENE"];
-                        datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
-                    }
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var sheet = package.Workbook.Worksheets["UNILENE"];
+                    datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
                 }
-
-                response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
             }
-            catch
-            {
-                response = 0;
-            }
-            
 
-            
+            response = _contabilidadRepository.ProcesarDetraccionContabilidad(datosArchivos);
 
             return response;
         }
