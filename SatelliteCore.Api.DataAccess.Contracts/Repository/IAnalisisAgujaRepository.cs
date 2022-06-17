@@ -1,4 +1,5 @@
-﻿using SatelliteCore.Api.Models.Entities;
+﻿using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
+using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
@@ -16,5 +17,18 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(ObtenerAnalisisAgujaModel, List<AnalisisAgujaFlexionEntity>)> AnalisisAgujaFlexion(string loteAnalisis);
         public Task EliminarPruebaFlexionAguja(string loteAnalisis);
         public Task GuardarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis);
+        public Task<ObtenerDatosGeneralesDTO> ObtenerDatosGenerales(string loteAnalisis);
+        public Task<AnalisisAgujaPlanMuestreoEntity> ObtenerPlanMuestreo(string loteAnalisis);
+        public Task RegistrarPlanMuestreo(AnalisisAgujaPlanMuestreoEntity planMuestreo);
+        public Task EliminarPlanMuestreo(string loteAnalisis);
+        public Task<List<AnalisisAgujaPruebaDimensionalEntity>> ObtenerPruebaDimensional(string loteAnalisis);
+        public Task EliminarPruebaDimensional(string loteAnalisis);
+        public Task RegistrarPruebaDimensional(List<AnalisisAgujaPruebaDimensionalEntity> prueba);
+        public Task<IEnumerable<AnalisisAgujaElasticidadPerforacionEntity>> ObtenerPruebaElasticidadPerforacion(string loteAnalisis);
+        public Task EliminarPruebaElasticidadPerforacion(string loteAnalisis);
+        public Task RegistrarPruebaElasticidadPerforacion(List<AnalisisAgujaElasticidadPerforacionEntity> prueba);
+        public Task<IEnumerable<AnalisisAgujaPruebaAspectoEntity>> ObtenerPruebaAspecto(string loteAnalisis);
+        public Task EliminarPruebaAspecto(string loteAnalisis);
+        public Task RegistrarPruebaAspecto(PruebaAspectoYObservacionesDTO datos, string loteAnalisis);
     }
 }

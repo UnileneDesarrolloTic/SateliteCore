@@ -1,4 +1,5 @@
-﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
@@ -124,6 +125,15 @@ namespace SatelliteCore.Api.Services
         public async Task<List<FamiliaMP>> ListarFamiliaMP()
         {
             return await _commonRepository.ListarFamiliaMP();
+        }
+
+
+        public async Task<ResponseModel<IEnumerable<ConfiguracionEntity>>> ObtenerConfiguracionesSistema(int idConfiguracion, string grupo)
+        {
+            IEnumerable<ConfiguracionEntity> configuraciones = await _commonRepository.ObtenerConfiguracionesSistema(idConfiguracion, grupo);
+            ResponseModel<IEnumerable<ConfiguracionEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<ConfiguracionEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
         }
     }
 }

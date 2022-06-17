@@ -48,12 +48,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
                .SetWidth(110)
-               .SetHeight(50)
+               .SetHeight(44)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetTextAlignment(TextAlignment.LEFT);
-
-            document.Add(img);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
@@ -62,15 +60,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
             Style estiloTitulo = new Style()
-                .SetFontSize(14)
+                .SetFontSize(16)
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK)
                 .SetTextAlignment(TextAlignment.CENTER);
 
             Style estiloHeaderDG = new Style()
-                .SetFontSize(10)
+                .SetFontSize(9)
                 .SetFont(fuenteNegrita)
-                .SetFontColor(ColorConstants.BLACK);
+                .SetFontColor(ColorConstants.BLACK)
+                .SetPaddingRight(2);
+
 
             Style estiloTexto = new Style()
                 .SetFontSize(9)
@@ -88,110 +88,81 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
                 .SetFontColor(ColorConstants.BLACK);
 
 
-            Paragraph header = new Paragraph("PRUEBA DE FLEXIÓN DE AGUJAS").AddStyle(estiloTitulo);
+            Table cabeceraReporte = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
+            Cell celdaCabeceraReporte = new Cell(1, 1).Add(img).SetTextAlignment(TextAlignment.LEFT).SetBorder(Border.NO_BORDER);
+            cabeceraReporte.AddCell(celdaCabeceraReporte);
+
+            celdaCabeceraReporte = new Cell(1, 1).Add(
+                new Paragraph($"N° Análisis: {loteAnalisis}")
+                .SetFont(fuenteNegrita)
+                .SetFontSize(11)
+            ).SetTextAlignment(TextAlignment.RIGHT).SetVerticalAlignment(VerticalAlignment.BOTTOM).SetBorder(Border.NO_BORDER);
+
+            cabeceraReporte.AddCell(celdaCabeceraReporte);
+
+            document.Add(cabeceraReporte);
+
+            Paragraph header = new Paragraph("PRUEBA DE FLEXIÓN DE AGUJAS").AddStyle(estiloTitulo);
             document.Add(header);
 
-            Table tablaDatosGenerales = new Table(6).UseAllAvailableWidth();
 
-            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Proveedor:")
-                .AddStyle(estiloHeaderDG))
-                .SetTextAlignment(TextAlignment.RIGHT);
+            Table tablaDatosGenerales = new Table(new float[] { 55, 45 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
-            tablaDatosGenerales.AddCell(cellDG);
+            Table tablaDetalleDatosGenerales = new Table(new float[] { 30, 70 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
+            Cell cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Proveedor:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
-            cellDG = new Cell(1, 2).Add(new Paragraph(cabecera.Proveedor)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(cabecera.Proveedor).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
-            tablaDatosGenerales.AddCell(cellDG);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Orden de compra:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(cabecera.OrdenCompra).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("Aguja:")
-                .AddStyle(estiloHeaderDG))
-                .SetTextAlignment(TextAlignment.RIGHT);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Fecha de análisis:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
-            tablaDatosGenerales.AddCell(cellDG);
-
-
-            cellDG = new Cell(1, 2).Add(new Paragraph(cabecera.DescripcionItem)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            tablaDatosGenerales.AddCell(cellDG);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(fechaRegistro).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("Fecha análisis:")
-              .AddStyle(estiloHeaderDG))
-              .SetTextAlignment(TextAlignment.RIGHT);
-
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph(fechaRegistro)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph("N° Análisis:")
-              .AddStyle(estiloHeaderDG))
-              .SetTextAlignment(TextAlignment.RIGHT);
-
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph(loteAnalisis)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            tablaDatosGenerales.AddCell(cellDG);
+            Cell celdaAuxTableDatosGenerales = new Cell(1, 1).Add(tablaDetalleDatosGenerales).SetBorder(Border.NO_BORDER);
+            tablaDatosGenerales.AddCell(celdaAuxTableDatosGenerales);
 
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("Cantidad:")
-               .AddStyle(estiloHeaderDG))
-               .SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales = new Table(new float[] { 27, 73 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
-            tablaDatosGenerales.AddCell(cellDG);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Aguja:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(cabecera.DescripcionItem).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
-            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.CantidadPruebas.ToString())
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Cantidad:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
-            tablaDatosGenerales.AddCell(cellDG);
-
-
-            cellDG = new Cell(1, 1).Add(new Paragraph("Ord. Compra:")
-                .AddStyle(estiloHeaderDG))
-                .SetTextAlignment(TextAlignment.RIGHT);
-
-            tablaDatosGenerales.AddCell(cellDG);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(FormatoNumeroEntero(cabecera.CantidadPruebas)).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
 
-            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.OrdenCompra)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph("Item:").AddStyle(estiloHeaderDG)).SetTextAlignment(TextAlignment.RIGHT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderRight(Border.NO_BORDER));
 
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph("Item:")
-                .AddStyle(estiloHeaderDG))
-                .SetTextAlignment(TextAlignment.RIGHT);
-
-            tablaDatosGenerales.AddCell(cellDG);
-
-            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.Item)
-                .AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            tablaDatosGenerales.AddCell(cellDG);
+            cellDatosGenerales = new Cell(1, 1).Add(new Paragraph(cabecera.Item).AddStyle(estiloTexto)).SetTextAlignment(TextAlignment.LEFT);
+            tablaDetalleDatosGenerales.AddCell(cellDatosGenerales.SetBorderLeft(Border.NO_BORDER));
 
 
-            document.Add(tablaDatosGenerales);
-            document.Add(saltoLinea);
+            celdaAuxTableDatosGenerales = new Cell(1, 1).Add(tablaDetalleDatosGenerales).SetBorder(Border.NO_BORDER);
+            tablaDatosGenerales.AddCell(celdaAuxTableDatosGenerales);
+
+            document.Add(tablaDatosGenerales.SetMarginBottom(11));
 
 
-            Table tablaDetalleCiclos = new Table(new float[] { 1, 1, 1, 1, 1 });
+            Table tablaDetalleCiclos = new Table(new float[] { 20, 20, 20, 20, 20 });
             tablaDetalleCiclos.SetWidth(UnitValue.CreatePercentValue(100));
             tablaDetalleCiclos.SetFixedLayout();
 
@@ -211,13 +182,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
                 Cell cellCiclo = new Cell(1, 1).Add(new Paragraph("").AddStyle(estiloTexto))
                     .SetBorder(Border.NO_BORDER)
-                    .SetWidth(50)
+                    .SetWidth(51)
                     .SetPadding(0)
                     .SetMargin(0);
 
                 tablaCiclos.AddHeaderCell(cellCiclo);
 
-                cellCiclo = new Cell(1, 1).Add(new Paragraph("Ciclo").AddStyle(estiloTexto))
+                cellCiclo = new Cell(1, 1).Add(new Paragraph("cycle").AddStyle(estiloTexto))
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetWidth(35)
                     .SetPadding(0)
@@ -231,10 +202,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
                     valor = listaCiclos.Where(x => x.Llave == (grupo + (i - 1))).FirstOrDefault().Valor;
 
-                    cellCiclo = new Cell(1, 1).Add(new Paragraph("Ciclo " + (grupo + i)).AddStyle(estiloTexto))
+                    cellCiclo = new Cell(1, 1).Add(new Paragraph("aguja " + (grupo + i)).AddStyle(estiloTexto))
                     .SetTextAlignment(TextAlignment.LEFT)
                     .SetPadding(0)
-                    .SetPaddingLeft(5)
+                    .SetPaddingLeft(3)
                     .SetMargin(0);
 
                     tablaCiclos.AddCell(cellCiclo);
@@ -257,10 +228,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             document.Add(tablaDetalleCiclos.SetMarginBottom(8));
 
 
-            Paragraph subTitulo = new Paragraph("Resultado de la flexión - SERIE 400:").AddStyle(estiloSubTitulo);
+            Paragraph subTitulo = new Paragraph($"Resultado de Flexión - SERIE {cabecera.Serie}:").AddStyle(estiloSubTitulo);
             document.Add(subTitulo);
 
-            Table resultadoFlexion = new Table(new float[] { 1, 1, 1, 1 });
+            Table resultadoFlexion = new Table(new float[] { 25, 25, 25, 25 });
             resultadoFlexion.SetWidth(UnitValue.CreatePercentValue(100));
             resultadoFlexion.SetFixedLayout();
 
@@ -275,14 +246,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
                 cantidadCiclosPorResumen = 0;
                 cantidadCiclosPorResumen = detalle.Where(x => x.TipoRegistro == 1 && x.Valor == resumen.Llave).ToList().Count();
 
-                Table tablaResultado = new Table(new float[] { 1, 1, 1 });
-                tablaResultado.SetWidth(UnitValue.CreatePercentValue(100));
+                Table tablaResultado = new Table(new float[] { 43, 25, 32 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
                 Cell cellResultado = new Cell(1, 1).Add(new Paragraph($" {resumen.Llave} ciclos =")
                     .AddStyle(estiloResultadoNegrita))
                     .SetBorder(Border.NO_BORDER)
                     .SetTextAlignment(TextAlignment.RIGHT)
-                    .SetWidth(48)
                     .SetPadding(0)
                     .SetMargin(0)
                     .SetPaddingRight(3);
@@ -291,15 +260,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
                 cellResultado = new Cell(1, 1).Add(new Paragraph(cantidadCiclosPorResumen.ToString()).AddStyle(estiloTexto))
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .SetWidth(20)
                     .SetPadding(0)
                     .SetMargin(0);
 
                 tablaResultado.AddCell(cellResultado);
 
-                cellResultado = new Cell(1, 1).Add(new Paragraph(resumen.Valor.ToString() + " %").AddStyle(estiloTexto).SetPaddingRight(2))
+                cellResultado = new Cell(1, 1).Add(new Paragraph(string.Format("{0:###,##0.##}", resumen.Valor) + " %").AddStyle(estiloTexto).SetPaddingRight(2))
                     .SetTextAlignment(TextAlignment.RIGHT)
-                    .SetWidth(40)
                     .SetPadding(0)
                     .SetMargin(0);
 
@@ -345,20 +312,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             document.Add(saltoLinea);
 
-            //Paragraph footer = new Paragraph("F/CDC-078, Versión 01").AddStyle(estiloSubTitulo).SetMargin(0).SetPadding(0).SetFontSize(8);
-            //document.Add(footer);
-            //footer = new Paragraph("Vigente desde: 28/06/2019").AddStyle(estiloSubTitulo).SetMargin(0).SetPadding(0).SetFontSize(8);
-            //document.Add(footer);
 
             document.Close();
 
             byte[] file = ms.ToArray();
 
             if (file == null || file.Length == 0)
+            {
+                pdf.Close();
+                writer.Close();
+                ms.Close();
                 return reporte;
+            }
 
             reporte = Convert.ToBase64String(file, 0, file.Length);
-
 
             pdf.Close();
             writer.Close();
@@ -376,6 +343,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             return listaGrupos;
 
+        }
+
+        private string FormatoNumeroEntero(int numero)
+        {
+            return string.Format("{0:###,###,###}", numero);
         }
 
     }
@@ -396,23 +368,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
                     .SetFontColor(ColorConstants.BLACK)
                     .SetMargin(0)
                     .SetPadding(0)
-                    .SetFontSize(8)
-                    ;
+                    .SetFontSize(8);
+
             Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
 
-            Cell footer = new Cell(1,1).Add(new Paragraph("F/CDC-078, Versión 01").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+            Cell footer = new Cell(1,1).Add(new Paragraph("F/CDC-078, Versión 04").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
 
             tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
 
-            footer = new Cell(1,1).Add(new Paragraph("Vigente desde: 28/06/2019").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
-
-            tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
-
-            Rectangle rectangulo = new Rectangle(15, 0, pagina.GetPageSize().GetWidth() - 70, 50);
+            Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 50);
 
             new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
 
         }
     }
+
 
 }

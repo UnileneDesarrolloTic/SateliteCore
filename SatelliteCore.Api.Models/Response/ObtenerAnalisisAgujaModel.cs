@@ -9,5 +9,6 @@
         public int CodProveedor { get; set; }
         public string Proveedor { get; set; }
         public int CantidadPruebas { get; set; }
+        public string Serie { get; set; }
     }
 }

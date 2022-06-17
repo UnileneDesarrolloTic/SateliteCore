@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Helpers;
+using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,7 +73,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ValidarLoteCreado")]
         public async Task<IActionResult> ValidarLoteCreado(string controlNumero, int secuencia)
         {
-            if (string.IsNullOrEmpty(controlNumero) || secuencia == 0 )
+            if (string.IsNullOrEmpty(controlNumero) || secuencia == 0)
                 throw new ValidationModelException("Los datos enviados no son válidos !!");
 
             int codUsuarioSesion = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
@@ -114,6 +116,138 @@ namespace SatelliteCore.Api.Controllers
             return Ok(reporte);
         }
 
+        [HttpGet("ObtenerDatosGenerales")]
+        public async Task<IActionResult> ObtenerDatosGenerales(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
 
-    }   
+            ResponseModel<ObtenerDatosGeneralesDTO> reporte = await _analisisAgujaServices.ObtenerDatosGenerales(loteAnalisis);
+
+            return Ok(reporte);
+        }
+
+        [HttpGet("ObtenerPlanMuestreo")]
+        public async Task<IActionResult> ObtenerPlanMuestreo(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ResponseModel<AnalisisAgujaPlanMuestreoEntity> reporte = await _analisisAgujaServices.ObtenerPlanMuestreo(loteAnalisis);
+
+            return Ok(reporte);
+        }
+
+        [HttpPost("GuardarPlanMuestreo")]
+        public async Task<IActionResult> GuardarPlanMuestreo(AnalisisAgujaPlanMuestreoEntity planMuestreo)
+        {
+            if (!planMuestreo.ValidarDatos())
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            planMuestreo.Usuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPlanMuestreo(planMuestreo);
+
+            return Ok(reporte);
+        }
+
+        [HttpGet("ObtenerPruebaDimensional")]
+        public async Task<IActionResult> ObtenerPruebaDimensional(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ResponseModel<List<AnalisisAgujaPruebaDimensionalEntity>> result = await _analisisAgujaServices.ObtenerPruebaDimensional(loteAnalisis);
+
+            return Ok(result);
+        }
+
+        [HttpPost("GuardarPruebaDimensional")]
+        public async Task<IActionResult> GuardarPruebaDimensional(List<AnalisisAgujaPruebaDimensionalEntity> prueba)
+        {
+            int usuarioToken = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            DateTime fechaActual = DateTime.Now;
+
+            List<AnalisisAgujaPruebaDimensionalEntity> nuevoArreglo = prueba.Select( item =>
+            {
+                if(!item.ValidarDatos())
+                    throw new ValidationModelException("Los datos enviados no son válidos !!");
+                
+                item.Usuario = usuarioToken;
+                item.Fecha = fechaActual;
+
+                return item;
+            }).ToList();
+                
+
+            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaDimensional(nuevoArreglo);
+
+            return Ok(reporte);
+        }
+
+        [HttpGet("ObtenerPruebaElasticidadPerforacion")]
+        public async Task<IActionResult> ObtenerPruebaElasticidadPerforacion(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ResponseModel<List<AnalisisAgujaElasticidadPerforacionEntity>> result = await _analisisAgujaServices.ObtenerPruebaElasticidadPerforacion(loteAnalisis);
+
+            return Ok(result);
+        }
+
+        [HttpPost("GuardarPruebaElasticidadPerforacion")]
+        public async Task<IActionResult> GuardarPruebaElasticidadPerforacion(List<AnalisisAgujaElasticidadPerforacionEntity> prueba)
+        {
+            int usuarioToken = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            DateTime fechaActual = DateTime.Now;
+
+            List<AnalisisAgujaElasticidadPerforacionEntity> nuevoArreglo = prueba.Select(item =>
+            {
+                if (!item.DatosValidos())
+                    throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+                item.Usuario = usuarioToken;
+                item.Fecha = fechaActual;
+
+                return item;
+            }).ToList();
+
+            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaElasticidadPerforacion(nuevoArreglo);
+
+            return Ok(reporte);
+        }
+
+        [HttpGet("ObtenerPruebaAspecto")]
+        public async Task<IActionResult> ObtenerPruebaAspecto(string loteAnalisis)
+        {
+            if (string.IsNullOrEmpty(loteAnalisis))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            ResponseModel<List<AnalisisAgujaPruebaAspectoEntity>> result = await _analisisAgujaServices.ObtenerPruebaAspecto(loteAnalisis);
+
+            return Ok(result);
+        }
+
+
+        [HttpPost("GuardarPruebaAspecto")]
+        public async Task<IActionResult> GuardarPruebaAspecto(PruebaAspectoYObservacionesDTO datos)
+        {
+            int usuarioToken = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaAspecto(datos, usuarioToken);
+
+            return Ok(reporte);
+        }
+
+
+        [HttpGet("ReporteAnalisisAguja")]
+        public async Task<IActionResult> GuardarPruebaAspecto(string loteAnalisis)
+        {
+            ResponseModel<string> reporte = await _analisisAgujaServices.ObtenerReporteAnalisisAguja(loteAnalisis);
+
+            return Ok(reporte);
+        }
+
+    }
 }
