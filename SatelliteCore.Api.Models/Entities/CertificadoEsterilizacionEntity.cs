@@ -47,5 +47,6 @@ namespace SatelliteCore.Api.Models.Entities
         public int IBNoExpuestos { get; set; }
         public bool IBNoExpuestosResultado { get; set; }
         public bool ConformeIB { get; set; }
+        public string Busqueda { get; set; }
     }
 }
