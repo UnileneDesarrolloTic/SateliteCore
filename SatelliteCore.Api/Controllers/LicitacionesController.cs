@@ -86,5 +86,16 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
+        [HttpGet("ListarGuiaInformacion")]
+        public async Task<IActionResult> ListarGuiaInformacion(string NumeroEntrega, string OrdenCompra)
+        {
+            if (string.IsNullOrEmpty(OrdenCompra))
+                throw new ValidationModelException("Debe Ingresar la Orden de Compra");
+
+            ResponseModel<IEnumerable<ListarGuiaInformeLPModel>> result = await _licitacionesServices.ListarGuiaInformacion(NumeroEntrega, OrdenCompra);
+            return Ok(result);
+        }
+
+
     }
 }

@@ -120,5 +120,28 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
         }
+
+
+
+        public async Task<IEnumerable<ListarGuiaInformeLPModel>> ListarGuiaInformacion(string NumeroEntrega,string OrdenCompra)
+        {
+            IEnumerable<ListarGuiaInformeLPModel> result = new List<ListarGuiaInformeLPModel>();
+
+            string sql1 = "SELECT RTRIM(g.SerieNumero) SerieNumero , RTRIM(g.GuiaNumero) GuiaNumero,g.fechadocumento,RTRIM(g.ReferenciaNumeroOrden) OrdenCompra,g.estado Estado,RTRIM(g.COMENTARIOS) Comentario,g.ReprogramacionPuntoPartida AS 'EntregaPecosa',g.ReferenciaNumeroOrden , " +
+                "IIF(o.FECHA_RETORNO IS NULL, 'SIN ORDEN DE SERVICIO', IIF(O.FECHA_RETORNO = '1900-01-01 00:00:00.000', 'SIN RETORNO', 'OK')) 'EstadoLogistica',RTRIM(o.comentarios) ComentarioSalida " +
+                "FROM PROD_UNILENE2..WH_GuiaRemision g "+
+                "FULL OUTER JOIN UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D O " +
+                "ON g.SerieNumero = o.serie and g.GuiaNumero = o.numero_documento " +
+                "INNER JOIN PROD_UNILENE2..wh_guiaremisiondetalle D on g.serienumero = d.serienumero and g.guianumero = d.guianumero "+
+                "INNER JOIN PROD_UNILENE2..WH_TransaccionHeader t on d.referenciatipodocumento = t.TipoDocumento and d.ReferenciaNumeroDocumento = t.NumeroDocumento "+
+                "WHERE g.Destinatario = 2317 and t.TransaccionCodigo <> 'SDE' and RTRIM(g.ReferenciaNumeroOrden) = RTRIM(@OrdenCompra) and g.ReprogramacionPuntoPartida LIKE '" + NumeroEntrega  + "-%' ";
+
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<ListarGuiaInformeLPModel>(sql1, new{ OrdenCompra, NumeroEntrega });
+            }
+            return result;
+        }
     }
 }

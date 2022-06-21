@@ -15,5 +15,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<ListarProcesoEntity>> ListarProceso();
         public Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega);
         public Task RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> matricula);
+
+        public Task<IEnumerable<ListarGuiaInformeLPModel>> ListarGuiaInformacion(string NumeroEntrega,string OrdenCompra);
     }
 }

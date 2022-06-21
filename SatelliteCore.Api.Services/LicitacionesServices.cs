@@ -60,15 +60,19 @@ namespace SatelliteCore.Api.Services
             return await _licitacionesRepository.ListarProgramaMuestraLIP(IdProceso,NumeroEntrega);
 
         }
-
-        
-
-
         public async Task<ResponseModel<string>> RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> dato)
         {
             await _licitacionesRepository.RegistrarProgramacionMuestreo(dato);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
+        }
+
+        public async Task<ResponseModel<IEnumerable<ListarGuiaInformeLPModel>>> ListarGuiaInformacion(string NumeroEntrega, string OrdenCompra)
+        {
+            IEnumerable<ListarGuiaInformeLPModel> result=await _licitacionesRepository.ListarGuiaInformacion(NumeroEntrega, OrdenCompra);
+
+            return new ResponseModel<IEnumerable<ListarGuiaInformeLPModel>>(true, Constante.MESSAGE_SUCCESS, result);  ;
+
         }
 
     }
