@@ -22,7 +22,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<(List<CertificadoEsterilizacionEntity>, int)> ListarCertificados(DatosListarCertificadoPaginado datos)
         {
             (List<CertificadoEsterilizacionEntity> ListaCertificados, int totalRegistros) result;
-
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 using (var result_db = await connection.QueryMultipleAsync("usp_ListaCertificadosEsterilizacion", datos, commandType: CommandType.StoredProcedure))
