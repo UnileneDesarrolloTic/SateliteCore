@@ -134,7 +134,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "ON g.SerieNumero = o.serie and g.GuiaNumero = o.numero_documento " +
                 "INNER JOIN PROD_UNILENE2..wh_guiaremisiondetalle D on g.serienumero = d.serienumero and g.guianumero = d.guianumero "+
                 "INNER JOIN PROD_UNILENE2..WH_TransaccionHeader t on d.referenciatipodocumento = t.TipoDocumento and d.ReferenciaNumeroDocumento = t.NumeroDocumento "+
-                "WHERE g.Destinatario = 2317 and t.TransaccionCodigo <> 'SDE' and RTRIM(g.ReferenciaNumeroOrden) = RTRIM(@OrdenCompra) and g.ReprogramacionPuntoPartida LIKE '" + NumeroEntrega  + "-%' ";
+                "WHERE g.Destinatario = 2317 and t.TransaccionCodigo <> 'SDE' and RTRIM(g.ReferenciaNumeroOrden) = RTRIM(@OrdenCompra) and SUBSTRING(g.ReprogramacionPuntoPartida,1,1) = @NumeroEntrega ";
 
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
