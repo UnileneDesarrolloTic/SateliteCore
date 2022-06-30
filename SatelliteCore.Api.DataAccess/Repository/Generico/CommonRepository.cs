@@ -78,12 +78,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return listaRol;
         }
 
-        public async Task<List<FamiliaMP>> ListarFamiliaMP()
+        public async Task<List<FamiliaMP>> ListarFamiliaMP(string tipo)
         {
             List<FamiliaMP> lista = new List<FamiliaMP>();
             using (var connection = new SqlConnection(_appConfig.contextSpring))
             {
-                lista = (List<FamiliaMP>)await connection.QueryAsync<FamiliaMP>("SELECT Codigo, Valor1 FROM TBDCatalogo WHERE Estado='A' and CatalogoID=6");
+                lista = (List<FamiliaMP>)await connection.QueryAsync<FamiliaMP>("SELECT Codigo, Valor1 FROM TBDCatalogo WHERE Estado='A' AND CatalogoID=6  AND RTRIM(PadreCodigo)=@tipo ", new { tipo });
                 connection.Dispose();
             }
 

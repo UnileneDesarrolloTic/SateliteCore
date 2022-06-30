@@ -122,9 +122,14 @@ namespace SatelliteCore.Api.Services
             return await _commonRepository.ListarRoles(estado);
         }
 
-        public async Task<List<FamiliaMP>> ListarFamiliaMP()
+        public async Task<List<FamiliaMP>> ListarFamiliaMP(string tipo)
         {
-            return await _commonRepository.ListarFamiliaMP();
+            List<FamiliaMP> familia = new List<FamiliaMP>();
+            familia = await _commonRepository.ListarFamiliaMP(tipo);
+            if (familia.Count>0)
+                familia.Insert(0,new FamiliaMP  { Codigo="TD" , Valor1="Todos" });
+
+            return familia;
         }
 
 

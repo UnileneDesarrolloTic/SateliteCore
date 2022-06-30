@@ -56,9 +56,9 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpGet("ListarFamiliaMP")]
-        public async Task<ActionResult> ListarFamiliaMP()
+        public async Task<ActionResult> ListarFamiliaMP(string tipo)
         {
-            List<FamiliaMP> listarFamiliaMP = await _commonService.ListarFamiliaMP();
+            List<FamiliaMP> listarFamiliaMP = await _commonService.ListarFamiliaMP(tipo);
             return Ok(listarFamiliaMP);
         }
 

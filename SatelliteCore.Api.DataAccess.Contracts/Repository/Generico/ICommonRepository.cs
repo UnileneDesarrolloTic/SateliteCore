@@ -10,7 +10,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<PaisEntity>> ListarPaises();
         public Task<List<MenuEntity>> ListarMenuxUsuario(int usuario);
         public Task<IEnumerable<RolEntity>> ListarRoles(string estado);
-        public Task<List<FamiliaMP>> ListarFamiliaMP();
+        public Task<List<FamiliaMP>> ListarFamiliaMP(string tipo);
         public Task<IEnumerable<ConfiguracionEntity>> ObtenerConfiguracionesSistema(int idConfiguracion, string grupo);
     }
 }

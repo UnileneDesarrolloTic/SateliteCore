@@ -11,7 +11,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<PaisEntity>> ListarPaises();
         public Task<List<MenuxUsuarioModel>> ListarMenuxUsuario(int usuario);
         public Task<IEnumerable<RolEntity>> ListarRoles(string estado);
-        public Task<List<FamiliaMP>> ListarFamiliaMP();
+        public Task<List<FamiliaMP>> ListarFamiliaMP(string tipo);
         public Task<ResponseModel<IEnumerable<ConfiguracionEntity>>> ObtenerConfiguracionesSistema(int idConfiguracion, string grupo);
     }
 }
