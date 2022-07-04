@@ -267,5 +267,30 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+
+        [HttpPost("ListarGuiaporFacturar")]
+        public async Task<ActionResult> ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato)
+        {
+            IEnumerable<FormatoGuiaPorFacturarModel> listar = await _comercialServices.ListarGuiaporFacturar(dato);
+            return Ok(listar);
+        }
+
+        [HttpPost("RegistrarGuiaporFacturar")]
+        public async Task<ActionResult> RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        {
+            await _comercialServices.RegistrarGuiaporFacturar(dato);
+            return Ok();
+        }
+
+
+
+        [HttpPost("ListarGuiaporFacturarExportar")]
+        public ActionResult ListarGuiaporFacturarExportar(List<FormatoGuiaPorFacturarModel> dato)
+        {   
+
+            string listar = _comercialServices.ListarGuiaporFacturarExportar(dato);
+            return Ok(listar);
+        }
+
     }
 }

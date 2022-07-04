@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.ReportServices.Contracts.Comercial;
 
 namespace SatelliteCore.Api.Services
 {
@@ -91,6 +92,28 @@ namespace SatelliteCore.Api.Services
              await _comercialRepository.RegistrarRotuladosPedido(dato, idUsuario);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "");
         }
+
+
+        public async Task<IEnumerable<FormatoGuiaPorFacturarModel>> ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato)
+        {
+            return await _comercialRepository.ListarGuiaporFacturar(dato);
+        }
+
+
+        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        {
+            await _comercialRepository.RegistrarGuiaporFacturar(dato);
+        }
+
+
+
+        public string ListarGuiaporFacturarExportar(List<FormatoGuiaPorFacturarModel> dato)
+        {
+            ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
+            string reporte = GuiaFactura.ExportarListarGuiaPorFactura(dato);
+            return reporte;
+        }
+
 
 
     }

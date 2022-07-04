@@ -232,14 +232,45 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato, int idUsuario)
         {
-            
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await context.ExecuteAsync("usp_RegistarRotuladoPedido", new { dato.numeroDocumento, dato.Rexterno,dato.Rinterno, idUsuario }, commandType: CommandType.StoredProcedure);
+            }   
+        }
+
+        public async Task<IEnumerable<FormatoGuiaPorFacturarModel>>  ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato)
+        {
+            IEnumerable<FormatoGuiaPorFacturarModel> lista = new List<FormatoGuiaPorFacturarModel>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista=await context.QueryAsync<FormatoGuiaPorFacturarModel>("usp_listar_guias_por_facturar", new { dato.Territorio, dato.FechaInicio,dato.FechaFin,dato.destinatario,dato.Tipo }, commandType: CommandType.StoredProcedure);
             }
 
-            
+            return lista;
         }
+
+
+
+        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        {
+
+            string script ="";
+
+            if (dato.comentariosEntrega)
+               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
+            else
+               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0' WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
+             
+           
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega });
+            }
+        }
+
+
 
     }
 }
