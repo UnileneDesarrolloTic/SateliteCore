@@ -177,7 +177,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("BROCA").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
             headerDocTable.AddCell(cellHeaderDoc);
 
-            cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("ALAMBRE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
+            cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("Φ ALAMBRE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
             headerDocTable.AddCell(cellHeaderDoc);
 
             cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("SERIE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
@@ -341,7 +341,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("CORROSIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
-            cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("SIN CORROSIÓN A SIMPLE VISTA")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER); //nodificacdo
+            cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("RESISTENTE A LA CORROSIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER); //nodificacdo
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
             cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("Presenta Corrosión").SetPaddingLeft(3)).AddStyle(cellTableCommon);
@@ -376,6 +376,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
+            cellAceptabilidad = new Cell(1, 7).Add(new Paragraph("(*) Si esta prueba tiene como resultado RECHAZADO termina el análisis")).AddStyle(cellTableCommon)
+                .SetTextAlignment(TextAlignment.RIGHT).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetPaddingRight(2);
+            pruebaAceptabilidad.AddCell(cellAceptabilidad);
+
+
             document.Add(pruebaAceptabilidad.SetMarginBottom(6));
 
             Table pruebaFlexioTable = new Table(new float[] { 12, 76, 12 });
@@ -391,7 +396,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph("STATUS")).AddStyle(headerTableCommon);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
-            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph("FLEXIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph($"FLEXIÓN\nCant: {SeparadorDeMilesDecimal(planMuestreo.UndMuestrearI)} und")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
 
@@ -434,6 +439,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaFlexioTable.AddCell(cellTablaResultado);
 
             pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph(planMuestreo.StatusFlexion == "A" ? "ACEPTADO":"RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaFlexioTable.AddCell(pruebaFlexionCell);
+
+            pruebaFlexionCell = new Cell(1, 3).Add(new Paragraph("(*) Si esta prueba tiene como resultado RECHAZADO termina el análisis")).AddStyle(cellTableCommon)
+                .SetTextAlignment(TextAlignment.RIGHT).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetPaddingRight(2);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
             document.Add(pruebaFlexioTable.SetMarginBottom(6));
@@ -1136,13 +1145,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeBuenAspecto))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(9, 1).Add(new Paragraph(SeparadorDeMilesDecimal(buenAspecto.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(buenAspecto.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(9, 1).Add(new Paragraph(porcentajeBuenAspecto >= (buenAspecto.Tolerancia ?? 0) ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph("ASPECTO DEL ALAMBRE")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(6, 1).Add(new Paragraph("ASPECTO DEL ALAMBRE")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("MARCAS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
@@ -1159,7 +1168,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoTable.AddCell(defectoCell);
 
 
-            defectoCell = new Cell(6, 1).Add(new Paragraph("ASPECTO DEL AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(8, 1).Add(new Paragraph(SeparadorDeMilesDecimal(100 - buenAspecto.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("POROSIDAD/HUECOS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
@@ -1228,6 +1237,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeMalFormada))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
+            defectoCell = new Cell(2, 1).Add(new Paragraph("ASPECTO DEL AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoTable.AddCell(defectoCell);
+
             defectoCell = new Cell(1, 1).Add(new Paragraph("REBABAS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
@@ -1241,8 +1253,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeBebabas))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("SIN AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
@@ -1295,7 +1305,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             conclusionessCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon);
             conclusionesTable.AddCell(conclusionessCell);
 
-            document.Add(conclusionesTable);
+            document.Add(conclusionesTable.SetMarginBottom(70));
+
+            Table responsablesTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
+
+            Cell responsableCelda = new Cell(1, 1).Add(new Paragraph("ANALISTA: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            responsablesTable.AddCell(responsableCelda);
+
+            responsableCelda = new Cell(1, 1).Add(new Paragraph("JEFE CONTROL DE CALIDAD: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            responsablesTable.AddCell(responsableCelda);
+
+            document.Add(responsablesTable);
 
             document.Close();
 
