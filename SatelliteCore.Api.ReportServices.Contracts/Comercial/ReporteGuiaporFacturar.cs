@@ -34,9 +34,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 BordesCeldas(worksheet);
                 TextoNegrita(worksheet);
 
+                string titulo = "";
+                if (ListaGuiaPorFactura[0].FacturaNumero == "" || ListaGuiaPorFactura[0].FacturaNumero==null)
+                {
+                    titulo = "REPORTE GENERAL DE GUIAS PENDIENTES DE FACTURAR";
+                }
+                else
+                {
+                    titulo = "REPORTE GENERAL DE GUIAS FACTURADAS";
+                }
+                
 
-
-                worksheet.Cells["A1"].Value = "REPORTE GENERAL DE GUIAS PENDIENTES DE FACTURAR";
+                worksheet.Cells["A1"].Value = titulo;
                 worksheet.Cells["A1"].Style.Font.Size = 14;
                 worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 
