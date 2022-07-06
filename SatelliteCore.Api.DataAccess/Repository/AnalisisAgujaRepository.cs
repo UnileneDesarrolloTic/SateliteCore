@@ -66,7 +66,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string script = "SELECT IIF(SUBSTRING(b.NumeroDeParte, 12, 1) = '3', CAST(c.ValorDecimal1 AS INT), c.ValorEntero3) Cantidad " +
                 "FROM WH_ControlCalidadDetalle a WITH(NOLOCK) INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item " +
-                "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadRecibida BETWEEN c.ValorEntero1 AND c.ValorEntero2 " +
+                "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadRecibida BETWEEN c.ValorEntero1 AND c.ValorEntero2 AND c.Estado = 'A'" +
                 "WHERE a.ControlNumero = @controlNumero AND a.Linea = @secuencia";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
@@ -139,16 +139,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca," +
                 "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,IIF(SUBSTRING(b.NumeroDeParte, 12, 1) = '3', '300', '400') Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
-                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, i.ValorDecimal3 FuerzaPerforacion, a.Observaciones, " +
-                "ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis " +
+                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis " +
                 "FROM SatelliteCore.dbo.TBMAnalisisAgujas a WITH(NOLOCK) " +
                     "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item INNER JOIN WH_ItemFormato c ON c.Grupo = '15' AND c.Tabla = '002' AND c.Codigo = SUBSTRING(b.NumeroDeParte, 2, 2) " +
                     "INNER JOIN WH_ItemFormato d WITH(NOLOCK) ON d.Grupo = '15' AND d.Tabla = '003' AND d.Codigo = SUBSTRING(b.NumeroDeParte, 4, 3) " +
-                    "INNER JOIN SatelliteCore.dbo.TBDConfiguracion e WITH(NOLOCK) ON e.IDConfiguracion = 3 AND e.Grupo = 'BATCH' AND a.Cantidad BETWEEN e.ValorEntero1 AND e.ValorEntero2 " +
+                    "INNER JOIN SatelliteCore.dbo.TBDConfiguracion e WITH(NOLOCK) ON e.IDConfiguracion = 3 AND e.Grupo = 'BATCH' AND a.Cantidad BETWEEN e.ValorEntero1 AND e.ValorEntero2 AND e.Estado = 'A'" +
                     "INNER JOIN WH_ItemFormato f WITH(NOLOCK) ON f.Grupo = '15' AND f.Tabla = '004' AND f.Codigo = CASE WHEN LEN(b.NumeroDeParte) IN(11, 14) THEN SUBSTRING(b.NumeroDeParte, 7, 2) ELSE SUBSTRING(b.NumeroDeParte, 7, 3) END " +
                     "INNER JOIN WH_ItemFormato g WITH(NOLOCK) ON g.Grupo = '15' AND g.Tabla = '005' AND g.Codigo = CASE WHEN LEN(b.NumeroDeParte) IN(11, 14) THEN SUBSTRING(b.NumeroDeParte, 9, 3) ELSE SUBSTRING(b.NumeroDeParte, 10, 3) END " +
-                    "INNER JOIN SatelliteCore.dbo.TBDConfiguracion h WITH(NOLOCK) ON h.IDConfiguracion = 5 AND h.Grupo = 'TP_Aguja' AND h.ValorTexto1 = SUBSTRING(b.NumeroDeParte, 2, 2) " +
-                    "INNER JOIN SatelliteCore.dbo.TBDConfiguracion i WITH(NOLOCK) ON i.IDConfiguracion = 4 AND i.Grupo = h.ValorTexto2 AND CAST(f.Codigo AS INT) BETWEEN i.ValorDecimal1 AND i.ValorDecimal2 " +
+                    "INNER JOIN SatelliteCore.dbo.TBDConfiguracion h WITH(NOLOCK) ON h.IDConfiguracion = 5 AND h.Grupo = 'TP_Aguja' AND h.ValorTexto1 = SUBSTRING(b.NumeroDeParte, 2, 2) AND h.Estado = 'A'" +
                 "WHERE Lote = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
@@ -199,7 +197,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             List<AnalisisAgujaPruebaDimensionalEntity> result = new List<AnalisisAgujaPruebaDimensionalEntity>();
 
-            string script = "SELECT LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,Usuario,Fecha FROM TBDAnalisisAgujaPruebaDimensional WITH(NOLOCK) " +
+            string script = "SELECT LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,Usuario,Fecha FROM TBDAnalisisAgujaPruebaDimensional WITH(NOLOCK) " +
                 "WHERE LoteAnalisis = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -222,8 +220,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task RegistrarPruebaDimensional(List<AnalisisAgujaPruebaDimensionalEntity> prueba)
         {
-            string script = "INSERT INTO TBDAnalisisAgujaPruebaDimensional (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,Usuario) " +
-                "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoEstado,@tolerancia,@usuario)";
+            string script = "INSERT INTO TBDAnalisisAgujaPruebaDimensional (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,Usuario) " +
+                "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoEstado,@tolerancia,@descripcionAux,@cantidadAux,@usuario)";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -235,7 +233,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<AnalisisAgujaElasticidadPerforacionEntity> result = new List<AnalisisAgujaElasticidadPerforacionEntity>();
 
-            string script = "SELECT LoteAnalisis,TipoRegistro,Uno,Dos,Tres,Cuatro,Cinco,Estado,FuerzaPerforacion,Usuario,Fecha FROM TBDAnalisisAgujaElasticidadPerforacion WITH(NOLOCK) " +
+            string script = "SELECT LoteAnalisis,TipoRegistro,Uno,Dos,Tres,Cuatro,Cinco,Estado,Usuario,Fecha FROM TBDAnalisisAgujaElasticidadPerforacion WITH(NOLOCK) " +
                 "WHERE LoteAnalisis = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -258,8 +256,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task RegistrarPruebaElasticidadPerforacion(List<AnalisisAgujaElasticidadPerforacionEntity> prueba)
         {
-            string script = "INSERT INTO TBDAnalisisAgujaElasticidadPerforacion (LoteAnalisis,TipoRegistro,Uno,Dos,Tres,Cuatro,Cinco,Estado,FuerzaPerforacion,Usuario,Fecha) " +
-                "VALUES(@loteAnalisis,@tipoRegistro,@uno,@dos,@tres,@cuatro,@cinco,@estado,@fuerzaPerforacion,@usuario,@fecha)";
+            string script = "INSERT INTO TBDAnalisisAgujaElasticidadPerforacion (LoteAnalisis,TipoRegistro,Uno,Dos,Tres,Cuatro,Cinco,Estado,Usuario,Fecha) " +
+                "VALUES(@loteAnalisis,@tipoRegistro,@uno,@dos,@tres,@cuatro,@cinco,@estado,@usuario,@fecha)";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
