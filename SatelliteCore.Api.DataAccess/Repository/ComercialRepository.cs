@@ -252,21 +252,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
 
 
-        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
         {
 
             string script ="";
 
             if (dato.comentariosEntrega)
-               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
+               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' , AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE()  WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
             else
-               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0' WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
+               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0', AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE() WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
              
            
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega });
+                await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega, idUsuario });
             }
         }
 

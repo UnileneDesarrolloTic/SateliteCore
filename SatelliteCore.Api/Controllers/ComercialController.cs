@@ -278,17 +278,20 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarGuiaporFacturar")]
         public async Task<ActionResult> RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
         {
-            await _comercialServices.RegistrarGuiaporFacturar(dato);
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            await _comercialServices.RegistrarGuiaporFacturar(dato, idUsuario);
+
             return Ok();
         }
 
 
 
         [HttpPost("ListarGuiaporFacturarExportar")]
-        public ActionResult ListarGuiaporFacturarExportar(List<FormatoGuiaPorFacturarModel> dato)
+        public async Task<ActionResult> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
         {   
 
-            string listar = _comercialServices.ListarGuiaporFacturarExportar(dato);
+            string listar = await _comercialServices.ListarGuiaporFacturarExportar(dato);
             return Ok(listar);
         }
 

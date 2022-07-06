@@ -100,17 +100,22 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
         {
-            await _comercialRepository.RegistrarGuiaporFacturar(dato);
+            await _comercialRepository.RegistrarGuiaporFacturar(dato, idUsuario);
         }
 
 
 
-        public string ListarGuiaporFacturarExportar(List<FormatoGuiaPorFacturarModel> dato)
+        public async Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
         {
+
+            IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
+
+            listaGuiaPorFacturar= await _comercialRepository.ListarGuiaporFacturar(dato);
+
             ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
-            string reporte = GuiaFactura.ExportarListarGuiaPorFactura(dato);
+            string reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
             return reporte;
         }
 
