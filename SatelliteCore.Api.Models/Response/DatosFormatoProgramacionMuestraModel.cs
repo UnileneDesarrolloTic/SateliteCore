@@ -14,6 +14,7 @@ namespace SatelliteCore.Api.Models.Response
         public string NumeroMuestreo { get; set; }
         public string NumeroEnsayo { get; set; }
         public int IdProceso { get; set; }
+        public string Protocolo { get; set; }
 
     }
 }

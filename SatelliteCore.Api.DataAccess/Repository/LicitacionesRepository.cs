@@ -95,11 +95,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoProgramacionMuestraModel> result = new List<DatosFormatoProgramacionMuestraModel>();
 
-            string sql1 = "SELECT M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,D.DescripcionItem,M.CodItem,M.NumeroMuestreo,M.NumeroEnsayo,P.IdProceso FROM TBMLIProceso P " +
+            string sql1 = "SELECT M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,D.DescripcionItem,M.CodItem,M.NumeroMuestreo,M.NumeroEnsayo, M.Protocolo, P.IdProceso FROM TBMLIProceso P " +
                             "INNER JOIN TBDLIProcesoDetalle D ON P.IdProceso = D.IdProceso "+
                             "INNER JOIN TBDLIProcesoProgramacionMuestras M ON P.IdProceso = M.IdProceso AND D.NumeroItem = M.NumeroItem "+
                             "WHERE P.IdProceso = @IdProceso AND M.NumeroEntrega = @NumeroEntrega " +
-                            "GROUP BY M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,M.CodItem,D.DescripcionItem,M.NumeroMuestreo,M.NumeroEnsayo,M.IdProgramacion,p.IdProceso " +
+                            "GROUP BY M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,M.CodItem,D.DescripcionItem,M.NumeroMuestreo,M.NumeroEnsayo, M.Protocolo,M.IdProgramacion,p.IdProceso " +
                             "ORDER BY M.NumeroItem";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -115,7 +115,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo WHERE IdProgramacion=@idProgramacion";
+                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo , Protocolo=@protocolo  WHERE IdProgramacion=@idProgramacion";
                 await context.ExecuteAsync(sql, dato);
             }
 
