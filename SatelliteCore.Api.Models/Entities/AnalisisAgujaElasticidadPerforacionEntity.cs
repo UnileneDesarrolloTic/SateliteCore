@@ -12,7 +12,6 @@ namespace SatelliteCore.Api.Models.Entities
         public decimal Cuatro { get; set; }
         public decimal Cinco { get; set; }
         public string Estado { get; set; }
-        public decimal? FuerzaPerforacion { get; set; }
         public int Usuario { get; set; }
         public DateTime Fecha { get; set; }
 

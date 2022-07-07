@@ -20,7 +20,7 @@ namespace SatelliteCore.Api.Models.Dto.AnalisisAgujas
         public int UndMuestrear { get; set; }
         public int UndMuestrearI { get; set; }
         public int UndMuestrearIII { get; set; }
-        public decimal FuerzaPerforacion { get; set; }
+        //public decimal FuerzaPerforacion { get; set; }
         public string Observaciones { get; set; }
         public DateTime FechaAnalisis { get; set; }
     }
