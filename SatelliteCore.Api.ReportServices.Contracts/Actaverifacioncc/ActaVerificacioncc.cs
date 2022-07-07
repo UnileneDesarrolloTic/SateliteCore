@@ -38,7 +38,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Document document = new Document(pdf, PageSize.A4.Rotate());
 
             document.SetMargins(5, 15, 30, 15);
-          
+
 
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
@@ -87,10 +87,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                         break;
                 }
 
-              
-               
+
                 GenerarPdf(document, cabecera, Entrega);
-               // 
+
                 if (contador < contadoArray - 1)
                 {
                     document.Add(new AreaBreak());
@@ -98,7 +97,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 contador++;
 
             }
-           
+
             document.Close();
 
             byte[] file = ms.ToArray();
@@ -114,6 +113,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             return reporte;
         }
+
 
 
         public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega)
@@ -612,13 +612,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
               .SetHeight(8)
               .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
-            
+
             /* cellFirma = new Cell(1, 1).Add(img2)
                           .SetTextAlignment(TextAlignment.CENTER)
                           .SetBorder(Border.NO_BORDER)
                           .SetPaddingLeft(20);
              tablaDatosFirma.AddCell(cellFirma);*/
-            
+
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
                 .AddStyle(estiloFechaVerificacion))
@@ -684,7 +684,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Compromiso(document, cabecera, rutaUnilene);
             document.Add(new AreaBreak(PageSize.A4));
             Condiciones(document, cabecera, rutaUnilene);
-            
+
         }
 
         public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
@@ -866,7 +866,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(img);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-            
+
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
@@ -900,11 +900,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA  DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo).SetMarginTop(10);
             Paragraph titulo2 = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
-            
+
             document.Add(saltoLinea);
             document.Add(titulo1);
             document.Add(titulo2);
-            
+
 
             Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
             tablaDatosGenerales.SetFixedLayout();
@@ -946,7 +946,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetBorder(Border.NO_BORDER);
             tablaDeclaracionJuramento.AddCell(cellPresente);
 
-            
+
 
             cellPresente = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].Descripcion)
                .AddStyle(estiloNegrita))
@@ -1022,7 +1022,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetPadding(5);
             tablaDatosContenido.AddCell(cellContenido);
 
-            cellContenido = new Cell(1, 1).Add(new Paragraph("8. Las condiciones de temperatura de almacenamiento deben ser no mayor a 30°C.")
+            cellContenido = new Cell(1, 1).Add(new Paragraph("8. Las condiciones de temperatura de almacenamiento deben ser no mayor a "+ cabecera.DetalleGuia[0].Temperatura + "°C.")
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.JUSTIFIED)
             .SetBorder(Border.NO_BORDER)
@@ -1070,6 +1070,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         }
 
-       
+
     }
 }

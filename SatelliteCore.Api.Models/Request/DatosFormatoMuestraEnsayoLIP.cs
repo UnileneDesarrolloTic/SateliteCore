@@ -10,7 +10,8 @@ namespace SatelliteCore.Api.Models.Request
         public string numeroEnsayo { get; set; }
         public string numeroMuestreo { get; set; }
         public string protocolo { get; set; }
-
+        public string temperatura { get; set; }
+        public string registroSanitario { get; set; }
 
     }
 }
