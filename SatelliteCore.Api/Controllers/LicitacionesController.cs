@@ -96,6 +96,20 @@ namespace SatelliteCore.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("ListarContratoProceso")]
+        public async Task<IActionResult> ListarContratoProceso(string proceso)
+        {
+            IEnumerable<EstructuraListaContratoProceso> result = await _licitacionesServices.ListarContratoProceso(proceso);
+            return Ok(result);
+        }
 
+
+
+        [HttpPost("RegistrarContratoProceso")]
+        public async Task<IActionResult> RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato)
+        {
+            ResponseModel<string> result = await _licitacionesServices.RegistrarContratoProceso(dato);
+            return Ok(result);
+        }
     }
 }

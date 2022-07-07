@@ -95,11 +95,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoProgramacionMuestraModel> result = new List<DatosFormatoProgramacionMuestraModel>();
 
-            string sql1 = "SELECT M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,D.DescripcionItem,M.CodItem,M.NumeroMuestreo,M.NumeroEnsayo, M.Protocolo, P.IdProceso FROM TBMLIProceso P " +
+            string sql1 = "SELECT M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,D.DescripcionItem,M.CodItem,M.NumeroMuestreo,M.Temperatura,M.RegistroSanitario,M.NumeroEnsayo, M.Protocolo, P.IdProceso FROM TBMLIProceso P " +
                             "INNER JOIN TBDLIProcesoDetalle D ON P.IdProceso = D.IdProceso "+
                             "INNER JOIN TBDLIProcesoProgramacionMuestras M ON P.IdProceso = M.IdProceso AND D.NumeroItem = M.NumeroItem "+
                             "WHERE P.IdProceso = @IdProceso AND M.NumeroEntrega = @NumeroEntrega " +
-                            "GROUP BY M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,M.CodItem,D.DescripcionItem,M.NumeroMuestreo,M.NumeroEnsayo, M.Protocolo,M.IdProgramacion,p.IdProceso " +
+                            "GROUP BY M.IdProgramacion,M.NumeroEntrega,M.NumeroItem,M.CodItem,D.DescripcionItem,M.NumeroMuestreo,M.Temperatura,M.RegistroSanitario,M.NumeroEnsayo, M.Protocolo,M.IdProgramacion,p.IdProceso " +
                             "ORDER BY M.NumeroItem";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -115,7 +115,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo , Protocolo=@protocolo  WHERE IdProgramacion=@idProgramacion";
+                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo , Protocolo=@protocolo , Temperatura=@temperatura , RegistroSanitario=@registroSanitario  WHERE IdProgramacion=@idProgramacion";
                 await context.ExecuteAsync(sql, dato);
             }
 
@@ -143,5 +143,31 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+
+        public async Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso)
+        {
+            IEnumerable<EstructuraListaContratoProceso> result = new List<EstructuraListaContratoProceso>();
+            string sql1 = "SELECT idproceso, tipodeusuario, numeroitem, descripcionitem, ISNULL(NumeroContrato,'') NumeroContrato   FROM TBDLIProcesoDetalle " +
+                           "WHERE idproceso=@proceso GROUP BY idproceso,tipodeusuario,numeroitem,descripcionitem,NumeroContrato";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<EstructuraListaContratoProceso>(sql1, new { proceso});
+            }
+            return result;
+        }
+
+
+        public async Task RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato)
+        {
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                string sql = "UPDATE TBDLIProcesoDetalle SET NumeroContrato = @numeroContrato  WHERE IdProceso=@idproceso AND Tipodeusuario=@tipodeusuario AND NumeroItem=@numeroitem";
+                await context.ExecuteAsync(sql, dato);
+            }
+
+        }
+
     }
 }

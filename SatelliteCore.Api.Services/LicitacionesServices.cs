@@ -75,5 +75,18 @@ namespace SatelliteCore.Api.Services
 
         }
 
+        public async Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso)
+        {
+            return await _licitacionesRepository.ListarContratoProceso(proceso);
+
+        }
+
+        public async Task<ResponseModel<string>> RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato)
+        {
+            await _licitacionesRepository.RegistrarContratoProceso(dato);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
+        }
+
     }
 }

@@ -16,7 +16,8 @@ namespace SatelliteCore.Api.Models.Response
        public string Lote { get; set; }
        public DateTime FechaExpiracion { get; set; }
        public string RegistroSanitario { get; set; }
-       public string Protocolo { get; set; }
+       public string Temperatura { get; set; }
+        public string Protocolo { get; set; }
        public string  NumeroMuestreo { get; set; }
        public string  NumeroEnsayo { get; set; }
 
