@@ -160,7 +160,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<AnalisisAgujaPlanMuestreoEntity> ObtenerPlanMuestreo(string loteAnalisis)
         {
             AnalisisAgujaPlanMuestreoEntity result = new AnalisisAgujaPlanMuestreoEntity();
-            // REVISAR
+            
             string script = "SELECT LoteAnalisis,Cantidad,UndMuestrear,UndMuestrearI,UndMuestrearIII,CajasMuestrear,StatusFlexion,Usuario,Fecha FROM TBDAnalisisAgujaPlanMuestreoFlexion WITH(NOLOCK) " +
                 "WHERE LoteAnalisis = @loteAnalisis";
 

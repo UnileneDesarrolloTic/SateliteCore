@@ -24,9 +24,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             List<AnalisisAgujaPruebaDimensionalEntity> dimensionaCorrosion, List<AnalisisAgujaFlexionEntity> flexion,
             List<AnalisisAgujaElasticidadPerforacionEntity> elasticidadPerforeacion, List<AnalisisAgujaPruebaAspectoEntity> aspectoAguja)
         {
-            string reporte = null;
-
-            //string fechaRegistro = detalle[0].FechaRegistro.ToString("dd/MM/yyyy hh:mm");
+            string reporte = null;            
 
             MemoryStream ms = new MemoryStream();
 
@@ -828,7 +826,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             pruebaPerforacionTable.AddCell(resultadoFuerzaPerforacionTable.SetMarginRight(19).SetMarginBottom(5).SetMarginTop(5));
 
-            //Modificar
             pruebaPerforacionCell = new Cell(1, 1).Add(new Paragraph(ObtenerDescripcionEstado(perforacion.Estado))).AddStyle(cellTablePerforacion).SetTextAlignment(TextAlignment.CENTER);
             pruebaPerforacionTable.AddCell(pruebaPerforacionCell);
 
