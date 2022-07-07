@@ -219,7 +219,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 9).Add(new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle)
+            cellDG = new Cell(1, 9).Add(new Paragraph(cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle)
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT);
 
@@ -737,7 +737,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Paragraph titulo1 = new Paragraph("ANEXO N°9").AddStyle(estiloTitulo).SetMarginTop(10).SetMarginBottom(7);
             Paragraph titulo2 = new Paragraph("DECLARACIÓN JURADA DE COMPROMISO DE CANJE Y/O REPOSICIÓN POR VICIOS OCULTOS").AddStyle(estiloTitulo);
-            Paragraph titulo3 = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            Paragraph titulo3 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
 
             document.Add(titulo1);
             document.Add(titulo2);
@@ -783,7 +783,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
 
-            Paragraph LictacionPublica = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC " + cabecera.OrdenCompra).AddStyle(estilotextoNegrita);
+            Paragraph LictacionPublica = new Paragraph( cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC " + cabecera.OrdenCompra).AddStyle(estilotextoNegrita);
 
             //tabla 3
             Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
@@ -899,7 +899,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetFontColor(ColorConstants.BLACK);
 
             Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA  DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo).SetMarginTop(10);
-            Paragraph titulo2 = new Paragraph("LICITACIÓN PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            Paragraph titulo2 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
 
             document.Add(saltoLinea);
             document.Add(titulo1);
