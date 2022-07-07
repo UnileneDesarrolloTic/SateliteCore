@@ -35,7 +35,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             docInfo.SetTitle("Reporte análisis de aguja");
             docInfo.SetAuthor("Sistema Satelite");
 
-
             Document document = new Document(pdf, PageSize.A4);
             document.SetMargins(10, 25, 50, 18);
 
