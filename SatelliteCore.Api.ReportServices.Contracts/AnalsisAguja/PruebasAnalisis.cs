@@ -177,7 +177,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("BROCA").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
             headerDocTable.AddCell(cellHeaderDoc);
 
-            cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("ALAMBRE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
+            cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("Φ ALAMBRE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
             headerDocTable.AddCell(cellHeaderDoc);
 
             cellHeaderDoc = new Cell(1, 1).Add(new Paragraph("SERIE").AddStyle(headerTableDescAguja)).AddStyle(borderTable);
@@ -270,7 +270,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             datosCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(planMuestreo.UndMuestrear)).SetFontSize(7.15f)).AddStyle(cellTableMd);
             datosTable.AddCell(datosCell);
 
-            datosCell = new Cell(1, 1).Add(new Paragraph("PRUEBAS DIMENCIONALES LONGITUD").SetFontSize(7.15f)).AddStyle(cellTableMd);
+            datosCell = new Cell(1, 1).Add(new Paragraph("PRUEBAS DIMENSIONALES LONGITUD").SetFontSize(7.15f)).AddStyle(cellTableMd);
             datosTable.AddCell(datosCell);
 
             datosCell = new Cell(1, 1).Add(new Paragraph("Nº unid. a muestrear (I)").SetFontSize(7.15f)).AddStyle(cellTableMd);
@@ -279,7 +279,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             datosCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(planMuestreo.UndMuestrearI)).SetFontSize(7.15f)).AddStyle(cellTableMd);
             datosTable.AddCell(datosCell);
 
-            datosCell = new Cell(3, 1).Add(new Paragraph("OTRAS PRUEBAS DIMENCIONALES").SetFontSize(7.15f)).AddStyle(cellTableMd);
+            datosCell = new Cell(3, 1).Add(new Paragraph("OTRAS PRUEBAS DIMENSIONALES").SetFontSize(7.15f)).AddStyle(cellTableMd);
             datosTable.AddCell(datosCell);
 
             datosCell = new Cell(1, 1).Add(new Paragraph("Nº unid. a muestrear (III)").SetFontSize(7.15f)).AddStyle(cellTableMd);
@@ -341,7 +341,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("CORROSIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
-            cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("SIN CORROSIÓN A SIMPLE VISTA")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER); //nodificacdo
+            cellAceptabilidad = new Cell(2, 1).Add(new Paragraph("RESISTENTE A LA\nCORROSIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
             cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("Presenta Corrosión").SetPaddingLeft(3)).AddStyle(cellTableCommon);
@@ -356,7 +356,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellAceptabilidad = new Cell(1, 1).Add(new Paragraph(pruebaCorrosion.Cantidad > 0 ? "100" : "0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
-            cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("0 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("= 0 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
             cellAceptabilidad = new Cell(2, 1).Add(new Paragraph(pruebaCorrosion.Cantidad > 0 ? "RECHAZADO" : "ACEPTADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
@@ -373,8 +373,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellAceptabilidad = new Cell(1, 1).Add(new Paragraph(pruebaCorrosion.Cantidad > 0 ? "0" : "100")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
 
-            cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            cellAceptabilidad = new Cell(1, 1).Add(new Paragraph("= 100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaAceptabilidad.AddCell(cellAceptabilidad);
+
+            cellAceptabilidad = new Cell(1, 7).Add(new Paragraph("(*) Si esta prueba tiene como resultado RECHAZADO termina el análisis")).AddStyle(cellTableCommon)
+                .SetTextAlignment(TextAlignment.RIGHT).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetPaddingRight(2);
+            pruebaAceptabilidad.AddCell(cellAceptabilidad);
+
 
             document.Add(pruebaAceptabilidad.SetMarginBottom(6));
 
@@ -391,7 +396,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph("STATUS")).AddStyle(headerTableCommon);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
-            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph("FLEXIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph($"FLEXIÓN\nCant: {SeparadorDeMilesDecimal(planMuestreo.UndMuestrearI)} und")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
 
@@ -433,16 +438,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             cellTablaResultado = new Cell(1, 1).Add(resultadoFlexion).AddStyle(cellTableCommon);
             pruebaFlexioTable.AddCell(cellTablaResultado);
 
-            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph(planMuestreo.StatusFlexion == "A" ? "ACEPTADO":"RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph(ObtenerDescripcionEstado(planMuestreo.StatusFlexion))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
-            document.Add(pruebaFlexioTable.SetMarginBottom(6));
+            pruebaFlexionCell = new Cell(1, 3).Add(new Paragraph("(*) Si esta prueba tiene como resultado RECHAZADO termina el análisis")).AddStyle(cellTableCommon)
+                .SetTextAlignment(TextAlignment.RIGHT).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetPaddingRight(2);
+            pruebaFlexioTable.AddCell(pruebaFlexionCell);
+
+            document.Add(pruebaFlexioTable.SetMarginBottom(5));
 
             Paragraph parafoDimensionales = new Paragraph("2. ANÁLISIS DE ACEPTABILIDAD DE PRUEBAS DIMENSIONALES").SetFontSize(8.95f);
 
             document.Add(parafoDimensionales.SetMarginBottom(6));
 
-            Table pruebasDimensionalesTable = new Table(new float[] { 18, 18, 18, 11, 11, 11, 13 });
+            Table pruebasDimensionalesTable = new Table(new float[] { 18, 17, 20, 11, 10, 11, 13 });
             pruebasDimensionalesTable.SetWidth(UnitValue.CreatePercentValue(100));
             pruebasDimensionalesTable.SetFixedLayout();
 
@@ -486,27 +495,29 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcientoLongitud))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(longitud.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(longitud.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(2, 1).Add(new Paragraph(porcientoLongitud >= longitud.Tolerancia ? "APROBADO" : "RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(2, 1).Add(new Paragraph(porcientoLongitud >= longitud.Tolerancia ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("Longitud opción 2")).AddStyle(cellTableCommon).SetPaddingLeft(3);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Longitud opción 2 : {longitud.DescripcionAux}")).AddStyle(cellTableCommon).SetPaddingLeft(3);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{longitud.CantidadAux}")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            decimal porcientoLongitudAux = decimal.Round(((longitud.CantidadAux ?? 0) * 100) / longitud.BaseCalculoEstado, 2);
+
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(porcientoLongitudAux)}")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"< {SeparadorDeMilesDecimal(100 - longitud.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             document.Add(pruebasDimensionalesTable.SetMarginBottom(12));
 
-            pruebasDimensionalesTable = new Table(new float[] { 18, 18, 18, 11, 11, 11, 13 });
+            pruebasDimensionalesTable = new Table(new float[] { 18, 17, 20, 11, 10, 11, 13 });
             pruebasDimensionalesTable.SetWidth(UnitValue.CreatePercentValue(100));
             pruebasDimensionalesTable.SetFixedLayout();
 
@@ -551,27 +562,29 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeDiametro))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(diametro.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(diametro.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             pruebaDimensionaCell = new Cell(2, 1).Add(new Paragraph(porcentajeDiametro >= diametro.Tolerancia ? "ACEPTADO":"RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("Diametro opción 2")).AddStyle(cellTableCommon).SetPaddingLeft(3);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Diametro opción 2: { diametro.DescripcionAux }")).AddStyle(cellTableCommon).SetPaddingLeft(3);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{diametro.CantidadAux ?? 0}")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            decimal porcentajeDiametroAux = decimal.Round(((diametro.CantidadAux ?? 0) * 100) / diametro.BaseCalculoEstado, 2);
+
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(porcentajeDiametroAux)}")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"< {SeparadorDeMilesDecimal(100 - diametro.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             document.Add(pruebasDimensionalesTable.SetMarginBottom(12));
 
-            pruebasDimensionalesTable = new Table(new float[] { 18, 18, 18, 11, 11, 11, 13 });
+            pruebasDimensionalesTable = new Table(new float[] { 18, 17, 20, 11, 10, 11, 13 });
             pruebasDimensionalesTable.SetWidth(UnitValue.CreatePercentValue(100));
             pruebasDimensionalesTable.SetFixedLayout();
 
@@ -616,28 +629,30 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeAlambre))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(alambre.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(alambre.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             pruebaDimensionaCell = new Cell(2, 1).Add(new Paragraph(porcentajeAlambre >= alambre.Tolerancia ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("Alambre opción 2")).AddStyle(cellTableCommon).SetPaddingLeft(3);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Alambre opción 2: { alambre.DescripcionAux }")).AddStyle(cellTableCommon).SetPaddingLeft(3);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"{alambre.CantidadAux ?? 0}")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("0")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            decimal porcentajeAlambreAux = decimal.Round(((alambre.CantidadAux ?? 0) * 100) / alambre.BaseCalculoEstado, 2);
+
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeAlambreAux))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph("100 %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"< {SeparadorDeMilesDecimal(100 - alambre.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            document.Add(pruebasDimensionalesTable.SetMarginBottom(12));
+            document.Add(pruebasDimensionalesTable.SetMarginBottom(10));
 
             Paragraph parafoPerforacion = new Paragraph("3. PRUEBA DE FUERZA DE PERFORACIÓN").SetFontSize(8.95f);
-            document.Add(parafoPerforacion.SetMarginBottom(6));
+            document.Add(parafoPerforacion.SetMarginBottom(5));
 
             parafoPerforacion = new Paragraph("Especificaciones").SetFontSize(8.95f).SetPaddingLeft(15);
             document.Add(parafoPerforacion.SetMarginBottom(6));
@@ -770,27 +785,51 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             decimal promedioPerforacion = decimal.Round((perforacion.Uno + perforacion.Dos + perforacion.Tres + perforacion.Cuatro + perforacion.Cinco) / 5, 2);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Uno))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+            if (perforacion.Estado == "N")
+            {
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Dos))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Tres))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Cuatro))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Cinco))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
 
-            resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(promedioPerforacion)).SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph("-").SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+            }
+            else
+            {
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Uno))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Dos))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Tres))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Cuatro))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(perforacion.Cinco))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+
+                resultadoFuerzaPerforacionCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(promedioPerforacion)).SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoFuerzaPerforacionTable.AddCell(resultadoFuerzaPerforacionCell);
+            }
 
             pruebaPerforacionTable.AddCell(resultadoFuerzaPerforacionTable.SetMarginRight(19).SetMarginBottom(5).SetMarginTop(5));
 
-            pruebaPerforacionCell = new Cell(1, 1).Add(new Paragraph(promedioPerforacion >= perforacion.FuerzaPerforacion ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTablePerforacion).SetTextAlignment(TextAlignment.CENTER);
+            //Modificar
+            pruebaPerforacionCell = new Cell(1, 1).Add(new Paragraph(ObtenerDescripcionEstado(perforacion.Estado))).AddStyle(cellTablePerforacion).SetTextAlignment(TextAlignment.CENTER);
             pruebaPerforacionTable.AddCell(pruebaPerforacionCell);
 
             document.Add(pruebaPerforacionTable.SetMarginBottom(12));
@@ -955,7 +994,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             elasticidadTable.SetFixedLayout();
 
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph("ELASTICIDAD")).AddStyle(headerTablePerforacion);
+            elasticidadCell = new Cell(1, 1).Add(new Paragraph("% DE DEFORMACIÓN EN RETORNO DE LA AGUJA")).AddStyle(headerTablePerforacion);
             elasticidadTable.AddCell(elasticidadCell);
 
             elasticidadCell = new Cell(1, 1).Add(new Paragraph("STATUS")).AddStyle(headerTablePerforacion);
@@ -991,27 +1030,51 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             decimal promedioElasticidad = decimal.Round((elasticidad.Uno + elasticidad.Dos + elasticidad.Tres + elasticidad.Cuatro + elasticidad.Cinco) / 5, 2);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Uno))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+            if(elasticidad.Estado == "N")
+            {
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Dos))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Tres))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Cuatro))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Cinco))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(promedioElasticidad)).SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            resultadoElasticidadTable.AddCell(elasticidadCell);
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph("-").SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+            }
+            else
+            {
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Uno))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Dos))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Tres))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Cuatro))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(elasticidad.Cinco))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+
+                elasticidadCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(promedioElasticidad)).SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+                resultadoElasticidadTable.AddCell(elasticidadCell);
+            }
+           
 
             elasticidadTable.AddCell(resultadoElasticidadTable.SetMarginRight(19).SetMarginBottom(5).SetMarginTop(5));
 
-            elasticidadCell = new Cell(1, 1).Add(new Paragraph(elasticidad.Estado == "A" ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTablePerforacion).SetTextAlignment(TextAlignment.CENTER);
+            elasticidadCell = new Cell(1, 1).Add(new Paragraph(ObtenerDescripcionEstado(elasticidad.Estado))).AddStyle(cellTablePerforacion).SetTextAlignment(TextAlignment.CENTER);
             elasticidadTable.AddCell(elasticidadCell);
 
             document.Add(elasticidadTable.SetMarginBottom(12));
@@ -1065,7 +1128,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
                 .AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(agujaCentrado.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(agujaCentrado.Tolerancia ?? 0)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(2, 1).Add(new Paragraph(porcentajeAgujaCentrado >= (agujaCentrado.Tolerancia ?? 0) ? "ACEPTADO" : "RECHAZADO" ))
@@ -1087,7 +1150,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeAgujaDescentrado))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(agujaDescentrado.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(1, 1).Add(new Paragraph($"< {SeparadorDeMilesDecimal(agujaDescentrado.Tolerancia ?? 0)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             document.Add(defectoTable.SetMarginBottom(10));
@@ -1136,13 +1199,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeBuenAspecto))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(9, 1).Add(new Paragraph(SeparadorDeMilesDecimal(buenAspecto.Tolerancia ?? 0) + " %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(buenAspecto.Tolerancia ?? 0)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(9, 1).Add(new Paragraph(porcentajeBuenAspecto >= (buenAspecto.Tolerancia ?? 0) ? "ACEPTADO" : "RECHAZADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph("ASPECTO DEL ALAMBRE")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(6, 1).Add(new Paragraph("ASPECTO DEL ALAMBRE")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("MARCAS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
@@ -1159,7 +1222,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoTable.AddCell(defectoCell);
 
 
-            defectoCell = new Cell(6, 1).Add(new Paragraph("ASPECTO DEL AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoCell = new Cell(8, 1).Add(new Paragraph($"< {SeparadorDeMilesDecimal(100 - buenAspecto.Tolerancia ?? 0)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("POROSIDAD/HUECOS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
@@ -1228,6 +1291,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeMalFormada))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
+            defectoCell = new Cell(2, 1).Add(new Paragraph("ASPECTO DEL AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            defectoTable.AddCell(defectoCell);
+
             defectoCell = new Cell(1, 1).Add(new Paragraph("REBABAS")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
@@ -1241,8 +1307,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             defectoCell = new Cell(1, 1).Add(new Paragraph(SeparadorDeMilesDecimal(porcentajeBebabas))).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
 
-            defectoCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
-            defectoTable.AddCell(defectoCell);
 
             defectoCell = new Cell(1, 1).Add(new Paragraph("SIN AGUJERO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             defectoTable.AddCell(defectoCell);
@@ -1295,7 +1359,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             conclusionessCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon);
             conclusionesTable.AddCell(conclusionessCell);
 
-            document.Add(conclusionesTable);
+            document.Add(conclusionesTable.SetMarginBottom(70));
+
+            Table responsablesTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
+
+            Cell responsableCelda = new Cell(1, 1).Add(new Paragraph("ANALISTA: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            responsablesTable.AddCell(responsableCelda);
+
+            responsableCelda = new Cell(1, 1).Add(new Paragraph("JEFE CONTROL DE CALIDAD: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            responsablesTable.AddCell(responsableCelda);
+
+            document.Add(responsablesTable);
 
             document.Close();
 
@@ -1317,6 +1391,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             ms.Close();
 
             return reporte;
+        }
+
+        private string ObtenerDescripcionEstado(string codigoEstado)
+        {
+            switch (codigoEstado)
+            {
+                case "A":
+                    return "ACEPTADO";
+                case "R":
+                    return "RECHAZADO";
+                case "N":
+                    return "NO APLICA";
+                default:
+                    return "";
+            }
         }
 
         private string SeparadorDeMilesDecimal(decimal numero)=> string.Format("{0:##,###,##0.##}", numero);
