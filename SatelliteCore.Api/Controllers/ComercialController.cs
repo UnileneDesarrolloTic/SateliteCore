@@ -275,6 +275,7 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listar);
         }
 
+
         [HttpPost("RegistrarGuiaporFacturar")]
         public async Task<ActionResult> RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
         {

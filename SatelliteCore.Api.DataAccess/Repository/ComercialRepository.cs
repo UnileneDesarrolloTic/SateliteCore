@@ -245,8 +245,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<FormatoGuiaPorFacturarModel> lista = new List<FormatoGuiaPorFacturarModel>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
+            {   
                 lista=await context.QueryAsync<FormatoGuiaPorFacturarModel>("usp_listar_guias_por_facturar", new { dato.Territorio, dato.FechaInicio,dato.FechaFin,dato.destinatario,dato.Tipo }, commandType: CommandType.StoredProcedure);
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral()
+        {
+            IEnumerable<FormatoGuiaPorFacturarGeneralModel> lista = new List<FormatoGuiaPorFacturarGeneralModel>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", commandType: CommandType.StoredProcedure);
             }
 
             return lista;
@@ -263,9 +275,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' , AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE()  WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
             else
                script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0', AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE() WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
-             
-           
-
+                  
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega, idUsuario });
