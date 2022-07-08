@@ -18,6 +18,8 @@ namespace SatelliteCore.Api.Models.Response
         public int StockEnTransito { get; set; }
         public decimal Alerta { get; set; }
         public bool PedidoAtrasado{ get; set; }
+        public int MesActual { get; set; }
+        public int UltimosMeses { get; set; }
         public List<TransitoProductoArimaModel> PedidosTransito { get; set; }
 
         public ProductoArimaModel()
