@@ -108,7 +108,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 {
                     worksheet.Row(row).Height = 25.5;
 
-
                     worksheet.Cells["A" + row].Value = item.comentariosEntrega ? "SI": "NO";
                     worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["A" + row].Style.Font.Name = "Calibri";
