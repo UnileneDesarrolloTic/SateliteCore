@@ -195,7 +195,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          + " WHERE CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN(" + dato + ") "
                          + " SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, RTRIM(C.Descripcion) CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, "
                          + " d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, " 
-                         + " pl.Fechavencimiento FechaExpiracion, ISNULL(prm.RegistroSanitario,'') RegistroSanitario, ISNULL(prm.Temperatura,0) Temperatura, prm.protocolo Protocolo, prm.NumeroMuestreo, prm.NumeroEnsayo "
+                         + " pl.Fechavencimiento FechaExpiracion, ISNULL(prm.RegistroSanitario,'') RegistroSanitario, ISNULL(prm.Temperatura,'') Temperatura, prm.protocolo Protocolo, prm.NumeroMuestreo, prm.NumeroEnsayo "
                          + " FROM TBMLIProceso p "
                          + "INNER JOIN TBDLIProcesoDetalle d ON p.IdProceso = d.IdProceso "
                          + "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle "
@@ -245,8 +245,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<FormatoGuiaPorFacturarModel> lista = new List<FormatoGuiaPorFacturarModel>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
+            {   
                 lista=await context.QueryAsync<FormatoGuiaPorFacturarModel>("usp_listar_guias_por_facturar", new { dato.Territorio, dato.FechaInicio,dato.FechaFin,dato.destinatario,dato.Tipo }, commandType: CommandType.StoredProcedure);
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral()
+        {
+            IEnumerable<FormatoGuiaPorFacturarGeneralModel> lista = new List<FormatoGuiaPorFacturarGeneralModel>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", commandType: CommandType.StoredProcedure);
             }
 
             return lista;
@@ -263,9 +275,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' , AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE()  WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
             else
                script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0', AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE() WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
-             
-           
-
+                  
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega, idUsuario });

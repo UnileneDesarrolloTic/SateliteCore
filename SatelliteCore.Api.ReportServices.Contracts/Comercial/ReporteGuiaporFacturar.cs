@@ -1,12 +1,10 @@
 ﻿using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
-using SatelliteCore.Api.Models.Report.Cotizacion;
-using SatelliteCore.Api.Models.Response;
-using System.Collections.Generic;
-using System;
-using System.Drawing;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 {
@@ -44,12 +42,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 {
                     titulo = "REPORTE GENERAL DE GUIAS FACTURADAS";
                 }
-                
+
 
                 worksheet.Cells["A1"].Value = titulo;
                 worksheet.Cells["A1"].Style.Font.Size = 14;
                 worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                
+
 
 
                 worksheet.Cells["A3"].Value = "SERIE";
@@ -137,8 +135,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 {
                     worksheet.Row(row).Height = 25.5;
 
-                  
-                    
+
+
 
                     worksheet.Cells["A" + row].Value = item.SerieNumero;
                     worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -165,7 +163,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
-                    worksheet.Cells["D" + row].Value = item.ComentariosEntrega==true ? "SI": "NO" ;
+                    worksheet.Cells["D" + row].Value = item.ComentariosEntrega == true ? "SI" : "NO";
                     worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["D" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["D" + row].Style.Font.Size = 10;
@@ -266,7 +264,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     row++;
                 }
 
-                    file = excelPackage.GetAsByteArray();
+
+                if (dato.Tipo == "GF")
+                {
+                    worksheet.Column(6).Hidden = true;
+                    worksheet.Column(7).Hidden = true;
+                }
+                else
+                {
+                    worksheet.Column(6).Hidden = false;
+                    worksheet.Column(7).Hidden = false;
+                }
+
+
+                file = excelPackage.GetAsByteArray();
 
                 if (file == null || file.Length == 0)
                     return reporte;
@@ -295,7 +306,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(5).Width = 10.43 + 2.71;
             worksheet.Column(6).Width = 10.43 + 2.71;
             worksheet.Column(7).Width = 9.86 + 2.71;
-            worksheet.Column(8).Width = 7.43 + 2.71; 
+            worksheet.Column(8).Width = 7.43 + 2.71;
             worksheet.Column(9).Width = 11.29 + 2.71;
             worksheet.Column(10).Width = 45 + 2.71;
             worksheet.Column(11).Width = 6.29 + 2.71;
@@ -303,7 +314,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(13).Width = 8.43 + 2.71;
             worksheet.Column(14).Width = 8.43 + 2.71;
             worksheet.Column(15).Width = 10.43 + 2.71;
-           
+
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
@@ -318,13 +329,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
         private static void PintarCeldas(ExcelWorksheet worksheet)
         {
-           // worksheet.Cells["N14,J5"].Style.Font.UnderLine = true;
+            // worksheet.Cells["N14,J5"].Style.Font.UnderLine = true;
             worksheet.Cells["A3:O3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
 
         }
         private static void TextoNegrita(ExcelWorksheet worksheet)
         {
-           
+
         }
     }
 }

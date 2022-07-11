@@ -109,13 +109,24 @@ namespace SatelliteCore.Api.Services
 
         public async Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
         {
+            string reporte = "";
 
-            IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
+            if (dato.Tipo != "G")
+            {
+                IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
+                listaGuiaPorFacturar = await _comercialRepository.ListarGuiaporFacturar(dato);
+                ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
+                reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
+            }else
+                {
+                    IEnumerable<FormatoGuiaPorFacturarGeneralModel> listaGuiaPorFacturarGeneral = new List<FormatoGuiaPorFacturarGeneralModel>();
+                    listaGuiaPorFacturarGeneral = await _comercialRepository.ListarGuiaporFacturarGeneral();
+                    ReporteGuiaporFacturarGeneral GuiaFacturaGeneral = new ReporteGuiaporFacturarGeneral();
+                    reporte = GuiaFacturaGeneral.ExportarListarGuiaPorFacturaGeneral(listaGuiaPorFacturarGeneral);
+                 }
+           
 
-            listaGuiaPorFacturar= await _comercialRepository.ListarGuiaporFacturar(dato);
 
-            ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
-            string reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
             return reporte;
         }
 
