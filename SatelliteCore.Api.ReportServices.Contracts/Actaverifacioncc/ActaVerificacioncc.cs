@@ -34,7 +34,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             docInfo.SetTitle("Licitaciones");
             docInfo.SetAuthor("Sistema Licitaciones");
 
-
             Document document = new Document(pdf, PageSize.A4.Rotate());
 
             document.SetMargins(5, 15, 30, 15);
