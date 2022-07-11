@@ -49,7 +49,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "LEFT JOIN WH_OrdenCompraDetalle c WITH(NOLOCK) ON b.CompaniaSocio = c.CompaniaSocio AND b.NumeroOrden = c.NumeroOrden AND a.Secuencia = c.Secuencia " +
                 "LEFT JOIN WH_OrdenCompra d WITH(NOLOCK) ON b.CompaniaSocio = d.CompaniaSocio AND b.NumeroOrden = d.NumeroOrden " +
                 "LEFT JOIN SatelliteCore.dbo.TBMAnalisisAgujas e WITH(NOLOCK) ON e.ControlNumero = a.ControlNumero AND e.ReferenciaSecuencia = a.Linea " +
-                "WHERE a.CompaniaSocio = '01000000' AND b.ControlNumero >= '' AND b.NumeroOrden = @NumeroOrden AND LEFT(b.NumeroOrden, 2) <> 'PE' " +
+                "WHERE a.CompaniaSocio = '01000000' AND b.ControlNumero >= '' AND b.NumeroOrden = @NumeroOrden AND LEFT(b.NumeroOrden, 2) <> 'PE' AND a.Estado != 'AN' AND a.Item LIKE 'ISTAG%'" +
                 "ORDER BY a.Linea";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
