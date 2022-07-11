@@ -165,7 +165,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
             Paragraph titulo1 = new Paragraph("ACTA DE VERIFICACION CUALITATIVA Y CUANTITATIVA").AddStyle(estiloTitulo);
-            Paragraph titulo2 = new Paragraph("LICITACION PUBLICA N° " + cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+            Paragraph titulo2 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
             document.Add(titulo1);
             document.Add(titulo2);
 
@@ -502,13 +502,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo=="" || detalle.NumeroMuestreo=="-" ? "NO APLICA" : detalle.NumeroMuestreo)
                    .AddStyle(estiloDetalle))
                    .SetTextAlignment(TextAlignment.CENTER)
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo=="" || detalle.NumeroEnsayo =="-" ? "NO APLICA": detalle.NumeroEnsayo)
                  .AddStyle(estiloDetalle))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -1022,7 +1022,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetPadding(5);
             tablaDatosContenido.AddCell(cellContenido);
 
-            cellContenido = new Cell(1, 1).Add(new Paragraph("8. Las condiciones de temperatura de almacenamiento deben ser no mayor a "+ cabecera.DetalleGuia[0].Temperatura + "°C.")
+            cellContenido = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].Temperatura == "" ? "" : "8. " + cabecera.DetalleGuia[0].Temperatura + ". ")
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.JUSTIFIED)
             .SetBorder(Border.NO_BORDER)

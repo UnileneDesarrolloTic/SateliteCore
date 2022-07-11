@@ -195,7 +195,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          + " WHERE CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN(" + dato + ") "
                          + " SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, RTRIM(C.Descripcion) CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, "
                          + " d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, " 
-                         + " pl.Fechavencimiento FechaExpiracion, ISNULL(prm.RegistroSanitario,'') RegistroSanitario, ISNULL(prm.Temperatura,0) Temperatura, prm.protocolo Protocolo, prm.NumeroMuestreo, prm.NumeroEnsayo "
+                         + " pl.Fechavencimiento FechaExpiracion, ISNULL(prm.RegistroSanitario,'') RegistroSanitario, ISNULL(prm.Temperatura,'') Temperatura, prm.protocolo Protocolo, prm.NumeroMuestreo, prm.NumeroEnsayo "
                          + " FROM TBMLIProceso p "
                          + "INNER JOIN TBDLIProcesoDetalle d ON p.IdProceso = d.IdProceso "
                          + "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle "
