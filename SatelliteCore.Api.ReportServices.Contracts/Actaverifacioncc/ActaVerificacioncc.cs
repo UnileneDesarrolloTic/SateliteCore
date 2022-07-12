@@ -457,7 +457,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CantidadRequerida.ToString())
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CantidadGRD.ToString())
                    .AddStyle(estiloDetalle))
                    .SetTextAlignment(TextAlignment.CENTER)
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
