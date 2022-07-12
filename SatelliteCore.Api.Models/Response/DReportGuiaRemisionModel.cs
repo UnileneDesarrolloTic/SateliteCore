@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.Models.Response
        public string Descripcion { get; set; }
        public string CaractervaluesDescripcion { get; set; }
        public string UnidadCodigo { get; set; }
-       public decimal CantidadRequerida { get; set; }
+       public int CantidadRequerida { get; set; }
        public int Cantidad { get; set; }
        public int CantidadGRD { get; set; }
        public string Guia { get; set; }

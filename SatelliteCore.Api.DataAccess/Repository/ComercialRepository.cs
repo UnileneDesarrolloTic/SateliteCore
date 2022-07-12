@@ -194,7 +194,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          + " INNER JOIN PROD_UNILENE2..PersonaMast per ON per.Persona = g.Destinatario "
                          + " WHERE CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN(" + dato + ") "
                          + " SELECT D.NumeroItem, RTRIM(h.Descripcion) Descripcion, ISNULL(RTRIM(prm.Presentacion),'') CaractervaluesDescripcion, RTRIM(IM.UnidadCodigo) UnidadCodigo, "
-                         + " d.CantidadRequerida, e.cantidad,h.Cantidad CantidadGRD, concat(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, " 
+                         + " CONVERT(INT,d.CantidadRequerida) CantidadRequerida, CONVERT(INT,e.cantidad) cantidad, CONVERT(INT,h.Cantidad) CantidadGRD, concat(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) Guia, RTRIM(h.Lote) Lote, "
                          + " pl.Fechavencimiento FechaExpiracion, ISNULL(prm.RegistroSanitario,'') RegistroSanitario, ISNULL(prm.Temperatura,'') Temperatura, IIF(LEFT(h.ItemCodigo, 1)='P',h.Lote,'S/N') Protocolo, prm.NumeroMuestreo, prm.NumeroEnsayo "
                          + " FROM TBMLIProceso p "
                          + "INNER JOIN TBDLIProcesoDetalle d ON p.IdProceso = d.IdProceso "
