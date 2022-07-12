@@ -501,13 +501,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo=="" || detalle.NumeroMuestreo=="-" ? "NO APLICA" : detalle.NumeroMuestreo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo=="" || detalle.NumeroMuestreo=="-" ? "NO REQUIERE" : detalle.NumeroMuestreo)
                    .AddStyle(estiloDetalle))
                    .SetTextAlignment(TextAlignment.CENTER)
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo=="" || detalle.NumeroEnsayo =="-" ? "NO APLICA": detalle.NumeroEnsayo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo=="" || detalle.NumeroEnsayo =="-" ? "NO REQUIERE" : detalle.NumeroEnsayo)
                  .AddStyle(estiloDetalle))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
