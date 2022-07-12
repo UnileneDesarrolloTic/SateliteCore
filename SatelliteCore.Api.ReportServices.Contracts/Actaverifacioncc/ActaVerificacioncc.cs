@@ -38,7 +38,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             document.SetMargins(5, 15, 30, 15);
 
-
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
                 string Entrega = "";
