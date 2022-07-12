@@ -113,7 +113,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
         }
 
 
-
         public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega)
         {
             Color bgColour = new DeviceRgb(161, 205, 241);
