@@ -115,7 +115,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo , Protocolo=@protocolo , Temperatura=@temperatura , RegistroSanitario=@registroSanitario, Presentacion=@presentacion  WHERE IdProgramacion=@idProgramacion";
+                string sql = "UPDATE TBDLIProcesoProgramacionMuestras SET NumeroMuestreo=@numeroMuestreo , NumeroEnsayo=@numeroEnsayo  WHERE IdProgramacion=@idProgramacion " +
+                             "UPDATE TBDLIProcesoProgramacionMuestras SET Protocolo=@protocolo , Temperatura=@temperatura , RegistroSanitario=@registroSanitario, Presentacion=@presentacion  WHERE NumeroItem=@numeroItem AND IdProceso=@idProceso";
                 await context.ExecuteAsync(sql, dato);
             }
 
