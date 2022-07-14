@@ -108,6 +108,83 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        
+
+        public async Task<IEnumerable<AgrupadorEntity>> ListarAgrupador()
+        {
+            IEnumerable<AgrupadorEntity> lista = new List<AgrupadorEntity>();
+
+            string query = "SELECT CodigoAgrupador , DescripcionAgrupador , DescripcionCompleta  FROM T_AGRUPADOR";
+
+            using (var connection = new SqlConnection(_appConfig.ContextDMVentas))
+            {
+                lista = await connection.QueryAsync<AgrupadorEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+
+        public async Task<IEnumerable<SubAgrupadorEntity>> ListarSubAgrupador(string idAgrupador)
+        {
+            IEnumerable<SubAgrupadorEntity> lista = new List<SubAgrupadorEntity>();
+
+            string query = "SELECT RTRIM(SUBAGRUPADOR_CODIGO) codSubAgrupador , RTRIM(SUBAGRUPADOR_NOMBRE) NombreSubAgrupador , RTRIM(AGRUPADOR_CODIGO) codAgrupador  FROM T_SUBAGRUPADOR WHERE AGRUPADOR_CODIGO=@idAgrupador";
+
+            using (var connection = new SqlConnection(_appConfig.ContextDMVentas))
+            {
+                lista = await connection.QueryAsync<SubAgrupadorEntity>(query,new { idAgrupador });
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<LineaEntity>> ListarLinea()
+        {
+            IEnumerable<LineaEntity> lista = new List<LineaEntity>();
+
+            string query = "SELECT RTRIM(Linea) Linea, RTRIM(DescripcionLocal) DescripcionLocal, RTRIM(DescripcionIngles)  DescripcionIngles FROM WH_ClaseLinea";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<LineaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<FamiliaMaestroItemsModel>> ListarFamilia(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> lista = new List<FamiliaMaestroItemsModel>();
+
+            string query = "SELECT RTRIM(Familia) Familia, RTRIM(DescripcionLocal) DescripcionLocal, RTRIM(DescripcionCompleta) DescripcionCompleta FROM  WH_CLASEFAMILIA WHERE DescripcionLocal like '%sutura%' and Linea = @idlinea AND Estado = 'A' ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<FamiliaMaestroItemsModel>(query, new { idlinea });
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<SubFamiliaEntity>> ListarSubFamilia(string idlinea, string idfamilia)
+        {
+            IEnumerable<SubFamiliaEntity> lista = new List<SubFamiliaEntity>();
+
+            string query = "SELECT RTRIM(Linea) Linea, RTRIM(Familia) Familia, RTRIM(SubFamilia) SubFamilia , RTRIM(DescripcionLocal) DescripcionLocal  FROM  WH_ClaseSubFamilia WHERE Linea=@idlinea AND Familia=@idfamilia AND Estado = 'A' ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<SubFamiliaEntity>(query, new { idlinea, idfamilia });
+                connection.Dispose();
+            }
+
+            return lista;
+        }
 
     }
 }

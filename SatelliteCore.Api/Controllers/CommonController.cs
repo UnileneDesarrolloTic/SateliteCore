@@ -70,5 +70,43 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
+        [HttpGet("ListarAgrupador")]
+        public async Task<IActionResult> ListarAgrupador()
+        {
+            ResponseModel<IEnumerable<AgrupadorEntity>> configuraciones = await _commonService.ListarAgrupador();
+            return Ok(configuraciones);
+        }
+
+        [HttpGet("ListarSubAgrupador")]
+        public async Task<IActionResult> ListarSubAgrupador(string idAgrupador)
+        {
+            ResponseModel<IEnumerable<SubAgrupadorEntity>> configuraciones = await _commonService.ListarSubAgrupador(idAgrupador);
+            return Ok(configuraciones);
+        }
+
+        [HttpGet("ListarLinea")]
+        public async Task<IActionResult> ListarLinea()
+        {
+            ResponseModel<IEnumerable<LineaEntity>> configuraciones = await _commonService.ListarLinea();
+            return Ok(configuraciones);
+        }
+
+        [HttpGet("ListarFamilia")]
+        public async Task<IActionResult> ListarFamilia(string idLinea)
+        {
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> configuraciones = await _commonService.ListarFamilia(idLinea);
+            return Ok(configuraciones);
+        }
+
+        [HttpGet("ListarSubFamilia")]
+        public async Task<IActionResult> ListarSubFamilia(string idlinea, string idfamilia)
+        {
+            ResponseModel<IEnumerable<SubFamiliaEntity>> configuraciones = await _commonService.ListarSubFamilia(idlinea,idfamilia);
+            return Ok(configuraciones);
+        }
+
+
+
+
     }
 }

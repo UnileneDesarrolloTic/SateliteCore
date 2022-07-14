@@ -140,5 +140,49 @@ namespace SatelliteCore.Api.Services
 
             return resultadoConfiguraciones;
         }
+
+
+        public async Task<ResponseModel<IEnumerable<AgrupadorEntity>>> ListarAgrupador()
+        {
+            IEnumerable<AgrupadorEntity> configuraciones = await _commonRepository.ListarAgrupador();
+            ResponseModel<IEnumerable<AgrupadorEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<AgrupadorEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<SubAgrupadorEntity>>> ListarSubAgrupador(string idAgrupador)
+        {
+            IEnumerable<SubAgrupadorEntity> configuraciones = await _commonRepository.ListarSubAgrupador(idAgrupador);
+            ResponseModel<IEnumerable<SubAgrupadorEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<SubAgrupadorEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<LineaEntity>>> ListarLinea()
+        {
+            IEnumerable<LineaEntity> configuraciones = await _commonRepository.ListarLinea();
+            ResponseModel<IEnumerable<LineaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<LineaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>> ListarFamilia(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> configuraciones = await _commonRepository.ListarFamilia(idlinea);
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> resultadoConfiguraciones = new ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<SubFamiliaEntity>>> ListarSubFamilia(string idlinea, string idfamilia)
+        {
+          
+            IEnumerable<SubFamiliaEntity> configuraciones = await _commonRepository.ListarSubFamilia(idlinea, idfamilia);
+            ResponseModel<IEnumerable<SubFamiliaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<SubFamiliaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+
     }
 }
