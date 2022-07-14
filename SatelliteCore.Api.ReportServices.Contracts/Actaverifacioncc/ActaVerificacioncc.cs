@@ -22,10 +22,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
     {
         public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias)
         {
+            string fechahoy = DateTime.Today.ToLongDateString().ToString();
+            string[] separarfecha = fechahoy.Split(',');
+            string fechaFinal = "Lima," + separarfecha[1];
 
             int contador = 0;
             int contadoArray = NumeroGuias.Count;
             string reporte = null;
+           
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdf = new PdfDocument(writer);
@@ -86,7 +90,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 }
 
 
-                GenerarPdf(document, cabecera, Entrega);
+                GenerarPdf(document, cabecera, Entrega,fechaFinal);
 
                 if (contador < contadoArray - 1)
                 {
@@ -113,8 +117,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
         }
 
 
-        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega)
+        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega,string fechaFinal)
         {
+            
+
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
 
@@ -177,7 +183,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosGenerales.AddCell(cellDG);
 
 
-            cellDG = new Cell(1, 1).Add(new Paragraph("Fecha")
+            cellDG = new Cell(1, 1).Add(new Paragraph("")
             .AddStyle(estiloCabecera))
             .SetFont(fuenteNegrita)
             .SetTextAlignment(TextAlignment.RIGHT)
@@ -185,11 +191,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosGenerales.AddCell(cellDG);
 
-            cellDG = new Cell(1, 2).Add(new Paragraph(DateTime.Now.ToLongDateString())
+            cellDG = new Cell(1, 2).Add(new Paragraph(fechaFinal)
              .AddStyle(estiloCabecera))
              .SetFont(fuenteNegrita)
-             .SetTextAlignment(TextAlignment.LEFT)
-             .SetBorder(Border.NO_BORDER);
+             .SetTextAlignment(TextAlignment.RIGHT)
+             .SetBorder(Border.NO_BORDER);             
 
             tablaDatosGenerales.AddCell(cellDG);
 
@@ -294,7 +300,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             //Detalle Item 
 
-            Table tablaDatosDetalle = new Table(24).UseAllAvailableWidth();
+            Table tablaDatosDetalle = new Table(29).UseAllAvailableWidth();
             tablaDatosDetalle.SetFixedLayout().SetFontSize(9);
 
             //bloque 1
@@ -314,7 +320,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosDetalle.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(2, 2).Add(new Paragraph("UNIDAD DE MEDIDA")
+            cellDetalle = new Cell(2, 1).Add(new Paragraph("UNIDAD DE MEDIDA")
              .AddStyle(estiloDetalle))
              .SetTextAlignment(TextAlignment.CENTER)
              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -322,7 +328,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosDetalle.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(2, 2).Add(new Paragraph("PRESENTACION")
+            cellDetalle = new Cell(2, 4).Add(new Paragraph("PRESENTACION")
             .AddStyle(estiloDetalle))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -357,7 +363,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosDetalle.AddCell(cellDetalle);
 
 
-            cellDetalle = new Cell(1, 2).Add(new Paragraph("LOTE")
+            cellDetalle = new Cell(1, 4).Add(new Paragraph("LOTE")
             .AddStyle(estiloDetalle))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -366,7 +372,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosDetalle.AddCell(cellDetalle);
 
 
-            cellDetalle = new Cell(2, 1).Add(new Paragraph("Registro Sanitario")
+            cellDetalle = new Cell(2, 3).Add(new Paragraph("REGISTRO SANITARIO")
             .AddStyle(estiloDetalle))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -395,7 +401,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             //bloque 2 
 
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("N°")
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("N°")
             .AddStyle(estiloDetalle))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -403,7 +409,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosDetalle.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("F.V")
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("F.V")
             .AddStyle(estiloDetalle))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -445,13 +451,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.UnidadCodigo)
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.UnidadCodigo)
                 .AddStyle(estiloDetalle))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.CaractervaluesDescripcion)
+                cellDetalle = new Cell(1, 4).Add(new Paragraph(detalle.CaractervaluesDescripcion)
                 .AddStyle(estiloDetalle))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -475,19 +481,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.Lote)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.Lote)
                  .AddStyle(estiloDetalle))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.FechaExpiracion.ToString("dd'/'MM'/'yyyy"))
-                .AddStyle(estiloDetalle).SetFontSize(5))
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.FechaExpiracion.ToString("dd'/'MM'/'yyyy"))
+                .AddStyle(estiloDetalle).SetFontSize(6))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 1).Add(new Paragraph(detalle.RegistroSanitario)
+                cellDetalle = new Cell(1, 3).Add(new Paragraph(detalle.RegistroSanitario)
                 .AddStyle(estiloDetalle))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -678,13 +684,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(saltoLinea);
 
             document.Add(new AreaBreak(PageSize.A4));
-            Compromiso(document, cabecera, rutaUnilene);
+            Compromiso(document, cabecera, rutaUnilene, fechaFinal);
             document.Add(new AreaBreak(PageSize.A4));
-            Condiciones(document, cabecera, rutaUnilene);
+            Condiciones(document, cabecera, rutaUnilene, fechaFinal);
 
         }
 
-        public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
+        public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
 
 
@@ -822,7 +828,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosFecha.AddCell(cellFecha);
 
 
-            cellFecha = new Cell(1, 1).Add(new Paragraph("Lima " + DateTime.Now.ToLongDateString())
+            cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER);
@@ -845,7 +851,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         }
 
-        public void Condiciones(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene)
+        public void Condiciones(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
 
 
@@ -1042,7 +1048,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosFecha.AddCell(cellFecha);
 
 
-            cellFecha = new Cell(1, 1).Add(new Paragraph("Lima " + DateTime.Now.ToLongDateString())
+            cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER);
