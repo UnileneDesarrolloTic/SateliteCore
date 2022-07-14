@@ -186,5 +186,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<IEnumerable<MarcaEntity>> ListarMarca()
+        {
+            IEnumerable<MarcaEntity> lista = new List<MarcaEntity>();
+
+            string query = "SELECT RTRIM(MarcaCodigo) MarcaCodigo, RTRIM(DescripcionLocal) DescripcionLocal, RTRIM(DescripcionIngles) DescripcionIngles  FROM  WH_Marcas WHERE ESTADO='A'";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<MarcaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
     }
 }

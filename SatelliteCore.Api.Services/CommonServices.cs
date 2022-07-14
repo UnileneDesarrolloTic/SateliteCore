@@ -183,6 +183,15 @@ namespace SatelliteCore.Api.Services
             return resultadoConfiguraciones;
         }
 
+        public async Task<ResponseModel<IEnumerable<MarcaEntity>>> ListarMarca()
+        {
+
+            IEnumerable<MarcaEntity> configuraciones = await _commonRepository.ListarMarca();
+            ResponseModel<IEnumerable<MarcaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<MarcaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
 
     }
 }

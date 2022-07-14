@@ -105,6 +105,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(configuraciones);
         }
 
+        [HttpGet("ListarMarca")]
+        public async Task<IActionResult> ListarMarca()
+        {
+            ResponseModel<IEnumerable<MarcaEntity>> configuraciones = await _commonService.ListarMarca();
+            return Ok(configuraciones);
+        }
+
 
 
 
