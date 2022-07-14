@@ -300,7 +300,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             //Detalle Item 
 
-            Table tablaDatosDetalle = new Table(29).UseAllAvailableWidth();
+            Table tablaDatosDetalle = new Table(30).UseAllAvailableWidth();
             tablaDatosDetalle.SetFixedLayout().SetFontSize(9);
 
             //bloque 1
@@ -312,7 +312,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tablaDatosDetalle.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(2, 4).Add(new Paragraph("NOMBRE DEL PRODUCTO(DCI)")
+            cellDetalle = new Cell(2, 5).Add(new Paragraph("NOMBRE DEL PRODUCTO(DCI)")
              .AddStyle(estiloDetalle))
              .SetTextAlignment(TextAlignment.CENTER)
              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -321,7 +321,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosDetalle.AddCell(cellDetalle);
 
             cellDetalle = new Cell(2, 1).Add(new Paragraph("UNIDAD DE MEDIDA")
-             .AddStyle(estiloDetalle))
+             .AddStyle(estiloDetalle).SetFontSize(5))
              .SetTextAlignment(TextAlignment.CENTER)
              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
              .SetBackgroundColor(bgColour);
@@ -445,7 +445,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 4).Add(new Paragraph(detalle.Descripcion)
+                cellDetalle = new Cell(1, 5).Add(new Paragraph(detalle.Descripcion)
                  .AddStyle(estiloDetalle))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
