@@ -64,7 +64,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 0;
 
-            string script = "SELECT IIF(SUBSTRING(b.NumeroDeParte, 12, 1) = '3', CAST(c.ValorDecimal1 AS INT), c.ValorEntero3) Cantidad " +
+            string script = "SELECT IIF(b.NumeroDeParte Like '%3__', CAST(c.ValorDecimal1 AS INT), c.ValorEntero3) Cantidad " +
                 "FROM WH_ControlCalidadDetalle a WITH(NOLOCK) INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item " +
                 "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadRecibida BETWEEN c.ValorEntero1 AND c.ValorEntero2 AND c.Estado = 'A'" +
                 "WHERE a.ControlNumero = @controlNumero AND a.Linea = @secuencia";
@@ -98,7 +98,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) analisis;
 
             string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, " +
-                "IIF(SUBSTRING(b.NumeroDeParte, 12, 1) = '3', '300', '400') Serie FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
+                "IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
                 "INNER JOIN PROD_UNILENE2.dbo.WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item WHERE Lote = @loteAnalisis " +
                 "SELECT IdAnalisis, Lote,TipoRegistro,Llave,Valor,UsuarioRegistro,FechaRegistro FROM TBDAnalisisAgujaFlexion WITH(NOLOCK) WHERE Lote = @loteAnalisis";
 
