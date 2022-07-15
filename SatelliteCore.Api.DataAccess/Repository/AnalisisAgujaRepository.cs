@@ -138,7 +138,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             ObtenerDatosGeneralesDTO result = new ObtenerDatosGeneralesDTO();
 
             string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca," +
-                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,IIF(SUBSTRING(b.NumeroDeParte, 12, 1) = '3', '300', '400') Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
+                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
                 "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis " +
                 "FROM SatelliteCore.dbo.TBMAnalisisAgujas a WITH(NOLOCK) " +
                     "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item INNER JOIN WH_ItemFormato c ON c.Grupo = '15' AND c.Tabla = '002' AND c.Codigo = SUBSTRING(b.NumeroDeParte, 2, 2) " +
