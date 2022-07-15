@@ -184,7 +184,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             FormatoReporteGuiaRemisionesModel result = new FormatoReporteGuiaRemisionesModel();
 
-            string script = "SELECT p.DescripcionComercial DescripcionProceso, p.DescripcionComercialDetalle, d.PuntosdeEntrega as Region, e.OrdenCompra, e.Pecosa, d.NumeroContrato Contrato, RTRIM(e.NumeroEntrega) NumeroEntrega, RTRIM(per.NombreCompleto) ClienteNombre, d.NombreRegion, CONCAT(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) GuiaNumero , p.CantItems "
+            string script = "SELECT p.DescripcionComercial DescripcionProceso, p.DescripcionComercialDetalle, d.NombredelaUnidadEjecutora as Region, e.OrdenCompra, e.Pecosa, d.NumeroContrato Contrato, RTRIM(e.NumeroEntrega) NumeroEntrega, RTRIM(per.NombreCompleto) ClienteNombre, d.NombreRegion, CONCAT(RTRIM(g.SerieNumero), '-', RTRIM(g.GuiaNumero)) GuiaNumero , p.CantItems "
                          + " FROM TBMLIProceso p "
                          + " INNER JOIN TBDLIProcesoDetalle d on p.IdProceso = d.IdProceso "
                          + " INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle "
