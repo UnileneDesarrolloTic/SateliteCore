@@ -853,15 +853,25 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
              .SetPaddingBottom(20);
             tablaDatosFecha.AddCell(cellFecha);
 
-            cellFecha = new Cell(1, 1).Add(img2)
-            .SetBorder(Border.NO_BORDER);
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+             .SetPaddingBottom(20);
             tablaDatosFecha.AddCell(cellFecha);
 
 
             cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
-            .SetBorder(Border.NO_BORDER);
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(10) ;
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(img2)
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(100);
             tablaDatosFecha.AddCell(cellFecha);
 
             document.Add(tablaDatosFecha);
@@ -1090,15 +1100,23 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
              .SetPaddingBottom(20);
             tablaDatosFecha.AddCell(cellFecha);
 
-            cellFecha = new Cell(1, 1).Add(img2)
-            .SetBorder(Border.NO_BORDER);
-            tablaDatosFecha.AddCell(cellFecha);
 
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+              .AddStyle(estiloTexto))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
 
             cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(img2)
+          .SetBorder(Border.NO_BORDER)
+          .SetMarginTop(100);
+
             tablaDatosFecha.AddCell(cellFecha);
 
             document.Add(tablaDatosFecha);
