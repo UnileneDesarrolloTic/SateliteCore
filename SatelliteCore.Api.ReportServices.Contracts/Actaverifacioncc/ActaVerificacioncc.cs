@@ -123,6 +123,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+            
+
 
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
@@ -582,12 +584,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
             tablaDatosFirma.SetFixedLayout().SetFontSize(9);
 
-            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+            
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
 
             Image img2 = new Image(ImageDataFactory
                .Create(rutaUnilene2))
-               .SetWidth(100)
-               .SetHeight(25)
+               .SetWidth(135)
+               .SetHeight(50)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetBorder(Border.NO_BORDER)
@@ -616,11 +619,23 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
               .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
-            /* cellFirma = new Cell(1, 1).Add(img2)
+             cellFirma = new Cell(1, 1).Add(new Paragraph(""))
                           .SetTextAlignment(TextAlignment.CENTER)
                           .SetBorder(Border.NO_BORDER)
                           .SetPaddingLeft(20);
-             tablaDatosFirma.AddCell(cellFirma);*/
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph(""))
+                         .SetTextAlignment(TextAlignment.CENTER)
+                         .SetBorder(Border.NO_BORDER)
+                         .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(img2)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetBorder(Border.NO_BORDER)
+                        .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
 
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
@@ -692,7 +707,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
-
+           
 
             Color bgColour = new DeviceRgb(161, 205, 241);
 
@@ -816,8 +831,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
+            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(FirmaLicitaciones))
+               .SetWidth(135)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
             //tabla 4
-            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
 
             Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
@@ -825,6 +851,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
              .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(img2)
+            .SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
 
@@ -1036,8 +1066,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
+
+            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(FirmaLicitaciones))
+               .SetWidth(135)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+
             //tabla 4
-            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
 
             Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
@@ -1045,6 +1088,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
              .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(img2)
+            .SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
 
