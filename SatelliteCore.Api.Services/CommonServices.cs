@@ -1,6 +1,8 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -190,6 +192,23 @@ namespace SatelliteCore.Api.Services
             ResponseModel<IEnumerable<MarcaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<MarcaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
 
             return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<object>> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
+        {
+            FormatoResponseRegistrarMaestroItem response = new FormatoResponseRegistrarMaestroItem();
+            response = await _commonRepository.RegistrarMaestroItem(dato);
+            return new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { response });
+        }
+
+
+        public async Task<PaginacionModel<FormatoListarMaestroItemModel>> ListarMaestroItem(DatosListarMaestroItemPaginador datos)
+        {
+            (List<FormatoListarMaestroItemModel> lista, int totalRegistros) = await _commonRepository.ListarMaestroItem(datos);
+
+            PaginacionModel<FormatoListarMaestroItemModel> response = new PaginacionModel<FormatoListarMaestroItemModel>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
+
+            return response;
         }
 
 

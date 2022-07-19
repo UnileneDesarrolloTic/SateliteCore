@@ -2,9 +2,12 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -199,6 +202,34 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return lista;
+        }
+
+        public async Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
+        {
+            FormatoResponseRegistrarMaestroItem result = new FormatoResponseRegistrarMaestroItem();
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryFirstOrDefaultAsync<FormatoResponseRegistrarMaestroItem>("usp_Registrar_Item_sutura", new { NUMERO_PARTE=dato.codsut, CODIGO_FAMILIA=dato.familia }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<(List<FormatoListarMaestroItemModel>, int)> ListarMaestroItem(DatosListarMaestroItemPaginador datos)
+        {
+            (List<FormatoListarMaestroItemModel> ListaMaestroItems, int totalRegistros) result;
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using (var result_db = await connection.QueryMultipleAsync("usp_Listar_Maestro_Items", datos, commandType: CommandType.StoredProcedure))
+                {
+                    result.ListaMaestroItems = result_db.Read<FormatoListarMaestroItemModel>().ToList();
+                    result.totalRegistros = result_db.Read<int>().First();
+                }
+
+                connection.Dispose();
+            }
+
+            return result;
         }
 
     }

@@ -1,4 +1,6 @@
 ﻿using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,5 +20,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<FamiliaMaestroItemsModel>> ListarFamilia(string idlinea);
         public Task<IEnumerable<SubFamiliaEntity>> ListarSubFamilia(string idlinea,string idfamilia);
         public Task<IEnumerable<MarcaEntity>> ListarMarca();
+        public Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato);
+        public Task<(List<FormatoListarMaestroItemModel>, int)> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
+
     }
 }

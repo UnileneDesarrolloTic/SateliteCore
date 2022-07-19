@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -112,8 +115,19 @@ namespace SatelliteCore.Api.Controllers
             return Ok(configuraciones);
         }
 
+        [HttpPost("RegistrarMaestroItem")]
+        public async Task<ActionResult> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
+        {
+            ResponseModel<object> cantidadPruebas = await _commonService.RegistrarMaestroItem(dato);
+            return Ok(cantidadPruebas);
+        }
 
 
-
+        [HttpPost("ListarMaestroItem")]
+        public async Task<IActionResult> ListarMaestroItem(DatosListarMaestroItemPaginador datos)
+        {
+            PaginacionModel<FormatoListarMaestroItemModel> response = await _commonService.ListarMaestroItem(datos);
+            return Ok(response);
+        }
     }
 }
