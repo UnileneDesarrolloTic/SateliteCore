@@ -49,10 +49,10 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.ListarDocumentoLicitacion(dato);
         }
 
-        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> dato)
+        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(ListarOpcionesImprimir dato)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (var safePrime in dato)
+            foreach (var safePrime in dato.ListaGuias)
             {
                 builder.Append("'" + safePrime.GuiasNumero + "'").Append(",");
             }
@@ -72,10 +72,10 @@ namespace SatelliteCore.Api.Services
             }
 
             if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
-                return new ResponseModel<string>(false, "No hay Elemento", "");
+                return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");
 
             ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
-            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision);
+            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato);
 
 
 

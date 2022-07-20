@@ -216,12 +216,12 @@ namespace SatelliteCore.Api.Controllers
         }
 
        [HttpPost("NumerodeGuiaLicitacion")]
-       public async Task<ActionResult> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> datos)
+       public async Task<ActionResult> NumerodeGuiaLicitacion(ListarOpcionesImprimir datos)
         {
           
             try
             {
-                if (datos.Count == 0)
+                if (datos.ListaGuias.Count == 0)
                 {
                     throw new ValidationModelException("Debe Seleccionar una o varias guias");
                   
