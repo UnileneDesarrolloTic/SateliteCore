@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Comercial;
+using System.Linq;
 
 namespace SatelliteCore.Api.Services
 {
@@ -60,6 +61,8 @@ namespace SatelliteCore.Api.Services
             string final = result.Remove(result.Length - 1);
 
             FormatoReporteGuiaRemisionesModel respuesta = await _comercialRepository.NumerodeGuiaLicitacion(final);
+            IEnumerable<FormatoReporteProtocoloModel> ListarProtocolo = await _comercialRepository.NumerodeGuiaProtocolo(final);
+
             List<DReportGuiaRemisionModel> aux = null;
 
             foreach (CReporteGuiaRemisionModel guia in respuesta.CabeceraReporteGuiaRemision)
@@ -70,6 +73,18 @@ namespace SatelliteCore.Api.Services
                 if (aux.Count > 0)
                     guia.DetalleGuia.AddRange(aux);
             }
+
+            IEnumerable<FormatoReporteProtocoloModel> aux2= null;
+
+            foreach (DReportGuiaRemisionModel detalle in respuesta.DetalleReporteGuiaRemision)
+            {
+                aux2 = null;
+                aux2 = ListarProtocolo.Where(x => x.OrdenFabricacion == detalle.Lote);
+
+                if (aux2.Count() > 0)
+                    detalle.DetalleProtocolo.AddRange(aux2);
+            }
+
 
             if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
                 return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");

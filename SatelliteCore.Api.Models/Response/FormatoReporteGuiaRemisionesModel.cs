@@ -7,5 +7,6 @@ namespace SatelliteCore.Api.Models.Response
 
         public List<CReporteGuiaRemisionModel> CabeceraReporteGuiaRemision { get; set; }
         public List<DReportGuiaRemisionModel> DetalleReporteGuiaRemision { get; set; }
+
     }
 }

@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.Models.Request
         public bool Acta { get; set; }
         public bool Condicion { get; set; }
         public bool Protocolo { get; set; }
-        public bool Rsanitario { get; set; }
+        public bool Carta { get; set; }
         public List<FormatoLicitacionesOT> ListaGuias { get; set; }
 
     }

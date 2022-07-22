@@ -221,6 +221,23 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+
+        public async Task<IEnumerable<FormatoReporteProtocoloModel>> NumerodeGuiaProtocolo(string dato)
+        {
+            string nuevovalor = dato.Replace("'","");
+
+            IEnumerable<FormatoReporteProtocoloModel> result = new List<FormatoReporteProtocoloModel>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result= await connection.QueryAsync<FormatoReporteProtocoloModel>("usp_Imprimir_Protocolo_Analisis_Lote", new { GUIAS=nuevovalor }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+
+
+
         public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
         {
             DatoPedidoDocumentoModel result  = new DatoPedidoDocumentoModel();
