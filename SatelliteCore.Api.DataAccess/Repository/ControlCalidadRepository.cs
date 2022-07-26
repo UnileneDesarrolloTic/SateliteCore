@@ -214,12 +214,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> result = new List<FormatoEstructuraObtenerOrdenFabricacion>();
 
-            string sql = "SELECT FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +
-                          "RTRIM(c.NombreCompleto) Cliente,RTRIM(a.NUMEROLOTE) Lote, cast(a.CANTIDADMUESTRA as DECIMAL(14,2)) ContraMuestra, RTRIM(a.NumeroLotePrincipal)  NumeroCaja " +
-                          "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
-                          "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
-                          "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
-                          "WHERE(a.NumeroLotePrincipal IS NOT null  OR a.NumeroLotePrincipal!='') AND a.ESTADO <> 'AN' ";
+            string sql = "SELECT  a.NUMEROLOTE OrdenFabricacion, substring(a.referencianumero,1,8) Lote , FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +  
+                         "RTRIM(c.NombreCompleto) Cliente, cast(a.CANTIDADMUESTRA as DECIMAL(14, 2)) ContraMuestra, RTRIM(a.NumeroLotePrincipal)  NumeroCaja " +
+                         "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
+                         "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
+                         "WHERE(a.NumeroLotePrincipal IS NOT null  OR a.NumeroLotePrincipal != '') AND a.ESTADO <> 'AN' " +
+                         "ORDER BY a.NumeroLote , a.referencianumero asc";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {

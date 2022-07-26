@@ -5,6 +5,7 @@ namespace SatelliteCore.Api.Models.Response
 {
     public struct FormatoEstructuraObtenerOrdenFabricacion
     {
+        public string OrdenFabricacion { get; set; }
         public DateTime FechaProduccion { get; set; }
         public string Item { get; set; }
         public string NumeroParte { get; set; }
