@@ -1,6 +1,9 @@
-﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.Comercial;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,5 +41,43 @@ namespace SatelliteCore.Api.Services
         {
             return await _controlCalidadRepository.ListarCotizaciones(datos);
         }
+
+        public async Task<ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerOrdenFabricacion(string OrdenFabricacion)
+        {
+            FormatoEstructuraObtenerOrdenFabricacion response = await _controlCalidadRepository.ObtenerOrdenFabricacion(OrdenFabricacion);
+            return new ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>(true, Constante.MESSAGE_SUCCESS, response );
+        }
+
+        public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string OrdenFabricacion,string codAlmacen)
+        {
+            return await _controlCalidadRepository.ListarTransaccionItem(OrdenFabricacion, codAlmacen);
+            
+        }
+
+        public async Task<ResponseModel<string>> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
+        {
+
+            int reponse = await _controlCalidadRepository.RegistrarOrdenFabricacionCaja(dato);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
+
+            return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<string>> ExportarOrdenFabricacionCaja()
+        {
+            IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> listaOrdenFabricacionCaja =  await _controlCalidadRepository.ExportarOrdenFabricacionCaja();
+
+
+            ReporteOrdenFabricacionCaja ExporteOrdenFabricacionCaja = new ReporteOrdenFabricacionCaja();
+            string reporte = ExporteOrdenFabricacionCaja.GenerarReporteCaja(listaOrdenFabricacionCaja);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+            return Respuesta;
+        }
+
+
+
     }
 }

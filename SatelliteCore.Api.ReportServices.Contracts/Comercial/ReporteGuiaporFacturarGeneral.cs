@@ -102,6 +102,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 worksheet.Cells["N1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
+                worksheet.Cells["O1"].Value = "F.RECEPCION";
+                worksheet.Cells["O1"].Style.Font.Size = 10;
+                worksheet.Cells["O1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["P1"].Value = "F.RETORNO";
+                worksheet.Cells["P1"].Style.Font.Size = 10;
+                worksheet.Cells["P1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
                 int row = 2;
 
                 foreach (FormatoGuiaPorFacturarGeneralModel item in ListaGuiaPorFacturaGeneral)
@@ -213,6 +223,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["N" + row].Style.WrapText = true;
                     worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    worksheet.Cells["O" + row].Value = item.FechaRecepcion;
+                    worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["O" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["O" + row].Style.Font.Size = 10;
+                    worksheet.Cells["O" + row].Style.WrapText = true;
+                    worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+
+                    worksheet.Cells["P" + row].Value = item.Retorno;
+                    worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["P" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["P" + row].Style.Font.Size = 10;
+                    worksheet.Cells["P" + row].Style.WrapText = true;
+                    worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                     row++ ;
 
                 }
@@ -249,13 +274,15 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(13).Width = 8.43 + 2.71;
             worksheet.Column(14).Width = 8.43 + 2.71;
             worksheet.Column(15).Width = 10.43 + 2.71;
+            worksheet.Column(16).Width = 10.43 + 2.71;
+            worksheet.Column(17).Width = 10.43 + 2.71;
 
         }
 
         private static void PintarCeldas(ExcelWorksheet worksheet)
         {
             // worksheet.Cells["N14,J5"].Style.Font.UnderLine = true;
-            worksheet.Cells["A1:N1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A1:P1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
 
         }
     }  

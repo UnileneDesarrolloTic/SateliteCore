@@ -155,5 +155,49 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("OrdenFabricacion")]
+        public async Task<ActionResult> ObtenerOrdenFabricacion(string OrdenFabricacion)
+        {
+            if (OrdenFabricacion=="")
+            {
+                ResponseModel<string> responseError =
+                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+
+                return BadRequest(responseError);
+            }
+
+            ResponseModel<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerOrdenFabricacion(OrdenFabricacion);
+            return Ok(response);
+        }
+
+
+        [HttpGet("ListarTransaccionItem")]
+        public async Task<ActionResult> ListarTransaccionItem(string OrdenFabricacion,string codAlmacen)
+        {
+            if (OrdenFabricacion == "")
+            {
+                ResponseModel<string> responseError = new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+                return BadRequest(responseError);
+            }
+
+            IEnumerable<DatosFormatoListarTransaccion> response = await _controlCalidadServices.ListarTransaccionItem(OrdenFabricacion, codAlmacen);
+            return Ok(response);
+        }
+
+
+        [HttpPost("RegistrarOrdenFabricacionCaja")]
+        public async Task<ActionResult> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarOrdenFabricacionCaja(dato);
+            return Ok(response);
+        }
+
+        [HttpGet("ExportarOrdenFabricacionCaja")]
+        public async Task<ActionResult> ExportarOrdenFabricacionCaja()
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ExportarOrdenFabricacionCaja();
+            return Ok(response);
+        }
     }
 }

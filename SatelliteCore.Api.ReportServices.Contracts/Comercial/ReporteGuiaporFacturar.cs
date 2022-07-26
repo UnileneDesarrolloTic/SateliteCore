@@ -38,9 +38,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 {
                     titulo = "REPORTE GENERAL DE GUIAS PENDIENTES DE FACTURAR";
                 }
-                else
+                else if (dato.Tipo == "FA")
                 {
                     titulo = "REPORTE GENERAL DE GUIAS FACTURADAS";
+                }
+                else
+                {
+                    titulo = "";
                 }
 
 
@@ -127,6 +131,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 worksheet.Cells["O3"].Style.Font.Size = 10;
                 worksheet.Cells["O3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["O3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["P3"].Value = "F.RECEPCION";
+                worksheet.Cells["P3"].Style.Font.Size = 10;
+                worksheet.Cells["P3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["P3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["Q3"].Value = "F.RETORNO";
+                worksheet.Cells["Q3"].Style.Font.Size = 10;
+                worksheet.Cells["Q3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["Q3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 int row = 4;
 
@@ -256,9 +270,25 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["O" + row].Style.WrapText = true;
                     worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    worksheet.Cells["P" + row].Value = item.FechaRecepcion;
+                    worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["P" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["P" + row].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells["P" + row].Style.Font.Size = 10;
+                    worksheet.Cells["P" + row].Style.WrapText = true;
+                    worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells["Q" + row].Value = item.FechaRetorno;
+                    worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["Q" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["Q" + row].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells["Q" + row].Style.Font.Size = 10;
+                    worksheet.Cells["Q" + row].Style.WrapText = true;
+                    worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                     if (item.ComentariosEntrega)
                     {
-                        worksheet.Cells["A" + row + ":O" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#60D460"));
+                        worksheet.Cells["A" + row + ":Q" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#60D460"));
                     }
 
                     row++;
@@ -314,12 +344,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(13).Width = 8.43 + 2.71;
             worksheet.Column(14).Width = 8.43 + 2.71;
             worksheet.Column(15).Width = 10.43 + 2.71;
+            worksheet.Column(16).Width = 10.43 + 2.71;
+            worksheet.Column(17).Width = 10.43 + 2.71;
 
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A1:N1"].Merge = true;
+            worksheet.Cells["A1:Q1"].Merge = true;
         }
 
         private static void BordesCeldas(ExcelWorksheet worksheet)
@@ -330,7 +362,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
         private static void PintarCeldas(ExcelWorksheet worksheet)
         {
             // worksheet.Cells["N14,J5"].Style.Font.UnderLine = true;
-            worksheet.Cells["A3:O3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A3:Q3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
 
         }
         private static void TextoNegrita(ExcelWorksheet worksheet)

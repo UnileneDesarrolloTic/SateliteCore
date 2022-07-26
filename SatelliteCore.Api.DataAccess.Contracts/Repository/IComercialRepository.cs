@@ -22,7 +22,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido);
         public Task RegistrarRotuladosPedido(DatosEstructuraNumeroRotuloModel dato, int idUsuario);
         public Task<IEnumerable<FormatoGuiaPorFacturarModel>> ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato);
-        public Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral();
+        public Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral(DatosEstructuraGuiaPorFacturarModel dato);
         public Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario);
 
     }

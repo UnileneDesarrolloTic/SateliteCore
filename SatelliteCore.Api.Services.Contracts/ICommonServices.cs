@@ -23,5 +23,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<MarcaEntity>>> ListarMarca();
         public Task<ResponseModel<object>> RegistrarMaestroItem(DatosRequestMaestroItemModel dato);
         public Task<PaginacionModel<FormatoListarMaestroItemModel>> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
+
+        public Task<ResponseModel<IEnumerable<MaestroAlmacenEntity>>> ListarMaestroAlmacen();
     }
 }

@@ -129,5 +129,13 @@ namespace SatelliteCore.Api.Controllers
             PaginacionModel<FormatoListarMaestroItemModel> response = await _commonService.ListarMaestroItem(datos);
             return Ok(response);
         }
+
+        [HttpGet("ListarMaestroAlmacen")]
+        public async Task<IActionResult> ListarMaestroAlmacen()
+        {
+            ResponseModel<IEnumerable<MaestroAlmacenEntity>> MaestroAlmacen = await _commonService.ListarMaestroAlmacen();
+            return Ok(MaestroAlmacen);
+        }
+
     }
 }

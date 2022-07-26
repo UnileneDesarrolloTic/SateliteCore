@@ -211,6 +211,16 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<ResponseModel<IEnumerable<MaestroAlmacenEntity>>> ListarMaestroAlmacen()
+        {
+
+            IEnumerable<MaestroAlmacenEntity> MaestroAlmacen = await _commonRepository.ListarMaestroAlmacen();
+            ResponseModel<IEnumerable<MaestroAlmacenEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MaestroAlmacenEntity>>(true, Constante.MESSAGE_SUCCESS, MaestroAlmacen);
+
+            return resultadoMaestroAlmacen;
+        }
+
+
 
     }
 }

@@ -232,5 +232,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<MaestroAlmacenEntity>> ListarMaestroAlmacen()
+        {
+            IEnumerable<MaestroAlmacenEntity> lista = new List<MaestroAlmacenEntity>();
+
+            string query = "SELECT RTRIM(AlmacenCodigo) AlmacenCodigo, RTRIM(DescripcionLocal) DescripcionLocal, IIF (Estado='A','ACTIVO','INACTIVO') Estado  FROM WH_AlmacenMast  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<MaestroAlmacenEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+
     }
 }

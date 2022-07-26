@@ -269,13 +269,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral()
+        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral(DatosEstructuraGuiaPorFacturarModel dato)
         {
             IEnumerable<FormatoGuiaPorFacturarGeneralModel> lista = new List<FormatoGuiaPorFacturarGeneralModel>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", commandType: CommandType.StoredProcedure);
+                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", new { destinatario = dato.destinatario  }, commandType: CommandType.StoredProcedure);
             }
 
             return lista;
