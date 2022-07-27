@@ -16,11 +16,15 @@ namespace SatelliteCore.Api.Services
 {
     public class LogisticaServices : ILogisticaServices
     {
-        private readonly ILogisticaServices _logisticaRepository;
+        private readonly ILogisticaRepository _logisticaRepository;
 
-        public LogisticaServices(ILogisticaServices logisticaRepository)
+        public LogisticaServices(ILogisticaRepository logisticaRepository)
         {
             _logisticaRepository = logisticaRepository;
+        }
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia)
+        {
+            return await _logisticaRepository.ObtenerNumeroGuias(NumeroGuia);
         }
 
 

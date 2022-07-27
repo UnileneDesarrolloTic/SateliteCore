@@ -21,5 +21,23 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             _appConfig = appConfig;
         }
+
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia)
+        {
+            IEnumerable<DatosFormatoPlanOrdenServicosD> result = new List<DatosFormatoPlanOrdenServicosD>();
+
+            string script = "SELECT CONCAT(RTRIM(a.SERIE),'-',RTRIM(a.NUMERO_DOCUMENTO))  NumeroGuia, FECHA_DOCUMENTO FechaDocumento, RTRIM(b.NombreCompleto) Cliente , " +
+                            "RTRIM(a.FACTURA_NUMERO) OrdenServicios , a.FECHA_RETORNO FechaRetorno " +
+                            "FROM UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D  a "+
+                            "INNER JOIN PROD_UNILENE2..PersonaMast b ON a.CLIENTE = b.Persona "+
+                            "WHERE a.ESTADO = 'A' AND a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim('264639')), 10)";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>(script, new { NumeroGuia });
+            }
+
+            return result;
+        }
     }
 }

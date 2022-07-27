@@ -27,5 +27,16 @@ namespace SatelliteCore.Api.Controllers
             _logisticaServices = logisticaServices;
         }
 
+        [HttpGet("ObtenerNumeroGuias")]
+        public async Task<IActionResult> ObtenerNumeroGuias(string NumeroGuia)
+        {
+            if (NumeroGuia == "")
+                throw new ValidationModelException("Debe Ingresar el numero de la guia");
+
+            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(NumeroGuia);
+
+            return Ok(listaAnalisis);
+        }
+
     }
 }

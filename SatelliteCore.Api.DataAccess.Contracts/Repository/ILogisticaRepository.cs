@@ -9,5 +9,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
     public interface ILogisticaRepository
     {
+        public Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia);
     }
 }
