@@ -143,7 +143,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<FormatoEstructuraObtenerOrdenFabricacion> ObtenerOrdenFabricacion(string OrdenFabricacion)
+        public async Task<FormatoEstructuraObtenerOrdenFabricacion> ObtenerOrdenFabricacion(string NumeroLote)
         {
             FormatoEstructuraObtenerOrdenFabricacion result = new FormatoEstructuraObtenerOrdenFabricacion();
 
@@ -152,12 +152,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
                           "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
                           "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
                           "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
-                          "WHERE a.numerolote = @OrdenFabricacion AND a.ESTADO <> 'AN' ";
+                          "WHERE a.REFERENCIANUMERO = @NumeroLote AND a.ESTADO <> 'AN' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
              
-                result = await context.QueryFirstOrDefaultAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql, new { OrdenFabricacion });
+                result = await context.QueryFirstOrDefaultAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql, new { NumeroLote });
                 
             }
 
@@ -165,7 +165,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string OrdenFabricacion, string codAlmacen)
+        public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string NumeroLote, string codAlmacen)
         {
             IEnumerable<DatosFormatoListarTransaccion> result =  new List<DatosFormatoListarTransaccion>();
 
@@ -177,13 +177,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
                         "INNER JOIN PROD_UNILENE2..WH_ItemMast f WITH(NOLOCK) ON a.Item = f.Item " +
                         "INNER JOIN PROD_UNILENE2..WH_AlmacenMast d WITH(NOLOCK) ON a.AlmacenCodigo = d.AlmacenCodigo " +
                         "LEFT JOIN PROD_UNILENE2..WH_ItemAlmacenLote e WITH(NOLOCK)ON e.Item = a.Item AND e.Condicion = a.Condicion AND e.AlmacenCodigo = a.AlmacenCodigo AND e.Lote = a.Lote WHERE(a.Condicion = '0') " +
-                        "AND(d.CompaniaSocio = '01000000')  AND(a.Condicion = '0') AND c.Lote = @OrdenFabricacion AND b.AlmacenCodigo=@codAlmacen " +
+                        "AND(d.CompaniaSocio = '01000000')  AND(a.Condicion = '0') AND c.Lote = @NumeroLote AND b.AlmacenCodigo=@codAlmacen " +
                         "ORDER BY a.Periodo ASC, a.Fecha ASC";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
 
-                result = await context.QueryAsync<DatosFormatoListarTransaccion>(sql, new { OrdenFabricacion, codAlmacen });
+                result = await context.QueryAsync<DatosFormatoListarTransaccion>(sql, new { NumeroLote, codAlmacen });
 
             }
 

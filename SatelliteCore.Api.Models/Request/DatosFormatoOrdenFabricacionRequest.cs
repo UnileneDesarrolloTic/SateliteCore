@@ -13,7 +13,7 @@ namespace SatelliteCore.Api.Models.Request
         public string item { get; set; }
         public string lote { get; set; }
         public string marca { get; set; }
-        public int numeroCaja { get; set; }
+        public string numeroCaja { get; set; }
         public string numeroParte { get; set; }
 
     }

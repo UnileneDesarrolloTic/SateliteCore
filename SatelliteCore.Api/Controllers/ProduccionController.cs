@@ -93,5 +93,44 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaProductos);
         }
 
+
+        [HttpGet("LoteFabricacionEtiquetas")]
+        public async Task<ActionResult> LoteFabricacionEtiquetas(string NumeroLote)
+        {
+
+            if (NumeroLote == "")
+            {
+                ResponseModel<string> responseError =
+                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+
+                return BadRequest(responseError);
+            }
+            ResponseModel<FormatoEstructuraLoteEtiquetas> response = await _pronosticoServices.LoteFabricacionEtiquetas(NumeroLote);
+            return Ok(response);
+        }
+
+
+        [HttpPost("RegistrarLoteFabricacionEtiquetas")]
+        public async Task<ActionResult> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response = await _pronosticoServices.RegistrarLoteFabricacionEtiquetas(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarLoteEstado")] 
+        public async Task<ActionResult> ListarLoteEstado()
+        {
+            IEnumerable<DatoFormatoLoteEstado> response = await _pronosticoServices.ListarLoteEstado();
+            return Ok(response);
+        }
+
+        [HttpPost("ModificarLoteEstado")]
+        public async Task<ActionResult> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato)
+        {
+            ResponseModel<string> response = await _pronosticoServices.ModificarLoteEstado(dato);
+            return Ok(response);
+        }
+
     }
 }

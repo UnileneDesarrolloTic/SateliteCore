@@ -157,9 +157,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("OrdenFabricacion")]
-        public async Task<ActionResult> ObtenerOrdenFabricacion(string OrdenFabricacion)
+        public async Task<ActionResult> ObtenerOrdenFabricacion(string NumeroLote)
         {
-            if (OrdenFabricacion=="")
+            if (NumeroLote == "")
             {
                 ResponseModel<string> responseError =
                         new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
@@ -167,21 +167,21 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            ResponseModel<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerOrdenFabricacion(OrdenFabricacion);
+            ResponseModel<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerOrdenFabricacion(NumeroLote);
             return Ok(response);
         }
 
 
         [HttpGet("ListarTransaccionItem")]
-        public async Task<ActionResult> ListarTransaccionItem(string OrdenFabricacion,string codAlmacen)
+        public async Task<ActionResult> ListarTransaccionItem(string NumeroLote, string codAlmacen)
         {
-            if (OrdenFabricacion == "")
+            if (NumeroLote == "")
             {
                 ResponseModel<string> responseError = new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
                 return BadRequest(responseError);
             }
 
-            IEnumerable<DatosFormatoListarTransaccion> response = await _controlCalidadServices.ListarTransaccionItem(OrdenFabricacion, codAlmacen);
+            IEnumerable<DatosFormatoListarTransaccion> response = await _controlCalidadServices.ListarTransaccionItem(NumeroLote, codAlmacen);
             return Ok(response);
         }
 

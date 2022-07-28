@@ -122,5 +122,84 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+
+
+        public async Task<FormatoEstructuraLoteEtiquetas> LoteFabricacionEtiquetas(string NumeroLote)
+        {
+            FormatoEstructuraLoteEtiquetas result = new FormatoEstructuraLoteEtiquetas();
+
+            string sql = "SELECT FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal,  " +
+                         "RTRIM(c.NombreCompleto) Cliente,RTRIM(a.NUMEROLOTE) OrdenFabricacion, SUBSTRING(RTRIM(a.REFERENCIANUMERO), 1, 8) Lote  , a.transferidoflag " +
+                         "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
+                         "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
+                         "WHERE a.REFERENCIANUMERO = @NumeroLote AND a.ESTADO <> 'AN' ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await context.QueryFirstOrDefaultAsync<FormatoEstructuraLoteEtiquetas>(sql, new { NumeroLote });
+
+            }
+
+            return result;
+        }
+
+        public async Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario)
+        {
+            int result = 1;
+            string sql = "INSERT INTO TBMPRLoteEstado (Lote,OrdenFabricacion,FechaRegistro,Estado,Usuario) VALUES (@lote,@ordenFabricacion,GETDATE(),'A',@idUsuario) " +
+                          "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET transferidoflag='N' WHERE REFERENCIANUMERO = @lote";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                foreach (DatosEstructuraLoteEtiquetasModel item in dato)
+                {
+                    await connection.ExecuteAsync(sql, new { item.lote, item.ordenFabricacion, idUsuario });
+                }
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado()
+        {
+            IEnumerable<DatoFormatoLoteEstado> result = new List<DatoFormatoLoteEstado>();
+
+            string sql = "select a.Id, a.Lote,a.OrdenFabricacion,FechaRegistro ,a.Estado, RTRIM(b.CodigoUsuario) Usuario FROM TBMPRLoteEstado a " +
+                         "LEFT JOIN PROD_UNILENE2..Empleadomast b ON a.Usuario = b.Empleado " +
+                         "WHERE a.Estado <> 'I'";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await context.QueryAsync<DatoFormatoLoteEstado>(sql);
+
+            }
+            return result;
+        }
+
+
+        public async Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato)
+        {
+            int result = 1;
+            string sql = "UPDATE TBMPRLoteEstado set Estado='I' where id=@id " +
+                         "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET TRANSFERIDOFLAG = 'S' where REFERENCIANUMERO = @lote";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                
+                    await connection.ExecuteAsync(sql, new { dato.id, dato.lote });
+              
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+
     }
 }

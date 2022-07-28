@@ -1,4 +1,5 @@
-﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
@@ -110,6 +111,31 @@ namespace SatelliteCore.Api.Services
             }
 
             return productosMPArima.Productos;
+        }
+
+
+        public async Task<ResponseModel<FormatoEstructuraLoteEtiquetas>> LoteFabricacionEtiquetas(string NumeroLote)
+        {
+            FormatoEstructuraLoteEtiquetas response = await _pronosticoRepository.LoteFabricacionEtiquetas(NumeroLote);
+            return new ResponseModel<FormatoEstructuraLoteEtiquetas>(true, Constante.MESSAGE_SUCCESS, response);
+        }
+
+
+        public async Task<ResponseModel<string>> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato,int idUsuario)
+        {
+            int response = await _pronosticoRepository.RegistrarLoteFabricacionEtiquetas(dato, idUsuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
+        }
+
+        public async Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado()
+        {
+            return await _pronosticoRepository.ListarLoteEstado();
+        }
+
+        public async Task<ResponseModel<string>> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato)
+        {
+            int response = await _pronosticoRepository.ModificarLoteEstado(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
     }
 }

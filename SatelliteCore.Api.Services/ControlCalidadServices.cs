@@ -42,15 +42,15 @@ namespace SatelliteCore.Api.Services
             return await _controlCalidadRepository.ListarCotizaciones(datos);
         }
 
-        public async Task<ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerOrdenFabricacion(string OrdenFabricacion)
+        public async Task<ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerOrdenFabricacion(string NumeroLote)
         {
-            FormatoEstructuraObtenerOrdenFabricacion response = await _controlCalidadRepository.ObtenerOrdenFabricacion(OrdenFabricacion);
+            FormatoEstructuraObtenerOrdenFabricacion response = await _controlCalidadRepository.ObtenerOrdenFabricacion(NumeroLote);
             return new ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>(true, Constante.MESSAGE_SUCCESS, response );
         }
 
-        public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string OrdenFabricacion,string codAlmacen)
+        public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string NumeroLote, string codAlmacen)
         {
-            return await _controlCalidadRepository.ListarTransaccionItem(OrdenFabricacion, codAlmacen);
+            return await _controlCalidadRepository.ListarTransaccionItem(NumeroLote, codAlmacen);
             
         }
 

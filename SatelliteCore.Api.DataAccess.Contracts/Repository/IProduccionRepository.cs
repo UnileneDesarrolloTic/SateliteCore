@@ -16,6 +16,10 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 
         public Task<bool> MostrarColumnaMP(int Usuario);
         public Task<SeguimientoComprasMPArima> SeguimientoCompraMPArima(PronosticoCompraMP dato);
+        public Task<FormatoEstructuraLoteEtiquetas> LoteFabricacionEtiquetas(string NumeroLote);
+        public Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario);
+        public Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado();
 
+        public Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato);
     }
 }
