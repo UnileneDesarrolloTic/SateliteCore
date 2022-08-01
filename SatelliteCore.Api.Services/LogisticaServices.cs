@@ -27,6 +27,13 @@ namespace SatelliteCore.Api.Services
             return await _logisticaRepository.ObtenerNumeroGuias(NumeroGuia);
         }
 
+        public async Task<ResponseModel<string>> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
+        {
+             await _logisticaRepository.RegistrarRetornoGuia(dato);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo los datos");
+        }
+
 
     }
 }

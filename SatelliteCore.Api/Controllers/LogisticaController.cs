@@ -38,5 +38,16 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaAnalisis);
         }
 
+        [HttpPost("RegistrarRetornoGuia")]
+        public async Task<IActionResult> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato )
+        {
+            if (!ModelState.IsValid)
+                throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
+
+            ResponseModel<string> response = await _logisticaServices.RegistrarRetornoGuia(dato);
+
+            return Ok(response);
+        }
+
     }
 }

@@ -30,7 +30,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                             "RTRIM(a.FACTURA_NUMERO) OrdenServicios , a.FECHA_RETORNO FechaRetorno " +
                             "FROM UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D  a "+
                             "INNER JOIN PROD_UNILENE2..PersonaMast b ON a.CLIENTE = b.Persona "+
-                            "WHERE a.ESTADO = 'A' AND a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim('264639')), 10)";
+                            "WHERE a.ESTADO = 'A' AND a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim(@NumeroGuia)), 10)";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -38,6 +38,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return result;
+        }
+
+
+        public async Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
+        {
+            string script = "UPDATE UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=@fechaRetorno  WHERE " +
+                            "CONCAT(RTRIM(SERIE),'-',RTRIM(NUMERO_DOCUMENTO))=@numeroGuia";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script,dato);
+            }
+
+            return 1;
         }
     }
 }
