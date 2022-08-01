@@ -1,0 +1,15 @@
+﻿using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
+using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace SatelliteCore.Api.DataAccess.Contracts.Repository
+{
+    public interface ILogisticaRepository
+    {
+        public Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia);
+        public Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato);
+    }
+}
