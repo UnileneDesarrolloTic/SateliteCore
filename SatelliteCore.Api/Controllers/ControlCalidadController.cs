@@ -163,7 +163,6 @@ namespace SatelliteCore.Api.Controllers
             {
                 ResponseModel<string> responseError =
                         new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
-
                 return BadRequest(responseError);
             }
 
