@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -111,6 +112,33 @@ namespace SatelliteCore.Api.Services
             }
 
             return productosMPArima.Productos;
+        }
+
+        public async Task<ResponseModel<string>> CompraMateriaPrimaExportar(PronosticoCompraMP dato)
+        {
+            SeguimientoComprasMPArima productosMPArima = await _pronosticoRepository.SeguimientoCompraMPArima(dato);
+            List<DCompraMPArimaModel> aux = null;
+            List<CompraMPArimaDetalleControlCalidad> auxcalidad = null;
+            foreach (CompraMPArimaModel pronostico in productosMPArima.Productos)
+            {
+                aux = null;
+                auxcalidad = null;
+                aux = productosMPArima.DetalleTransito.FindAll(x => x.Item == pronostico.Item);
+                auxcalidad = productosMPArima.DetalleCalidad.FindAll(x => x.Item == pronostico.Item);
+
+                if (aux.Count > 0)
+                    pronostico.DetalleCompra.AddRange(aux);
+
+                if (auxcalidad.Count > 0)
+                    pronostico.DetalleCalidad.AddRange(auxcalidad);
+            }
+
+            ReporteExcelCompraArima ExporteCompraArima = new ReporteExcelCompraArima();
+            string reporte = ExporteCompraArima.GenerarReporte(productosMPArima);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+            return Respuesta;
         }
 
 

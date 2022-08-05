@@ -93,6 +93,21 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaProductos);
         }
 
+        [HttpPost("CompraMateriaPrimaExportar")]
+        public async Task<ActionResult> CompraMateriaPrimaExportar(PronosticoCompraMP dato)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                ResponseModel<string> responseError = new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+
+                return BadRequest(responseError);
+            }
+
+            ResponseModel<string> respuesta = await _pronosticoServices.CompraMateriaPrimaExportar(dato);
+
+            return Ok(respuesta);
+        }
 
         [HttpGet("LoteFabricacionEtiquetas")]
         public async Task<ActionResult> LoteFabricacionEtiquetas(string NumeroLote)

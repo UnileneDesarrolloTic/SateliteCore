@@ -34,6 +34,7 @@ namespace SatelliteCore.Api.Controllers
 
                 var theURL = _appConfig.ReportRRHH + Reporte + Parametros + Formato;
 
+
                 var httpClientHandler = new HttpClientHandler()
                 {
                     UseDefaultCredentials = true

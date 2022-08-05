@@ -23,6 +23,7 @@ namespace SatelliteCore.Api.Models.Response
         public decimal Aduanas { get; set; }
         public decimal PendienteOC { get; set; }
         public decimal StockDisponible { get; set; }
+        public decimal StockReal { get; set; }
         public decimal Alerta { get; set; }
         public decimal Duracion { get; set; }
         public List<DCompraMPArimaModel> DetalleCompra { get; set; }
