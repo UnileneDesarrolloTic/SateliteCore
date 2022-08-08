@@ -22,5 +22,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 
         public Task RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> matricula);
 
+        public Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar();
+
     }
 }

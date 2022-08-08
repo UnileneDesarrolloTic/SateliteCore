@@ -111,5 +111,12 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> result = await _licitacionesServices.RegistrarContratoProceso(dato);
             return Ok(result);
         }
+
+        [HttpGet("DashboardLicitacionesExportar")]
+        public  async Task<IActionResult> DashboardLicitacionesExportar()
+        {
+            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar();
+            return Ok(result);
+        }
     }
 }

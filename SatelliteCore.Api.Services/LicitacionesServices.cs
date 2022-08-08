@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.ReportServices.Contracts.Dashboard;
 
 namespace SatelliteCore.Api.Services
 {
@@ -86,6 +87,18 @@ namespace SatelliteCore.Api.Services
             await _licitacionesRepository.RegistrarContratoProceso(dato);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
+        }
+
+       public async Task<ResponseModel<string>> DashboardLicitacionesExportar()
+        {
+            IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar();
+
+            ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
+            string reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+            return Respuesta;
         }
 
     }
