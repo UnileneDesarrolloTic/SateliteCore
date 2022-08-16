@@ -1,11 +1,8 @@
 ﻿using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
 using SatelliteCore.Api.Models.Generic;
-using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 
@@ -341,7 +338,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
-           
+
         }
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
@@ -355,4 +352,4 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
         }
     }
- }
+}

@@ -49,5 +49,49 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("ListarItemVentas")]
+        public async Task<IActionResult> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato)
+        {
+            IEnumerable<DatosFormatoItemVentas> result = await _logisticaServices.ListarItemVentas(dato);
+            return Ok(result);
+        }
+
+
+        [HttpGet("BuscarItemVentas")]
+        public async Task<IActionResult> BuscarItemVentas(string Item)
+        {
+            IEnumerable<DatosFormatoItemLoteAlmacen> result = await _logisticaServices.BuscarItemVentas(Item);
+            return Ok(result);
+        }
+
+        [HttpPost("ListarItemVentasExportar")]
+        public async Task<IActionResult> ListarItemVentasExportar(FormatoDatosBusquedaItemsVentas dato)
+        {
+            ResponseModel<string> response = await _logisticaServices.ListarItemVentasExportar(dato);
+            
+            return Ok(response);
+        }
+
+        [HttpGet("ListarItemVentasDetalle")]
+        public async Task<IActionResult> ListarItemVentasDetalle()
+        {
+            IEnumerable<DatosFormatoDetalledelItemVentas> result = await _logisticaServices.ListarItemVentasDetalle();
+            return Ok(result);
+        }
+
+        [HttpGet("ListarItemVentasDetalleExportar")]
+        public async Task<IActionResult> ListarItemVentasDetalleExportar()
+        {
+            ResponseModel<string> response = await _logisticaServices.ListarItemVentasDetalleExportar();
+            return Ok(response);
+        }
+
+
+        [HttpPost("DetalleComprometidoItem")]
+        public async Task<IActionResult> DetalleComprometidoItem(DatosFormatoRequestDetalleComprometido  dato)
+        {
+            IEnumerable<DatosFormatoDetalleComprometidoItem> result = await _logisticaServices.DetalleComprometidoItem(dato);
+            return Ok(result);
+        }
     }
 }
