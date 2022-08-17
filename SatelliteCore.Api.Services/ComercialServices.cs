@@ -40,6 +40,20 @@ namespace SatelliteCore.Api.Services
         {
             return await _comercialRepository.ListarProtocoloAnalisis(datos);
         }
+        public async Task<ResponseModel<string>> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
+        {
+            (List<DetalleProtocoloAnalisis> lista, int totalRegistros) result =  await _comercialRepository.ListarProtocoloAnalisis(datos);
+
+            ReporteExcelProtocoloAnalisis ExporteProtocoloAnalisis = new ReporteExcelProtocoloAnalisis();
+            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(result.lista);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+
+            return Respuesta;
+        }
+
+
         public async Task<List<DetalleClientes>> ListarClientes()
         {
             return await _comercialRepository.ListarClientes();

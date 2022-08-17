@@ -44,7 +44,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
         {
             string script = "UPDATE UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=@fechaRetorno  WHERE " +
-                            "CONCAT(RTRIM(SERIE),'-',RTRIM(NUMERO_DOCUMENTO))=@numeroGuia";
+                            "CONCAT(RTRIM(SERIE),'-',RTRIM(NUMERO_DOCUMENTO))=@numeroGuia AND Estado='A'";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {

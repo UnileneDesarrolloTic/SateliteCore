@@ -13,6 +13,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<(List<CotizacionEntity>, int)> ListarCotizaciones(DatosListarCotizacionesPaginado datos);
         public Task<int> RegistrarRespuestas(FormatoCotizacionRespuesta datos);
         public Task<(List<DetalleProtocoloAnalisis>, int)> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos);
+        public Task<ResponseModel<string>> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos);
         public Task<List<DetalleClientes>> ListarClientes();
         public Task<IEnumerable<FormatoLicitaciones>> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion dato);
         public Task<ResponseModel<string>> NumerodeGuiaLicitacion(ListarOpcionesImprimir dato);

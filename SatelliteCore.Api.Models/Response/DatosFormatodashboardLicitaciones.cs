@@ -11,6 +11,8 @@ namespace SatelliteCore.Api.Models.Response
         public string OrdenCompra { get; set; }
         public string Entrega { get; set; }
         public string Guia { get; set; }
+        public DateTime FechaGuia { get; set; }
+        public decimal MontoGuiado { get; set; }
         public string EstadoFacturacion { get; set; }
         public string Factura { get; set; }
         public decimal MontoFactura { get; set; }

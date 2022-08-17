@@ -188,6 +188,23 @@ namespace SatelliteCore.Api.Controllers
             }
         }
 
+        [HttpPost("ListarProtocoloAnalisisExportar")]
+        public async Task<ActionResult> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
+        {
+            try
+            {
+                ResponseModel<string> result = await _comercialServices.ListarProtocoloAnalisisExportar(datos);
+                return Ok(result);
+               
+            }
+            catch (Exception ex)
+            {
+                ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+
         [HttpPost("ListarClientes")]
         public async Task<ActionResult> ListarClientes()
         {
