@@ -28,6 +28,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Boolean documentoCondiciones = dato.Condicion;
             Boolean documentoProtocolo = dato.Protocolo;
             Boolean documentoRsanitario = dato.Carta;
+            Boolean documentoBPA = dato.practicas;
+            Boolean documentoManufactura = dato.Manufactura;
 
             string fechahoy = DateTime.Today.ToLongDateString().ToString();
             string[] separarfecha = fechahoy.Split(',');
@@ -57,6 +59,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             string FirmaLiliaHurtado= System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
             string FirmaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
 
+            string CertificadoBPA = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPA1310-21.jpg");
+            string ManufacturaP1 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPMN0762021P1.jpg");
+            string ManufacturaP2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPMN0762021P2.jpg");
+
 
             Image imgFirmaLiliaHurtado = new Image(ImageDataFactory
               .Create(FirmaLiliaHurtado))
@@ -73,6 +79,27 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
               .SetMarginBottom(0)
               .SetPadding(0)
               .SetTextAlignment(TextAlignment.CENTER);
+
+            Image imgCertificadoBPA = new Image(ImageDataFactory
+            .Create(CertificadoBPA))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
+
+            Image imgManufacturaP1 = new Image(ImageDataFactory
+            .Create(ManufacturaP1))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
+
+            Image imgManufacturaP2 = new Image(ImageDataFactory
+            .Create(ManufacturaP2))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
 
 
 
@@ -157,6 +184,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
                         Protocolo(document, cabecera, rutaUnilene, fechaFinal, Conclusion , imgFirmaLiliaHurtado , imgFirmaFirmaMilagrosMunoz);
                     }
+
+                if (documentoBPA)
+                {
+                    if (documentoActaCC || documentoCondiciones || documentoRsanitario)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    buenaspracticasalmacenamiento(document,imgCertificadoBPA);
+                }
+
+                if (documentoManufactura)
+                {
+                    if (documentoActaCC || documentoCondiciones || documentoRsanitario)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    DocumentoManufactura(document, imgManufacturaP1, imgManufacturaP2);
+                }
 
 
                 if (contador < contadoArray - 1)
@@ -1945,7 +1988,60 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         
         }
+        
+        public void buenaspracticasalmacenamiento(Document document, Image imgCertificadoBPA)
+        {
 
+
+            Table tablaCertificadoBPA = new Table(1).UseAllAvailableWidth();
+            tablaCertificadoBPA.SetFixedLayout();
+
+
+
+            Cell cellCertificadoBPA = new Cell(1, 1).Add(imgCertificadoBPA)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaCertificadoBPA.AddCell(cellCertificadoBPA);
+
+            document.Add(cellCertificadoBPA);
+
+
+
+        }
+
+        public void DocumentoManufactura(Document document, Image imgManufacturaP1, Image imgManufacturaP2)
+        {
+
+
+            Table tablaManufacturaP1 = new Table(1).UseAllAvailableWidth();
+            tablaManufacturaP1.SetFixedLayout();
+            Cell cellManufacturaP1 = new Cell(1, 1).Add(imgManufacturaP1)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaManufacturaP1.AddCell(cellManufacturaP1);
+
+            document.Add(tablaManufacturaP1);
+
+            document.Add(new AreaBreak(PageSize.A4));
+
+            Table tablaManufacturaP2 = new Table(1).UseAllAvailableWidth();
+            tablaManufacturaP2.SetFixedLayout();
+            Cell cellManufacturaP2 = new Cell(1, 1).Add(imgManufacturaP2)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaManufacturaP2.AddCell(cellManufacturaP2);
+
+            document.Add(tablaManufacturaP2);
+
+
+
+        }
 
         public class FooterProtocolos : IEventHandler
         {

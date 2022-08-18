@@ -204,7 +204,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          + "INNER JOIN PROD_UNILENE2..WH_GuiaRemisionDetalle h ON g.GuiaNumero = h.GuiaNumero and h.SerieNumero = g.SerieNumero "
                          + "INNER JOIN PROD_UNILENE2..WH_ItemMast im ON h.itemcodigo = im.item "
                          + "INNER JOIN PROD_UNILENE2..WH_CaracteristicaValues C ON IM.CaracteristicaValor01 = C.Valor AND C.Caracteristica = '01' "
-                         + "INNER JOIN PROD_UNILENE2..WH_ItemAlmacenLote pl ON pl.lotefabricacion = h.Lote AND g.almacencodigo=pl.almacencodigo AND h.ItemCodigo=pl.Item AND SUBSTRING(pl.lote,1,2)<>'OT'"
+                         + "INNER JOIN PROD_UNILENE2..WH_ItemAlmacenLote pl ON pl.Lote = h.Lote AND g.almacencodigo=pl.almacencodigo AND h.ItemCodigo=pl.Item "
                          + "INNER JOIN TBDLIProcesoProgramacionMuestras prm ON p.idproceso = prm.idproceso AND d.NumeroItem = prm.NumeroItem AND e.NumeroEntrega = prm.NumeroEntrega "
                          + "INNER JOIN PROD_UNILENE2..PersonaMast per ON per.Persona = g.Destinatario "
                          + "WHERE CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN(" + dato + ") ";

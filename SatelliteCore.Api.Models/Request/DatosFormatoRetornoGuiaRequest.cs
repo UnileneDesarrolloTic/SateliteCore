@@ -7,13 +7,13 @@ namespace SatelliteCore.Api.Models.Request
     {
         [Required]
         public string cliente { get; set; }
-        [Required]
+        
         public string fechaDocumento { get; set; }
-        [Required]
+        
         public DateTime fechaRetorno { get; set; }
-        [Required]
+        
         public string numeroGuia { get; set; }
-        [Required]
+        
         public string ordenServicios { get; set; }
     }
 }
