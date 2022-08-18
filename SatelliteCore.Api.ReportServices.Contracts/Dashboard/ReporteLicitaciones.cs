@@ -300,7 +300,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A3:M3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A3:O3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
         }
 
 

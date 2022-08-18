@@ -35,7 +35,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                 worksheet.Cells["A3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["A3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
 
-                worksheet.Cells["B3"].Value = "CodAlmacen";
+                worksheet.Cells["B3"].Value = "Descripción";
                 worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B3"].Style.Font.Size = 10;
                 worksheet.Cells["B3"].Style.WrapText = true;
@@ -92,7 +92,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                     worksheet.Cells["A" + row].Style.WrapText = true;
                     worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["B" + row].Value = rowitem.AlmacenCodigo;
+                    worksheet.Cells["B" + row].Value = rowitem.DescripcionItem;
                     worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["B" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["B" + row].Style.Font.Size = 10;
@@ -165,12 +165,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
         {
 
             worksheet.Column(1).Width = 20.86 + 2.71;
-            worksheet.Column(2).Width = 20.86 + 2.71;
+            worksheet.Column(2).Width = 57.00 + 2.71;
             worksheet.Column(3).Width = 20.86 + 2.71;
-            worksheet.Column(4).Width = 20.86 + 2.71;
-            worksheet.Column(5).Width = 20.86 + 2.71;
-            worksheet.Column(6).Width = 20.86 + 2.71;
-            worksheet.Column(7).Width = 20.86 + 2.71;
+            worksheet.Column(4).Width = 17.68 + 2.71;
+            worksheet.Column(5).Width = 17.68 + 2.71;
+            worksheet.Column(6).Width = 17.68 + 2.71;
+            worksheet.Column(7).Width = 17.68 + 2.71;
             worksheet.Column(8).Width = 20.86 + 2.71;
             worksheet.Column(9).Width = 20.86 + 2.71;
             worksheet.Column(10).Width = 20.86 + 2.71;

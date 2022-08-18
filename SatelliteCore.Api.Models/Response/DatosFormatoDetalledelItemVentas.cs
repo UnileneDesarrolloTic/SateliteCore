@@ -8,6 +8,7 @@ namespace SatelliteCore.Api.Models.Response
     {
         public string Item { get; set; }
         public string AlmacenCodigo { get; set; }
+        public string DescripcionItem { get; set; }
         public string DescripcionLocal { get; set; }
         public string Lote { get; set; }
         public decimal StockActual { get; set; }

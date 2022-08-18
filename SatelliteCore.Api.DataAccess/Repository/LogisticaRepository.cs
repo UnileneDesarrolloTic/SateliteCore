@@ -78,14 +78,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<IEnumerable<DatosFormatoDetalledelItemVentas>> ListarItemVentasDetalle()
         {
             IEnumerable<DatosFormatoDetalledelItemVentas> result = new List<DatosFormatoDetalledelItemVentas>();
-            string script = "SELECT RTRIM(b.Item) Item,RTRIM(b.AlmacenCodigo) AlmacenCodigo,RTRIM(c.DescripcionLocal) DescripcionLocal, RTRIM(b.Lote) Lote , ISNULL(SUM(b.StockActual), 0)  StockActual, ISNULL(SUM(b.StockComprometido), 0) StockComprometido , " +
+            string script = "SELECT RTRIM(b.Item) Item, RTRIM(d.DescripcionLocal) DescripcionItem, RTRIM(b.AlmacenCodigo) AlmacenCodigo,RTRIM(c.DescripcionLocal) DescripcionLocal, RTRIM(b.Lote) Lote , ISNULL(SUM(b.StockActual), 0)  StockActual, ISNULL(SUM(b.StockComprometido), 0) StockComprometido , " +
                             "ISNULL(SUM(b.StockActual), 0) - ISNULL(SUM(b.StockComprometido), 0) StockDisponible FROM[PROD_UNILENE2]..WH_ITEMMAST  a " +
                             "LEFT JOIN [PROD_UNILENE2]..WH_ItemAlmacenLote b ON a.Item = b.Item " +
                             "INNER JOIN [PROD_UNILENE2]..WH_AlmacenMast c ON c.AlmacenCodigo = b.AlmacenCodigo " +
                             "INNER JOIN [PROD_UNILENE2]..WH_ITEMMAST d ON b.Item = d.Item " +
                             "WHERE b.AlmacenCodigo IN(SELECT AlmacenCodigo FROM[PROD_UNILENE2]..WH_AlmacenMast WHERE Estado = 'A' AND AlmacenVentaFlag = 'S') "+
                             "AND b.StockActual > 0 AND d.Linea IN ('P','D') AND d.Estado='A'" +
-                            "GROUP BY b.AlmacenCodigo,c.DescripcionLocal,b.Item ,b.Lote";
+                            "GROUP BY b.AlmacenCodigo,c.DescripcionLocal,d.DescripcionLocal,b.Item ,b.Lote";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
