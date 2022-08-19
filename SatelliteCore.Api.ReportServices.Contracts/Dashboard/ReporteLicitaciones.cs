@@ -295,7 +295,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A1:M1"].Merge=true;
+            worksheet.Cells["A1:O1"].Merge=true;
         }
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
