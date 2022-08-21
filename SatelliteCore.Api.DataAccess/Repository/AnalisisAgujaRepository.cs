@@ -42,7 +42,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<ListarOrdenCompra> result = new List<ListarOrdenCompra>();
             string script = "SELECT a.Linea Secuencia,RTRIM(b.ControlNumero) ControlNumero,RTRIM(ISNULL(c.Item, a.Item)) Item,c.Descripcion DescripcionItem,RTRIM(c.UnidadCodigo) UnidadCodigo," +
-                "CAST(c.CantidadPedida AS INT) CantidadPedida,CAST(c.CantidadRecibida AS INT) CantidadRecibida,ISNULL(e.Lote, aa.LoteAprobado) AS LoteAprobado," +
+                "CAST(c.CantidadPedida AS INT) CantidadPedida,CAST(aa.CantidadAceptada AS INT) CantidadRecibida,ISNULL(e.Lote, aa.LoteAprobado) AS LoteAprobado," +
                 "ISNULL(aa.LoteRechazado, '') AS LoteRechazado,d.Proveedor CodProveedor,RTRIM(b.NumeroOrden) NumeroOrden, ISNULL(e.Lote, '') Analisis FROM WH_ControlCalidadDetalle a WITH(NOLOCK) " +
                 "INNER JOIN WH_ControlCalidad b WITH(NOLOCK) ON a.CompaniaSocio = b.CompaniaSocio AND a.ControlNumero = b.ControlNumero " +
                 "LEFT JOIN WH_ControlCalidadDetalle aa WITH(NOLOCK) ON aa.CompaniaSocio = a.CompaniaSocio AND aa.ControlNumero = a.ControlNumero AND aa.Secuencia = a.Secuencia " +
@@ -66,7 +66,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string script = "SELECT IIF(b.NumeroDeParte Like '%3__', CAST(c.ValorDecimal1 AS INT), c.ValorEntero3) Cantidad " +
                 "FROM WH_ControlCalidadDetalle a WITH(NOLOCK) INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item " +
-                "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadRecibida BETWEEN c.ValorEntero1 AND c.ValorEntero2 AND c.Estado = 'A'" +
+                "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadAceptada BETWEEN c.ValorEntero1 AND c.ValorEntero2 AND c.Estado = 'A'" +
                 "WHERE a.ControlNumero = @controlNumero AND a.Linea = @secuencia";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\SatelliteCore.Api.CrossCutting\SatelliteCore.Api.CrossCutting.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Request\GestorDocumentario\" />
+  </ItemGroup>
+
 </Project>

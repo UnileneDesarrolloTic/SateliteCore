@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using SatelliteCore.Api.Filters;
 using SatelliteCore.Api.Models.Config;
 using SystemsIntegration.Api.Middlewares;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace SatelliteCore.Api
 {
@@ -63,6 +65,13 @@ namespace SatelliteCore.Api
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
             services.AddTransient<IAuthorizationHandler, CustomPermitRequirementHandler>();
 
             IoCRegister.AddRegistration(services);
@@ -81,11 +90,20 @@ namespace SatelliteCore.Api
                      .AllowAnyMethod()
                      .AllowAnyHeader());
 
+            //app.UseStaticFiles();
+
             //app.UseCors("ApiCorsPolicy");
             app.UseRouting();
             app.UseMiddleware<ExceptionManagerMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //         Path.Combine(env.ContentRootPath, "MyStaticFiles")),
+            //    RequestPath = "/StaticFiles"
+            //});
 
             app.UseEndpoints(endpoints =>
             {
