@@ -233,6 +233,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
+            worksheet.Cells["A3:J3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
             worksheet.Cells["A3:J3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ED7D31"));
 
         }

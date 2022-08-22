@@ -69,6 +69,52 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<string>> ObtenerTipoUsuario(int NumeroProceso, int Item, string Mes)
+        {
+            IEnumerable<string> result = new List<string>();
+
+            string sql1 =  "SELECT D.Tipodeusuario " +
+                           "FROM TBMLIProceso P " +
+                           "INNER JOIN TBDLIProcesoDetalle D ON P.IdProceso = D.IdProceso " +
+                           "INNER JOIN TBDLIProcesoEntrega E ON D.IdDetalle = E.IdDetalle " +
+                           "WHERE E.NumeroEntrega = @Mes AND P.IdProceso = @NumeroProceso  AND D.NumeroItem=@Item  " +
+                           "GROUP BY D.Tipodeusuario";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<string>(sql1, new { Mes, NumeroProceso, Item });
+
+            }
+
+            return result;
+        }
+
+
+        public async Task<DatosFormatoBuscarOrdenCompraLicitacionesModel> BuscarOrdenCompraLicitaciones(int NumeroProceso, int NumeroEntrega, int Item, string TipoUsuario)
+        {
+            DatosFormatoBuscarOrdenCompraLicitacionesModel result = new DatosFormatoBuscarOrdenCompraLicitacionesModel() ;
+
+            string sql1 = "SELECT TOP 1 NumeroOrden numeroOC, CantidadOrden cantidadOC FROM TBDLIOrdenCompra WHERE IdProceso= @NumeroProceso AND NumeroEntrega=@NumeroEntrega AND NumeroItem=@Item AND TipoUsuario=@TipoUsuario AND ESTADO=1 ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryFirstOrDefaultAsync<DatosFormatoBuscarOrdenCompraLicitacionesModel>(sql1,new { NumeroProceso, NumeroEntrega , Item, TipoUsuario });
+            }
+            return result;
+        }
+
+
+        public async Task<int> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato ,int idUsuario)
+        {
+            int result;
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.ExecuteAsync("usp_Licitaciones_Registrar_OrdenCompra", new { dato.idProceso,dato.NumeroEntrega,dato.NumeroOC,dato.Usuario,dato.CantidadOC,dato.Item, idUsuario },commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+
         public async Task RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato)
         {
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -150,7 +196,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso)
         {
             IEnumerable<EstructuraListaContratoProceso> result = new List<EstructuraListaContratoProceso>();
-            string sql1 = "SELECT idproceso, tipodeusuario, numeroitem, descripcionitem, ISNULL(NumeroContrato,'') NumeroContrato   FROM TBDLIProcesoDetalle " +
+            string sql1 = "SELECT idproceso, tipodeusuario, numeroitem, descripcionitem, ISNULL(NumeroContrato,'') NumeroContrato FROM TBDLIProcesoDetalle " +
                            "WHERE idproceso=@proceso GROUP BY idproceso,tipodeusuario,numeroitem,descripcionitem,NumeroContrato";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))

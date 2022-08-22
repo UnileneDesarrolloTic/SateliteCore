@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SatelliteCore.Api.CrossCutting.Helpers;
-using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
-using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -39,7 +34,7 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpPost("RegistrarRetornoGuia")]
-        public async Task<IActionResult> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato )
+        public async Task<IActionResult> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
         {
             if (!ModelState.IsValid)
                 throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
@@ -68,7 +63,7 @@ namespace SatelliteCore.Api.Controllers
         public async Task<IActionResult> ListarItemVentasExportar(FormatoDatosBusquedaItemsVentas dato)
         {
             ResponseModel<string> response = await _logisticaServices.ListarItemVentasExportar(dato);
-            
+
             return Ok(response);
         }
 
@@ -88,7 +83,7 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpPost("DetalleComprometidoItem")]
-        public async Task<IActionResult> DetalleComprometidoItem(DatosFormatoRequestDetalleComprometido  dato)
+        public async Task<IActionResult> DetalleComprometidoItem(DatosFormatoRequestDetalleComprometido dato)
         {
             IEnumerable<DatosFormatoDetalleComprometidoItem> result = await _logisticaServices.DetalleComprometidoItem(dato);
             return Ok(result);

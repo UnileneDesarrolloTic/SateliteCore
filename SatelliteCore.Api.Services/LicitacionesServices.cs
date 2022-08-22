@@ -43,18 +43,42 @@ namespace SatelliteCore.Api.Services
             
         }
 
+        public async Task<IEnumerable<string>> ObtenerTipoUsuario(int NumeroProceso, int Item, string Mes)
+        {
+            return await _licitacionesRepository.ObtenerTipoUsuario(NumeroProceso, Item, Mes);
+
+        }
+
+
+        public async Task<ResponseModel<DatosFormatoBuscarOrdenCompraLicitacionesModel>> BuscarOrdenCompraLicitaciones(int NumeroProceso, int NumeroEntrega, int Item, string TipoUsuario)
+        {
+            DatosFormatoBuscarOrdenCompraLicitacionesModel response = new DatosFormatoBuscarOrdenCompraLicitacionesModel();
+             response = await _licitacionesRepository.BuscarOrdenCompraLicitaciones(NumeroProceso, NumeroEntrega, Item , TipoUsuario);
+
+            return new ResponseModel<DatosFormatoBuscarOrdenCompraLicitacionesModel>(true, Constante.MESSAGE_SUCCESS, response);
+
+        }
+
+        public async Task<ResponseModel<string>> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato, int idUsuario)
+        {
+            int response = await _licitacionesRepository.RegistrarOrdenCompra(dato, idUsuario);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
+
+        }
+
         public async Task<ResponseModel<string>> RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato)
         {
             await _licitacionesRepository.RegistrarDistribuccionProceso(dato);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
+
         public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso()
         {
             return await _licitacionesRepository.ListarProceso();
 
         }
-
 
         public async Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega)
         {
