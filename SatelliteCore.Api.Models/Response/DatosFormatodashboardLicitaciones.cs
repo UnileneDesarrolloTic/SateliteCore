@@ -9,6 +9,7 @@ namespace SatelliteCore.Api.Models.Response
         public string Proceso { get; set; }
         public string DescripcionItem { get; set; }
         public string OrdenCompra { get; set; }
+        public string Pecosa { get; set; }
         public string Entrega { get; set; }
         public string Guia { get; set; }
         public DateTime FechaGuia { get; set; }

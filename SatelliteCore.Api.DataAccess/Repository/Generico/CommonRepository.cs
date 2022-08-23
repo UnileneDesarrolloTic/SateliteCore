@@ -117,7 +117,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<AgrupadorEntity> lista = new List<AgrupadorEntity>();
 
-            string query = "SELECT CodigoAgrupador , DescripcionAgrupador , DescripcionCompleta  FROM T_AGRUPADOR";
+            string query = "SELECT CodigoAgrupador , DescripcionAgrupador , DescripcionCompleta  FROM T_AGRUPADOR WHERE FECHAFINVIG='2100-01-01'";
 
             using (var connection = new SqlConnection(_appConfig.ContextDMVentas))
             {

@@ -10,6 +10,7 @@ namespace SatelliteCore.Api.Models.Response
         public string Codsut { get; set; }
         public string Descripcion { get; set; }
         public int Origen { get; set; }
+        public string idAgrupador { get; set; }
         public string idmarca { get; set; }
     }
 }
