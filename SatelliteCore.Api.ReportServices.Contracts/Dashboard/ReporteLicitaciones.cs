@@ -54,12 +54,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                 worksheet.Cells["C3"].Style.WrapText = true;
                 worksheet.Cells["C3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["D3"].Value = "Pecosa";
+                worksheet.Cells["D3"].Value = "Orden Compra";
                 worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["D3"].Style.Font.Size = 10;
                 worksheet.Cells["D3"].Style.WrapText = true;
                 worksheet.Cells["D3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
 
                 worksheet.Cells["E3"].Value = "Entrega";
                 worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -165,7 +164,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                     worksheet.Cells["C" + row].Style.WrapText = true;
                     worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["D" + row].Value = rowitem.Pecosa;
+
+                    worksheet.Cells["D" + row].Value = rowitem.OrdenCompra;
                     worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["D" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["D" + row].Style.Font.Size = 10;
