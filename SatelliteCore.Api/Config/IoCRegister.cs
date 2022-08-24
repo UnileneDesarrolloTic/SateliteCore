@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
+using SatelliteCore.Api.DataAccess.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Services;
 using SatelliteCore.Api.Services.Contracts;
-using SatelliteCore.Api.DataAccess.Contracts.Repository;
-using SatelliteCore.Api.DataAccess.Repository;
-using SatelliteCore.Api.DataAccess.Contracts;
-using SatelliteCore.Api.DataAccess;
 
 namespace SatelliteCore.Api.Config
 {
@@ -31,6 +29,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IAnalisisAgujaRepository, AnalisisAgujaRepository>();
             service.AddScoped<ILicitacionesRepository, LicitacionesRepository>();
             service.AddScoped<ILogisticaRepository, LogisticaRepository>();
+            service.AddScoped<IRRHHRepository, RRHHRepository>();
 
 
             return service;
@@ -49,6 +48,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IAnalisisAgujaServices, AnalisisAgujaServices>();
             service.AddScoped<ILicitacionesServices, LicitacionesServices>();
             service.AddScoped<ILogisticaServices, LogisticaServices>();
+            service.AddScoped<IRRHHServices, RRHHServices>();
 
             return service;
         }
