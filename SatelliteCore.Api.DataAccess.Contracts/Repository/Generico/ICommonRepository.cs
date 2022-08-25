@@ -18,6 +18,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<SubAgrupadorEntity>> ListarSubAgrupador(string idAgrupador);
         public Task<IEnumerable<LineaEntity>> ListarLinea();
         public Task<IEnumerable<FamiliaMaestroItemsModel>> ListarFamilia(string idlinea);
+        public Task<IEnumerable<FamiliaMaestroItemsModel>> ListarFamiliaGeneral(string idlinea);
         public Task<IEnumerable<SubFamiliaEntity>> ListarSubFamilia(string idlinea,string idfamilia);
         public Task<IEnumerable<MarcaEntity>> ListarMarca();
         public Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato);
