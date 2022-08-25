@@ -147,5 +147,30 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("ListarItemOrdenCompra")]
+        public async Task<ActionResult> ListarItemOrdenCompra(string Origen)
+        {
+            IEnumerable<object> response = await _pronosticoServices.ListarItemOrdenCompra(Origen);
+            return Ok(response);
+        }
+
+        [HttpGet("BuscarItemOrdenCompra")]
+        public async Task<ActionResult> BuscarItemOrdenCompra(string Item)
+        {
+            DatosFormatoInformacionItemOrdenCompra response = await _pronosticoServices.BuscarItemOrdenCompra(Item);
+            return Ok(response);
+        }
+
+        /*
+        [HttpGet("ActualizarFechaPrometida")]
+        public async Task<ActionResult> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra datos)
+        {
+            DatosFormatoInformacionItemOrdenCompra response = await _pronosticoServices.BuscarItemOrdenCompra(datos);
+            return Ok(response);
+        }
+        */
+
+
+
     }
 }

@@ -11,15 +11,15 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<SeguimientoProductoArimaModel> SeguimientoProductosArima(string periodo);
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);
         public Task<SeguimientoCandMPAGenericModel> ListaSeguimientoCandidatosMP(string regla);
-
         public Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item);
-
         public Task<bool> MostrarColumnaMP(int Usuario);
         public Task<SeguimientoComprasMPArima> SeguimientoCompraMPArima(PronosticoCompraMP dato);
         public Task<FormatoEstructuraLoteEtiquetas> LoteFabricacionEtiquetas(string NumeroLote);
         public Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario);
         public Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado();
-
         public Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato);
+        public Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen);
+
+        public Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Origen);
     }
 }

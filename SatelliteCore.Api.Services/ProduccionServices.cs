@@ -165,5 +165,15 @@ namespace SatelliteCore.Api.Services
             int response = await _pronosticoRepository.ModificarLoteEstado(dato);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
+
+        public async Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen)
+        {
+            return await _pronosticoRepository.ListarItemOrdenCompra(Origen);
+        }
+
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item)
+        {
+            return await _pronosticoRepository.BuscarItemOrdenCompra(Item);
+        }
     }
 }

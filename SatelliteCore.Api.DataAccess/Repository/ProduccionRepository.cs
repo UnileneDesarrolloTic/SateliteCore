@@ -200,6 +200,37 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        public async Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen)
+        {
+            IEnumerable<object> result = new List<object>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await connection.QueryAsync<object>("usp_Listar_item_Seguimiento_Compra",new { Origen }, commandType: CommandType.StoredProcedure);
+
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item)
+        {
+            DatosFormatoInformacionItemOrdenCompra result = new DatosFormatoInformacionItemOrdenCompra();
+
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Buscar_Item_Orden_Compra", new { Item }, commandType: CommandType.StoredProcedure);
+                result.informacionItem = multi.Read<FormatoDatoInformacionItem>().ToList();
+                result.ListaOrdenCompra = multi.Read<FormatoDatosOrdenCompraItem>().ToList();
+             
+            }
+
+            return result;
+        }
+
+
 
     }
 }
