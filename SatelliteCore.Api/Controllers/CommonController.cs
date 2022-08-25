@@ -101,6 +101,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(configuraciones);
         }
 
+        [HttpGet("ListarFamiliaGeneral")]
+        public async Task<IActionResult> ListarFamiliaGeneral(string idLinea)
+        {
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> configuraciones = await _commonService.ListarFamiliaGeneral(idLinea);
+            return Ok(configuraciones);
+        }
+
         [HttpGet("ListarSubFamilia")]
         public async Task<IActionResult> ListarSubFamilia(string idlinea, string idfamilia)
         {

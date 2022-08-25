@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Config;
+using SatelliteCore.Api.Models.Dto.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Services.Contracts;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,10 +20,12 @@ namespace SatelliteCore.Api.Controllers
     public class RRHHController : ControllerBase
     {
         private readonly IAppConfig _appConfig;
+        private readonly IRRHHServices _rrhhServices;
 
-        public RRHHController(IAppConfig appConfig)
+        public RRHHController(IAppConfig appConfig, IRRHHServices rrhhServices)
         {
             _appConfig = appConfig;
+            _rrhhServices = rrhhServices;
         }
 
         [HttpPost("GenerarReporteAsistencia")]
@@ -55,6 +61,14 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(response);
             }
 
+        }
+
+        [HttpGet("ListarAsistencia")]
+        public async Task<IActionResult> ListarAsistencia(DateTime fecha)
+        {
+            int usuarioToken = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<IEnumerable<ReporteAsistenciaDTO>> listarAsistencia = await _rrhhServices.ListarAsistencia(fecha, usuarioToken);
+            return Ok(listarAsistencia);
         }
     }
 }
