@@ -174,6 +174,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<IEnumerable<FamiliaMaestroItemsModel>> ListarFamiliaGeneral(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> lista = new List<FamiliaMaestroItemsModel>();
+
+            string query = "SELECT RTRIM(Familia) Familia, RTRIM(DescripcionLocal) DescripcionLocal, RTRIM(DescripcionCompleta) DescripcionCompleta FROM  WH_CLASEFAMILIA WHERE Linea = @idlinea AND Estado = 'A' ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await connection.QueryAsync<FamiliaMaestroItemsModel>(query, new { idlinea });
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
         public async Task<IEnumerable<SubFamiliaEntity>> ListarSubFamilia(string idlinea, string idfamilia)
         {
             IEnumerable<SubFamiliaEntity> lista = new List<SubFamiliaEntity>();

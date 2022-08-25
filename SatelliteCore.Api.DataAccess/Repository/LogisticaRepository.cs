@@ -57,7 +57,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<DatosFormatoItemVentas> result = new List<DatosFormatoItemVentas>();
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<DatosFormatoItemVentas>("usp_Lista_Item_Ventas", new { dato.Item, dato.Codsut, dato.Descripcion, dato.Origen, dato.idmarca, dato.idAgrupador }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoItemVentas>("usp_Lista_Item_Ventas", new { dato.Item, dato.Codsut, dato.Descripcion, dato.Origen, dato.idmarca, dato.idAgrupador,dato.idSubAgrupador,dato.idLinea,dato.idfamilia,dato.idSubFamilia }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }

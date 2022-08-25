@@ -176,6 +176,14 @@ namespace SatelliteCore.Api.Services
             return resultadoConfiguraciones;
         }
 
+        public async Task<ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>> ListarFamiliaGeneral(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> configuraciones = await _commonRepository.ListarFamiliaGeneral(idlinea);
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> resultadoConfiguraciones = new ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
         public async Task<ResponseModel<IEnumerable<SubFamiliaEntity>>> ListarSubFamilia(string idlinea, string idfamilia)
         {
           
