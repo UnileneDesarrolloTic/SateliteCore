@@ -200,36 +200,83 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen)
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio)
         {
-            IEnumerable<object> result = new List<object>();
+            DatosFormatoInformacionCalendarioSeguimientoOC result = new DatosFormatoInformacionCalendarioSeguimientoOC();
 
-            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Origen, Anio }, commandType: CommandType.StoredProcedure);
+                result.Calendario = multi.Read<DatosFormatoCalentarioSeguimientoOC>().ToList();
+                result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
 
-                result = await connection.QueryAsync<object>("usp_Listar_item_Seguimiento_Compra",new { Origen }, commandType: CommandType.StoredProcedure);
-
-                connection.Dispose();
             }
 
             return result;
         }
 
-        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item)
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
         {
             DatosFormatoInformacionItemOrdenCompra result = new DatosFormatoInformacionItemOrdenCompra();
 
             using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Buscar_Item_Orden_Compra", new { Item }, commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Buscar_Item_Orden_Compra", new { Item, Anio }, commandType: CommandType.StoredProcedure);
                 result.informacionItem = multi.Read<FormatoDatoInformacionItem>().ToList();
                 result.ListaOrdenCompra = multi.Read<FormatoDatosOrdenCompraItem>().ToList();
-             
+                result.Detalle = multi.Read<object>().ToList();
+
             }
 
             return result;
         }
 
+        public async Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
+        {
+            int result=0;
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { dato.fechaPrometida, dato.item , dato.numeroOrden});
+            }
+
+            return result;
+        }
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra)
+        {
+            (object cabecera, object detalle) datosOrdenCompra;
+
+            string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, a.Estado " +
+                            "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
+                            "WHERE NumeroOrden = @OrdenCompra  " +
+                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, UnidadCodigo, CantidadPedida , Estado , FechaPrometida " +
+                            "FROM PROD_UNILENE2..WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using var result =  await context.QueryMultipleAsync(script, new { OrdenCompra });
+                datosOrdenCompra.cabecera = result.Read().FirstOrDefault();
+                datosOrdenCompra.detalle = result.Read().ToList();
+            }
+
+            return datosOrdenCompra;
+        }
+
+        public async Task<int> ActualizarFechaComprometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> dato)
+        {
+            int result = 0;
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, dato);
+            }
+
+            return result;
+
+        }
 
 
     }

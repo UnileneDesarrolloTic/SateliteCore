@@ -18,8 +18,10 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario);
         public Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado();
         public Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato);
-        public Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen);
-
-        public Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Origen);
+        public Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen,string Anio);
+        public Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio);
+        public Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato);
+        public Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra);
+        public Task<int> ActualizarFechaComprometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> dato);
     }
 }

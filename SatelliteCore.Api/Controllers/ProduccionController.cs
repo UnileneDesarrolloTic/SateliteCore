@@ -37,9 +37,9 @@ namespace SatelliteCore.Api.Controllers
         {
             (IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros) = await _pronosticoServices.ListaPedidosCreadoAuto(filtro);
 
-            PaginacionModel<PedidosCreadosAutoLogModel> PedidosPaginados = 
+            PaginacionModel<PedidosCreadosAutoLogModel> PedidosPaginados =
                 new PaginacionModel<PedidosCreadosAutoLogModel>((List<PedidosCreadosAutoLogModel>)ListaPedidos, filtro.Pagina, filtro.RegistrosPorPagina, TotalRegistros);
-                
+
             return Ok(PedidosPaginados);
         }
 
@@ -68,22 +68,22 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            int idUsuario =  Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
             bool Permiso = await _pronosticoServices.MostrarColumnaMP(idUsuario);
-            ResponseModel<dynamic> responseSuccesss = new ResponseModel<dynamic>(true, Constante.MESSAGE_SUCCESS, new {permisoColumna=Permiso});
+            ResponseModel<dynamic> responseSuccesss = new ResponseModel<dynamic>(true, Constante.MESSAGE_SUCCESS, new { permisoColumna = Permiso });
 
             return Ok(responseSuccesss);
         }
 
-        
+
         [HttpPost("CompraMateriaPrima")]
         public async Task<ActionResult> PronosticoCompraMP(PronosticoCompraMP dato)
-        {   
+        {
 
             if (!ModelState.IsValid)
             {
                 ResponseModel<string> responseError =
-                             new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED,"");
+                             new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
 
                 return BadRequest(responseError);
             }
@@ -133,7 +133,7 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("ListarLoteEstado")] 
+        [HttpGet("ListarLoteEstado")]
         public async Task<ActionResult> ListarLoteEstado()
         {
             IEnumerable<DatoFormatoLoteEstado> response = await _pronosticoServices.ListarLoteEstado();
@@ -148,27 +148,46 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ListarItemOrdenCompra")]
-        public async Task<ActionResult> ListarItemOrdenCompra(string Origen)
+        public async Task<ActionResult> ListarItemOrdenCompra(string Origen, string Anio)
         {
-            IEnumerable<object> response = await _pronosticoServices.ListarItemOrdenCompra(Origen);
+            DatosFormatoInformacionCalendarioSeguimientoOC response = await _pronosticoServices.ListarItemOrdenCompra(Origen, Anio);
             return Ok(response);
         }
 
         [HttpGet("BuscarItemOrdenCompra")]
-        public async Task<ActionResult> BuscarItemOrdenCompra(string Item)
+        public async Task<ActionResult> BuscarItemOrdenCompra(string Item, string Anio)
         {
-            DatosFormatoInformacionItemOrdenCompra response = await _pronosticoServices.BuscarItemOrdenCompra(Item);
+            DatosFormatoInformacionItemOrdenCompra response = await _pronosticoServices.BuscarItemOrdenCompra(Item, Anio);
             return Ok(response);
         }
 
-        /*
-        [HttpGet("ActualizarFechaPrometida")]
+
+        [HttpPost("ActualizarFechaPrometida")]
         public async Task<ActionResult> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra datos)
         {
-            DatosFormatoInformacionItemOrdenCompra response = await _pronosticoServices.BuscarItemOrdenCompra(datos);
+            ResponseModel<string> response = await _pronosticoServices.ActualizarFechaPrometida(datos);
             return Ok(response);
         }
-        */
+
+        [HttpGet("VisualizarOrdenCompra")]
+        public async Task<ActionResult> VisualizarOrdenCompra(string OrdenCompra)
+        {
+            (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompra(OrdenCompra);
+            object response = new { cabecera, detalle };
+
+            return Ok(response);
+        }
+
+        [HttpPost("ActualizarFechaPrometidaMasiva")]
+        public async Task<ActionResult> ActualizarFechaPrometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> datos)
+        {
+            ResponseModel<string> response = await _pronosticoServices.ActualizarFechaPrometidaMasiva(datos);
+            return Ok(response);
+        }
+
+
+
+
 
 
 

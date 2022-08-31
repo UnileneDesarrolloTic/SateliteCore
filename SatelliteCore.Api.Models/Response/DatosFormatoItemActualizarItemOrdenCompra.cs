@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SatelliteCore.Api.Models.Response
 {
-    public class DatosFormatoItemActualizarItemOrdenCompra
+    public struct DatosFormatoItemActualizarItemOrdenCompra
     {
         public string numeroOrden { get; set; }
         public string nombreCompleto { get; set; }

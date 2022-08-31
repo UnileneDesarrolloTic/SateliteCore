@@ -166,14 +166,33 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
 
-        public async Task<IEnumerable<object>> ListarItemOrdenCompra(string Origen)
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio)
         {
-            return await _pronosticoRepository.ListarItemOrdenCompra(Origen);
+            return await _pronosticoRepository.ListarItemOrdenCompra(Origen, Anio);
         }
 
-        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item)
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
         {
-            return await _pronosticoRepository.BuscarItemOrdenCompra(Item);
+            return await _pronosticoRepository.BuscarItemOrdenCompra(Item,Anio);
         }
+
+        public async Task<ResponseModel<string>> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
+        {
+                   await _pronosticoRepository.ActualizarFechaPrometida(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra)
+        {
+            (object cabecera, object detalle)  response = await _pronosticoRepository.VisualizarOrdenCompra(OrdenCompra);
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> ActualizarFechaPrometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> dato)
+        {
+            await _pronosticoRepository.ActualizarFechaComprometidaMasiva(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
     }
 }
