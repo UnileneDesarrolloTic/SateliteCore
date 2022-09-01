@@ -219,12 +219,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-        public async Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
+        public async Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato,int idUsuario)
         {
             FormatoResponseRegistrarMaestroItem result = new FormatoResponseRegistrarMaestroItem();
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryFirstOrDefaultAsync<FormatoResponseRegistrarMaestroItem>("usp_Registrar_Item_sutura", new { NUMERO_PARTE=dato.codsut, CODIGO_FAMILIA=dato.familia }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryFirstOrDefaultAsync<FormatoResponseRegistrarMaestroItem>("usp_Registrar_Item_sutura", new { NUMERO_PARTE=dato.codsut, CODIGO_FAMILIA=dato.familia, idUsuario }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }

@@ -202,10 +202,10 @@ namespace SatelliteCore.Api.Services
             return resultadoConfiguraciones;
         }
 
-        public async Task<ResponseModel<object>> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
+        public async Task<ResponseModel<object>> RegistrarMaestroItem(DatosRequestMaestroItemModel dato, int idUsuario)
         {
             FormatoResponseRegistrarMaestroItem response = new FormatoResponseRegistrarMaestroItem();
-            response = await _commonRepository.RegistrarMaestroItem(dato);
+            response = await _commonRepository.RegistrarMaestroItem(dato, idUsuario);
             return new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { response });
         }
 

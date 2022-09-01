@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
@@ -125,7 +126,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarMaestroItem")]
         public async Task<ActionResult> RegistrarMaestroItem(DatosRequestMaestroItemModel dato)
         {
-            ResponseModel<object> cantidadPruebas = await _commonService.RegistrarMaestroItem(dato);
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<object> cantidadPruebas = await _commonService.RegistrarMaestroItem(dato, idUsuario);
             return Ok(cantidadPruebas);
         }
 
