@@ -263,5 +263,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        public async Task<bool> ValidacionPermisoAccesso( string permiso, int usuario)
+        {
+            bool result;
+
+            using (var satelliteContext = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await satelliteContext.QuerySingleAsync<bool>("usp_validacion_PermisoAcceso",
+                                    new { usuario, permiso }, commandType: CommandType.StoredProcedure);
+                satelliteContext.Dispose();
+            }
+
+            return !result;
+        }
+
+
     }
 }

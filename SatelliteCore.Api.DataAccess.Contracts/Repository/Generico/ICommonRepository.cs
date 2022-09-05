@@ -24,5 +24,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<FormatoResponseRegistrarMaestroItem> RegistrarMaestroItem(DatosRequestMaestroItemModel dato,int idUsuario);
         public Task<(List<FormatoListarMaestroItemModel>, int)> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
         public Task<IEnumerable<MaestroAlmacenEntity>> ListarMaestroAlmacen();
+        public Task<bool> ValidacionPermisoAccesso(string Permiso, int idUsuario);
     }
 }

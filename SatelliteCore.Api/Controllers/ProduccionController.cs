@@ -179,7 +179,7 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpPost("ActualizarFechaPrometidaMasiva")]
-        public async Task<ActionResult> ActualizarFechaPrometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> datos)
+        public async Task<ActionResult> ActualizarFechaPrometidaMasiva(DatosFormatoCabeceraOrdenCompraModel datos)
         {
             ResponseModel<string> response = await _pronosticoServices.ActualizarFechaPrometidaMasiva(datos);
             return Ok(response);

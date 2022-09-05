@@ -188,7 +188,7 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
-        public async Task<ResponseModel<string>> ActualizarFechaPrometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> dato)
+        public async Task<ResponseModel<string>> ActualizarFechaPrometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
         {
             await _pronosticoRepository.ActualizarFechaComprometidaMasiva(dato);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");

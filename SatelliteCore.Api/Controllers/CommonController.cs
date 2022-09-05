@@ -146,5 +146,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(MaestroAlmacen);
         }
 
+        [HttpGet("ValidacionPermisoAccesso")]
+        public async Task<IActionResult> ValidacionPermisoAccesso(string Permiso)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<bool> MaestroAlmacen = await _commonService.ValidacionPermisoAccesso(Permiso, idUsuario);
+            return Ok(MaestroAlmacen);
+        }
+
     }
 }

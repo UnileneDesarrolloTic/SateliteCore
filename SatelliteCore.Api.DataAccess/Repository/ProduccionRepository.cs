@@ -248,7 +248,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (object cabecera, object detalle) datosOrdenCompra;
 
-            string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, a.Estado " +
+            string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, FechaEnvioProveedor ,a.Estado " +
                             "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
                             "WHERE NumeroOrden = @OrdenCompra  " +
                             "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, UnidadCodigo, CantidadPedida , Estado , FechaPrometida " +
@@ -264,14 +264,16 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return datosOrdenCompra;
         }
 
-        public async Task<int> ActualizarFechaComprometidaMasiva(List<DatosFormatoItemActualizarItemOrdenCompra> dato)
+        public async Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
         {
             int result = 0;
+            string scriptCabecera = "UPDATE PROD_UNILENE2..WH_OrdenCompra SET FechaEnvioProveedor=@FechaLlegada WHERE NumeroOrden=@Documento ";
             string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(script, dato);
+                await context.ExecuteAsync(scriptCabecera, new { dato.FechaLlegada ,dato.Documento});
+                await context.ExecuteAsync(script, dato.Detalle);
             }
 
             return result;

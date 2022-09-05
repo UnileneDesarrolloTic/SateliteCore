@@ -228,7 +228,14 @@ namespace SatelliteCore.Api.Services
             return resultadoMaestroAlmacen;
         }
 
+        public async Task<ResponseModel<bool>> ValidacionPermisoAccesso(string Permiso, int idUsuario)
+        {
 
+            bool Acceso = await _commonRepository.ValidacionPermisoAccesso(Permiso, idUsuario);
+            ResponseModel<bool> response = new ResponseModel<bool>(true, Constante.MESSAGE_SUCCESS, Acceso);
+
+            return response;
+        }
 
     }
 }
