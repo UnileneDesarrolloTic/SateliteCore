@@ -143,22 +143,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<FormatoEstructuraObtenerOrdenFabricacion> ObtenerOrdenFabricacion(string NumeroLote)
+        public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerInformacionLote(string NumeroLote)
         {
-            FormatoEstructuraObtenerOrdenFabricacion result = new FormatoEstructuraObtenerOrdenFabricacion();
+            IEnumerable< FormatoEstructuraObtenerOrdenFabricacion >  result = new List<FormatoEstructuraObtenerOrdenFabricacion>();
 
-            string sql = "SELECT FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +
-                          "RTRIM(c.NombreCompleto) Cliente,RTRIM(a.NUMEROLOTE) Lote, cast(a.CANTIDADMUESTRA as DECIMAL(14,2)) ContraMuestra, RTRIM(a.NumeroLotePrincipal)  NumeroCaja " +
-                          "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
-                          "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
-                          "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
-                          "WHERE a.REFERENCIANUMERO = @NumeroLote AND a.ESTADO <> 'AN' ";
+            string sql = "SELECT FECHAPRODUCCION FechaProduccion, RTRIM(a.ITEM) Item, RTRIM(b.NumeroDeParte) NumeroParte, RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +
+                         "RTRIM(c.NombreCompleto) Cliente, RTRIM(a.NUMEROLOTE) OrdenFabricacion, a.REFERENCIANUMERO Lote, 0 ContraMuestra, RTRIM(SUBSTRING(a.NumeroLotePrincipal,0,CHARINDEX('-',a.NumeroLotePrincipal,0)) )   NumeroCaja , a.AuditableFlag " +
+                         "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
+                         "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
+                         "WHERE a.ESTADO <> 'AN'  AND a.REFERENCIANUMERO LIKE '"+ NumeroLote +"%'";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-             
-                result = await context.QueryFirstOrDefaultAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql, new { NumeroLote });
-                
+            {             
+                result = await context.QueryAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql);                
             }
 
             return result;
@@ -169,7 +167,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoListarTransaccion> result =  new List<DatosFormatoListarTransaccion>();
 
-            string sql = "SELECT  RTRIM (c.Lote) Lote, a.Periodo , RTRIM(CONCAT (a.ReferenciaTipoDocumento,'-',a.ReferenciaNumeroDocumento)) AS Documento, a.Cantidad, RTRIM(a.AlmacenCodigo) AlmacenCodigo, " +
+            string sql ="SELECT  RTRIM (c.Lote) Lote, a.Periodo , RTRIM(CONCAT (a.ReferenciaTipoDocumento,'-',a.ReferenciaNumeroDocumento)) AS Documento, a.Cantidad, RTRIM(a.AlmacenCodigo) AlmacenCodigo, " +
                         "RTRIM(CONCAT(b.ReferenciaTipoDocumento, ' ', b.ReferenciaNumeroDocumento)) AS DocumentoTransaccion " +
                         "FROM PROD_UNILENE2..WH_Kardex  a WITH(NOLOCK) " +
                         "INNER JOIN PROD_UNILENE2..WH_TransaccionHeader b WITH(NOLOCK)ON(a.ReferenciaCompaniaSocio = b.CompaniaSocio AND a.ReferenciaTipoDocumento = b.TipoDocumento AND a.ReferenciaNumeroDocumento = b.NumeroDocumento) " +
@@ -191,17 +189,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<int> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
-        {
+        public async Task<int> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
+        {   
             int result = 1;
-            string sql = "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET NumeroLotePrincipal=@numeroCaja WHERE NUMEROLOTE=@lote AND  item=@item";
+
+          
+
+            string sql = "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE  SET NumeroLotePrincipal=IIF(@numeroCaja='','',CONCAT(@numeroCaja,'-',YEAR(@fechaProduccion))) WHERE REFERENCIANUMERO=@lote AND  item=@item";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {   
-                foreach (DatosFormatoOrdenFabricacionRequest item in dato)
-                {
-                    await connection.ExecuteAsync(sql, new { item.numeroCaja, item.lote, item.item });
-                }
+             
+                await connection.ExecuteAsync(sql, new { dato.numeroCaja, dato.fechaProduccion, dato.lote, dato.item });
+                
                 connection.Dispose();
             }
 

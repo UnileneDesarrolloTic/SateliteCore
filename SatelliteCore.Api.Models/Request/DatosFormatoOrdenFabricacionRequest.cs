@@ -15,6 +15,8 @@ namespace SatelliteCore.Api.Models.Request
         public string marca { get; set; }
         public string numeroCaja { get; set; }
         public string numeroParte { get; set; }
+        public string auditableFlag { get; set; }
+        public string ordenFabricacion { get; set; }
 
     }
 }

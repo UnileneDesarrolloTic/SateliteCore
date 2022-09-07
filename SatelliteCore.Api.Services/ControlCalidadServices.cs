@@ -42,10 +42,9 @@ namespace SatelliteCore.Api.Services
             return await _controlCalidadRepository.ListarCotizaciones(datos);
         }
 
-        public async Task<ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerOrdenFabricacion(string NumeroLote)
+        public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerInformacionLote(string NumeroLote)
         {
-            FormatoEstructuraObtenerOrdenFabricacion response = await _controlCalidadRepository.ObtenerOrdenFabricacion(NumeroLote);
-            return new ResponseModel<FormatoEstructuraObtenerOrdenFabricacion>(true, Constante.MESSAGE_SUCCESS, response );
+            return await _controlCalidadRepository.ObtenerInformacionLote(NumeroLote);
         }
 
         public async Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string NumeroLote, string codAlmacen)
@@ -54,10 +53,10 @@ namespace SatelliteCore.Api.Services
             
         }
 
-        public async Task<ResponseModel<string>> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
+        public async Task<ResponseModel<string>> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
         {
 
-            int reponse = await _controlCalidadRepository.RegistrarOrdenFabricacionCaja(dato);
+            int reponse = await _controlCalidadRepository.RegistrarLoteNumeroCaja(dato);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
 

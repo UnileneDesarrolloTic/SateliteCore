@@ -10,7 +10,9 @@ using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -156,17 +158,15 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("OrdenFabricacion")]
-        public async Task<ActionResult> ObtenerOrdenFabricacion(string NumeroLote)
+        [HttpGet("ObtenerInformacionLote")]
+        public async Task<ActionResult> ObtenerInformacionLote(string NumeroLote)
         {
             if (NumeroLote == "")
             {
-                ResponseModel<string> responseError =
-                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
-                return BadRequest(responseError);
+                throw new ValidationModelException("Debe Ingresar el Numero de Lote");
             }
 
-            ResponseModel<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerOrdenFabricacion(NumeroLote);
+            IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerInformacionLote(NumeroLote);
             return Ok(response);
         }
 
@@ -185,10 +185,13 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
-        [HttpPost("RegistrarOrdenFabricacionCaja")]
-        public async Task<ActionResult> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
+        [HttpPost("RegistrarLoteNumeroCaja")]
+        public async Task<ActionResult> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
         {
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarOrdenFabricacionCaja(dato);
+           /* var claims = HttpContext.User.Identity as ClaimsIdentity;
+            var  Usuario = int.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Issuer);*/
+
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarLoteNumeroCaja(dato);
             return Ok(response);
         }
 
