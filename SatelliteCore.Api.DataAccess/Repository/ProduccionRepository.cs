@@ -211,7 +211,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
 
             }
-
             return result;
         }
 
