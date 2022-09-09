@@ -190,7 +190,6 @@ namespace SatelliteCore.Api.Controllers
         public async Task<ActionResult> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
         {
             int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
-
             ResponseModel<string> response = await _controlCalidadServices.RegistrarLoteNumeroCaja(dato, idUsuario);
             return Ok(response);
         }
@@ -199,6 +198,22 @@ namespace SatelliteCore.Api.Controllers
         public async Task<ActionResult> ListarKardexInternoNumeroLote(string NumeroLote)
         {
             IEnumerable < DatosFormatoKardexInternoGCM > response= await _controlCalidadServices.ListarKardexInternoNumeroLote(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarKardexInternoGCM")]
+        public async Task<ActionResult> RegistrarKardexInternoGCM(DatosFormatoRegistrarKardexInternoGCM dato)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarKardexInternoGCM(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("ActualizarKardexInternoGCM")]
+        public async Task<ActionResult> ActualizarKardexInternoGCM(int idKardex, string comentarios)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response  = await _controlCalidadServices.ActualizarKardexInternoGCM(idKardex, comentarios,idUsuario);
             return Ok(response);
         }
 

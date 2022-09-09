@@ -195,7 +195,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {   
-             
                 await connection.ExecuteAsync("usp_RegistrarNumeroCaja_ContraMuestra", new { dato.numeroCaja, dato.contraMuestra, dato.fechaProduccion, dato.lote,dato.ordenFabricacion,dato.item, idUsuario }, commandType: CommandType.StoredProcedure);
                 
                 connection.Dispose();
@@ -216,6 +215,42 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
                 result = await context.QueryAsync<DatosFormatoKardexInternoGCM>(sql, new { NumeroLote });
 
+            }
+
+            return result;
+        }
+
+
+        public async Task<int> RegistrarKardexInternoGCM(DatosFormatoRegistrarKardexInternoGCM dato, int idUsuario)
+        {
+            int result = 1;
+            string sql2 = "SELECT Usuario FROM  TBMUsuario WHERE CodUsuario = @idUsuario";
+            string sql1 = "INSERT INTO TBMKardexInternoCC (NumeroLote,OrdenFabricacion,TipoTransaccion,Cantidad,Usuario,FechaTransaccion,Estado,Comentarios)  " +
+                         "VALUES(@Lote, @ordenFabricacion,@Transaccion , @Cantidad, @Usuario, GETDATE(), 'A', @Comentario); ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                string Usuario = await connection.QueryFirstOrDefaultAsync<string>(sql2, new { idUsuario });
+                await connection.ExecuteAsync(sql1, new { dato.Lote, dato.OrdenFabricacion,dato.Transaccion,dato.Cantidad, Usuario ,dato.Comentario });
+
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+        public async Task<int> ActualizarKardexInternoGCM(int idKardex, string comentarios, int idUsuario)
+        {
+            int result = 1;
+
+            string sql = "UPDATE TBMKardexInternoCC SET Comentarios=@comentarios ,Usuario=(SELECT Usuario FROM  TBMUsuario WHERE CodUsuario=@idUsuario) WHERE Id=@idKardex ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync(sql, new { idKardex, comentarios, idUsuario });
+
+                connection.Dispose();
             }
 
             return result;
