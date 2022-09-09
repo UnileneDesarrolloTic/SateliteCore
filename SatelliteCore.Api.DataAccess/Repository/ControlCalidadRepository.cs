@@ -189,18 +189,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<int> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
+        public async Task<int> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato, int idUsuario)
         {   
             int result = 1;
-
-          
-
-            string sql = "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE  SET NumeroLotePrincipal=IIF(@numeroCaja='','',CONCAT(@numeroCaja,'-',YEAR(@fechaProduccion))) WHERE REFERENCIANUMERO=@lote AND  item=@item";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {   
              
-                await connection.ExecuteAsync(sql, new { dato.numeroCaja, dato.fechaProduccion, dato.lote, dato.item });
+                await connection.ExecuteAsync("usp_RegistrarNumeroCaja_ContraMuestra", new { dato.numeroCaja, dato.contraMuestra, dato.fechaProduccion, dato.lote,dato.ordenFabricacion,dato.item, idUsuario }, commandType: CommandType.StoredProcedure);
                 
                 connection.Dispose();
             }
@@ -208,6 +204,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+
+        public async Task<IEnumerable<DatosFormatoKardexInternoGCM>> ListarKardexInternoNumeroLote(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoKardexInternoGCM> result = new List<DatosFormatoKardexInternoGCM>();
+
+            string sql = "SELECT Id IdKardex, NumeroLote, OrdenFabricacion, TipoTransaccion, Cantidad, Usuario, Comentarios, Estado  FROM TBMKardexInternoCC WHERE NumeroLote=@NumeroLote";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await context.QueryAsync<DatosFormatoKardexInternoGCM>(sql, new { NumeroLote });
+
+            }
+
+            return result;
+        }
 
         public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ExportarOrdenFabricacionCaja()
         {

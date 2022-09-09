@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
@@ -188,12 +189,19 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarLoteNumeroCaja")]
         public async Task<ActionResult> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
         {
-           /* var claims = HttpContext.User.Identity as ClaimsIdentity;
-            var  Usuario = int.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Issuer);*/
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarLoteNumeroCaja(dato);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarLoteNumeroCaja(dato, idUsuario);
             return Ok(response);
         }
+
+        [HttpGet("ListarKardexInternoNumeroLote")]
+        public async Task<ActionResult> ListarKardexInternoNumeroLote(string NumeroLote)
+        {
+            IEnumerable < DatosFormatoKardexInternoGCM > response= await _controlCalidadServices.ListarKardexInternoNumeroLote(NumeroLote);
+            return Ok(response);
+        }
+
 
         [HttpGet("ExportarOrdenFabricacionCaja")]
         public async Task<ActionResult> ExportarOrdenFabricacionCaja()

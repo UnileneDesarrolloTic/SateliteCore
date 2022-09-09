@@ -53,14 +53,20 @@ namespace SatelliteCore.Api.Services
             
         }
 
-        public async Task<ResponseModel<string>> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
+        public async Task<ResponseModel<string>> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato,int idUsuario)
         {
 
-            int reponse = await _controlCalidadRepository.RegistrarLoteNumeroCaja(dato);
+            int reponse = await _controlCalidadRepository.RegistrarLoteNumeroCaja(dato, idUsuario);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
 
             return Respuesta;
+        }
+
+        public async Task<IEnumerable<DatosFormatoKardexInternoGCM>> ListarKardexInternoNumeroLote(string NumeroLote)
+        {
+            return await _controlCalidadRepository.ListarKardexInternoNumeroLote(NumeroLote);
+
         }
 
 
