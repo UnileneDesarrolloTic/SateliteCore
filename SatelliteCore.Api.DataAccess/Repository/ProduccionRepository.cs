@@ -200,13 +200,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio)
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
         {
             DatosFormatoInformacionCalendarioSeguimientoOC result = new DatosFormatoInformacionCalendarioSeguimientoOC();
 
             using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Origen, Anio }, commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Origen, Anio, Regla }, commandType: CommandType.StoredProcedure);
                 result.Calendario = multi.Read<DatosFormatoCalentarioSeguimientoOC>().ToList();
                 result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
 
