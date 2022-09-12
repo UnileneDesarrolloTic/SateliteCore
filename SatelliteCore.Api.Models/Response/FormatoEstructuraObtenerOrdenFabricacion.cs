@@ -17,5 +17,6 @@ namespace SatelliteCore.Api.Models.Response
         public string AuditableFlag { get; set; }
         public string Marca { get; set; }
 
+
     }
 }

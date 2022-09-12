@@ -14,7 +14,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(List<LoteEntity>, int)> ListarLotes(DatosLote datos);
         public Task<int> RegistrarLote(LoteEntity lote);
         public Task<(List<CotizacionEntity>, int)> ListarCotizaciones(DatosListarCotizacionesPaginado datos);
-        public Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerInformacionLote(string NumeroLote);
+        public Task<DatosFormatoListarOrdenFabricacionModel> ObtenerInformacionLote(string NumeroLote);
         public Task<IEnumerable<DatosFormatoListarTransaccion>> ListarTransaccionItem(string NumeroLote, string codAlmacen);
         public Task<int> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato, int idUsuario);
         public Task<IEnumerable<DatosFormatoKardexInternoGCM>> ListarKardexInternoNumeroLote(string NumeroLote);

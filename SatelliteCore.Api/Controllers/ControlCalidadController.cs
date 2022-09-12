@@ -167,7 +167,7 @@ namespace SatelliteCore.Api.Controllers
                 throw new ValidationModelException("Debe Ingresar el Numero de Lote");
             }
 
-            IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerInformacionLote(NumeroLote);
+            DatosFormatoListarOrdenFabricacionModel response =  await _controlCalidadServices.ObtenerInformacionLote(NumeroLote);
             return Ok(response);
         }
 

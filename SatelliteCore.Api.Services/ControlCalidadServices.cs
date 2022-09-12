@@ -7,6 +7,7 @@ using SatelliteCore.Api.ReportServices.Contracts.Comercial;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SatelliteCore.Api.Services
 {
@@ -42,7 +43,7 @@ namespace SatelliteCore.Api.Services
             return await _controlCalidadRepository.ListarCotizaciones(datos);
         }
 
-        public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ObtenerInformacionLote(string NumeroLote)
+        public async Task<DatosFormatoListarOrdenFabricacionModel> ObtenerInformacionLote(string NumeroLote)
         {
             return await _controlCalidadRepository.ObtenerInformacionLote(NumeroLote);
         }
