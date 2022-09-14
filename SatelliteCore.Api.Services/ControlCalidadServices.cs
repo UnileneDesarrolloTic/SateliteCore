@@ -8,6 +8,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using SatelliteCore.Api.Models.Generic;
 
 namespace SatelliteCore.Api.Services
 {
@@ -90,6 +91,21 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
+
+        public async Task<PaginacionModel<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
+        {
+            (List<DatosFormatosListarControlLotes> lista, int totalRegistros) = await _controlCalidadRepository.ListarControlLotes(dato);
+            PaginacionModel<DatosFormatosListarControlLotes> response = new PaginacionModel<DatosFormatosListarControlLotes>(lista, dato.Pagina, dato.RegistrosPorPagina, totalRegistros);
+
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato)
+        {
+            int reponse = await _controlCalidadRepository.ActualizarControlLotes(dato);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
+            return Respuesta;
+        }
 
 
     }

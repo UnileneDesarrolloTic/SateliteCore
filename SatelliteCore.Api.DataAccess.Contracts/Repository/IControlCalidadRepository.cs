@@ -21,5 +21,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarKardexInternoGCM(DatosFormatoRegistrarKardexInternoGCM dato, int idUsuario);
         public Task<int> ActualizarKardexInternoGCM(int idKardex, string comentarios, int idUsuario);
         public Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ExportarOrdenFabricacionCaja();
+        public Task<(List<DatosFormatosListarControlLotes>, int)> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato);
+        public Task<int> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> RegistrarKardexInternoGCM(DatosFormatoRegistrarKardexInternoGCM dato, int idUsuario);
         public Task<ResponseModel<string>> ActualizarKardexInternoGCM(int idKardex, string comentarios, int idUsuario);
         public Task<ResponseModel<string>> ExportarOrdenFabricacionCaja();
+        public Task<PaginacionModel<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato);
+        public Task<ResponseModel<string>> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato);
 
     }
 }

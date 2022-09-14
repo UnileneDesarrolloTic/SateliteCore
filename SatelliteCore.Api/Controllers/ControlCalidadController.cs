@@ -224,5 +224,20 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> response = await _controlCalidadServices.ExportarOrdenFabricacionCaja();
             return Ok(response);
         }
+
+
+        [HttpPost("ListarControlLotes")]
+        public async Task<ActionResult> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
+        {
+            PaginacionModel<DatosFormatosListarControlLotes> response = await _controlCalidadServices.ListarControlLotes(dato);
+            return Ok(response);
+        }
+
+        [HttpPost("ActualizarControlLotes")]
+        public async Task<ActionResult> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ActualizarControlLotes(dato);
+            return Ok(response);
+        }
     }
 }
