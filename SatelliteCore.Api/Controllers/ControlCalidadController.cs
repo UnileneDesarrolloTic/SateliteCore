@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
@@ -10,7 +11,9 @@ using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -156,17 +159,15 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("OrdenFabricacion")]
-        public async Task<ActionResult> ObtenerOrdenFabricacion(string NumeroLote)
+        [HttpGet("ObtenerInformacionLote")]
+        public async Task<ActionResult> ObtenerInformacionLote(string NumeroLote)
         {
             if (NumeroLote == "")
             {
-                ResponseModel<string> responseError =
-                        new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
-                return BadRequest(responseError);
+                throw new ValidationModelException("Debe Ingresar el Numero de Lote");
             }
 
-            ResponseModel<FormatoEstructuraObtenerOrdenFabricacion> response =  await _controlCalidadServices.ObtenerOrdenFabricacion(NumeroLote);
+            DatosFormatoListarOrdenFabricacionModel response =  await _controlCalidadServices.ObtenerInformacionLote(NumeroLote);
             return Ok(response);
         }
 
@@ -185,17 +186,57 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
-        [HttpPost("RegistrarOrdenFabricacionCaja")]
-        public async Task<ActionResult> RegistrarOrdenFabricacionCaja(List<DatosFormatoOrdenFabricacionRequest> dato)
+        [HttpPost("RegistrarLoteNumeroCaja")]
+        public async Task<ActionResult> RegistrarLoteNumeroCaja(DatosFormatoOrdenFabricacionRequest dato)
         {
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarOrdenFabricacionCaja(dato);
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarLoteNumeroCaja(dato, idUsuario);
             return Ok(response);
         }
+
+        [HttpGet("ListarKardexInternoNumeroLote")]
+        public async Task<ActionResult> ListarKardexInternoNumeroLote(string NumeroLote)
+        {
+            IEnumerable < DatosFormatoKardexInternoGCM > response= await _controlCalidadServices.ListarKardexInternoNumeroLote(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarKardexInternoGCM")]
+        public async Task<ActionResult> RegistrarKardexInternoGCM(DatosFormatoRegistrarKardexInternoGCM dato)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarKardexInternoGCM(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("ActualizarKardexInternoGCM")]
+        public async Task<ActionResult> ActualizarKardexInternoGCM(int idKardex, string comentarios)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> response  = await _controlCalidadServices.ActualizarKardexInternoGCM(idKardex, comentarios,idUsuario);
+            return Ok(response);
+        }
+
 
         [HttpGet("ExportarOrdenFabricacionCaja")]
         public async Task<ActionResult> ExportarOrdenFabricacionCaja()
         {
             ResponseModel<string> response = await _controlCalidadServices.ExportarOrdenFabricacionCaja();
+            return Ok(response);
+        }
+
+
+        [HttpPost("ListarControlLotes")]
+        public async Task<ActionResult> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
+        {
+            PaginacionModel<DatosFormatosListarControlLotes> response = await _controlCalidadServices.ListarControlLotes(dato);
+            return Ok(response);
+        }
+
+        [HttpPost("ActualizarControlLotes")]
+        public async Task<ActionResult> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ActualizarControlLotes(dato);
             return Ok(response);
         }
     }
