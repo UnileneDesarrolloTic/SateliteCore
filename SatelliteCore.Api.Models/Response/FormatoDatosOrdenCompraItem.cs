@@ -10,6 +10,7 @@ namespace SatelliteCore.Api.Models.Response
         public string NombreCompleto { get; set; }
         public string Documento { get; set; }
         public decimal CantidadPedida { get; set; }
+        public decimal CantidadRecibida { get; set; }
         public DateTime FechaPrometida { get; set; }
         public string Item { get; set; }
     }

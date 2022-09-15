@@ -250,7 +250,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, FechaEnvioProveedor ,a.Estado " +
                             "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
                             "WHERE NumeroOrden = @OrdenCompra  " +
-                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, UnidadCodigo, CantidadPedida , Estado , FechaPrometida " +
+                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, UnidadCodigo, CantidadPedida , CantidadRecibida , Estado , FechaPrometida " +
                             "FROM PROD_UNILENE2..WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
