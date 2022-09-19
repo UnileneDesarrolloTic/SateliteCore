@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Controllers
@@ -87,6 +89,44 @@ namespace SatelliteCore.Api.Controllers
 
         }
 
+
+        [HttpGet("ListarAsignacionPersonal")]
+        public async Task<ActionResult> ListarAsignacionPersonal()
+        {
+            DatosFormatoAsignacionPersonalLaboralModel response = await _usuarioService.ListarAsignacionPersonal();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarAreaPersonaLaboral")]
+        public async Task<ActionResult> ListarAreaPersonaLaboral()
+        {
+            List<AreaPersonalLaboralEntity> response = await _usuarioService.ListarAreaPersonaLaboral();
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarPersonaMasiva")]
+        public async Task<ActionResult> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato)
+        {
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> response = await _usuarioService.RegistrarPersonaLaboralMasiva(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("FiltrarAreaPersona")]
+        public async Task<ActionResult> FiltrarAreaPersona(int idArea)
+        {
+            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioService.FiltrarAreaPersona(idArea);
+            return Ok(response);
+        }
+
+
+        [HttpGet("LiberalPersona")]
+        public async Task<ActionResult> LiberalPersona(int IdAsignacion)
+        {
+            ResponseModel<string> response = await _usuarioService.LiberalPersona(IdAsignacion);
+            return Ok(response);
+        }
 
 
 
