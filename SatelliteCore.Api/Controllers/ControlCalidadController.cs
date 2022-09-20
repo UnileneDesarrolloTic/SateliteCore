@@ -219,9 +219,9 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpGet("ExportarOrdenFabricacionCaja")]
-        public async Task<ActionResult> ExportarOrdenFabricacionCaja()
+        public async Task<ActionResult> ExportarOrdenFabricacionCaja(string anioProduccion)
         {
-            ResponseModel<string> response = await _controlCalidadServices.ExportarOrdenFabricacionCaja();
+            ResponseModel<string> response = await _controlCalidadServices.ExportarOrdenFabricacionCaja(anioProduccion);
             return Ok(response);
         }
 

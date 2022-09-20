@@ -268,7 +268,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ExportarOrdenFabricacionCaja()
+        public async Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ExportarOrdenFabricacionCaja(string anioProduccion)
         {
 
             IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> result = new List<FormatoEstructuraObtenerOrdenFabricacion>();
@@ -279,11 +279,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
                          "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
                          "WHERE(a.NumeroLotePrincipal IS NOT null  OR a.NumeroLotePrincipal != '') AND a.ESTADO <> 'AN' " +
+                         "AND CAST(YEAR(FECHAPRODUCCION) AS varchar) = @anioProduccion " +
                          "ORDER BY a.NumeroLote , a.referencianumero asc";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql) ;
+                result = await context.QueryAsync<FormatoEstructuraObtenerOrdenFabricacion>(sql, new { anioProduccion }) ;
             }
 
             return result;

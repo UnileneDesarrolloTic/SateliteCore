@@ -81,9 +81,9 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> ExportarOrdenFabricacionCaja()
+        public async Task<ResponseModel<string>> ExportarOrdenFabricacionCaja(string anioProduccion)
         {
-            IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> listaOrdenFabricacionCaja =  await _controlCalidadRepository.ExportarOrdenFabricacionCaja();
+            IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> listaOrdenFabricacionCaja =  await _controlCalidadRepository.ExportarOrdenFabricacionCaja(anioProduccion);
             ReporteOrdenFabricacionCaja ExporteOrdenFabricacionCaja = new ReporteOrdenFabricacionCaja();
             string reporte = ExporteOrdenFabricacionCaja.GenerarReporteCaja(listaOrdenFabricacionCaja);
 
