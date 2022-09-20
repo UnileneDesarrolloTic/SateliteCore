@@ -186,7 +186,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                         "INNER JOIN PROD_UNILENE2..WH_ItemMast f WITH(NOLOCK) ON a.Item = f.Item " +
                         "INNER JOIN PROD_UNILENE2..WH_AlmacenMast d WITH(NOLOCK) ON a.AlmacenCodigo = d.AlmacenCodigo " +
                         "LEFT JOIN PROD_UNILENE2..WH_ItemAlmacenLote e WITH(NOLOCK)ON e.Item = a.Item AND e.Condicion = a.Condicion AND e.AlmacenCodigo = a.AlmacenCodigo AND e.Lote = a.Lote WHERE(a.Condicion = '0') " +
-                        "AND(d.CompaniaSocio = '01000000')  AND(a.Condicion = '0') AND c.Lote = @NumeroLote AND b.AlmacenCodigo=@codAlmacen " +
+                        "AND(d.CompaniaSocio = '01000000')  AND(a.Condicion = '0') AND(a.AlmacenCodigo = @codAlmacen) AND((CASE WHEN f.ItemTipo = 'PT' THEN e.LoteFabricacion ELSE e.Lote END) = @NumeroLote) AND(a.Condicion = '0') " +
                         "ORDER BY a.Periodo ASC, a.Fecha ASC";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
