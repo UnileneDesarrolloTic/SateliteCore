@@ -9,6 +9,6 @@ namespace SatelliteCore.Api.Models.Request
     {
         public string Documento { get; set; }
         public string FechaLlegada { get; set; }
-        public List<DatosFormatoItemActualizarItemOrdenCompra> Detalle { get; set; }
+        public List<DatosFormatoDetalleOrdenCompraMasivo> Detalle { get; set; }
     }
 }
