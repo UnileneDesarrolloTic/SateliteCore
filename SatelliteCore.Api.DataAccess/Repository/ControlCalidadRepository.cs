@@ -327,5 +327,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        public async Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo,string Tabla)
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> result = new List<DatosFormatoTablaNumerodeParte>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaNumerodeParte>("SP_UNILENE_LO_MAESTRO_NUMERO_PARTE", new { GRUPO= Grupo, TABLA=Tabla }, commandType: CommandType.StoredProcedure);
+                
+            }
+
+            return result;
+        }
+
+
     }
 }

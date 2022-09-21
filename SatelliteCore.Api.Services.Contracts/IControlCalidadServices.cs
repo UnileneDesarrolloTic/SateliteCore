@@ -23,6 +23,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> ExportarOrdenFabricacionCaja(string anioProduccion);
         public Task<PaginacionModel<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato);
         public Task<ResponseModel<string>> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato);
+        public Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo, string Tabla);
 
     }
 }

@@ -107,6 +107,31 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
+        public async Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo, string Tabla)
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> result = new List<DatosFormatoTablaNumerodeParte>();
+
+            IEnumerable <DatosFormatoTablaNumerodeParte> Respuesta = await _controlCalidadRepository.ListarMaestroNumeroParte(Grupo,Tabla);
+
+            foreach (DatosFormatoTablaNumerodeParte valor in Respuesta)
+            {
+                DatosFormatoTablaNumerodeParte myObj = new DatosFormatoTablaNumerodeParte();
+                myObj.Grupo = valor.Grupo.Trim();
+                myObj.NombreGrupo = valor.NombreGrupo.Trim();
+                myObj.CodigoTabla = valor.CodigoTabla.Trim();
+                myObj.NombreTabla = valor.NombreTabla.Trim();
+                myObj.Codigo = valor.Codigo.Trim();
+                myObj.DescripcionLocal = valor.DescripcionLocal.Trim();
+                myObj.Longitud = valor.Longitud;
+                myObj.Estado = valor.Estado;
+                myObj.UltimaFechaModif = valor.UltimaFechaModif;
+                myObj.UltimoUsuario = valor.UltimoUsuario;
+                result=result.Concat(new[] { myObj });
+            }
+            
+            return result;
+        }
+
 
     }
 }

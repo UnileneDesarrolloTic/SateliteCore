@@ -239,5 +239,20 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> response = await _controlCalidadServices.ActualizarControlLotes(dato);
             return Ok(response);
         }
+
+
+        [HttpGet("ListarMaestroNumeroParte")]
+        public async Task<IActionResult> ListarMaestroNumeroParte(string Grupo,string Tabla)
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla);
+            return Ok(response);
+        }
+
+        /*[HttpGet("ListarAtributos")]
+        public async Task<IActionResult> ListarAtributos()
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla);
+            return Ok(response);
+        }*/
     }
 }

@@ -154,5 +154,18 @@ namespace SatelliteCore.Api.Controllers
             return Ok(MaestroAlmacen);
         }
 
+        [HttpGet("ListarGrupo")]
+        public async Task<IActionResult> ListarGrupo()
+        {
+            ResponseModel<IEnumerable<GrupoEntity>> response = await _commonService.ListarGrupo();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarTabla")]
+        public async Task<IActionResult> ListarTabla(string Grupo)
+        {
+            ResponseModel<IEnumerable<TablaEntity>> response = await _commonService.ListarTabla(Grupo);
+            return Ok(response);
+        }
     }
 }

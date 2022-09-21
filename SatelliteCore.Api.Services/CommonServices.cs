@@ -237,5 +237,21 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<ResponseModel<IEnumerable<GrupoEntity>>> ListarGrupo()
+        {
+            IEnumerable<GrupoEntity> grupo = await _commonRepository.ListarGrupo();
+            ResponseModel<IEnumerable<GrupoEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<GrupoEntity>>(true, Constante.MESSAGE_SUCCESS, grupo);
+
+            return resultadoMaestroAlmacen;
+        }
+
+        public async Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo)
+        {
+            IEnumerable<TablaEntity> tabla = await _commonRepository.ListarTabla(Grupo);
+            ResponseModel<IEnumerable<TablaEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<TablaEntity>>(true, Constante.MESSAGE_SUCCESS, tabla);
+
+            return resultadoMaestroAlmacen;
+        }
+
     }
 }

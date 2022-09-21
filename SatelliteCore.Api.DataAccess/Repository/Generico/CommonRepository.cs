@@ -277,6 +277,32 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return !result;
         }
 
+        public async Task<IEnumerable<GrupoEntity>> ListarGrupo()
+        {
+            IEnumerable<GrupoEntity> lista = new List<GrupoEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<GrupoEntity>("SP_UNILENE_LO_GRUPO_NUMERO_PARTE", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<TablaEntity>> ListarTabla( string Grupo)
+        {
+            IEnumerable<TablaEntity> lista = new List<TablaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<TablaEntity>("SP_UNILENE_LO_TABLAS_GRUPO_NUMERO_PARTE",new {GRUPO=Grupo }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
 
     }
 }
