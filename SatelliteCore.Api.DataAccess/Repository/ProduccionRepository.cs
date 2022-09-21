@@ -250,7 +250,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, FechaEnvioProveedor ,a.Estado " +
                             "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
                             "WHERE NumeroOrden = @OrdenCompra  " +
-                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, UnidadCodigo, CantidadPedida , CantidadRecibida , Estado , FechaPrometida " +
+                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, RTRIM(UnidadCodigo) UnidadCodigo, CantidadPedida , CantidadRecibida , Estado , FechaPrometida , CAST(0 AS BIT) isSelected   " +
                             "FROM PROD_UNILENE2..WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -266,13 +266,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
         {
             int result = 0;
-            string scriptCabecera = "UPDATE PROD_UNILENE2..WH_OrdenCompra SET FechaEnvioProveedor=@FechaLlegada WHERE NumeroOrden=@Documento ";
-            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
+            //string scriptCabecera = "UPDATE PROD_UNILENE2..WH_OrdenCompra SET FechaEnvioProveedor=@FechaLlegada WHERE NumeroOrden=@Documento ";
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden=@NumeroOrden  AND Item=@Item AND estado<>'CO' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(scriptCabecera, new { dato.FechaLlegada ,dato.Documento});
-                await context.ExecuteAsync(script, dato.Detalle);
+               // await context.ExecuteAsync(scriptCabecera, new { dato.FechaLlegada ,dato.Documento});
+               foreach(DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)
+                {
+                    await context.ExecuteAsync(script, new { item.NumeroOrden, item.Item, dato.FechaLlegada });
+                }
+               
             }
 
             return result;

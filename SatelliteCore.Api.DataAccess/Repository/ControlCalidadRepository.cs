@@ -291,18 +291,15 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<(List<DatosFormatosListarControlLotes>, int)> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
+        public async Task<IEnumerable<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
         {
+            IEnumerable<DatosFormatosListarControlLotes> result = new List<DatosFormatosListarControlLotes>();
 
-            (List<DatosFormatosListarControlLotes> DetalleItemControlLotes, int totalRegistros) result;
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using (var result_db = await connection.QueryMultipleAsync("usp_Listar_informacion_Control_lotes", dato, commandType: CommandType.StoredProcedure))
-                {
-                    result.DetalleItemControlLotes = result_db.Read<DatosFormatosListarControlLotes>().ToList();
-                    result.totalRegistros = result_db.Read<int>().First();
-                }
+                result = await connection.QueryAsync<DatosFormatosListarControlLotes>("usp_Listar_informacion_Control_lotes", dato, commandType: CommandType.StoredProcedure);
+               
                 connection.Dispose();
 
             }
