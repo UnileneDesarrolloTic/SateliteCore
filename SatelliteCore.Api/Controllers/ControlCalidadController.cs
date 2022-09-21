@@ -229,7 +229,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListarControlLotes")]
         public async Task<ActionResult> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
         {
-            PaginacionModel<DatosFormatosListarControlLotes> response = await _controlCalidadServices.ListarControlLotes(dato);
+            IEnumerable<DatosFormatosListarControlLotes> response = await _controlCalidadServices.ListarControlLotes(dato);
             return Ok(response);
         }
 

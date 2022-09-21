@@ -92,12 +92,10 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<PaginacionModel<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
+        public async Task<IEnumerable<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato)
         {
-            (List<DatosFormatosListarControlLotes> lista, int totalRegistros) = await _controlCalidadRepository.ListarControlLotes(dato);
-            PaginacionModel<DatosFormatosListarControlLotes> response = new PaginacionModel<DatosFormatosListarControlLotes>(lista, dato.Pagina, dato.RegistrosPorPagina, totalRegistros);
-
-            return response;
+            IEnumerable<DatosFormatosListarControlLotes> lista = await _controlCalidadRepository.ListarControlLotes(dato);
+            return lista;
         }
 
         public async Task<ResponseModel<string>> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato)

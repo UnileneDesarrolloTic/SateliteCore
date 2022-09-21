@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SatelliteCore.Api.Models.Response
 {
-    public class DatosFormatosListarControlLotes
+    public struct DatosFormatosListarControlLotes
     {
         public DateTime FechaEntrega { get; set; }
         public string Aprobado { get; set; }
