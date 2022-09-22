@@ -28,5 +28,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<GrupoEntity>> ListarGrupo();
         public Task<IEnumerable<TablaEntity>> ListarTabla(string Grupo);
         public Task<IEnumerable<MarcaProtocoloEntity>> ListarMarcaProtocolo(string Grupo,string Campo);
+        public Task<IEnumerable<MetodologiaEntity>> ListarMetodologiaProtocolo();
     }
 }

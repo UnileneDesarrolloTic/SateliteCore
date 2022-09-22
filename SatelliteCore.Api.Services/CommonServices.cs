@@ -240,23 +240,31 @@ namespace SatelliteCore.Api.Services
         public async Task<ResponseModel<IEnumerable<GrupoEntity>>> ListarGrupo()
         {
             IEnumerable<GrupoEntity> grupo = await _commonRepository.ListarGrupo();
-            ResponseModel<IEnumerable<GrupoEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<GrupoEntity>>(true, Constante.MESSAGE_SUCCESS, grupo);
+            ResponseModel<IEnumerable<GrupoEntity>> resultado = new ResponseModel<IEnumerable<GrupoEntity>>(true, Constante.MESSAGE_SUCCESS, grupo);
 
-            return resultadoMaestroAlmacen;
+            return resultado;
         }
 
         public async Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo)
         {
             IEnumerable<TablaEntity> tabla = await _commonRepository.ListarTabla(Grupo);
-            ResponseModel<IEnumerable<TablaEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<TablaEntity>>(true, Constante.MESSAGE_SUCCESS, tabla);
+            ResponseModel<IEnumerable<TablaEntity>> resultado = new ResponseModel<IEnumerable<TablaEntity>>(true, Constante.MESSAGE_SUCCESS, tabla);
 
-            return resultadoMaestroAlmacen;
+            return resultado;
         }
 
         public async Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo,string Campo)
         {
             IEnumerable<MarcaProtocoloEntity> response = await _commonRepository.ListarMarcaProtocolo(Grupo,Campo);
-            ResponseModel<IEnumerable<MarcaProtocoloEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MarcaProtocoloEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+            ResponseModel<IEnumerable<MarcaProtocoloEntity>> resultado = new ResponseModel<IEnumerable<MarcaProtocoloEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultado;
+        }
+
+        public async Task<ResponseModel<IEnumerable<MetodologiaEntity>>> ListarMetodologiaProtocolo()
+        {
+            IEnumerable<MetodologiaEntity> response = await _commonRepository.ListarMetodologiaProtocolo();
+            ResponseModel<IEnumerable<MetodologiaEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MetodologiaEntity>>(true, Constante.MESSAGE_SUCCESS, response);
 
             return resultadoMaestroAlmacen;
         }

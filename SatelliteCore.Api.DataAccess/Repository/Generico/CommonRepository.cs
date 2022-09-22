@@ -316,6 +316,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<IEnumerable<MetodologiaEntity>> ListarMetodologiaProtocolo()
+        {
+            IEnumerable<MetodologiaEntity> lista = new List<MetodologiaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<MetodologiaEntity>("SP_LISTAR_METODOLOGIA", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
 
     }
 }
