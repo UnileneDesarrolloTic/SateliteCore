@@ -268,5 +268,12 @@ namespace SatelliteCore.Api.Controllers
             IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadServices.ListarLeyenda(Marca, Hebra);
             return Ok(response);
         }
+
+        [HttpGet("ListarTablaPrueba")]
+        public async Task<IActionResult> ListarTablaPrueba(string Metodologia)
+        {
+            IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadServices.ListarTablaPrueba(Metodologia);
+            return Ok(response);
+        }
     }
 }

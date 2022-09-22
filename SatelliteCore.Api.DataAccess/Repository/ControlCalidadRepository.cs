@@ -377,6 +377,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia)
+        {
+
+            IEnumerable<DatosFormatoTablaPruebasModel> result = new List<DatosFormatoTablaPruebasModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaPruebasModel>("SP_LISTAR_TPRO_PRUEBA", new { Metodologia }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
 
     }
 }

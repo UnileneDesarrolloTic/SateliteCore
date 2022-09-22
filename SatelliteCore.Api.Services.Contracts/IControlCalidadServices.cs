@@ -27,6 +27,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos();
         public Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca,string Hebra);
         public Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra);
+        public Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia);
 
     }
 }

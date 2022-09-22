@@ -147,6 +147,12 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia)
+        {
+            IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadRepository.ListarTablaPrueba(Metodologia);
+            return response;
+        }
+
 
     }
 }
