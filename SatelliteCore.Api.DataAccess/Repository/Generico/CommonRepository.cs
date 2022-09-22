@@ -303,6 +303,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<IEnumerable<MarcaProtocoloEntity>> ListarMarcaProtocolo(string Grupo,string Campo)
+        {
+            IEnumerable<MarcaProtocoloEntity> lista = new List<MarcaProtocoloEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<MarcaProtocoloEntity>("SP_UNILENE_LO_VALORES_FORMATO_ITEM", new { Grupo,Campo }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
 
     }
 }

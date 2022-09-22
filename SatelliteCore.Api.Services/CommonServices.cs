@@ -253,5 +253,13 @@ namespace SatelliteCore.Api.Services
             return resultadoMaestroAlmacen;
         }
 
+        public async Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo,string Campo)
+        {
+            IEnumerable<MarcaProtocoloEntity> response = await _commonRepository.ListarMarcaProtocolo(Grupo,Campo);
+            ResponseModel<IEnumerable<MarcaProtocoloEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MarcaProtocoloEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoMaestroAlmacen;
+        }
+
     }
 }

@@ -24,5 +24,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato);
         public Task<int> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato);
         public Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo,string Tabla);
+        public Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos();
+        public Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra);
+        public Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra);
     }
 }

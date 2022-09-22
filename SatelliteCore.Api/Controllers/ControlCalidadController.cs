@@ -248,11 +248,25 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        /*[HttpGet("ListarAtributos")]
+        [HttpGet("ListarAtributos")]
         public async Task<IActionResult> ListarAtributos()
         {
-            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla);
+            IEnumerable<DatosFormatoTablaAbributoModel> response = await _controlCalidadServices.ListarAtributos();
             return Ok(response);
-        }*/
+        }
+
+        [HttpGet("ListarDescripcion")]
+        public async Task<IActionResult> ListarDescripcion(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadServices.ListarDescripcion(Marca, Hebra);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarLeyenda")]
+        public async Task<IActionResult> ListarLeyenda(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadServices.ListarLeyenda(Marca, Hebra);
+            return Ok(response);
+        }
     }
 }

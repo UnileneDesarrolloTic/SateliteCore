@@ -338,5 +338,45 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        public async Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos()
+        {
+           
+            IEnumerable<DatosFormatoTablaAbributoModel> result = new List<DatosFormatoTablaAbributoModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaAbributoModel>("SP_LISTAR_TPRO_CANTIDAD_AGUJAS", commandType: CommandType.StoredProcedure);
+
+            }
+            return result ;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca,string Hebra)
+        {
+
+            IEnumerable<DatosFormatoTablaDescripcionModel> result = new List<DatosFormatoTablaDescripcionModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaDescripcionModel>("SP_LISTAR_TPRO_DESCRIPCION", new { ID_MARCA = Marca , ID_HEBRA=Hebra } , commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra)
+        {
+
+            IEnumerable<DatosFormatoTablaLeyendaModel> result = new List<DatosFormatoTablaLeyendaModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaLeyendaModel>("SP_LISTAR_TPRO_LEYENDA", new { ID_MARCA = Marca, ID_HEBRA = Hebra }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+
     }
 }

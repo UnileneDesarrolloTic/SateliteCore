@@ -167,5 +167,13 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<IEnumerable<TablaEntity>> response = await _commonService.ListarTabla(Grupo);
             return Ok(response);
         }
+
+
+        [HttpGet("ListarMarcaProtocolo")]
+        public async Task<IActionResult> ListarMarcaProtocolo(string Grupo, string Campo)
+        {
+            ResponseModel<IEnumerable<MarcaProtocoloEntity>> response = await _commonService.ListarMarcaProtocolo(Grupo, Campo);
+            return Ok(response);
+        }
     }
 }

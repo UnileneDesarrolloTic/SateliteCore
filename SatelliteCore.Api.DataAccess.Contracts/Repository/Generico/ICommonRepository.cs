@@ -27,5 +27,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<bool> ValidacionPermisoAccesso(string Permiso, int idUsuario);
         public Task<IEnumerable<GrupoEntity>> ListarGrupo();
         public Task<IEnumerable<TablaEntity>> ListarTabla(string Grupo);
+        public Task<IEnumerable<MarcaProtocoloEntity>> ListarMarcaProtocolo(string Grupo,string Campo);
     }
 }

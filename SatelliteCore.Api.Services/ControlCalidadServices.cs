@@ -130,6 +130,23 @@ namespace SatelliteCore.Api.Services
             return result;
         }
 
+        public async Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos()
+        {
+            IEnumerable<DatosFormatoTablaAbributoModel> response = await _controlCalidadRepository.ListarAtributos();
+            return response;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadRepository.ListarDescripcion(Marca, Hebra);
+            return response;
+        }
+        public async Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadRepository.ListarLeyenda(Marca, Hebra);
+            return response;
+        }
+
 
     }
 }

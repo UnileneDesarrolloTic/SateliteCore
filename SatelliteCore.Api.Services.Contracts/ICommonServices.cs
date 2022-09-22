@@ -28,5 +28,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<bool>> ValidacionPermisoAccesso(string Permiso, int idUsuario);
         public Task<ResponseModel<IEnumerable<GrupoEntity>>> ListarGrupo();
         public Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo);
+        public Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo, string Campo);
     }
 }
