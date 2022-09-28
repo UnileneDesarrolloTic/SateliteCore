@@ -38,9 +38,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 {
                     titulo = "REPORTE GENERAL DE GUIAS PENDIENTES DE FACTURAR";
                 }
-                else
+                else if (dato.Tipo == "FA")
                 {
                     titulo = "REPORTE GENERAL DE GUIAS FACTURADAS";
+                }
+                else
+                {
+                    titulo = "";
                 }
 
 
@@ -88,45 +92,68 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
 
-                worksheet.Cells["H3"].Value = "PERSONA";
+                worksheet.Cells["H3"].Value = "E.FACTURA";
                 worksheet.Cells["H3"].Style.Font.Size = 10;
                 worksheet.Cells["H3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["I3"].Value = "RUC";
+                worksheet.Cells["I3"].Value = "PERSONA";
                 worksheet.Cells["I3"].Style.Font.Size = 10;
                 worksheet.Cells["I3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["J3"].Value = "NOMBRE_CLIENTE";
+                worksheet.Cells["J3"].Value = "NUMERO DE ORDEN";
                 worksheet.Cells["J3"].Style.Font.Size = 10;
                 worksheet.Cells["J3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["K3"].Value = "ESTADO";
+                worksheet.Cells["K3"].Value = "RUC";
                 worksheet.Cells["K3"].Style.Font.Size = 10;
                 worksheet.Cells["K3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["L3"].Value = "ULTIMO USUARIO";
+                worksheet.Cells["L3"].Value = "NOMBRE CLIENTE";
                 worksheet.Cells["L3"].Style.Font.Size = 10;
                 worksheet.Cells["L3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["M3"].Value = "PROCESO";
+                worksheet.Cells["M3"].Value = "ESTADO";
                 worksheet.Cells["M3"].Style.Font.Size = 10;
                 worksheet.Cells["M3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["N3"].Value = "E/PECOSA";
+                worksheet.Cells["N3"].Value = "ULTIMO USUARIO";
                 worksheet.Cells["N3"].Style.Font.Size = 10;
                 worksheet.Cells["N3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["O3"].Value = "E.LOGISTICA";
+                worksheet.Cells["O3"].Value = "PROCESO";
                 worksheet.Cells["O3"].Style.Font.Size = 10;
                 worksheet.Cells["O3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["O3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["P3"].Value = "E/PECOSA";
+                worksheet.Cells["P3"].Style.Font.Size = 10;
+                worksheet.Cells["P3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["P3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["Q3"].Value = "E.LOGISTICA";
+                worksheet.Cells["Q3"].Style.Font.Size = 10;
+                worksheet.Cells["Q3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["Q3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+
+                worksheet.Cells["R3"].Value = "E.SALIDA";
+                worksheet.Cells["R3"].Style.Font.Size = 10;
+                worksheet.Cells["R3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["R3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                worksheet.Cells["S3"].Value = "E.RETORNO";
+                worksheet.Cells["S3"].Style.Font.Size = 10;
+                worksheet.Cells["S3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["S3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+
 
                 int row = 4;
 
@@ -196,15 +223,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["G" + row].Style.Numberformat.Format = "dd/MM/yyyy";
                     worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                
 
-                    worksheet.Cells["H" + row].Value = item.Destinatario;
+                    worksheet.Cells["H" + row].Value = item.EstadoFacturacion;
                     worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["H" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["H" + row].Style.Font.Size = 10;
                     worksheet.Cells["H" + row].Style.WrapText = true;
                     worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["I" + row].Value = item.DestinatarioRUC;
+                    worksheet.Cells["I" + row].Value = item.Destinatario;
                     worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["I" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["I" + row].Style.Font.Size = 10;
@@ -212,7 +240,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
-                    worksheet.Cells["J" + row].Value = item.DestinatarioNombre;
+                    worksheet.Cells["J" + row].Value = item.ReferenciaNumeroOrden;
                     worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["J" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["J" + row].Style.Font.Size = 10;
@@ -221,44 +249,74 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
 
 
-                    worksheet.Cells["K" + row].Value = item.EstadoGuia;
+                    worksheet.Cells["K" + row].Value = item.DestinatarioRUC;
                     worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["K" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["K" + row].Style.Font.Size = 10;
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["L" + row].Value = item.UltimoUsuario;
+                    worksheet.Cells["L" + row].Value = item.DestinatarioNombre;
                     worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["L" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["L" + row].Style.Font.Size = 10;
                     worksheet.Cells["L" + row].Style.WrapText = true;
                     worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["M" + row].Value = item.LicitacionNumeroProceso;
+                    worksheet.Cells["M" + row].Value = item.EstadoGuia;
                     worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["M" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["M" + row].Style.Font.Size = 10;
                     worksheet.Cells["M" + row].Style.WrapText = true;
                     worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["N" + row].Value = item.ReprogramacionPuntoPartida;
+                    worksheet.Cells["N" + row].Value = item.UltimoUsuario;
                     worksheet.Cells["N" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["N" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["N" + row].Style.Font.Size = 10;
                     worksheet.Cells["N" + row].Style.WrapText = true;
                     worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["O" + row].Value = item.EstadoLogistica;
+                    worksheet.Cells["O" + row].Value = item.LicitacionNumeroProceso;
                     worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["O" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["O" + row].Style.Font.Size = 10;
                     worksheet.Cells["O" + row].Style.WrapText = true;
                     worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    worksheet.Cells["P" + row].Value = item.ReprogramacionPuntoPartida;
+                    worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["P" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["P" + row].Style.Font.Size = 10;
+                    worksheet.Cells["P" + row].Style.WrapText = true;
+                    worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells["Q" + row].Value = item.EstadoLogistica;
+                    worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["Q" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["Q" + row].Style.Font.Size = 10;
+                    worksheet.Cells["Q" + row].Style.WrapText = true;
+                    worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells["R" + row].Value = item.FechaRecepcion;
+                    worksheet.Cells["R" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["R" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["R" + row].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells["R" + row].Style.Font.Size = 10;
+                    worksheet.Cells["R" + row].Style.WrapText = true;
+                    worksheet.Cells["R" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells["S" + row].Value = item.FechaRetorno;
+                    worksheet.Cells["S" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["S" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["S" + row].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells["S" + row].Style.Font.Size = 10;
+                    worksheet.Cells["S" + row].Style.WrapText = true;
+                    worksheet.Cells["S" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                     if (item.ComentariosEntrega)
                     {
-                        worksheet.Cells["A" + row + ":O" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#60D460"));
+                        worksheet.Cells["A" + row + ":S" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#60D460"));
                     }
 
                     row++;
@@ -306,20 +364,24 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(5).Width = 10.43 + 2.71;
             worksheet.Column(6).Width = 10.43 + 2.71;
             worksheet.Column(7).Width = 9.86 + 2.71;
-            worksheet.Column(8).Width = 7.43 + 2.71;
-            worksheet.Column(9).Width = 11.29 + 2.71;
-            worksheet.Column(10).Width = 45 + 2.71;
-            worksheet.Column(11).Width = 6.29 + 2.71;
-            worksheet.Column(12).Width = 8.43 + 2.71;
+            worksheet.Column(8).Width = 9.43 + 2.71;
+            worksheet.Column(9).Width = 9.29 + 2.71;
+            worksheet.Column(10).Width = 9.29 + 2.71;
+            worksheet.Column(11).Width = 9.29 + 2.71;
+            worksheet.Column(12).Width = 45.43 + 2.71;
             worksheet.Column(13).Width = 8.43 + 2.71;
             worksheet.Column(14).Width = 8.43 + 2.71;
             worksheet.Column(15).Width = 10.43 + 2.71;
+            worksheet.Column(16).Width = 10.43 + 2.71;
+            worksheet.Column(17).Width = 10.43 + 2.71;
+            worksheet.Column(16).Width = 10.43 + 2.71;
+            worksheet.Column(17).Width = 10.43 + 2.71;
 
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A1:N1"].Merge = true;
+            worksheet.Cells["A1:S1"].Merge = true;
         }
 
         private static void BordesCeldas(ExcelWorksheet worksheet)
@@ -330,7 +392,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
         private static void PintarCeldas(ExcelWorksheet worksheet)
         {
             // worksheet.Cells["N14,J5"].Style.Font.UnderLine = true;
-            worksheet.Cells["A3:O3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A3:S3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
 
         }
         private static void TextoNegrita(ExcelWorksheet worksheet)

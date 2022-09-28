@@ -6,9 +6,11 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
+using System.Security.Claims;
+
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -52,7 +54,42 @@ namespace SatelliteCore.Api.Controllers
             
             return Ok(result);
         }
-        
+
+        [HttpGet("ObtenerTipoUsuario")]
+        public async Task<IActionResult> ObtenerTipoUsuario(int NumeroProceso, int Item, string Mes)
+        {
+            if (NumeroProceso == 0)
+                throw new ValidationModelException("El Numero de Proceso Es Obligatorio");
+
+            IEnumerable<string> result = await _licitacionesServices.ObtenerTipoUsuario(NumeroProceso, Item, Mes);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("BuscarOrdenCompraLicitaciones")]
+        public async Task<IActionResult> BuscarOrdenCompraLicitaciones( int NumeroProceso, int NumeroEntrega, int Item, string TipoUsuario)
+        {
+            if (NumeroProceso == 0)
+                throw new ValidationModelException("El Numero de Proceso Es Obligatorio");
+
+            ResponseModel<DatosFormatoBuscarOrdenCompraLicitacionesModel> result = await _licitacionesServices.BuscarOrdenCompraLicitaciones(NumeroProceso, NumeroEntrega,Item,TipoUsuario);
+            return Ok(result);
+        }
+
+
+        [HttpPost("RegistrarOrdenCompra")]
+        public async Task<IActionResult> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato)
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            int idUsuario = int.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            ResponseModel<string> result = await _licitacionesServices.RegistrarOrdenCompra(dato, idUsuario);
+            return Ok(result);
+        }
+
+
+
 
         [HttpPost("RegistrarDistribuccionProceso")]
         public async Task<IActionResult> RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato)
@@ -109,6 +146,13 @@ namespace SatelliteCore.Api.Controllers
         public async Task<IActionResult> RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato)
         {
             ResponseModel<string> result = await _licitacionesServices.RegistrarContratoProceso(dato);
+            return Ok(result);
+        }
+
+        [HttpGet("DashboardLicitacionesExportar")]
+        public  async Task<IActionResult> DashboardLicitacionesExportar()
+        {
+            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar();
             return Ok(result);
         }
     }

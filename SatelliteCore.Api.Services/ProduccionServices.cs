@@ -1,7 +1,9 @@
-﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -111,5 +113,86 @@ namespace SatelliteCore.Api.Services
 
             return productosMPArima.Productos;
         }
+
+        public async Task<ResponseModel<string>> CompraMateriaPrimaExportar(PronosticoCompraMP dato)
+        {
+            SeguimientoComprasMPArima productosMPArima = await _pronosticoRepository.SeguimientoCompraMPArima(dato);
+            List<DCompraMPArimaModel> aux = null;
+            List<CompraMPArimaDetalleControlCalidad> auxcalidad = null;
+            foreach (CompraMPArimaModel pronostico in productosMPArima.Productos)
+            {
+                aux = null;
+                auxcalidad = null;
+                aux = productosMPArima.DetalleTransito.FindAll(x => x.Item == pronostico.Item);
+                auxcalidad = productosMPArima.DetalleCalidad.FindAll(x => x.Item == pronostico.Item);
+
+                if (aux.Count > 0)
+                    pronostico.DetalleCompra.AddRange(aux);
+
+                if (auxcalidad.Count > 0)
+                    pronostico.DetalleCalidad.AddRange(auxcalidad);
+            }
+
+            ReporteExcelCompraArima ExporteCompraArima = new ReporteExcelCompraArima();
+            string reporte = ExporteCompraArima.GenerarReporte(productosMPArima);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+            return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<FormatoEstructuraLoteEtiquetas>> LoteFabricacionEtiquetas(string NumeroLote)
+        {
+            FormatoEstructuraLoteEtiquetas response = await _pronosticoRepository.LoteFabricacionEtiquetas(NumeroLote);
+            return new ResponseModel<FormatoEstructuraLoteEtiquetas>(true, Constante.MESSAGE_SUCCESS, response);
+        }
+
+
+        public async Task<ResponseModel<string>> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato,int idUsuario)
+        {
+            int response = await _pronosticoRepository.RegistrarLoteFabricacionEtiquetas(dato, idUsuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
+        }
+
+        public async Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado()
+        {
+            return await _pronosticoRepository.ListarLoteEstado();
+        }
+
+        public async Task<ResponseModel<string>> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato)
+        {
+            int response = await _pronosticoRepository.ModificarLoteEstado(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        {
+            return await _pronosticoRepository.ListarItemOrdenCompra(Origen, Anio, Regla);
+        }
+
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
+        {
+            return await _pronosticoRepository.BuscarItemOrdenCompra(Item,Anio);
+        }
+
+        public async Task<ResponseModel<string>> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
+        {
+                   await _pronosticoRepository.ActualizarFechaPrometida(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra)
+        {
+            (object cabecera, object detalle)  response = await _pronosticoRepository.VisualizarOrdenCompra(OrdenCompra);
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> ActualizarFechaPrometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
+        {
+            await _pronosticoRepository.ActualizarFechaComprometidaMasiva(dato);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
     }
 }

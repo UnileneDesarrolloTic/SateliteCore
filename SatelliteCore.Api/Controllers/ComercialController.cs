@@ -188,6 +188,23 @@ namespace SatelliteCore.Api.Controllers
             }
         }
 
+        [HttpPost("ListarProtocoloAnalisisExportar")]
+        public async Task<ActionResult> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
+        {
+            try
+            {
+                ResponseModel<string> result = await _comercialServices.ListarProtocoloAnalisisExportar(datos);
+                return Ok(result);
+               
+            }
+            catch (Exception ex)
+            {
+                ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+
         [HttpPost("ListarClientes")]
         public async Task<ActionResult> ListarClientes()
         {
@@ -216,12 +233,12 @@ namespace SatelliteCore.Api.Controllers
         }
 
        [HttpPost("NumerodeGuiaLicitacion")]
-       public async Task<ActionResult> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> datos)
+       public async Task<ActionResult> NumerodeGuiaLicitacion(ListarOpcionesImprimir datos)
         {
           
             try
             {
-                if (datos.Count == 0)
+                if (datos.ListaGuias.Count == 0)
                 {
                     throw new ValidationModelException("Debe Seleccionar una o varias guias");
                   

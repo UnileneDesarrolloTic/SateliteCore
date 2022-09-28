@@ -122,5 +122,167 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+
+
+        public async Task<FormatoEstructuraLoteEtiquetas> LoteFabricacionEtiquetas(string NumeroLote)
+        {
+            FormatoEstructuraLoteEtiquetas result = new FormatoEstructuraLoteEtiquetas();
+
+            string sql = "SELECT FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal,  " +
+                         "RTRIM(c.NombreCompleto) Cliente,RTRIM(a.NUMEROLOTE) OrdenFabricacion, SUBSTRING(RTRIM(a.REFERENCIANUMERO), 1, 8) Lote  , a.transferidoflag " +
+                         "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
+                         "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
+                         "WHERE a.REFERENCIANUMERO = @NumeroLote AND a.ESTADO <> 'AN' ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await context.QueryFirstOrDefaultAsync<FormatoEstructuraLoteEtiquetas>(sql, new { NumeroLote });
+
+            }
+
+            return result;
+        }
+
+        public async Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario)
+        {
+            int result = 1;
+            string sql = "INSERT INTO TBMPRLoteEstado (Lote,OrdenFabricacion,FechaRegistro,Estado,Usuario) VALUES (@lote,@ordenFabricacion,GETDATE(),'A',@idUsuario) " +
+                          "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET transferidoflag='N' WHERE REFERENCIANUMERO = @lote";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                foreach (DatosEstructuraLoteEtiquetasModel item in dato)
+                {
+                    await connection.ExecuteAsync(sql, new { item.lote, item.ordenFabricacion, idUsuario });
+                }
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado()
+        {
+            IEnumerable<DatoFormatoLoteEstado> result = new List<DatoFormatoLoteEstado>();
+
+            string sql = "select a.Id, a.Lote,a.OrdenFabricacion,FechaRegistro ,a.Estado, RTRIM(b.CodigoUsuario) Usuario FROM TBMPRLoteEstado a " +
+                         "LEFT JOIN PROD_UNILENE2..Empleadomast b ON a.Usuario = b.Empleado " +
+                         "WHERE a.Estado <> 'I'";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                result = await context.QueryAsync<DatoFormatoLoteEstado>(sql);
+
+            }
+            return result;
+        }
+
+
+        public async Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato)
+        {
+            int result = 1;
+            string sql = "UPDATE TBMPRLoteEstado set Estado='I' where id=@id " +
+                         "UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET TRANSFERIDOFLAG = 'S' where REFERENCIANUMERO = @lote";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                
+                    await connection.ExecuteAsync(sql, new { dato.id, dato.lote });
+              
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        {
+            DatosFormatoInformacionCalendarioSeguimientoOC result = new DatosFormatoInformacionCalendarioSeguimientoOC();
+
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Origen, Anio, Regla }, commandType: CommandType.StoredProcedure);
+                result.Calendario = multi.Read<DatosFormatoCalentarioSeguimientoOC>().ToList();
+                result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
+
+            }
+            return result;
+        }
+
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
+        {
+            DatosFormatoInformacionItemOrdenCompra result = new DatosFormatoInformacionItemOrdenCompra();
+
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Buscar_Item_Orden_Compra", new { Item, Anio }, commandType: CommandType.StoredProcedure);
+                result.informacionItem = multi.Read<FormatoDatoInformacionItem>().ToList();
+                result.ListaOrdenCompra = multi.Read<FormatoDatosOrdenCompraItem>().ToList();
+                result.Detalle = multi.Read<object>().ToList();
+
+            }
+
+            return result;
+        }
+
+        public async Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
+        {
+            int result=0;
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { dato.fechaPrometida, dato.item , dato.numeroOrden});
+            }
+
+            return result;
+        }
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra)
+        {
+            (object cabecera, object detalle) datosOrdenCompra;
+
+            string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, FechaEnvioProveedor ,a.Estado " +
+                            "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
+                            "WHERE NumeroOrden = @OrdenCompra  " +
+                            "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, RTRIM(UnidadCodigo) UnidadCodigo, CantidadPedida , CantidadRecibida , Estado , FechaPrometida , CAST(0 AS BIT) isSelected   " +
+                            "FROM PROD_UNILENE2..WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using var result =  await context.QueryMultipleAsync(script, new { OrdenCompra });
+                datosOrdenCompra.cabecera = result.Read().FirstOrDefault();
+                datosOrdenCompra.detalle = result.Read().ToList();
+            }
+
+            return datosOrdenCompra;
+        }
+
+        public async Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
+        {
+            int result = 0;
+            //string scriptCabecera = "UPDATE PROD_UNILENE2..WH_OrdenCompra SET FechaEnvioProveedor=@FechaLlegada WHERE NumeroOrden=@Documento ";
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden=@NumeroOrden  AND Item=@Item AND estado<>'CO' ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+               // await context.ExecuteAsync(scriptCabecera, new { dato.FechaLlegada ,dato.Documento});
+               foreach(DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)
+                {
+                    await context.ExecuteAsync(script, new { item.NumeroOrden, item.Item, dato.FechaLlegada });
+                }
+               
+            }
+
+            return result;
+
+        }
+
+
     }
 }

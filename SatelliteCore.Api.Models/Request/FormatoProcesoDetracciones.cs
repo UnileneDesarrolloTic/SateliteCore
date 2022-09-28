@@ -8,7 +8,7 @@ namespace SatelliteCore.Api.Models.Request
     public class FormatoProcesoDetracciones
     {   
         public string periodo { get; set; }
-        public int totalimporte { get; set; }
+        public string totalimporte { get; set; }
         public List<ProcesoDetraccionesModel> proceso { get; set; }
     }
     public class ProcesoDetraccionesModel

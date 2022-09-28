@@ -11,6 +11,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 {
     public class ActaVerificacioncc
     {
-        public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias)
+        public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias, ListarOpcionesImprimir dato)
         {
+            //DOCUMENTO QUE TIENE TRUE 
+            Boolean documentoActaCC = dato.Acta;
+            Boolean documentoCondiciones = dato.Condicion;
+            Boolean documentoProtocolo = dato.Protocolo;
+            Boolean documentoRsanitario = dato.Carta;
+            Boolean documentoBPA = dato.practicas;
+            Boolean documentoManufactura = dato.Manufactura;
+
             string fechahoy = DateTime.Today.ToLongDateString().ToString();
             string[] separarfecha = fechahoy.Split(',');
             string fechaFinal = "Lima," + separarfecha[1];
@@ -30,21 +39,75 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             int contadoArray = NumeroGuias.Count;
             string reporte = null;
            
+           
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdf = new PdfDocument(writer);
-
             PdfDocumentInfo docInfo = pdf.GetDocumentInfo();
             docInfo.SetTitle("Licitaciones");
             docInfo.SetAuthor("Sistema Licitaciones");
 
-            Document document = new Document(pdf, PageSize.A4.Rotate());
+           
+            Document document = new Document(pdf, documentoActaCC ? PageSize.A4.Rotate() : PageSize.A4);
+            //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterProtocolos(document, prueba));
+
 
             document.SetMargins(5, 15, 30, 15);
+
+            string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+            string Conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocolo.png");
+            string FirmaLiliaHurtado= System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
+            string FirmaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
+
+            string CertificadoBPA = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPA1310-21.jpg");
+            string ManufacturaP1 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPMN0762021P1.jpg");
+            string ManufacturaP2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPMN0762021P2.jpg");
+
+
+            Image imgFirmaLiliaHurtado = new Image(ImageDataFactory
+              .Create(FirmaLiliaHurtado))
+              .SetWidth(150)
+              .SetHeight(65)
+              .SetMarginBottom(0)
+              .SetPadding(0)
+              .SetTextAlignment(TextAlignment.CENTER);
+
+            Image imgFirmaFirmaMilagrosMunoz = new Image(ImageDataFactory
+              .Create(FirmaFirmaMilagrosMunoz))
+              .SetWidth(150)
+              .SetHeight(65)
+              .SetMarginBottom(0)
+              .SetPadding(0)
+              .SetTextAlignment(TextAlignment.CENTER);
+
+            Image imgCertificadoBPA = new Image(ImageDataFactory
+            .Create(CertificadoBPA))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
+
+            Image imgManufacturaP1 = new Image(ImageDataFactory
+            .Create(ManufacturaP1))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
+
+            Image imgManufacturaP2 = new Image(ImageDataFactory
+            .Create(ManufacturaP2))
+            .ScaleAbsolute(550f, 850f)
+            .SetMarginBottom(0)
+            .SetPadding(0)
+            .SetTextAlignment(TextAlignment.RIGHT);
+
+
+
 
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
                 string Entrega = "";
+                
 
                 switch (cabecera.NumeroEntrega)
                 {
@@ -89,16 +152,68 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                         break;
                 }
 
+              
 
-                GenerarPdf(document, cabecera, Entrega,fechaFinal);
+                if (documentoActaCC)
+                    GenerarPdf(document, cabecera, Entrega, fechaFinal);
+
+                if (documentoCondiciones)
+                {
+                    if (documentoActaCC)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    Compromiso(document, cabecera, rutaUnilene, fechaFinal);
+                    document.Add(new AreaBreak(PageSize.A4));
+                    Condiciones(document, cabecera, rutaUnilene, fechaFinal);
+                }
+
+                if (documentoRsanitario)
+                {
+                    if (documentoActaCC || documentoCondiciones)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    Carta(document, cabecera, rutaUnilene, fechaFinal);
+                }
+
+                
+                if (cabecera.DetalleGuia[0].DetalleProtocolo.Count > 0 )
+                    if (documentoProtocolo)
+                    {   
+                        if (documentoActaCC || documentoCondiciones || documentoRsanitario)
+                            document.Add(new AreaBreak(PageSize.A4));
+
+                        Protocolo(document, cabecera, rutaUnilene, fechaFinal, Conclusion , imgFirmaLiliaHurtado , imgFirmaFirmaMilagrosMunoz);
+                    }
+
+                if (documentoBPA)
+                {
+                    if (documentoActaCC || documentoCondiciones || documentoRsanitario)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    buenaspracticasalmacenamiento(document,imgCertificadoBPA);
+                }
+
+                if (documentoManufactura)
+                {
+                    if (documentoActaCC || documentoCondiciones || documentoRsanitario)
+                        document.Add(new AreaBreak(PageSize.A4));
+
+                    DocumentoManufactura(document, imgManufacturaP1, imgManufacturaP2);
+                }
+
 
                 if (contador < contadoArray - 1)
                 {
                     document.Add(new AreaBreak());
                 }
+
+                
                 contador++;
 
             }
+
+            
+
 
             document.Close();
 
@@ -123,6 +238,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+            
+
 
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
@@ -582,12 +699,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
             tablaDatosFirma.SetFixedLayout().SetFontSize(9);
 
-            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
+            
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
 
             Image img2 = new Image(ImageDataFactory
                .Create(rutaUnilene2))
-               .SetWidth(100)
-               .SetHeight(25)
+               .SetWidth(135)
+               .SetHeight(50)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetBorder(Border.NO_BORDER)
@@ -616,11 +734,23 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
               .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
-            /* cellFirma = new Cell(1, 1).Add(img2)
+             cellFirma = new Cell(1, 1).Add(new Paragraph(""))
                           .SetTextAlignment(TextAlignment.CENTER)
                           .SetBorder(Border.NO_BORDER)
                           .SetPaddingLeft(20);
-             tablaDatosFirma.AddCell(cellFirma);*/
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(new Paragraph(""))
+                         .SetTextAlignment(TextAlignment.CENTER)
+                         .SetBorder(Border.NO_BORDER)
+                         .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            cellFirma = new Cell(1, 1).Add(img2)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetBorder(Border.NO_BORDER)
+                        .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
 
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("_______________________________________________________________")
@@ -681,18 +811,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosinformacion.AddCell(cellInformacion);
 
             document.Add(tablaDatosinformacion);
-            document.Add(saltoLinea);
+           
 
-            document.Add(new AreaBreak(PageSize.A4));
+           /* document.Add(new AreaBreak(PageSize.A4));
             Compromiso(document, cabecera, rutaUnilene, fechaFinal);
             document.Add(new AreaBreak(PageSize.A4));
-            Condiciones(document, cabecera, rutaUnilene, fechaFinal);
+            Condiciones(document, cabecera, rutaUnilene, fechaFinal);*/
 
         }
 
         public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
-
+           
 
             Color bgColour = new DeviceRgb(161, 205, 241);
 
@@ -816,11 +946,29 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
+            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(FirmaLicitaciones))
+               .SetWidth(135)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
             //tabla 4
-            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
 
             Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+             .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
@@ -831,7 +979,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
-            .SetBorder(Border.NO_BORDER);
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(10) ;
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(img2)
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(100);
             tablaDatosFecha.AddCell(cellFecha);
 
             document.Add(tablaDatosFecha);
@@ -1036,8 +1191,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
+
+            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(FirmaLicitaciones))
+               .SetWidth(135)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+
             //tabla 4
-            Table tablaDatosFecha = new Table(1).UseAllAvailableWidth();
+            Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
 
             Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
@@ -1048,10 +1216,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosFecha.AddCell(cellFecha);
 
 
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+              .AddStyle(estiloTexto))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
             cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(img2)
+          .SetBorder(Border.NO_BORDER)
+          .SetMarginTop(100);
+
             tablaDatosFecha.AddCell(cellFecha);
 
             document.Add(tablaDatosFecha);
@@ -1072,6 +1252,834 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
         }
+
+        public void Carta(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
+        {
+            Color bgColour = new DeviceRgb(161, 205, 241);
+
+
+            Image img = new Image(ImageDataFactory
+               .Create(rutaUnilene))
+               .SetWidth(150)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+            document.Add(img);
+
+            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+
+            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            Paragraph saltoLinea = new Paragraph(new Text("\n"));
+            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
+
+            Style estiloTitulo = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetMarginTop(-3)
+                .SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.CENTER);
+
+            Style estiloCabecera = new Style()
+                .SetFontSize(10)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloNegrita = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloTexto = new Style()
+                .SetFontSize(9)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloFechaVerificacion = new Style()
+                .SetFontSize(6)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Paragraph titulo1 = new Paragraph("CARTA DE GARANTÍA DE CALIDAD DE LOS PRODUCTOS OFERTADOS").AddStyle(estiloTitulo).SetMarginTop(10);
+            Paragraph titulo2 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
+
+            document.Add(saltoLinea);
+            document.Add(titulo1);
+            document.Add(titulo2);
+
+
+            Table tablaDatosGenerales = new Table(1).UseAllAvailableWidth();
+            tablaDatosGenerales.SetFixedLayout();
+
+            Cell cellDG = new Cell(1, 1).Add(new Paragraph("Señores:")
+              .AddStyle(estiloCabecera))
+              .SetTextAlignment(TextAlignment.LEFT)
+              .SetBorder(Border.NO_BORDER);
+
+            tablaDatosGenerales.AddCell(cellDG);
+
+            cellDG = new Cell(1, 1).Add(new Paragraph(cabecera.Region)
+             .AddStyle(estiloCabecera))
+             .SetTextAlignment(TextAlignment.LEFT)
+             .SetBorder(Border.NO_BORDER);
+            tablaDatosGenerales.AddCell(cellDG);
+
+            document.Add(tablaDatosGenerales);
+
+            Table tablaDatosParrafo = new Table(1).UseAllAvailableWidth();
+            tablaDatosParrafo.SetFixedLayout();
+
+            Cell cellPresente = new Cell(1, 1).Add(new Paragraph("Presente")
+                .AddStyle(estiloTexto))
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetBorder(Border.NO_BORDER);
+            tablaDatosParrafo.AddCell(cellPresente);
+
+            cellPresente = new Cell(1, 1).Add(new Paragraph("De Nuestra consideración: ")
+               .AddStyle(estiloTexto))
+               .SetTextAlignment(TextAlignment.LEFT)
+               .SetBorder(Border.NO_BORDER)
+               .SetPaddingBottom(20);
+            tablaDatosParrafo.AddCell(cellPresente);
+
+            document.Add(tablaDatosParrafo);
+
+
+
+            Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
+            tablaDatosContenido.SetFixedLayout();
+
+            Cell cellContenido = new Cell(1, 1).Add(new Paragraph("Tenemos el agrado de dirigirnos a ustedes para saludarlos muy cordialmente y a la vez informarles que nuestra empresa ").Add(new Paragraph("UNILENE S.A.C").AddStyle(estiloNegrita)).Add(new Paragraph(", identificada con RUC Nº 20197705249, con domicilio en Jr. Napo Nº 450 Breña,").Add(new Paragraph("GARANTIZA").AddStyle(estiloNegrita)).Add(" que los productos que internamos son de primera calidad tal como lo ACREDITAN nuestros certificados de Buenas Prácticas de Manufactura BPM Nº 076-2021 y de Buenas Prácticas de Almacenamiento BPA Nº 1310-2021."))
+              .AddStyle(estiloTexto))
+              .SetTextAlignment(TextAlignment.JUSTIFIED)
+              .SetBorder(Border.NO_BORDER)
+               .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            cellContenido = new Cell(1, 1).Add(new Paragraph("Asimismo, informamos que las condiciones de embalaje son en cajas de cartón y que el transporte es de mayor seguridad, cualquier reclamo de los productos entregados correspondiente a orden de compra ").Add(new Paragraph("Nº "+ cabecera.OrdenCompra).AddStyle(estiloNegrita)).Add (" serán cambiados dentro de las (24) veinticuatro horas siguientes")
+             .AddStyle(estiloTexto))
+             .SetTextAlignment(TextAlignment.JUSTIFIED)
+             .SetBorder(Border.NO_BORDER)
+              .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            cellContenido = new Cell(1, 1).Add(new Paragraph("La garantía de nuestros productos es de 4 años.")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.JUSTIFIED)
+            .SetBorder(Border.NO_BORDER)
+            .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            cellContenido = new Cell(1, 1).Add(new Paragraph("Sin otro particular y agradeciendo la atención que se sirva brindar a la presente, quedamos de ustedes")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.JUSTIFIED)
+            .SetBorder(Border.NO_BORDER)
+            .SetPaddingBottom(20);
+            tablaDatosContenido.AddCell(cellContenido);
+
+            document.Add(tablaDatosContenido);
+            document.Add(saltoLinea);
+
+            //tabla 4
+            Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
+            tablaDatosFecha.SetFixedLayout();
+
+            Cell cellFecha = new Cell(1, 1).Add(new Paragraph("Atentamente,")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+             .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph("")
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+             .SetPaddingBottom(20);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph(fechaFinal)
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(10);
+            tablaDatosFecha.AddCell(cellFecha);
+
+
+            cellFecha = new Cell(1, 1).Add(new Paragraph(""))//imagen
+            .SetBorder(Border.NO_BORDER)
+            .SetMarginTop(100);
+            tablaDatosFecha.AddCell(cellFecha);
+
+            document.Add(tablaDatosFecha);
+            document.Add(saltoLinea);
+
+            Table tablaDatosinformacion = new Table(1).UseAllAvailableWidth();
+            tablaDatosinformacion.SetFixedLayout().SetFontSize(9);
+
+            Cell cellInformacion = new Cell(1, 1).Add(new Paragraph("Unilene S.A.C \n Jr Napo 450, Lima 05 - Peru \n Phone: 997509088 \n www.unilene.com \n info@unilene.com")
+                  .AddStyle(estiloTexto))
+                  .SetTextAlignment(TextAlignment.LEFT)
+                  .SetBorder(Border.NO_BORDER);
+            tablaDatosinformacion.AddCell(cellInformacion);
+
+            document.Add(tablaDatosinformacion);
+            document.Add(saltoLinea);
+
+
+        }
+
+        public void Protocolo(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal, string Conclusion, Image imgFirmaLiliaHurtado, Image imgFirmaFirmaMilagrosMunoz)
+        {
+
+            Color bgColorfondo = new DeviceRgb(217, 217, 217);
+
+            string imagenFlooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");
+            Image imagenFlooterss = new Image(ImageDataFactory
+             .Create(imagenFlooter))
+             .SetWidth(400)
+             .SetHeight(15)
+             .SetMarginBottom(0)
+             .SetPadding(0)
+             .ScaleAbsolute(50f, 50f)
+             .SetTextAlignment(TextAlignment.CENTER);
+
+            Table PiePagina = new Table(2).UseAllAvailableWidth();
+            PiePagina.SetFixedLayout();
+
+
+            Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
+            .SetFixedPosition(0f, document.GetBottomMargin()-2, 0f)
+            .SetBorder(Border.NO_BORDER);
+
+            PiePagina.AddCell(cellFPiePagina);
+
+            document.Add(PiePagina);
+
+            Image img = new Image(ImageDataFactory
+               .Create(rutaUnilene))
+               .SetWidth(150)
+               .SetHeight(50)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+
+            Image imgConclusion = new Image(ImageDataFactory
+               .Create(Conclusion))
+               .SetWidth(560)
+               .SetHeight(40)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+
+            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+
+            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            Paragraph saltoLinea = new Paragraph(new Text("\n"));
+            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
+
+            Style estiloTitulo = new Style()
+                .SetFontSize(14)
+                .SetFont(fuenteNegrita)
+                .SetMarginTop(-3)
+                .SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.CENTER);
+
+
+            Style estiloCabeceraSubtituloLote = new Style()
+               .SetFontSize(14)
+               .SetFont(fuenteNegrita)
+               .SetMarginTop(-3)
+               .SetFontColor(ColorConstants.BLACK)
+               .SetTextAlignment(TextAlignment.RIGHT);
+
+            Style estiloCabeceraSubtituloCodsut = new Style()
+                .SetFontSize(10)
+                .SetFont(fuenteNormal)
+                .SetMarginTop(9)
+                .SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.RIGHT);
+
+
+            Style estiloCabeceraVariable = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloTexto = new Style()
+                .SetFontSize(9)
+                .SetFont(fuenteNormal)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloNegrita = new Style()
+                .SetFontSize(10)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloTextoDetalleProtocolo = new Style()
+                .SetFontSize(7)
+                .SetFont(fuenteNormal)
+                .SetFontColor(ColorConstants.BLACK);
+
+            Style estiloNegritaDetalleProtocolo = new Style()
+                .SetFontSize(7)
+                .SetFont(fuenteNegrita)
+                .SetFontColor(ColorConstants.BLACK);
+
+
+
+
+            //CABECERA 
+            Table tablaDatosTitulo = new Table(3).UseAllAvailableWidth();
+            tablaDatosTitulo.SetFixedLayout();
+
+            Cell cellTitulo = new Cell(1, 1).Add(img)
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaDatosTitulo.AddCell(cellTitulo);
+
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("PROTOCOLO DE ANÁLISIS")
+            .AddStyle(estiloTitulo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetBorder(Border.NO_BORDER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            tablaDatosTitulo.AddCell(cellTitulo);
+
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + cabecera.DetalleGuia[0].DetalleProtocolo[0].NumeroLote + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].ItemNumeroParte + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
+            .SetTextAlignment(TextAlignment.RIGHT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetBorder(Border.NO_BORDER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            tablaDatosTitulo.AddCell(cellTitulo);
+
+            document.Add(tablaDatosTitulo);
+
+
+            Table tablaDatosdeCabecera = new Table(6).UseAllAvailableWidth();
+            tablaDatosTitulo.SetFixedLayout().SetPaddingBottom(3);
+
+
+            Cell cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Producto:")
+           .AddStyle(estiloCabeceraVariable))
+           .SetTextAlignment(TextAlignment.LEFT)
+           .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+           .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+           .SetBorderRight(Border.NO_BORDER)
+           .SetBorderBottom(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].DescripcionLocal)
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("")
+            .AddStyle(estiloTitulo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER); ;
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("")
+            .AddStyle(estiloTitulo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER); ;
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentación")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER);
+
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].Presentacion)
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Fecha de Fabricación:")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].FechaFabricacion.ToString("dd'/'MM'/'yyyy"))
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderLeft(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("N° de Lote:")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].NumeroLote)
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Tamaño de Lote : ")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER); ;
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].TamanoLote.ToString("N"))
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Fecha de Expira:")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].FechaExpira.ToString("dd'/'MM'/'yyyy"))
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Marca:")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].Marca)
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Fecha de Análisis:")
+            .AddStyle(estiloCabeceraVariable))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER); ;
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].FechaAnalisis.ToString("dd'/'MM'/'yyyy"))
+            .AddStyle(estiloTexto))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderLeft(Border.NO_BORDER);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+
+            document.Add(tablaDatosdeCabecera);
+
+            Table tablaDetalleProtocolo = new Table(9).UseAllAvailableWidth();
+            tablaDetalleProtocolo.SetFixedLayout();
+
+            Cell cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph("Pruebas Efectuadas")
+            .AddStyle(estiloNegritaDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBackgroundColor(bgColorfondo);
+            tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+            cellDetalleProtocolo = new Cell(1, 4).Add(new Paragraph("Especificaciones")
+            .AddStyle(estiloNegritaDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBackgroundColor(bgColorfondo);
+            tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+            cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph("Resultados")
+            .AddStyle(estiloNegritaDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBackgroundColor(bgColorfondo);
+            tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+            cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph("Metodologia")
+            .AddStyle(estiloNegritaDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER)
+            .SetBackgroundColor(bgColorfondo);
+            tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+
+            //FOREARCH
+            foreach (FormatoReporteProtocoloModel item in cabecera.DetalleGuia[0].DetalleProtocolo)
+            {
+                cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph(item.Prueba)
+               .AddStyle(estiloTextoDetalleProtocolo))
+               .SetTextAlignment(TextAlignment.LEFT)
+               .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+               .SetVerticalAlignment(VerticalAlignment.TOP)
+               .SetPaddingBottom(3)
+               .SetBorderLeft(Border.NO_BORDER)
+               .SetBorderBottom(Border.NO_BORDER)
+               .SetBorderTop(Border.NO_BORDER)
+               .SetBorderRight(Border.NO_BORDER);
+                tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+                cellDetalleProtocolo = new Cell(1, 4).Add(new Paragraph(item.Especificacion)
+                .AddStyle(estiloTextoDetalleProtocolo))
+                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.TOP)
+                .SetPaddingBottom(3)
+                .SetBorderLeft(Border.NO_BORDER)
+                .SetBorderBottom(Border.NO_BORDER)
+                .SetBorderTop(Border.NO_BORDER)
+                .SetBorderRight(Border.NO_BORDER);
+                tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.Resultado)
+                .AddStyle(estiloTextoDetalleProtocolo))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.TOP)
+                .SetPaddingBottom(3)
+                .SetBorderLeft(Border.NO_BORDER)
+                .SetBorderBottom(Border.NO_BORDER)
+                .SetBorderTop(Border.NO_BORDER)
+                .SetBorderRight(Border.NO_BORDER);
+                tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+
+                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.Metodologia)
+                .AddStyle(estiloTextoDetalleProtocolo))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetVerticalAlignment(VerticalAlignment.TOP)
+                .SetPaddingBottom(3)
+                .SetBorderLeft(Border.NO_BORDER)
+                .SetBorderBottom(Border.NO_BORDER)
+                .SetBorderTop(Border.NO_BORDER)
+                .SetBorderRight(Border.NO_BORDER);
+                tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
+            }
+
+            document.Add(tablaDetalleProtocolo);
+
+            Table tablaTecnicaPropia = new Table(6).UseAllAvailableWidth();
+            tablaTecnicaPropia.SetFixedLayout();
+
+            Cell cellTecnicaPropia = new Cell(1, 6)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].Leyenda)
+            .AddStyle(estiloTextoDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetVerticalAlignment(VerticalAlignment.TOP)
+            .SetMarginTop(-3)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+
+            cellTecnicaPropia = new Cell(1, 1)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+
+
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].MetodosEsterilizacion)
+            .AddStyle(estiloTextoDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetVerticalAlignment(VerticalAlignment.TOP)
+            .SetMarginTop(-10)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+            cellTecnicaPropia = new Cell(1, 1)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabecera.DetalleGuia[0].DetalleProtocolo[0].NormasISO)
+            .AddStyle(estiloTextoDetalleProtocolo))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetVerticalAlignment(VerticalAlignment.TOP)
+            .SetMarginTop(-10)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+            cellTecnicaPropia = new Cell(1, 1)
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaTecnicaPropia.AddCell(cellTecnicaPropia);
+
+            document.Add(tablaTecnicaPropia);
+
+            Table tablaobservacion = new Table(1).UseAllAvailableWidth();
+            tablaobservacion.SetFixedLayout();
+
+            Cell cellObservarcion = new Cell(1, 1).Add(new Paragraph("OBSERVACION: ")
+            .AddStyle(estiloNegrita))
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.LEFT)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
+            tablaobservacion.AddCell(cellObservarcion);
+
+
+            cellObservarcion = new Cell(1, 1).Add(imgConclusion)
+            .SetTextAlignment(TextAlignment.LEFT)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaobservacion.AddCell(cellObservarcion);
+
+            document.Add(tablaobservacion);
+
+            Table tablaFirmaResponsables = new Table(2).UseAllAvailableWidth();
+            tablaFirmaResponsables.SetFixedLayout();
+
+
+            Cell cellFirmaResponsables = new Cell(1, 1).Add(imgFirmaLiliaHurtado)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetPaddingLeft(50)
+            .SetBorder(Border.NO_BORDER);
+            tablaFirmaResponsables.AddCell(cellFirmaResponsables);
+
+            cellFirmaResponsables = new Cell(1, 1).Add(imgFirmaFirmaMilagrosMunoz)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetPaddingLeft(50)
+            .SetBorder(Border.NO_BORDER);
+            tablaFirmaResponsables.AddCell(cellFirmaResponsables);
+
+            document.Add(tablaFirmaResponsables);
+
+
+        
+        }
+        
+        public void buenaspracticasalmacenamiento(Document document, Image imgCertificadoBPA)
+        {
+
+
+            Table tablaCertificadoBPA = new Table(1).UseAllAvailableWidth();
+            tablaCertificadoBPA.SetFixedLayout();
+
+
+
+            Cell cellCertificadoBPA = new Cell(1, 1).Add(imgCertificadoBPA)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaCertificadoBPA.AddCell(cellCertificadoBPA);
+
+            document.Add(cellCertificadoBPA);
+
+
+
+        }
+
+        public void DocumentoManufactura(Document document, Image imgManufacturaP1, Image imgManufacturaP2)
+        {
+
+
+            Table tablaManufacturaP1 = new Table(1).UseAllAvailableWidth();
+            tablaManufacturaP1.SetFixedLayout();
+            Cell cellManufacturaP1 = new Cell(1, 1).Add(imgManufacturaP1)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaManufacturaP1.AddCell(cellManufacturaP1);
+
+            document.Add(tablaManufacturaP1);
+
+            document.Add(new AreaBreak(PageSize.A4));
+
+            Table tablaManufacturaP2 = new Table(1).UseAllAvailableWidth();
+            tablaManufacturaP2.SetFixedLayout();
+            Cell cellManufacturaP2 = new Cell(1, 1).Add(imgManufacturaP2)
+            .SetTextAlignment(TextAlignment.CENTER)
+            .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            .SetBorder(Border.NO_BORDER);
+            tablaManufacturaP2.AddCell(cellManufacturaP2);
+
+            document.Add(tablaManufacturaP2);
+
+
+
+        }
+
+        public class FooterProtocolos : IEventHandler
+        {
+
+        
+
+
+            public void HandleEvent(Event @event)
+            {
+                PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+                PdfDocument pdf = documentoEvento.GetDocument();
+                PdfPage pagina = documentoEvento.GetPage();
+                PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamBefore(), pagina.GetResources(), pdf);
+
+
+                PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                Style estiloFooter = new Style().SetFontSize(8)
+                        .SetFont(fuenteNegrita)
+                        .SetFontColor(ColorConstants.BLACK)
+                        .SetMargin(0)
+                        .SetPadding(0)
+                        .SetFontSize(8);
+
+
+                Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
+
+                Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045;Rev.11").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+                tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
+                
+                
+                Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 200);
+
+               
+                new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
+
+            }
+        }
+
 
 
     }

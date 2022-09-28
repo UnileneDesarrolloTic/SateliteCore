@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
+using SatelliteCore.Api.DataAccess.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Services;
 using SatelliteCore.Api.Services.Contracts;
-using SatelliteCore.Api.DataAccess.Contracts.Repository;
-using SatelliteCore.Api.DataAccess.Repository;
+
 namespace SatelliteCore.Api.Config
 {
     public static class IoCRegister
@@ -27,6 +28,9 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IContabilidadRepository, ContabilidadRepository>();
             service.AddScoped<IAnalisisAgujaRepository, AnalisisAgujaRepository>();
             service.AddScoped<ILicitacionesRepository, LicitacionesRepository>();
+            service.AddScoped<ILogisticaRepository, LogisticaRepository>();
+            service.AddScoped<IRRHHRepository, RRHHRepository>();
+
 
             return service;
         }
@@ -43,6 +47,8 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IContabilidadService, ContabilidadServices>();
             service.AddScoped<IAnalisisAgujaServices, AnalisisAgujaServices>();
             service.AddScoped<ILicitacionesServices, LicitacionesServices>();
+            service.AddScoped<ILogisticaServices, LogisticaServices>();
+            service.AddScoped<IRRHHServices, RRHHServices>();
 
             return service;
         }

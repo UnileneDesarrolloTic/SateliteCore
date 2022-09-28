@@ -87,6 +87,73 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
-       
+
+        public async Task<DatosFormatoAsignacionPersonalLaboralModel> ListarAsignacionPersonal()
+        {
+            //IEnumerable<FormatoDeAsignacionPersonalLaboralModel> result = new List<FormatoDeAsignacionPersonalLaboralModel>();
+
+            DatosFormatoAsignacionPersonalLaboralModel result = new DatosFormatoAsignacionPersonalLaboralModel();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using (var result_db = await connection.QueryMultipleAsync("usp_unilene_pr_listar_horario_personal", commandType: CommandType.StoredProcedure))
+                {
+                    result.PersonalLaboral = result_db.Read<FormatoDeAsignacionPersonalLaboralModel>().ToList();
+                    result.ContarArea = result_db.Read<DatosFormatoContarAreaModel>().ToList();
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<List<AreaPersonalLaboralEntity>> ListarAreaPersonaLaboral()
+        {
+            List<AreaPersonalLaboralEntity> result = new List<AreaPersonalLaboralEntity>();
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = (List<AreaPersonalLaboralEntity>)await connection.QueryAsync<AreaPersonalLaboralEntity>("usp_ListarAreas", commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<int> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato,int idUsuario)
+        {
+            int result=1;
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {   
+                foreach (PersonaLaboral valor in dato.ListaPersona)
+                {
+                    await connection.ExecuteAsync("sp_RegistrarPersonalArea", new { dato.IdArea, valor.idPersona ,idUsuario }, commandType: CommandType.StoredProcedure);
+                }
+                
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea)
+        {
+            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> result = new List<DatosFormatoFiltrarTrabajadorAreaModel>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatoFiltrarTrabajadorAreaModel>("usp_Filtrar_Empleado_por_Area", new { idArea  }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<int> LiberalPersona(int IdAsignacion)
+        {
+            int result = 1;
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync("sp_LiberarPersonalArea", new { IdAsignacion }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
     }
 }

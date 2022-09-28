@@ -1,4 +1,5 @@
-﻿using SatelliteCore.Api.CrossCutting.Helpers;
+﻿using SatelliteCore.Api.CrossCutting.Config;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
@@ -46,6 +47,38 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+
+        public async Task<DatosFormatoAsignacionPersonalLaboralModel> ListarAsignacionPersonal()
+        {
+            DatosFormatoAsignacionPersonalLaboralModel response = await _usuarioRepository.ListarAsignacionPersonal();
+            return response;
+        }
+
+        public async Task<List<AreaPersonalLaboralEntity>> ListarAreaPersonaLaboral()
+        {
+            List<AreaPersonalLaboralEntity> response = await _usuarioRepository.ListarAreaPersonaLaboral();
+            return response;    
+        }
+
+        public async Task<ResponseModel<string>> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato, int idUsuario)
+        {
+            int response = await _usuarioRepository.RegistrarPersonaLaboralMasiva(dato, idUsuario);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
+        }
+
+        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea)
+        {
+            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioRepository.FiltrarAreaPersona(idArea);
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> LiberalPersona(int IdAsignacion)
+        {
+            int response = await _usuarioRepository.LiberalPersona(IdAsignacion);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Liberado con exito");
+        }
 
 
     }

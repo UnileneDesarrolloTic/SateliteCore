@@ -25,5 +25,7 @@ namespace SatelliteCore.Api.Models.Response
         public string LicitacionNumeroProceso { get; set; }
         public bool ComentariosEntrega { get; set; }
         public string UsuComercial { get; set; }
+        public DateTime? FechaRecepcion { get; set; }
+        public DateTime? FechaRetorno { get; set; }
     }
 }

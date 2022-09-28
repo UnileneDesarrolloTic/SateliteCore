@@ -204,7 +204,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                          + "INNER JOIN PROD_UNILENE2..WH_GuiaRemisionDetalle h ON g.GuiaNumero = h.GuiaNumero and h.SerieNumero = g.SerieNumero "
                          + "INNER JOIN PROD_UNILENE2..WH_ItemMast im ON h.itemcodigo = im.item "
                          + "INNER JOIN PROD_UNILENE2..WH_CaracteristicaValues C ON IM.CaracteristicaValor01 = C.Valor AND C.Caracteristica = '01' "
-                         + "INNER JOIN PROD_UNILENE2..WH_ItemAlmacenLote pl ON pl.lotefabricacion = h.Lote AND g.almacencodigo=pl.almacencodigo AND SUBSTRING(pl.lote,1,2)<>'OT'"
+                         + "INNER JOIN PROD_UNILENE2..WH_ItemAlmacenLote pl ON pl.Lote = h.Lote AND g.almacencodigo=pl.almacencodigo AND h.ItemCodigo=pl.Item "
                          + "INNER JOIN TBDLIProcesoProgramacionMuestras prm ON p.idproceso = prm.idproceso AND d.NumeroItem = prm.NumeroItem AND e.NumeroEntrega = prm.NumeroEntrega "
                          + "INNER JOIN PROD_UNILENE2..PersonaMast per ON per.Persona = g.Destinatario "
                          + "WHERE CONCAT(RTRIM(g.SerieNumero) ,'-', g.GuiaNumero) IN(" + dato + ") ";
@@ -220,6 +220,23 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+
+        public async Task<IEnumerable<FormatoReporteProtocoloModel>> NumerodeGuiaProtocolo(string dato)
+        {
+            string nuevovalor = dato.Replace("'","");
+
+            IEnumerable<FormatoReporteProtocoloModel> result = new List<FormatoReporteProtocoloModel>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result= await connection.QueryAsync<FormatoReporteProtocoloModel>("usp_Imprimir_Protocolo_Analisis_Lote", new { GUIAS=nuevovalor }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+
+
 
         public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
         {
@@ -252,13 +269,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral()
+        public async Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral(DatosEstructuraGuiaPorFacturarModel dato)
         {
             IEnumerable<FormatoGuiaPorFacturarGeneralModel> lista = new List<FormatoGuiaPorFacturarGeneralModel>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", commandType: CommandType.StoredProcedure);
+                lista = await context.QueryAsync<FormatoGuiaPorFacturarGeneralModel>("usp_listar_guias_por_facturar_general", new { destinatario = dato.destinatario  }, commandType: CommandType.StoredProcedure);
             }
 
             return lista;

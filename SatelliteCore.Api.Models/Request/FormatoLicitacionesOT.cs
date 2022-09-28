@@ -4,7 +4,19 @@ using System.Text;
 
 namespace SatelliteCore.Api.Models.Request
 {
-    public struct FormatoLicitacionesOT
+    public class ListarOpcionesImprimir
+    {
+        public bool Acta { get; set; }
+        public bool Condicion { get; set; }
+        public bool Protocolo { get; set; }
+        public bool Carta { get; set; }
+        public bool practicas { get; set; }
+        public bool Manufactura { get; set; }
+        public List<FormatoLicitacionesOT> ListaGuias { get; set; }
+
+    }
+
+    public class FormatoLicitacionesOT
     {
         public string GuiasNumero { get; set; }
     }

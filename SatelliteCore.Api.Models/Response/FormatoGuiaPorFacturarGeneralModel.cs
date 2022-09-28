@@ -20,6 +20,8 @@ namespace SatelliteCore.Api.Models.Response
         public string LicitacionNumeroProceso { get; set; }
         public string ReprogramacionPuntoPartida { get; set; }
         public string estado { get; set; }
+        public DateTime? FechaRecepcion { get; set; }
+        public DateTime? Retorno { get; set; }
 
     }
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Comercial;
+using System.Linq;
 
 namespace SatelliteCore.Api.Services
 {
@@ -39,6 +40,20 @@ namespace SatelliteCore.Api.Services
         {
             return await _comercialRepository.ListarProtocoloAnalisis(datos);
         }
+        public async Task<ResponseModel<string>> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
+        {
+            (List<DetalleProtocoloAnalisis> lista, int totalRegistros) result =  await _comercialRepository.ListarProtocoloAnalisis(datos);
+
+            ReporteExcelProtocoloAnalisis ExporteProtocoloAnalisis = new ReporteExcelProtocoloAnalisis();
+            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(result.lista);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+
+            return Respuesta;
+        }
+
+
         public async Task<List<DetalleClientes>> ListarClientes()
         {
             return await _comercialRepository.ListarClientes();
@@ -49,10 +64,10 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.ListarDocumentoLicitacion(dato);
         }
 
-        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(List<FormatoLicitacionesOT> dato)
+        public async Task<ResponseModel<string>> NumerodeGuiaLicitacion(ListarOpcionesImprimir dato)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (var safePrime in dato)
+            foreach (var safePrime in dato.ListaGuias)
             {
                 builder.Append("'" + safePrime.GuiasNumero + "'").Append(",");
             }
@@ -60,6 +75,8 @@ namespace SatelliteCore.Api.Services
             string final = result.Remove(result.Length - 1);
 
             FormatoReporteGuiaRemisionesModel respuesta = await _comercialRepository.NumerodeGuiaLicitacion(final);
+            IEnumerable<FormatoReporteProtocoloModel> ListarProtocolo = await _comercialRepository.NumerodeGuiaProtocolo(final);
+
             List<DReportGuiaRemisionModel> aux = null;
 
             foreach (CReporteGuiaRemisionModel guia in respuesta.CabeceraReporteGuiaRemision)
@@ -71,11 +88,23 @@ namespace SatelliteCore.Api.Services
                     guia.DetalleGuia.AddRange(aux);
             }
 
+            IEnumerable<FormatoReporteProtocoloModel> aux2= null;
+
+            foreach (DReportGuiaRemisionModel detalle in respuesta.DetalleReporteGuiaRemision)
+            {
+                aux2 = null;
+                aux2 = ListarProtocolo.Where(x => x.OrdenFabricacion == detalle.Lote);
+
+                if (aux2.Count() > 0)
+                    detalle.DetalleProtocolo.AddRange(aux2);
+            }
+
+
             if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
-                return new ResponseModel<string>(false, "No hay Elemento", "");
+                return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");
 
             ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
-            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision);
+            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato);
 
 
 
@@ -110,23 +139,10 @@ namespace SatelliteCore.Api.Services
         public async Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
         {
             string reporte = "";
-
-            if (dato.Tipo != "G")
-            {
-                IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
-                listaGuiaPorFacturar = await _comercialRepository.ListarGuiaporFacturar(dato);
-                ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
-                reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
-            }else
-                {
-                    IEnumerable<FormatoGuiaPorFacturarGeneralModel> listaGuiaPorFacturarGeneral = new List<FormatoGuiaPorFacturarGeneralModel>();
-                    listaGuiaPorFacturarGeneral = await _comercialRepository.ListarGuiaporFacturarGeneral();
-                    ReporteGuiaporFacturarGeneral GuiaFacturaGeneral = new ReporteGuiaporFacturarGeneral();
-                    reporte = GuiaFacturaGeneral.ExportarListarGuiaPorFacturaGeneral(listaGuiaPorFacturarGeneral);
-                 }
-           
-
-
+            IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
+            listaGuiaPorFacturar = await _comercialRepository.ListarGuiaporFacturar(dato);
+            ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
+            reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
             return reporte;
         }
 

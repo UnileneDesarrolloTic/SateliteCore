@@ -1,6 +1,8 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -140,5 +142,100 @@ namespace SatelliteCore.Api.Services
 
             return resultadoConfiguraciones;
         }
+
+
+        public async Task<ResponseModel<IEnumerable<AgrupadorEntity>>> ListarAgrupador()
+        {
+            IEnumerable<AgrupadorEntity> configuraciones = await _commonRepository.ListarAgrupador();
+            ResponseModel<IEnumerable<AgrupadorEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<AgrupadorEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<SubAgrupadorEntity>>> ListarSubAgrupador(string idAgrupador)
+        {
+            IEnumerable<SubAgrupadorEntity> configuraciones = await _commonRepository.ListarSubAgrupador(idAgrupador);
+            ResponseModel<IEnumerable<SubAgrupadorEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<SubAgrupadorEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<LineaEntity>>> ListarLinea()
+        {
+            IEnumerable<LineaEntity> configuraciones = await _commonRepository.ListarLinea();
+            ResponseModel<IEnumerable<LineaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<LineaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>> ListarFamilia(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> configuraciones = await _commonRepository.ListarFamilia(idlinea);
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> resultadoConfiguraciones = new ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>> ListarFamiliaGeneral(string idlinea)
+        {
+            IEnumerable<FamiliaMaestroItemsModel> configuraciones = await _commonRepository.ListarFamiliaGeneral(idlinea);
+            ResponseModel<IEnumerable<FamiliaMaestroItemsModel>> resultadoConfiguraciones = new ResponseModel<IEnumerable<FamiliaMaestroItemsModel>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<SubFamiliaEntity>>> ListarSubFamilia(string idlinea, string idfamilia)
+        {
+          
+            IEnumerable<SubFamiliaEntity> configuraciones = await _commonRepository.ListarSubFamilia(idlinea, idfamilia);
+            ResponseModel<IEnumerable<SubFamiliaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<SubFamiliaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<IEnumerable<MarcaEntity>>> ListarMarca()
+        {
+
+            IEnumerable<MarcaEntity> configuraciones = await _commonRepository.ListarMarca();
+            ResponseModel<IEnumerable<MarcaEntity>> resultadoConfiguraciones = new ResponseModel<IEnumerable<MarcaEntity>>(true, Constante.MESSAGE_SUCCESS, configuraciones);
+
+            return resultadoConfiguraciones;
+        }
+
+        public async Task<ResponseModel<object>> RegistrarMaestroItem(DatosRequestMaestroItemModel dato, int idUsuario)
+        {
+            FormatoResponseRegistrarMaestroItem response = new FormatoResponseRegistrarMaestroItem();
+            response = await _commonRepository.RegistrarMaestroItem(dato, idUsuario);
+            return new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { response });
+        }
+
+
+        public async Task<PaginacionModel<FormatoListarMaestroItemModel>> ListarMaestroItem(DatosListarMaestroItemPaginador datos)
+        {
+            (List<FormatoListarMaestroItemModel> lista, int totalRegistros) = await _commonRepository.ListarMaestroItem(datos);
+
+            PaginacionModel<FormatoListarMaestroItemModel> response = new PaginacionModel<FormatoListarMaestroItemModel>(lista, datos.Pagina, datos.RegistrosPorPagina, totalRegistros);
+
+            return response;
+        }
+
+        public async Task<ResponseModel<IEnumerable<MaestroAlmacenEntity>>> ListarMaestroAlmacen()
+        {
+
+            IEnumerable<MaestroAlmacenEntity> MaestroAlmacen = await _commonRepository.ListarMaestroAlmacen();
+            ResponseModel<IEnumerable<MaestroAlmacenEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MaestroAlmacenEntity>>(true, Constante.MESSAGE_SUCCESS, MaestroAlmacen);
+
+            return resultadoMaestroAlmacen;
+        }
+
+        public async Task<ResponseModel<bool>> ValidacionPermisoAccesso(string Permiso, int idUsuario)
+        {
+
+            bool Acceso = await _commonRepository.ValidacionPermisoAccesso(Permiso, idUsuario);
+            ResponseModel<bool> response = new ResponseModel<bool>(true, Constante.MESSAGE_SUCCESS, Acceso);
+
+            return response;
+        }
+
     }
 }
