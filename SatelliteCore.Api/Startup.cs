@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using SatelliteCore.Api.Filters;
 using SatelliteCore.Api.Models.Config;
 using SystemsIntegration.Api.Middlewares;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace SatelliteCore.Api
 {
