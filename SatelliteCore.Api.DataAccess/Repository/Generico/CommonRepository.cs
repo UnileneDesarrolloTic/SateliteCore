@@ -329,6 +329,33 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<IEnumerable<AgrupadorHebrasEntity>> ListarAgrupadoHebra()
+        {
+            IEnumerable<AgrupadorHebrasEntity> lista = new List<AgrupadorHebrasEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<AgrupadorHebrasEntity>("SP_LISTAR_CLASE_HEBRA", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<CalibrePruebaEntity>> ListarCalibrePrueba()
+        {
+            IEnumerable<CalibrePruebaEntity> lista = new List<CalibrePruebaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<CalibrePruebaEntity>("SP_LISTAR_CALIBRE_PRUEBAS", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+
 
     }
 }

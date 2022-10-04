@@ -154,5 +154,93 @@ namespace SatelliteCore.Api.Services
         }
 
 
+        
+
+        public async Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo()
+        {
+            IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel> response = await _controlCalidadRepository.ListarObtenerAgujasDescripcionNuevo();
+            return response;
+        }
+
+ 
+        public async Task<ResponseModel<string>> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        {
+            await _controlCalidadRepository.NuevoDescripcionDT(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> EliminarDescripcionDT(string IdDescripcion)
+        {
+            await _controlCalidadRepository.EliminarDescripcionDT(IdDescripcion);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con éxito");
+            return Respuesta;
+        }
+
+        public async Task<IEnumerable<DatosFormatoObtenerAgujasDescripcionModel>> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion)
+        {
+            IEnumerable<DatosFormatoObtenerAgujasDescripcionModel> response = await _controlCalidadRepository.ListarObtenerAgujasDescripcionActualizar(IdDescripcion);
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        {
+            await _controlCalidadRepository.ActualizarDescripcionDT(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario)
+        {
+            await _controlCalidadRepository.RegistrarActualizarLeyendaDT(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> EliminarLeyendaDT(string IdLeyenda)
+        {
+            await _controlCalidadRepository.EliminarLeyendaDT(IdLeyenda);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con éxito");
+            return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<string>> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario)
+        {
+            await _controlCalidadRepository.RegistrarActualizarPruebaDT(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> EliminarPruebaDT(string IdPrueba)
+        {
+            await _controlCalidadRepository.EliminarPruebaDT(IdPrueba);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminar con éxito");
+            return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote)
+        {
+            DatosFormatoNumeroLoteProtocoloModel result = new DatosFormatoNumeroLoteProtocoloModel();
+            result= await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            ResponseModel<DatosFormatoNumeroLoteProtocoloModel> Respuesta = new ResponseModel<DatosFormatoNumeroLoteProtocoloModel>(true, Constante.MESSAGE_SUCCESS, result);
+            return Respuesta;
+        }
+
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string  NumeroParte)
+        {
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> Respuesta = await _controlCalidadRepository.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte);
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<object>> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario)
+        {
+            int response = 0;
+            response=await _controlCalidadRepository.RegistrarFechaAnalisisProtocolo(NumeroLote, FechaAnalisis, idUsuario);
+            ResponseModel<object> Respuesta = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { ID= response });
+            return Respuesta;
+        }
+
     }
 }

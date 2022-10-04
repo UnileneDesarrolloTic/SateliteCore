@@ -28,5 +28,17 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra);
         public Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra);
         public Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia);
+        public Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo();
+        public Task<int> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario);
+        public Task<int> EliminarDescripcionDT(string IdDescripcion);
+        public Task<IEnumerable<DatosFormatoObtenerAgujasDescripcionModel>> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion);
+        public Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario);
+        public Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario);
+        public Task<int> EliminarLeyendaDT(string IdLeyenda);
+        public Task<int> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario);
+        public Task<int> EliminarPruebaDT(string IdLeyenda);
+        public Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote);
+        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte);
+        public Task<int> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario);
     }
 }

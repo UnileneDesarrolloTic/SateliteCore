@@ -269,5 +269,20 @@ namespace SatelliteCore.Api.Services
             return resultadoMaestroAlmacen;
         }
 
+        public async Task<ResponseModel<IEnumerable<AgrupadorHebrasEntity>>> ListarAgrupadoHebra()
+        {
+            IEnumerable<AgrupadorHebrasEntity> response = await _commonRepository.ListarAgrupadoHebra();
+            ResponseModel<IEnumerable<AgrupadorHebrasEntity>> resultadoAgrupadoHebras = new ResponseModel<IEnumerable<AgrupadorHebrasEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoAgrupadoHebras;
+        }
+
+        public async Task<ResponseModel<IEnumerable<CalibrePruebaEntity>>> ListarCalibrePrueba()
+        {
+            IEnumerable<CalibrePruebaEntity> response = await _commonRepository.ListarCalibrePrueba();
+            ResponseModel<IEnumerable<CalibrePruebaEntity>> resultadoAgrupadoHebras = new ResponseModel<IEnumerable<CalibrePruebaEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoAgrupadoHebras;
+        }
     }
 }

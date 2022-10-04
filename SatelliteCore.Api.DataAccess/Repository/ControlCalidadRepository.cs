@@ -390,6 +390,196 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo()
+        {
+
+            IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel> result = new List<DatosFormatoObtenerTablaAgujasNuevoModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoObtenerTablaAgujasNuevoModel>("SP_LISTAR_TPRO_CANTIDAD_AGUJAS", commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+      
+
+        public async Task<int> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato,string idUsuario)
+        {
+
+            int IdDescripcion = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                IdDescripcion = await connection.QuerySingleAsync<int>("SP_INSERTAR_TPRO_DESCRIPCION", new { ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                foreach (DatosFormatoDetalleAgujaDescripcion valor in dato.DetalleAgujas)
+                {   
+                    if(valor.descripcionlocal.Trim()!="" || valor.descripcionlocal.Trim() != "")
+                       await connection.ExecuteAsync("SP_INSERTAR_TPRO_CARACTERISTICA_DESCRIPCION", new { ID_DESCRIPCION = IdDescripcion, ID_CANTIDAD_AGUJA=valor.iD_AGUJA, DESCRIPCIONLOCAL=valor.descripcionlocal, DESCRIPCIONINGLES=valor.descripcioningles }, commandType: CommandType.StoredProcedure);
+                }
+            }
+            return IdDescripcion;
+        }
+
+        public async Task<int> EliminarDescripcionDT(string IdDescripcion)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_DESCRIPCION SET Estado='I' WHERE ID_DESCRIPCION=@IdDescripcion ";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+               await connection.ExecuteAsync(sql,new {IdDescripcion});
+
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoObtenerAgujasDescripcionModel>> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion)
+        {
+
+            IEnumerable<DatosFormatoObtenerAgujasDescripcionModel> result = new List<DatosFormatoObtenerAgujasDescripcionModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoObtenerAgujasDescripcionModel>("SP_LISTAR_TPRO_CARACTERISTICAS_DESCRIPCION", new { ID_DESCRIPCION = IdDescripcion }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                foreach (DatosFormatoDetalleAgujaDescripcion valor in dato.DetalleAgujas)
+                {
+                    if (valor.descripcionlocal.Trim() != "" || valor.descripcionlocal.Trim() != "")
+                        await connection.ExecuteAsync("SP_INSERTAR_TPRO_CARACTERISTICA_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_CANTIDAD_AGUJA = valor.iD_AGUJA, DESCRIPCIONLOCAL = valor.descripcionlocal, DESCRIPCIONINGLES = valor.descripcioningles }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            return result;
+        }
+
+        public async Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                if (dato.IdLeyenda == 0)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_LEYENDA", new { NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                }
+                else
+                {
+                    await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_LEYENDA", new { ID_LEYENDA=dato.IdLeyenda, NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            return result;
+        }
+
+
+        public async Task<int> EliminarLeyendaDT(string IdLeyenda)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_LEYENDA SET Estado='I' WHERE ID_LEYENDA=@IdLeyenda ";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync(sql, new { IdLeyenda });
+            }
+
+            return result;
+        }
+
+
+        public async Task<int> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+               await connection.ExecuteAsync("SP_INSERTAR_TPRO_PRUEBA", new { ID_AGRUPADOR_HEBRA = dato.IdAgrupadoHebra,
+                                                                              ID_METODOLOGIA = dato.IdMedologia, 
+                                                                              CALIBRE_USP = dato.IdCalibre, 
+                                                                              DESCRIPCIONLOCAL = dato.DescripcionLocal, 
+                                                                              DESCRIPCIONINGLES = dato.DescripcionIngle,
+                                                                              UNIDAD_MEDIDA = dato.IdUnidadMedida, 
+                                                                              ESPECIFFICACIONLOCAL = dato.EspecificacionLocal, 
+                                                                              ESPECIFFICACIONINGLES = dato.EspecificacionIngles, 
+                                                                              VALOR = dato.valor, 
+                                                                              USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<int> EliminarPruebaDT(string IdPrueba)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_PRUEBA_DETALLE SET Estado='I' WHERE ID_PRUEBA=@IdPrueba " +
+                         "UPDATE TPRO_PRUEBA SET Estado='I' WHERE ID_PRUEBA=@IdPrueba";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync(sql, new { IdPrueba });
+            }
+
+            return result;
+        }
+
+
+        public async Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote)
+        {
+            DatosFormatoNumeroLoteProtocoloModel result = new DatosFormatoNumeroLoteProtocoloModel();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryFirstOrDefaultAsync<DatosFormatoNumeroLoteProtocoloModel>("SP_LISTAR_TPRO_PROTOCOLO_CABECERA", new { NUMEROLOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte)
+        {
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> result = new List<DatosFormatosDatoListarPruebaProtocolo>();
+             
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatosDatoListarPruebaProtocolo>("SP_LISTAR_FORMATO_PROTOCOLO", new { NUMERODEPARTE = NumeroParte, LOTE= NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<int> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario )
+        {
+            int result = 0;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = NumeroLote, USUARIO = idUsuario, FECHA_ANALISIS= FechaAnalisis }, commandType: CommandType.StoredProcedure);
+                
+            }
+
+            return result;
+        }
+
 
     }
 }

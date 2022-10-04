@@ -30,5 +30,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo);
         public Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo, string Campo);
         public Task<ResponseModel<IEnumerable<MetodologiaEntity>>> ListarMetodologiaProtocolo();
+        public Task<ResponseModel<IEnumerable<AgrupadorHebrasEntity>>> ListarAgrupadoHebra();
+        public Task<ResponseModel<IEnumerable<CalibrePruebaEntity>>> ListarCalibrePrueba();
     }
 }

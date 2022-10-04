@@ -182,5 +182,19 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<IEnumerable<MetodologiaEntity>> response = await _commonService.ListarMetodologiaProtocolo();
             return Ok(response);
         }
+
+        [HttpGet("ListarAgrupadoHebra")]
+        public async Task<IActionResult> ListarAgrupadoHebra()
+        {
+            ResponseModel<IEnumerable<AgrupadorHebrasEntity>> response = await _commonService.ListarAgrupadoHebra();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarCalibrePrueba")]
+        public async Task<IActionResult> ListarCalibrePrueba()
+        {
+            ResponseModel<IEnumerable<CalibrePruebaEntity>> response = await _commonService.ListarCalibrePrueba();
+            return Ok(response);
+        }
     }
 }

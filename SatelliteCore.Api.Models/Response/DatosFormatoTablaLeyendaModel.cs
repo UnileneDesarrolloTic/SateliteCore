@@ -15,6 +15,7 @@ namespace SatelliteCore.Api.Models.Response
         public string DETALLE { get; set; }
         public string TECNICA_INGLES { get; set; }
         public string METODO_INGLES { get; set; }
+        public string DETALLE_INGLES { get; set; }
         public string ESTADO { get; set; }
         public DateTime FECHA_REGISTRO { get; set; }
         public string USUARIO { get; set; }
