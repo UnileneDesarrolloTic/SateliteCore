@@ -377,11 +377,35 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("RegistrarFechaAnalisisProtocolo")]
-        public async Task<IActionResult> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis )
+        [HttpPost("RegistrarControlProcesoProtocolo")]
+        public async Task<IActionResult> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato )
         {
             string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
-            ResponseModel<object> response = await _controlCalidadServices.RegistrarFechaAnalisisProtocolo(NumeroLote, FechaAnalisis, idUsuario);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlProcesoProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarControlPTProtocolo")]
+        public async Task<IActionResult> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlPTProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("RegistrarPruebasEfectuadasProtocolo")]
+        public async Task<IActionResult> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarPruebasEfectuadasProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("BuscarInformacionResultadoProtocolo")]
+        public async Task<IActionResult> BuscarInformacionResultadoProtocolo(string NumeroLote)
+        {
+
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> response = await _controlCalidadServices.BuscarInformacionResultadoProtocolo(NumeroLote);
             return Ok(response);
         }
 

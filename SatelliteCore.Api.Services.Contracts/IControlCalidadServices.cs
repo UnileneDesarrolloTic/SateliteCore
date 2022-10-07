@@ -28,7 +28,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca,string Hebra);
         public Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra);
         public Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia);
-     
         public Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo();
         public Task<ResponseModel<string>> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato,string idUsuario);
         public Task<ResponseModel<string>> EliminarDescripcionDT(string IdDescripcion);
@@ -40,6 +39,9 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> EliminarPruebaDT(string IdPrueba);
         public Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote);
         public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte);
-        public Task<ResponseModel<object>> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario);
+        public Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario);
+        public Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario);
+        public Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario);
+        public Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote);
     }
 }

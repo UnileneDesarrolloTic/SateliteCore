@@ -234,13 +234,30 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<ResponseModel<object>> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario)
+        public async Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario)
         {
-            int response = 0;
-            response=await _controlCalidadRepository.RegistrarFechaAnalisisProtocolo(NumeroLote, FechaAnalisis, idUsuario);
-            ResponseModel<object> Respuesta = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { ID= response });
+            await _controlCalidadRepository.RegistrarControlProcesoProtocolo(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            return Respuesta;
+        }
+        public async Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario)
+        {
+            await _controlCalidadRepository.RegistrarControlPTProtocolo(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
 
+        public async Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario)
+        {
+            await _controlCalidadRepository.RegistrarPruebasEfectuadasProtocolo(dato, idUsuario);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            return Respuesta;
+        }
+
+        public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> Respuesta = await _controlCalidadRepository.BuscarInformacionResultadoProtocolo(NumeroLote);
+            return Respuesta;
+        }
     }
 }

@@ -39,6 +39,9 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> EliminarPruebaDT(string IdLeyenda);
         public Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote);
         public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte);
-        public Task<int> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario);
+        public Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario);
+        public Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario);
+        public Task<int> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario);
+        public Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote);
     }
 }

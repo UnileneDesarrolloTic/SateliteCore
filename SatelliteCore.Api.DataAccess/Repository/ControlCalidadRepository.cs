@@ -568,13 +568,83 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> RegistrarFechaAnalisisProtocolo(string NumeroLote, string FechaAnalisis, string idUsuario )
+        public async Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario )
         {
-            int result = 0;
+            int ID = 0;
+            int contarA = 1;
+            int contarB = 1;
             using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                result = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = NumeroLote, USUARIO = idUsuario, FECHA_ANALISIS= FechaAnalisis }, commandType: CommandType.StoredProcedure);
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
                 
+                foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'A', SECUENCIA = contarA , COL_1=item.LongitudD  , COL_2=item.DiametroD }, commandType: CommandType.StoredProcedure);
+                    contarA++;
+                }
+        
+                foreach (DatosFormatosTablaBControlProcesos item in dato.TablaResistencia)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'B', SECUENCIA = contarB, COL_1 = item.TensionNewtons, COL_2 = item.AgujasNewtons }, commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+
+        public async Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario)
+        {
+            int ID = 0;
+            int contarA = 1;
+            int contarB = 1;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
+
+                foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'C', SECUENCIA = contarA, COL_1 = item.LongitudD, COL_2 = item.DiametroD }, commandType: CommandType.StoredProcedure);
+                    contarA++;
+                }
+
+                foreach (DatosFormatosTablaBControlProcesos item in dato.TablaResistencia)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'D', SECUENCIA = contarB, COL_1 = item.TensionNewtons, COL_2 = item.AgujasNewtons }, commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+        public async Task<int> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario)
+        {
+            int ID = 0;
+            int contarB = 1;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+               
+
+                foreach (DatosFormatoDetallePruebasProtocolos item in dato.TablaPrueba)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> result = new List<DatosFormatoInformacionResultadoProtocolo>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoInformacionResultadoProtocolo>("SP_LISTAR_PRUEBA_RESULTADO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
