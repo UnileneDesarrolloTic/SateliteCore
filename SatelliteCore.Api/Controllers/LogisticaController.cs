@@ -88,5 +88,12 @@ namespace SatelliteCore.Api.Controllers
             IEnumerable<DatosFormatoDetalleComprometidoItem> result = await _logisticaServices.DetalleComprometidoItem(dato);
             return Ok(result);
         }
+
+        [HttpGet("BuscarNumeroPedido")]
+        public async Task<IActionResult> BuscarNumeroPedido(string NumeroDocumento, string Tipo)
+        {
+            IEnumerable<DatosFormatoMateriaPrimaItemLogistica> result = await _logisticaServices.BuscarNumeroPedido(NumeroDocumento, Tipo);
+            return Ok(result);
+        }
     }
 }

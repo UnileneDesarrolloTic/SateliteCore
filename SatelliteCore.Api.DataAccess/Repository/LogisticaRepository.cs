@@ -118,5 +118,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+
+        public async Task<IEnumerable<DatosFormatoMateriaPrimaItemLogistica>> BuscarNumeroPedido(string NumeroDocumento, string Tipo)
+        {
+            IEnumerable<DatosFormatoMateriaPrimaItemLogistica> result = new List<DatosFormatoMateriaPrimaItemLogistica>();
+       
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoMateriaPrimaItemLogistica>("SP_UNILENE_CO_LISTAR_DETALLE_COTIZACION", new { NumeroDocumento , Tipo }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
     }
 }

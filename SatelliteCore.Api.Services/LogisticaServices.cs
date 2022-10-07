@@ -75,6 +75,10 @@ namespace SatelliteCore.Api.Services
             return await _logisticaRepository.DetalleComprometidoItem(dato);
         }
 
+        public async Task<IEnumerable<DatosFormatoMateriaPrimaItemLogistica>> BuscarNumeroPedido(string NumeroDocumento, string Tipo)
+        {
+            return await _logisticaRepository.BuscarNumeroPedido(NumeroDocumento, Tipo);
+        }
 
     }
 }
