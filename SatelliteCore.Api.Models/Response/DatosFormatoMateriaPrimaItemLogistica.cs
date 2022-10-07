@@ -10,6 +10,7 @@ namespace SatelliteCore.Api.Models.Response
         public DateTime FechaDocumento { get; set; }
         public string clientenombre { get; set; }
         public string EstadoCotizacion { get; set; }
+        public string Linea { get; set; }
         public string Familia { get; set; }
         public string unidadcodigo { get; set; }
         public string ItemCodigo { get; set; }

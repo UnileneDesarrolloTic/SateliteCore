@@ -18,6 +18,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> ListarItemVentasDetalleExportar();
         public Task<IEnumerable<DatosFormatoDetalleComprometidoItem>> DetalleComprometidoItem(DatosFormatoRequestDetalleComprometido dato);
         public Task<IEnumerable<DatosFormatoMateriaPrimaItemLogistica>> BuscarNumeroPedido(string NumeroDocumento, string Tipo);
+        public Task<IEnumerable<DatosFormatoDetalleRecetaMPLogistica>> BuscardDetalleRecetaMP(string Item, string Cantidad);
 
     }
 }

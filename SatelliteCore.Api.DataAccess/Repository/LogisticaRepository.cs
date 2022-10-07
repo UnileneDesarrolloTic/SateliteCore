@@ -123,9 +123,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMateriaPrimaItemLogistica> result = new List<DatosFormatoMateriaPrimaItemLogistica>();
        
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
             {
                 result = await context.QueryAsync<DatosFormatoMateriaPrimaItemLogistica>("SP_UNILENE_CO_LISTAR_DETALLE_COTIZACION", new { NumeroDocumento , Tipo }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoDetalleRecetaMPLogistica>> BuscardDetalleRecetaMP(string Item, string Cantidad)
+        {
+            IEnumerable<DatosFormatoDetalleRecetaMPLogistica> result = new List<DatosFormatoDetalleRecetaMPLogistica>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await context.QueryAsync<DatosFormatoDetalleRecetaMPLogistica>("SP_UNILENE_CO_LISTAR_DETALLE_RECETA", new { Item, Cantidad }, commandType: CommandType.StoredProcedure);
             }
 
             return result;

@@ -21,6 +21,7 @@ namespace SatelliteCore.Api.Models.Config
         public string ReportRRHH => _configuration.GetSection("ReportServer:RRHH").Value;
         public string ContextDMVentas => _configuration.GetSection("ConnectionStrings:DMVentasContext").Value;
         public string ContextMongoDB => _configuration.GetSection("ConnectionStrings:MongoContext").Value;
-        
+
+        public string ContextUReporteador => _configuration.GetSection("ConnectionStrings:UReporteadorContext").Value;
     }
 }

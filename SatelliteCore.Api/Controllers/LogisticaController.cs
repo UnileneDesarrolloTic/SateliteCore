@@ -95,5 +95,12 @@ namespace SatelliteCore.Api.Controllers
             IEnumerable<DatosFormatoMateriaPrimaItemLogistica> result = await _logisticaServices.BuscarNumeroPedido(NumeroDocumento, Tipo);
             return Ok(result);
         }
+
+        [HttpGet("BuscardDetalleRecetaMP")]
+        public async Task<IActionResult> BuscardDetalleRecetaMP(string Item, string Cantidad)
+        {
+            IEnumerable<DatosFormatoDetalleRecetaMPLogistica> result = await _logisticaServices.BuscardDetalleRecetaMP(Item, Cantidad);
+            return Ok(result);
+        }
     }
 }
