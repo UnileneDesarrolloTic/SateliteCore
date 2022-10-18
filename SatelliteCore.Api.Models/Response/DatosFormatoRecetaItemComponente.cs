@@ -15,6 +15,9 @@ namespace SatelliteCore.Api.Models.Response
         public decimal Cantidad { get; set; }
         public decimal CostoUnitarioSoles { get; set; }
         public string MATERIAL { get; set; }
-      
+        public string Linea { get; set; }
+        public string Familia { get; set; }
+        public string SubFamilia { get; set; }
+
     }
 }
