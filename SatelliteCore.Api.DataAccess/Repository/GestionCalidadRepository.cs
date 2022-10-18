@@ -144,17 +144,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
             if (!string.IsNullOrEmpty(filtros.SubFamilia))
                 query = $"{query} AND c.SubFamilia = @subFamilia";
 
-            //if (filtros.Inicio != null)
-            //    query = $"{query} AND a.FechaDocumento >= @inicio";
-
-            //if (filtros.Fin != null)
-            //    query = $"{query} AND a.FechaDocumento <= @fin";
-
             if (!string.IsNullOrEmpty(filtros.Item))
                 query = $"{query} AND RTRIM(b.ItemCodigo) = @item";
 
             if (!string.IsNullOrEmpty(filtros.NumeroParte))
-                query = $"{query} AND c.NumeroDeParte = @numeroParte";
+                query = $"{query} AND c.NumeroDeParte LIKE @numeroParte";
+            
 
             query = $"{query} ORDER BY a.FechaDocumento";
 
