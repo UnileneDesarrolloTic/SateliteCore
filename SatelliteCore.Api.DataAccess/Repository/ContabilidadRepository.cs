@@ -76,7 +76,45 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-      
+
+        public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ConsultarProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            IEnumerable<DatosFormatoDatosProductoCostobase> result_db = new List<DatosFormatoDatosProductoCostobase>();
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result_db = await connection.QueryAsync<DatosFormatoDatosProductoCostobase>("usp_BaseCosto_ItemProducto_Analisis_costo", new{ dato.CodProducto, dato.NumeroCotizacion, dato.Opcion , dato.base64 } , commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return result_db;
+        }
+
+        /*public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            IEnumerable<DatosFormatoDatosProductoCostobase> result_db = new List<DatosFormatoDatosProductoCostobase>();
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result_db = await connection.QueryAsync<DatosFormatoDatosProductoCostobase>("usp_BaseCosto_ItemProducto_Analisis_costo_Masivo", new { dato }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return result_db;
+        }*/
+
+        public async Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item ,string FechaDocumento)
+        {
+            IEnumerable<DatosFormatoRecetaItemComponente> result_db = new List<DatosFormatoRecetaItemComponente>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result_db = await connection.QueryAsync<DatosFormatoRecetaItemComponente>("usp_Info_Receta_itemcomponente_MP",new { Item , FechaDocumento }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return result_db;
+        }
+
+
 
 
     }

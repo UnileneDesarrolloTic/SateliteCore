@@ -12,5 +12,9 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<DetraccionesEntity>> ListarDetraccion();
         public int ProcesarDetraccionContabilidad(DatosFormato64 dato);
         public string GenerarBlogNotasDetraccion(FormatoProcesoDetracciones dato);
+        public Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ConsultarProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato);
+        public Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato);
+        public Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item, string FechaDocumento);
+       
     }
 }
