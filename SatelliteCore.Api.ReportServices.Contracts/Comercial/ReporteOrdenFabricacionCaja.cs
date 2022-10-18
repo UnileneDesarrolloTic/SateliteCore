@@ -97,6 +97,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 worksheet.Cells["J2"].Style.WrapText = true;
                 worksheet.Cells["J2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                worksheet.Cells["K2"].Value = "Fecha Ingreso";
+                worksheet.Cells["K2"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["K2"].Style.Font.Size = 12;
+                worksheet.Cells["K2"].Style.WrapText = true;
+                worksheet.Cells["K2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 int row = 3;
 
@@ -187,6 +192,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["J" + row].Style.WrapText = true;
                     worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    worksheet.Cells["K" + row].Value = item.FechaIngreso;
+                    worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["K" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["K" + row].Style.Font.Size = 10;
+                    worksheet.Cells["K" + row].Style.WrapText = true;
+                    worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells["K" + row].Style.Numberformat.Format = "dd/MM/yyyy";
+
 
                     row++;
                 }
@@ -224,18 +237,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(9).Width = 10.00 + 2.71;
             worksheet.Column(10).Width = 10.40 + 2.71;
             worksheet.Column(11).Width = 10.40 + 2.71;
-
+            worksheet.Column(12).Width = 10.40 + 2.71;
 
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A1:J1"].Merge = true;
+            worksheet.Cells["A1:K1"].Merge = true;
         }
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A2:J2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A2:K2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
         }
 
         
