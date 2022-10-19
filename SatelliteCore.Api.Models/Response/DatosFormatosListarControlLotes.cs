@@ -39,5 +39,6 @@ namespace SatelliteCore.Api.Models.Response
         public string Busqueda  { get; set; }
         public DateTime FechaExpiracion  { get; set; }
         public int ProtocoloFlag { get; set; }
+        public string destruible { get; set;  }
     }
 }

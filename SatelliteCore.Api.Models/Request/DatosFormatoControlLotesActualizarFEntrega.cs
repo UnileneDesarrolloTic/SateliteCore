@@ -8,6 +8,8 @@ namespace SatelliteCore.Api.Models.Request
     {
         public string ordenFabricacion { get; set; }
         public string lote { get; set; }
+        public int destruible { get; set; }
+        public string comentarios { get; set; }
         public DateTime fechaEntrega  { get; set; }
     }
 }

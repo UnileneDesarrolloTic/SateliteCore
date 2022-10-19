@@ -312,11 +312,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 1;
 
-            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega =@fechaEntrega WHERE NUMEROLOTE=@ordenFabricacion AND REFERENCIANUMERO=@lote ";
+            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega =@fechaEntrega , Proyecto =@destruible , COMENTARIOS=@comentarios   WHERE NUMEROLOTE=@ordenFabricacion AND REFERENCIANUMERO=@lote ";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await connection.ExecuteAsync(sql, new { dato.lote, dato.ordenFabricacion, dato.fechaEntrega });
+                await connection.ExecuteAsync(sql, new { dato.lote, dato.ordenFabricacion, dato.fechaEntrega, dato.destruible , dato.comentarios });
 
                 connection.Dispose();
             }
