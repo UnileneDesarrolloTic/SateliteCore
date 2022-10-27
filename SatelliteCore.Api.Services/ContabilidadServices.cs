@@ -154,9 +154,15 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item, string FechaDocumento)
+        public async Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item)
         {
-            IEnumerable<DatosFormatoRecetaItemComponente> lista = await _contabilidadRepository.ConsultarRecetaProducto(Item, FechaDocumento);
+            IEnumerable<DatosFormatoRecetaItemComponente> lista = await _contabilidadRepository.ConsultarRecetaProducto(Item);
+            return lista;
+        }
+
+        public async Task<IEnumerable<DatosFormatoComponentePrecioUnitario>> ListarItemComponentePrecio(DatosFormatosComponentPrecio dato)
+        {
+            IEnumerable<DatosFormatoComponentePrecioUnitario> lista = await _contabilidadRepository.ListarItemComponentePrecio(dato);
             return lista;
         }
 

@@ -10,5 +10,8 @@ namespace SatelliteCore.Api.Models.Request
         public string NumeroCotizacion { get; set; }
         public Boolean Opcion { get; set; }
         public string base64 { get; set; }
+        public Boolean BusquedaExcel { get; set; }
+        public string idSubFamilia { get; set; }
+        public string idfamilia { get; set; }
     }
 }
