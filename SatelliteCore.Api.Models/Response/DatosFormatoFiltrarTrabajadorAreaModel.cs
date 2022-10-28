@@ -8,5 +8,7 @@ namespace SatelliteCore.Api.Models.Response
     {
         public int IdAsignacion { get; set; }
         public string NombreCompleto { get; set; }
+        public string Descripcion { get; set; }
+        
     }
 }

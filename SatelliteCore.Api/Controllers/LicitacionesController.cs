@@ -100,9 +100,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ListarProceso")]
-        public async Task<IActionResult> ListarProceso()
+        public async Task<IActionResult> ListarProceso(string idClient)
         {
-            IEnumerable<ListarProcesoEntity> result = await _licitacionesServices.ListarProceso();
+            IEnumerable<ListarProcesoEntity> result = await _licitacionesServices.ListarProceso(idClient);
 
             return Ok(result);
         }
