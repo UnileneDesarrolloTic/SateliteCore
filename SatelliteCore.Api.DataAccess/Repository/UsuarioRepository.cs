@@ -132,13 +132,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea)
+        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea,string NombrePersona)
         {
             IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> result = new List<DatosFormatoFiltrarTrabajadorAreaModel>();
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatoFiltrarTrabajadorAreaModel>("usp_Filtrar_Empleado_por_Area", new { idArea  }, commandType: CommandType.StoredProcedure);
+                result = await connection.QueryAsync<DatosFormatoFiltrarTrabajadorAreaModel>("usp_Filtrar_Empleado_por_Area", new { idArea, NombrePersona }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -150,6 +150,25 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await connection.ExecuteAsync("sp_LiberarPersonalArea", new { IdAsignacion }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoPersonaAsignacionExportModel>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal)
+        {
+            IEnumerable<DatosFormatoPersonaAsignacionExportModel> result = new List<DatosFormatoPersonaAsignacionExportModel>();
+
+            string query = "SELECT a.IdAsignacion, RTRIM(b.Busqueda) NombreCompleto ,c.Descripcion NombreArea,a.FechaAsignacion ,a.FechaReAsignacion , IIF(a.Estado='A','Activo','Inactivo') Estado " +
+                          "FROM TBMAsignacionArea a " +
+                          "INNER JOIN PROD_UNILENE2..PersonaMast b on b.Persona = a.IdEmpleado " +
+                          "INNER JOIN TBMAreasProduccion c ON a.IdArea = c.IdArea " +
+                          "WHERE(CONVERT(varchar, a.FechaAsignacion, 23) >= @FechaInicio AND CONVERT(varchar, a.FechaAsignacion, 23) <= @FechaFinal)";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatoPersonaAsignacionExportModel>(query, new { FechaInicio, FechaFinal });
             }
 
             return result;
