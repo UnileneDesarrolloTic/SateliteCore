@@ -17,7 +17,16 @@ namespace SatelliteCore.Api.Models.Response
         public decimal CostoManoObra { get; set; }
         public decimal CostoCIF { get; set; }
         public decimal CostoUnitarioBase { get; set; }
+        public decimal PrecioVentaMinimo { get; set;  }
         public DateTime UltFechaDoc { get; set; }
-      
+        public string ItemComponente { get; set; }
+        public string DescripcionLocalItemComponente { get; set; }
+        public decimal ItemComponenteCostoDolares { get; set; }
+        public decimal ItemComponenteCostUnitario { get; set; } 
+        public string LineaItemComponente { get; set; }
+        public string FamiliaItemComponente { get; set; }
+        public string SubFamiliaItemComponente { get; set; }
+        public string TipoAguja { get; set; }
+        public bool isSelected { get; set; }
     }
 }

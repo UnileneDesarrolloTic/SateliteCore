@@ -109,7 +109,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result_db = await connection.QueryAsync<DatosFormatoComponentePrecioUnitario>("usp_Listar_Item_Componente", new { dato.Linea,dato.Familia,dato.SubFamilia }, commandType: CommandType.StoredProcedure);
+                result_db = await connection.QueryAsync<DatosFormatoComponentePrecioUnitario>("usp_Listar_Item_Componente_CostoBase", new { dato.Linea,dato.Familia,dato.SubFamilia }, commandType: CommandType.StoredProcedure);
                 connection.Dispose();
             }
 

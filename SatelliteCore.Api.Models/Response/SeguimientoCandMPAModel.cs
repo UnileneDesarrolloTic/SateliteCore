@@ -18,6 +18,7 @@ namespace SatelliteCore.Api.Models.Response
         public decimal StockComprometido { get; set; }
         public decimal StockDisponible { get; set; }
         public decimal CantPedir { get; set; }
-        
+        public decimal Duracion { get; set; }
+
     }
 }
