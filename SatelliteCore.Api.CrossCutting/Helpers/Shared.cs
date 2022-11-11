@@ -12,7 +12,12 @@ namespace SatelliteCore.Api.CrossCutting.Helpers
             int codigoUsuario = int.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
             return codigoUsuario;
         }
-
+        public static string ObtenerUsuarioSpring(IIdentity context)
+        {
+            ClaimsIdentity identity = context as ClaimsIdentity;
+            string Usuario = identity.FindFirst(ClaimTypes.GivenName).Value;
+            return Usuario;
+        }
         public static bool ValidarFecha(object inValue)
         {
             bool bValid;

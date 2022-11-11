@@ -120,7 +120,7 @@ namespace SatelliteCore.Api.Services
                 using (ExcelPackage package = new ExcelPackage(memStream))
                 {
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    var sheet = package.Workbook.Worksheets["UNILENE"];
+                    var sheet = package.Workbook.Worksheets.First();
                     ListarItem = GetListItem<string>(sheet);
                 }
             }
@@ -144,7 +144,7 @@ namespace SatelliteCore.Api.Services
 
             StringBuilder builder = new StringBuilder();
 
-            for (int row = 2; row <= endRow; row++)
+            for (int row = 1; row <= endRow; row++)
             {
                 builder.Append(sheet.Cells[row, 1].Value).Append(",");
             }
