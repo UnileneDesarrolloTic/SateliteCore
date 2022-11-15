@@ -13,5 +13,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<(object cabecera, object detalle)> BuscarCotizacionExportaciones(string NumeroDocumento);
         public Task<ResponseModel<string>> GuardarCotizacionExportaciones(DatosFormatoFormularioCotizacionExportaciones datos, string UsuarioSesion);
         public Task<ResponseModel<List<FormatoDetalleCotizacionExportaciones>>> ProcesarExcelExportaciones(DatosFormato64 dato);
+        public Task<ResponseModel<List<FormatoDetalleCotizacionExportaciones>>> BuscarWHItemMast(string Opcion, string Descripcion);
+        public Task<ResponseModel<string>> DesactivarItemCotizacionExportacion(string NumeroDocumento, string Item, int Linea, string UsuarioSesion);
     }
 }

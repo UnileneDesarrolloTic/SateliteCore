@@ -106,5 +106,23 @@ namespace SatelliteCore.Api.Services
             }
             return new ResponseModel<List<FormatoDetalleCotizacionExportaciones>>(true, Constante.MESSAGE_SUCCESS, list);
         }
+
+        public async Task<ResponseModel<List<FormatoDetalleCotizacionExportaciones>>> BuscarWHItemMast(string  Opcion, string Descripcion)
+        {
+
+            List <FormatoDetalleCotizacionExportaciones> result = new List<FormatoDetalleCotizacionExportaciones>();
+            result = await _exportacionesRepository.BuscarWHItemMast(Opcion,Descripcion);
+
+            return new ResponseModel<List<FormatoDetalleCotizacionExportaciones>>(true, Constante.MESSAGE_SUCCESS, result);
+        }
+
+        public async Task<ResponseModel<string>> DesactivarItemCotizacionExportacion(string NumeroDocumento, string Item, int Linea, string UsuarioSesion)
+        {
+             await _exportacionesRepository.DesactivarItemCotizacionExportacion(NumeroDocumento, Item, Linea ,UsuarioSesion);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminación exitosa ");
+        }
+
+
     }
 }

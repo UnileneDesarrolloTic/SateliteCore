@@ -12,5 +12,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> EditarCotizacionExportaciones(DatosFormatoFormularioCotizacionExportaciones dato, string UsuarioSesion);
         public Task<int> RegistrarCotizacionExportaciones(DatosFormatoFormularioCotizacionExportaciones dato, string UsuarioSesion);
         public Task<FormatoDetalleCotizacionExportaciones> ObtenerInformacionExcel(FormatoDetalleExcelExportacionesModel parametro);
+        public Task<List<FormatoDetalleCotizacionExportaciones>> BuscarWHItemMast(string Opcion, string Descripcion);
+
+        public Task<int> DesactivarItemCotizacionExportacion(string NumeroDocumento, string Item, int Linea , string UsuarioSesion);
     }
 }

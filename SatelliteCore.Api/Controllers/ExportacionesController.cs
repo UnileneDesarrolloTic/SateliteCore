@@ -60,5 +60,21 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<List<FormatoDetalleCotizacionExportaciones>> response = await _exportacionesServices.ProcesarExcelExportaciones(dato);
             return Ok(response);
         }
+
+        [HttpGet("BuscarItemMast")]
+        public async Task<IActionResult> BuscarWHItemMast(string Opcion, string Descripcion)
+        {
+            ResponseModel<List<FormatoDetalleCotizacionExportaciones>> response = await _exportacionesServices.BuscarWHItemMast(Opcion, Descripcion);
+            return Ok(response);
+        }
+
+        [HttpGet("DesactivarItemCotizacionExportacion")]
+        public async Task<IActionResult> DesactivarItemCotizacionExportacion(string NumeroDocumento, string Item , int Linea)
+        {
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            ResponseModel<string> response = await _exportacionesServices.DesactivarItemCotizacionExportacion(NumeroDocumento, Item, Linea , UsuarioSesion);
+            return Ok(response);
+        }
     }
 }
