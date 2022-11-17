@@ -10,5 +10,6 @@
         public string Proveedor { get; set; }
         public int CantidadPruebas { get; set; }
         public string Serie { get; set; }
+        public string Especialidad { get; set; }
     }
 }

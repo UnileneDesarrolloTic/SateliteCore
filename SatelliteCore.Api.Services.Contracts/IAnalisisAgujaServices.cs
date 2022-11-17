@@ -15,7 +15,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<object>> RegistrarAnalisisAguja(ControlAgujasModel matricula);
         public Task<ResponseModel<string>> ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion);
         public Task<object> AnalisisAgujaFlexion(string loteAnalisis);
-        public Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis);
+        public Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato);
         public Task<ResponseModel<string>> ReporteAnalisisFlexion(string loteAnalisis);
         public Task<ResponseModel<ObtenerDatosGeneralesDTO>> ObtenerDatosGenerales(string loteAnalisis);
         public Task<ResponseModel<AnalisisAgujaPlanMuestreoEntity>> ObtenerPlanMuestreo(string loteAnalisis);

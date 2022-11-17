@@ -23,5 +23,6 @@ namespace SatelliteCore.Api.Models.Dto.AnalisisAgujas
         //public decimal FuerzaPerforacion { get; set; }
         public string Observaciones { get; set; }
         public DateTime FechaAnalisis { get; set; }
+        public string Especialidad { get; set;  }
     }
 }

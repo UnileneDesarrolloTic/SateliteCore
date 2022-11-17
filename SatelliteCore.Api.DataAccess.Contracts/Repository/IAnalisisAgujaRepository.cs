@@ -16,7 +16,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion);
         public Task<(ObtenerAnalisisAgujaModel, List<AnalisisAgujaFlexionEntity>)> AnalisisAgujaFlexion(string loteAnalisis);
         public Task EliminarPruebaFlexionAguja(string loteAnalisis);
-        public Task GuardarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis);
+        public Task GuardarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato);
         public Task<ObtenerDatosGeneralesDTO> ObtenerDatosGenerales(string loteAnalisis);
         public Task<AnalisisAgujaPlanMuestreoEntity> ObtenerPlanMuestreo(string loteAnalisis);
         public Task RegistrarPlanMuestreo(AnalisisAgujaPlanMuestreoEntity planMuestreo);
