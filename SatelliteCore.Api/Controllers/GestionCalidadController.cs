@@ -2,9 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Dto.GestionCalidad;
+using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
+using SatelliteCore.Api.Models.Request.GestionCalidad;
+using SatelliteCore.Api.Models.Request.GestorDocumentario;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.GestionCalidad;
 using SatelliteCore.Api.Services.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -50,6 +56,80 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> reporte = await _gestionCalidadServices.ReporteVentasPorCliente(filtros);
             return Ok(reporte);
         }
+
+        [HttpPost("ListaReclamos")]
+        public async Task<IActionResult> ListarReclamosQuejas(FiltrosListaReclamosDTO filtros)
+        {
+            PaginacionModel<ListaReclamosDTO> listaReclamos = await _gestionCalidadServices.ListarReclamosQuejas(filtros);
+            return Ok(listaReclamos);
+        }
+
+        [HttpGet("RegistrarReclamo")]
+        public async Task<IActionResult> ListarReclamosQuejas(int codigoCliente)
+        {
+            string usuarioSesion = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+
+            ResponseModel<object> listaReclamos = await _gestionCalidadServices.RegistrarReclamoCabecera(codigoCliente, usuarioSesion);
+
+            return Ok(listaReclamos);
+        }
+
+        [HttpGet("DetalleReclamo")]
+        public async Task<IActionResult> ObtenerDetalleReclamo(string codigoReclamo)
+        {
+            string usuarioSesion = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+
+            ResponseModel<ReclamoDTO> listaReclamos = await _gestionCalidadServices.ObtenerDetalleReclamo(codigoReclamo);
+
+            return Ok(listaReclamos);
+        }
+
+        [HttpPost("LotesFiltradosReclamo")]
+        public async Task<IActionResult> LotesFiltradosReclamo(FiltrosLotesReclamosDTO filtros)
+        {
+            ResponseModel<IEnumerable<LotesFiltradosReclamo>> reporte = await _gestionCalidadServices.LotesFiltradosReclamo(filtros);
+            return Ok(reporte);
+        }
+
+        [HttpGet("ObtenerDatosItemLote")]
+        public async Task<IActionResult> ObtenerDatosItemLote(string lote)
+        {
+            ResponseModel<DatosLoteReclamoDTO> listaReclamos = await _gestionCalidadServices.DatosItemLote(lote);
+            return Ok(listaReclamos);
+        }
+
+        [HttpPost("GuardarReclamoDetalle")]
+        public async Task<IActionResult> GuardarReclamoDetalle(TBDReclamosEntity detalle)
+        { 
+            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            ResponseModel<object> result = await _gestionCalidadServices.GuardarDetalleReclamo(detalle);
+            return Ok(result);
+        }
+
+        [HttpPost("ActualizarDetalleLoteReclamo")]
+        public async Task<IActionResult> ActualizarDetalleLoteReclamo(TBDReclamosEntity detalle)
+        {
+            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            ResponseModel<string> result = await _gestionCalidadServices.ActualizarDetalleLoteReclamo(detalle);
+            return Ok(result);
+        }
+
+        [HttpGet("DatosReclamoLote")]
+        public async Task<IActionResult> DatosReclamoLote (string codReclamo, string lote, string documento)
+        {
+            ResponseModel<CabeceraReclamoLoteDTO> listaReclamos = await _gestionCalidadServices.DataReclamoLote(codReclamo, lote, documento);
+            return Ok(listaReclamos);
+        }
+
+        [HttpPost("ResponderReclamo")]
+        public async Task<IActionResult> RegistrarRespuestaReclamo(RespuestaReclamoDTO respuesta)
+        {
+            respuesta.Usuario = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> result = await _gestionCalidadServices.RegistrarRespuestaReclamo(respuesta);
+            return Ok(result);
+        }
+
 
 
         [HttpGet("ListarSsoma")]

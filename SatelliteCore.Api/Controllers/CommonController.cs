@@ -197,5 +197,12 @@ namespace SatelliteCore.Api.Controllers
             return Ok(AlmacenamientoSsoma);
         }
 
+        [HttpGet("DatosCliente")]
+        public async Task<IActionResult> ObtenerDatosCliente(int codigoCliente)
+        {
+            ResponseModel<DatosClienteDTO> cliente = await _commonService.ObtenerDatosCliente(codigoCliente);
+            return Ok(cliente);
+        }
+
     }
 }

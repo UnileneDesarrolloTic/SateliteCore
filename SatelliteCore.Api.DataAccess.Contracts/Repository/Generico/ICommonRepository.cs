@@ -1,4 +1,5 @@
 ﻿using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(List<FormatoListarMaestroItemModel>, int)> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
         public Task<IEnumerable<MaestroAlmacenEntity>> ListarMaestroAlmacen();
         public Task<bool> ValidacionPermisoAccesso(string Permiso, int idUsuario);
+        public Task<DatosClienteDTO> ObtenerDatosCliente(int codigoCliente);
+        public Task ActualizarCorrelativoCodReclamo(int correlativo, int idConfiguracion, int id, string grupo);
+        public Task<bool> ValidarExiteConfiguracionDetallePorId(int idConfiguracion, string estado = null);
         public Task<IEnumerable<TipoDocumentoSsomaEntity>> TipoDocumentoSsoma();
         public Task<IEnumerable<UbicacionSsomaEntity>> UbicacionSsoma();
         public Task<IEnumerable<ProteccionEntitySsoma>> ProteccionSsoma();
