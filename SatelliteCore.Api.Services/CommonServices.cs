@@ -237,5 +237,11 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<ResponseModel<DatosClienteDTO>> ObtenerDatosCliente(int codigoCliente)
+        {
+            DatosClienteDTO datosCliente = await _commonRepository.ObtenerDatosCliente(codigoCliente);
+            return new ResponseModel<DatosClienteDTO>(true, Constante.MESSAGE_SUCCESS, datosCliente); ;
+        }
+
     }
 }

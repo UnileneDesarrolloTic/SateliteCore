@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
@@ -110,9 +112,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-
-        
-
         public async Task<IEnumerable<AgrupadorEntity>> ListarAgrupador()
         {
             IEnumerable<AgrupadorEntity> lista = new List<AgrupadorEntity>();
@@ -127,8 +126,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return lista;
         }
-
-
         public async Task<IEnumerable<SubAgrupadorEntity>> ListarSubAgrupador(string idAgrupador)
         {
             IEnumerable<SubAgrupadorEntity> lista = new List<SubAgrupadorEntity>();
@@ -275,6 +272,51 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return !result;
+        }
+
+        public async Task<DatosClienteDTO> ObtenerDatosCliente (int codigoCliente)
+        {
+            DatosClienteDTO cliente = new DatosClienteDTO();
+
+            string query = "SELECT RTRIM(a.Documento) Documento, RTRIM(a.NombreCompleto) Nombre, IIF(c.Nacionalidad = 'E', 'EXTRANJERA', 'NACIONAL') Territorio, " +
+                "RTRIM(b.DescripcionCorta) Pais, a.Estado FROM PersonaMast a INNER JOIN ClienteMast c ON a.Persona = c.Cliente " +
+                "LEFT JOIN Pais b ON a.Nacionalidad = b.Pais WHERE Persona = @codigoCliente AND a.EsCliente = 'S'";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                cliente = await connection.QueryFirstOrDefaultAsync<DatosClienteDTO>(query, new { codigoCliente });
+            }
+
+            return cliente;
+        }
+
+        public async Task ActualizarCorrelativoCodReclamo(int correlativo, int idConfiguracion, int id, string grupo)
+        {
+            string query = "UPDATE TBDConfiguracion SET ValorEntero1 = @correlativo WHERE IdConfiguracion = @idConfiguracion AND Id = @id AND Grupo = @grupo";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync(query, new { correlativo, idConfiguracion, id, grupo });
+            }
+        }
+
+        public async Task<bool> ValidarExiteConfiguracionDetallePorId(int idConfiguracion, string estado = null)
+        {
+            bool validacion = false;
+
+            string query = "SELECT 1 FROM TBDConfiguracion WHERE Id = idConfiguracion";
+
+            if (!string.IsNullOrEmpty(estado))
+                query = $"{query} AND Estado = @estado";
+
+            query = QueryScript.ConsultaValidacion(query);
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                validacion = await connection.QueryFirstOrDefaultAsync<bool>(query, new { idConfiguracion, estado});
+            }
+
+            return validacion;
         }
 
 

@@ -13,6 +13,13 @@ namespace SatelliteCore.Api.CrossCutting.Helpers
             return codigoUsuario;
         }
 
+        public static string ObtenerUsuarioSpringSesion(IIdentity context)
+        {
+            ClaimsIdentity identity = context as ClaimsIdentity;
+            string codigoSpring = identity.FindFirst(ClaimTypes.GivenName).Value;
+            return codigoSpring;
+        }
+
         public static bool ValidarFecha(object inValue)
         {
             bool bValid;

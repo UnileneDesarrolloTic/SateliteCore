@@ -26,5 +26,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<PaginacionModel<FormatoListarMaestroItemModel>> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
         public Task<ResponseModel<IEnumerable<MaestroAlmacenEntity>>> ListarMaestroAlmacen();
         public Task<ResponseModel<bool>> ValidacionPermisoAccesso(string Permiso, int idUsuario);
+        public Task<ResponseModel<DatosClienteDTO>> ObtenerDatosCliente(int codigoCliente);
     }
 }
