@@ -2,7 +2,10 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Dto.GestionCalidad;
+using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Response;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -162,8 +165,57 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        
+        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo)
+        {
+            IEnumerable<DatosFormatoListarSsomaModel> result = new List<DatosFormatoListarSsomaModel>();
 
+            string query = " SELECT  a.IdSsoma,a.idTipoDocumento ,b.Descripcion TipoDocumentoDescripcion, ISNULL(a.idUbicacionSsoma,0)  idUbicacionSsoma , ISNULL(a.idProteccionSsoma,0) idProteccionSsoma, ISNULL(a.idEstadoSsoma,0)  idEstadoSsoma, ISNULL(c.Descripcion,'') EstadoDescripcion," +
+                           " a.CodigoDocumento , a.NombreDocumento , a.FechaPublicacion, a.VersionSsoma , a.Vigencia , ISNULL(a.idSsomaAlmacenamiento, 0) idSsomaAlmacenamiento,a.ArchivoPasivo,a.idSsomaResponsable responsable,a.FechaAprobacion, a.FechaRevision , a.Comentario ,DATEDIFF(DAY,a.FechaPublicacion,a.FechaRevision) Dias " +
+                           " FROM dbo.TBMSsoma a "+
+                           " INNER JOIN dbo.TBMSsomaTipoDocumento b ON a.idTipoDocumento = b.idTipoDocumento " +
+                           " LEFT JOIN dbo.TBMSsomaEstado c ON a.idEstadoSsoma = c.idEstadoSsoma " +
+                           " WHERE a.idTipoDocumento = IIF(@TipoDocumento = 0, b.idTipoDocumento, @TipoDocumento) AND " +
+                           " a.CodigoDocumento = IIF(@Codigo is null, a.CodigoDocumento, @Codigo)  AND a.Estado = 'A' ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoListarSsomaModel>(query, new { TipoDocumento , Codigo });
+            }
+
+            return result;
+        }
+
+
+        public async Task<object> RegistrarSsoma(DatosFormatoRegistrarSsomaModel dato,string UsuarioSesion)
+        {
+            dynamic resp = new { mensaje = "", respuesta = false };
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                resp = await connection.QuerySingleOrDefaultAsync("usp_Registrar_Editar_Ssoma", new { dato.idSsoma, dato.codigo, dato.nombreDocumento, dato.tipoDocumento, dato.version, dato.vigencia, dato.fechapublicacion, dato.fecharevision, dato.fechaAprobacion, dato.estado, dato.Ubicacion, dato.Almacenamiento, dato.proteccion, dato.responsable, dato.archivopasivo, dato.comentario, UsuarioSesion }, commandType: CommandType.StoredProcedure);
+  
+                connection.Dispose();
+            }
+
+            return resp;
+        }
+
+        public async Task<int> EliminarSsoma(int idSsoma, string UsuarioSesion)
+        {
+            int result = 1;
+            string sql = "UPDATE dbo.TBMSsoma SET  UsuarioModificacion=@UsuarioSesion ,FechaModificacion=GETDATE() , Estado='I' WHERE IdSsoma=@idSsoma";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+
+                await connection.ExecuteAsync(sql, new { idSsoma, UsuarioSesion });
+
+                connection.Dispose();
+            }
+
+            return result;
+        }
 
     }
 }

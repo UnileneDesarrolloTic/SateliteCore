@@ -2,6 +2,7 @@
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Dto.GestionCalidad;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.ReportServices.Contracts.GestionCalidad;
 using SatelliteCore.Api.Services.Contracts;
@@ -78,5 +79,28 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+
+        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo)
+        {
+            IEnumerable<DatosFormatoListarSsomaModel> respuesta =await _gestionCalidadRepository.ListarSsoma(TipoDocumento, Codigo);
+
+            return respuesta;
+        }
+
+        public async Task<ResponseModel<string>> RegistrarSsoma(DatosFormatoRegistrarSsomaModel dato , string UsuarioSesion)
+        {
+            dynamic respuesta = new { mensaje = "", respuesta = false };
+
+            respuesta = await _gestionCalidadRepository.RegistrarSsoma(dato, UsuarioSesion);
+
+            return new ResponseModel<string>(respuesta.respuesta, Constante.MESSAGE_SUCCESS, respuesta.mensaje);
+        }
+
+        public async Task<ResponseModel<string>> EliminarSsoma(int idSsoma, string UsuarioSesion)
+        {
+            await _gestionCalidadRepository.EliminarSsoma(idSsoma, UsuarioSesion);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminacion satisfactoria");
+        }
     }
 }

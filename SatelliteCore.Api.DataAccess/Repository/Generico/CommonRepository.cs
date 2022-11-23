@@ -277,6 +277,94 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return !result;
         }
 
+        public async Task<IEnumerable<TipoDocumentoSsomaEntity>> TipoDocumentoSsoma()
+        {
+            IEnumerable<TipoDocumentoSsomaEntity> lista = new List<TipoDocumentoSsomaEntity>();
 
+            string query = " SELECT idTipoDocumento, Descripcion ,Codigo , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaTipoDocumento  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<TipoDocumentoSsomaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<UbicacionSsomaEntity>> UbicacionSsoma()
+        {
+            IEnumerable<UbicacionSsomaEntity> lista = new List<UbicacionSsomaEntity>();
+
+            string query = " SELECT idUbicacionSsoma, Descripcion , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaUbicacion  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<UbicacionSsomaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<ProteccionEntitySsoma>> ProteccionSsoma()
+        {
+            IEnumerable<ProteccionEntitySsoma> lista = new List<ProteccionEntitySsoma>();
+
+            string query = " SELECT idProteccionSsoma, Descripcion , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaProteccion  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<ProteccionEntitySsoma>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<EstadoEntitySsoma>> EstadoSsoma()
+        {
+            IEnumerable<EstadoEntitySsoma> lista = new List<EstadoEntitySsoma>();
+
+            string query = " SELECT idEstadoSsoma, Descripcion , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaEstado  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<EstadoEntitySsoma>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<AlmacenamientoSsomaEntity>> AlmacenamientoSsoma()
+        {
+            IEnumerable<AlmacenamientoSsomaEntity> lista = new List<AlmacenamientoSsomaEntity>();
+
+            string query = " SELECT idSsomaAlmacenamiento, Descripcion , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaAlmacenamiento  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<AlmacenamientoSsomaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<ResponsableSsomaEntity>> ResponsableSsoma()
+        {
+            IEnumerable<ResponsableSsomaEntity> lista = new List<ResponsableSsomaEntity>();
+
+            string query = " SELECT idSsomaResponsable, Descripcion , UsuarioCreacion , FechaModificacion , Estado FROM TBMSsomaResponsable  WHERE  Estado='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<ResponsableSsomaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
     }
 }

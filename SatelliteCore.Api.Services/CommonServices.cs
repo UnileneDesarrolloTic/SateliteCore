@@ -237,5 +237,52 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>>> TipoDocumentoSsoma()
+        {
+
+            IEnumerable<TipoDocumentoSsomaEntity> tipoDocumentoSsomas = await _commonRepository.TipoDocumentoSsoma();
+            ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>> resultadotipoDocumentoSsomas = new ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>>(true, Constante.MESSAGE_SUCCESS, tipoDocumentoSsomas);
+
+            return resultadotipoDocumentoSsomas;
+        }
+
+        public async Task<ResponseModel<IEnumerable<UbicacionSsomaEntity>>> UbicacionSsoma()
+        {
+
+            IEnumerable<UbicacionSsomaEntity> ubicacionSsomas = await _commonRepository.UbicacionSsoma();
+            ResponseModel<IEnumerable<UbicacionSsomaEntity>> resultadoubicacionSsomas = new ResponseModel<IEnumerable<UbicacionSsomaEntity>>(true, Constante.MESSAGE_SUCCESS, ubicacionSsomas);
+
+            return resultadoubicacionSsomas;
+        }
+
+        public async Task<ResponseModel<IEnumerable<ProteccionEntitySsoma>>> ProteccionSsoma()
+        {
+
+            IEnumerable<ProteccionEntitySsoma> ProteccionSsomas = await _commonRepository.ProteccionSsoma();
+            ResponseModel<IEnumerable<ProteccionEntitySsoma>> resultadoProteccionSsomas = new ResponseModel<IEnumerable<ProteccionEntitySsoma>>(true, Constante.MESSAGE_SUCCESS, ProteccionSsomas);
+
+            return resultadoProteccionSsomas;
+        }
+        public async Task<ResponseModel<IEnumerable<EstadoEntitySsoma>>> EstadoSsoma()
+        {
+            IEnumerable<EstadoEntitySsoma> EstadoSsomas = await _commonRepository.EstadoSsoma();
+            ResponseModel<IEnumerable<EstadoEntitySsoma>> resultadoEstadoSsomas = new ResponseModel<IEnumerable<EstadoEntitySsoma>>(true, Constante.MESSAGE_SUCCESS, EstadoSsomas);
+            return resultadoEstadoSsomas;
+        }
+
+        public async Task<ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>>> AlmacenamientoSsoma()
+        {
+            IEnumerable<AlmacenamientoSsomaEntity> AlmacenamientoSsomas = await _commonRepository.AlmacenamientoSsoma();
+            ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>> Almacenamientosomas = new ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>>(true, Constante.MESSAGE_SUCCESS, AlmacenamientoSsomas);
+            return Almacenamientosomas;
+        }
+
+        public async Task<ResponseModel<IEnumerable<ResponsableSsomaEntity>>> ResponsableSsoma()
+        {
+            IEnumerable<ResponsableSsomaEntity> ResponsableSsomas = await _commonRepository.ResponsableSsoma();
+            ResponseModel<IEnumerable<ResponsableSsomaEntity>> Responsablesomas = new ResponseModel<IEnumerable<ResponsableSsomaEntity>>(true, Constante.MESSAGE_SUCCESS, ResponsableSsomas);
+            return Responsablesomas;
+        }
+
     }
 }

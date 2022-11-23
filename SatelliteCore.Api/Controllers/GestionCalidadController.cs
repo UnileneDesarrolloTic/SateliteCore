@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Dto.GestionCalidad;
+using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -48,5 +50,34 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> reporte = await _gestionCalidadServices.ReporteVentasPorCliente(filtros);
             return Ok(reporte);
         }
+
+
+        [HttpGet("ListarSsoma")]
+        public async Task<IActionResult> ListarSsoma(int TipoDocumento, string Codigo)
+        {
+            IEnumerable<DatosFormatoListarSsomaModel> listar = await _gestionCalidadServices.ListarSsoma(TipoDocumento, Codigo);
+
+            return Ok(listar);
+        }
+
+
+        [HttpPost("RegistrarSsoma")]
+        public async Task<IActionResult> RegistrarSsoma(DatosFormatoRegistrarSsomaModel dato)
+        {
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            ResponseModel<string> registrar = await _gestionCalidadServices.RegistrarSsoma(dato, UsuarioSesion);
+            return Ok(registrar);
+        }
+
+        [HttpGet("EliminarSsoma")]
+        public async Task<IActionResult> EliminarSsoma(int idSsoma)
+        {
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            ResponseModel<string> registrar = await _gestionCalidadServices.EliminarSsoma(idSsoma, UsuarioSesion);
+            return Ok(registrar);
+        }
+
     }
 }
