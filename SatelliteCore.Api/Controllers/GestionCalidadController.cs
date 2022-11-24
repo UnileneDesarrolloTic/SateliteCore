@@ -67,7 +67,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("RegistrarReclamo")]
         public async Task<IActionResult> ListarReclamosQuejas(int codigoCliente)
         {
-            string usuarioSesion = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            string usuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
 
             ResponseModel<object> listaReclamos = await _gestionCalidadServices.RegistrarReclamoCabecera(codigoCliente, usuarioSesion);
 
@@ -77,7 +77,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("DetalleReclamo")]
         public async Task<IActionResult> ObtenerDetalleReclamo(string codigoReclamo)
         {
-            string usuarioSesion = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            string usuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
 
             ResponseModel<ReclamoDTO> listaReclamos = await _gestionCalidadServices.ObtenerDetalleReclamo(codigoReclamo);
 
@@ -101,7 +101,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("GuardarReclamoDetalle")]
         public async Task<IActionResult> GuardarReclamoDetalle(TBDReclamosEntity detalle)
         { 
-            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<object> result = await _gestionCalidadServices.GuardarDetalleReclamo(detalle);
             return Ok(result);
         }
@@ -109,7 +109,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ActualizarDetalleLoteReclamo")]
         public async Task<IActionResult> ActualizarDetalleLoteReclamo(TBDReclamosEntity detalle)
         {
-            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            detalle.UsuarioRegistro = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> result = await _gestionCalidadServices.ActualizarDetalleLoteReclamo(detalle);
             return Ok(result);
         }
@@ -124,7 +124,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ResponderReclamo")]
         public async Task<IActionResult> RegistrarRespuestaReclamo(RespuestaReclamoDTO respuesta)
         {
-            respuesta.Usuario = Shared.ObtenerUsuarioSpringSesion(HttpContext.User.Identity);
+            respuesta.Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
 
             ResponseModel<string> result = await _gestionCalidadServices.RegistrarRespuestaReclamo(respuesta);
             return Ok(result);

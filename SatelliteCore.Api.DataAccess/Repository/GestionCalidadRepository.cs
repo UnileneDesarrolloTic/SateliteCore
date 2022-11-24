@@ -187,6 +187,27 @@ namespace SatelliteCore.Api.DataAccess.Repository
             if (filtros.Cliente > 0)
                 query = $"{query} AND a.Cliente = @Cliente";
 
+            if (!string.IsNullOrEmpty(filtros.CodReclamo))
+                query = $"{query} AND a.codReclamo = @codReclamo";
+
+            if (!string.IsNullOrEmpty(filtros.Territorio))
+                query = $"{query} AND c.Nacionalidad = @territorio";
+
+            query = $"{query} SELECT * FROM #Temp_Paginacion ORDER BY DiferenciaDias DESC OFFSET (@pagina - 1) * @registrosPorPagina " +
+                $"ROWS FETCH NEXT @registrosPorPagina ROWS ONLY; SELECT COUNT(1) CantidadRegistros FROM #Temp_Paginacion";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                reclamos = await context.QueryAsync<ListaReclamosDTO>(query, filtros);
+                using SqlMapper.GridReader multi = await context.QueryMultipleAsync(query, filtros);
+                reclamos = multi.Read<ListaReclamosDTO>().ToList();
+                registros = multi.Read<int>().FirstOrDefault();
+            }
+
+            return (reclamos.ToList(), registros);
+
+        }
+
         public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo)
         {
             IEnumerable<DatosFormatoListarSsomaModel> result = new List<DatosFormatoListarSsomaModel>();
@@ -228,25 +249,15 @@ namespace SatelliteCore.Api.DataAccess.Repository
             int result = 1;
             string sql = "UPDATE dbo.TBMSsoma SET  UsuarioModificacion=@UsuarioSesion ,FechaModificacion=GETDATE() , Estado='I' WHERE IdSsoma=@idSsoma";
 
-            if (!string.IsNullOrEmpty(filtros.CodReclamo))
-                query = $"{query} AND a.codReclamo = @codReclamo";
-
-            if (!string.IsNullOrEmpty(filtros.Territorio))
-                query = $"{query} AND c.Nacionalidad = @territorio";
-
-            query = $"{query} SELECT * FROM #Temp_Paginacion ORDER BY DiferenciaDias DESC OFFSET (@pagina - 1) * @registrosPorPagina " +
-                $"ROWS FETCH NEXT @registrosPorPagina ROWS ONLY; SELECT COUNT(1) CantidadRegistros FROM #Temp_Paginacion";
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                reclamos = await context.QueryAsync<ListaReclamosDTO>(query, filtros);
-                using SqlMapper.GridReader multi = await context.QueryMultipleAsync(query, filtros);
-                reclamos = multi.Read<ListaReclamosDTO>().ToList();
-                registros = multi.Read<int>().FirstOrDefault();
+
+                await connection.ExecuteAsync(sql, new { idSsoma, UsuarioSesion });
+
+                connection.Dispose();
             }
 
-            return (reclamos.ToList(), registros);
-
+            return result;
         }
 
         public async Task RegistrarReclamo(TBMReclamosEntity reclamo)
@@ -469,17 +480,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 await context.ExecuteAsync(query, new { idDetalle });
             }
 
-        }
-            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
+        }           
 
-                await connection.ExecuteAsync(sql, new { idSsoma, UsuarioSesion });
-
-                connection.Dispose();
-            }
-
-            return result;
-        }
 
     }
 }
