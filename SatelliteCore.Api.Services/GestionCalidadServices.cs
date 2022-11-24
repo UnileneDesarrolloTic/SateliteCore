@@ -80,9 +80,9 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo)
+        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo, int Estado)
         {
-            IEnumerable<DatosFormatoListarSsomaModel> respuesta =await _gestionCalidadRepository.ListarSsoma(TipoDocumento, Codigo);
+            IEnumerable<DatosFormatoListarSsomaModel> respuesta =await _gestionCalidadRepository.ListarSsoma(TipoDocumento, Codigo, Estado);
 
             return respuesta;
         }

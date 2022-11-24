@@ -53,9 +53,9 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpGet("ListarSsoma")]
-        public async Task<IActionResult> ListarSsoma(int TipoDocumento, string Codigo)
+        public async Task<IActionResult> ListarSsoma(int TipoDocumento, string Codigo, int Estado)
         {
-            IEnumerable<DatosFormatoListarSsomaModel> listar = await _gestionCalidadServices.ListarSsoma(TipoDocumento, Codigo);
+            IEnumerable<DatosFormatoListarSsomaModel> listar = await _gestionCalidadServices.ListarSsoma(TipoDocumento, Codigo, Estado);
 
             return Ok(listar);
         }

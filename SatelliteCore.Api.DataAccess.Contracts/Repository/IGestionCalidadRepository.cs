@@ -14,7 +14,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<List<DocumentosPedidosDTO>> OrdenDocumentosPedidosPorLotes(List<string> lotes);
         public Task<List<GuiaDocumentos>> OrdenGuiasRelacionadasPorLotes(List<string> lotes);
         public Task<List<VentasPorClienteDTO>> VentasPorCliente(RequestFiltroVentaCliente filtros);
-        public Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo);
+        public Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo, int Estado);
         public Task<object> RegistrarSsoma(DatosFormatoRegistrarSsomaModel dato,string UsuarioSesion);
         public Task<int> EliminarSsoma(int idSsoma, string UsuarioSesion);
     }
