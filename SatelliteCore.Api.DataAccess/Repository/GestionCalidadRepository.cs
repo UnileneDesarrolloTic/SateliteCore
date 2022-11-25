@@ -180,9 +180,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "RTRIM(e.DescripcionCorta) Nacionalidad, IIF(c.Nacionalidad = 'E', 'Extranjera', 'Nacional') Territorio, " +
                 "CASE a.Estado WHEN 'P' THEN 'PROCESO' WHEN 'C' THEN 'COMPLETADO' END Estado, a.FechaRegistro, a.UsuarioRegistro, " +
                 "DATEDIFF(DAY, a.FechaRegistro, GETDATE()) DiferenciaDias " +
-                "INTO #Temp_Paginacion FROM SatelliteCore.dbo.TBMReclamos a INNER JOIN PersonaMast b ON a.Cliente = b.Persona " +
-                "INNER JOIN ClienteMast c ON b.Persona = c.Cliente INNER JOIN CO_TipoCliente d ON c.TipoCliente = d.TipoCliente " +
-                "LEFT JOIN Pais e ON b.Nacionalidad = e.Pais WHERE CAST(a.FechaRegistro AS DATE) BETWEEN @fechaInicio AND @fechaFin ";
+                "INTO #Temp_Paginacion FROM SatelliteCore.dbo.TBMReclamos a WITH(NOLOCK) INNER JOIN PersonaMast b WITH(NOLOCK) ON a.Cliente = b.Persona " +
+                "INNER JOIN ClienteMast c WITH(NOLOCK) ON b.Persona = c.Cliente INNER JOIN CO_TipoCliente d WITH(NOLOCK) ON c.TipoCliente = d.TipoCliente " +
+                "LEFT JOIN Pais e WITH(NOLOCK) ON b.Nacionalidad = e.Pais WHERE CAST(a.FechaRegistro AS DATE) BETWEEN @fechaInicio AND @fechaFin ";
 
             if (filtros.Cliente > 0)
                 query = $"{query} AND a.Cliente = @Cliente";
@@ -208,7 +208,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo)
+        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo , int Estado)
         {
             IEnumerable<DatosFormatoListarSsomaModel> result = new List<DatosFormatoListarSsomaModel>();
 
@@ -218,11 +218,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
                            " INNER JOIN dbo.TBMSsomaTipoDocumento b ON a.idTipoDocumento = b.idTipoDocumento " +
                            " LEFT JOIN dbo.TBMSsomaEstado c ON a.idEstadoSsoma = c.idEstadoSsoma " +
                            " WHERE a.idTipoDocumento = IIF(@TipoDocumento = 0, b.idTipoDocumento, @TipoDocumento) AND " +
-                           " a.CodigoDocumento = IIF(@Codigo is null, a.CodigoDocumento, @Codigo)  AND a.Estado = 'A' ";
+                           " a.CodigoDocumento = IIF(@Codigo is null, a.CodigoDocumento, @Codigo)  AND  a.idEstadoSsoma = IIF(@Estado = 0, a.idEstadoSsoma, @Estado)  AND a.Estado = 'A' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<DatosFormatoListarSsomaModel>(query, new { TipoDocumento , Codigo });
+                result = await context.QueryAsync<DatosFormatoListarSsomaModel>(query, new { TipoDocumento , Codigo, Estado });
             }
 
             return result;
@@ -480,8 +480,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 await context.ExecuteAsync(query, new { idDetalle });
             }
 
-        }           
-
-
+        }
     }
 }

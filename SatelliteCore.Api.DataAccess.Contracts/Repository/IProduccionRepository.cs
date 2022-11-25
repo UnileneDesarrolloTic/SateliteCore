@@ -11,6 +11,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<SeguimientoProductoArimaModel> SeguimientoProductosArima(string periodo);
         public Task<(IEnumerable<PedidosCreadosAutoLogModel> ListaPedidos, int TotalRegistros)> ListaPedidosCreadoAuto(PedidosCreadosDataModel filtro);
         public Task<SeguimientoCandMPAGenericModel> ListaSeguimientoCandidatosMP(string regla);
+        public Task<IEnumerable<SeguimientoCandMPAModel>> ExportarAgujasMateriaPrima(string regla);
         public Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item);
         public Task<bool> MostrarColumnaMP(int Usuario);
         public Task<SeguimientoComprasMPArima> SeguimientoCompraMPArima(PronosticoCompraMP dato);

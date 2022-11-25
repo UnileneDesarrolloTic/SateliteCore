@@ -50,6 +50,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<SeguimientoCandMPAModel>> ExportarAgujasMateriaPrima(string regla)
+        {
+            IEnumerable<SeguimientoCandMPAModel> result = new List<SeguimientoCandMPAModel>();
+
+            using (var satelliteContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
+              
+            }
+
+            return result;
+        }
+
+
         public async Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item)
         {
             List<DetalleControlCalidadItemMP> result;

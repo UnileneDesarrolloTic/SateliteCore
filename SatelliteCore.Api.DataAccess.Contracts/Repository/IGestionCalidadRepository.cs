@@ -31,7 +31,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarRespuestaReclamo(RespuestaReclamoDTO respuesta);
         public Task Validar_ActualizarEstadoReclamo(int idDetalle);
         public Task<string> ObtenerEstadoLoteDetalleReclamo(int idDetalle);
-        public Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo);
+        public Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo, int Estado);
         public Task<object> RegistrarSsoma(DatosFormatoRegistrarSsomaModel dato,string UsuarioSesion);
         public Task<int> EliminarSsoma(int idSsoma, string UsuarioSesion);
     }
