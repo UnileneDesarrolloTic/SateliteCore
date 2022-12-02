@@ -23,6 +23,5 @@ namespace SatelliteCore.Api.Models.Config
         public string ContextMongoDB => _configuration.GetSection("ConnectionStrings:MongoContext").Value;
 
         public string ContextUReporteador => _configuration.GetSection("ConnectionStrings:UReporteadorContext").Value;
-
     }
 }

@@ -46,6 +46,17 @@ namespace SatelliteCore.Api.Services
             return await _pronosticoRepository.ListaSeguimientoCandidatosMP(regla);
         }
 
+        public async Task<ResponseModel<string>> ExportarAgujasMateriaPrima(string regla)
+        {
+            IEnumerable<SeguimientoCandMPAModel> listar = new List<SeguimientoCandMPAModel>();
+            listar= await _pronosticoRepository.ExportarAgujasMateriaPrima(regla);
+
+            ReportExcelMateriaPrima ExcelMateriaP = new ReportExcelMateriaPrima();
+            string excel = ExcelMateriaP.ReporteExcel(listar,regla);
+
+            return  new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, excel);
+        }
+
         public async Task<List<DetalleControlCalidadItemMP>> ControlCalidadItemMP(string Item)
         {
             List<DetalleControlCalidadItemMP> productosArima = await _pronosticoRepository.ControlCalidadItemMP(Item);

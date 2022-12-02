@@ -16,7 +16,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<DatosFormatoAsignacionPersonalLaboralModel> ListarAsignacionPersonal();
         public Task<List<AreaPersonalLaboralEntity>> ListarAreaPersonaLaboral();
         public Task<ResponseModel<string>> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato,int idUsuario);
-        public Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea);
+        public Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea,string NombrePersona);
         public Task<ResponseModel<string>> LiberalPersona(int IdAsignacion);
+        public Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal);
     }
 }

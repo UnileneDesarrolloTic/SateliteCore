@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.Administracion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -67,9 +68,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
         }
 
-        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea)
+        public async Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea, string NombrePersona)
         {
-            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioRepository.FiltrarAreaPersona(idArea);
+            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioRepository.FiltrarAreaPersona(idArea, NombrePersona);
             return response;
         }
 
@@ -79,6 +80,20 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Liberado con exito");
         }
+
+        public async Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal)
+        {
+            IEnumerable<DatosFormatoPersonaAsignacionExportModel> Listar = await _usuarioRepository.ExportarExcelPersonaAsignacion(FechaInicio, FechaFinal);
+
+            ReporteAsignacionPersonal Exporte = new ReporteAsignacionPersonal();
+            string reporte = Exporte.GenerarReporte(Listar);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+            return Respuesta;
+        }
+
+
 
 
     }

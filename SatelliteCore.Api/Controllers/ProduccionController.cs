@@ -50,6 +50,16 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listaCandidatos);
         }
 
+        [HttpGet("ExportarAgujasMateriaPrima")]
+        public async Task<ActionResult> ExportarAgujasMateriaPrima(string regla)
+        {
+            ResponseModel<string> respuesta = await _pronosticoServices.ExportarAgujasMateriaPrima(regla);
+            return Ok(respuesta);
+        }
+
+
+
+
         [HttpGet("ControlCalidadItemMP")]
         public async Task<ActionResult> ControlCalidadItemMP(string Item)
         {

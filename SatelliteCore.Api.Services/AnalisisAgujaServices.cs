@@ -76,12 +76,14 @@ namespace SatelliteCore.Api.Services
             return result;
         }
 
-        public async Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis)
+        public async Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato)
         {
-            string loteAnalisis = analisis[0].Lote;
+          
+          
+                string loteAnalisis = dato.Lote;
+                await _analisisAgujaRepository.EliminarPruebaFlexionAguja(loteAnalisis);
+                await _analisisAgujaRepository.GuardarPruebaFlexionAguja(dato);
 
-            await _analisisAgujaRepository.EliminarPruebaFlexionAguja(loteAnalisis);
-            await _analisisAgujaRepository.GuardarPruebaFlexionAguja(analisis);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo los datos de la prueba de flexión !!");
         }
@@ -228,8 +230,8 @@ namespace SatelliteCore.Api.Services
 
             List<AnalisisAgujaFlexionEntity> flexionAux = analisisFlexion.Result.flexion.FindAll(x => x.TipoRegistro == 2).ToList();
 
-            if (flexionAux.Count < 1)
-                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con prueba de flexión");
+           /* if (flexionAux.Count < 1)
+                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con prueba de flexión");*/
 
             if (string.IsNullOrEmpty(datosGenerales.Result.OrdenCompra))
                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con registros de análisis");

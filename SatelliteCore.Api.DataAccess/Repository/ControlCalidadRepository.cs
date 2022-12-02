@@ -273,8 +273,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             IEnumerable<FormatoEstructuraObtenerOrdenFabricacion> result = new List<FormatoEstructuraObtenerOrdenFabricacion>();
 
-            string sql = "SELECT  a.NUMEROLOTE OrdenFabricacion, substring(a.referencianumero,1,8) Lote , FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +  
-                         "RTRIM(c.NombreCompleto) Cliente, cast(a.CANTIDADMUESTRA as DECIMAL(14, 2)) ContraMuestra, RTRIM(a.NumeroLotePrincipal)  NumeroCaja " +
+            string sql = "SELECT  a.NUMEROLOTE OrdenFabricacion, substring(a.referencianumero,1,8) Lote , FECHAPRODUCCION FechaProduccion ,RTRIM(a.ITEM) Item,RTRIM(b.NumeroDeParte) NumeroParte,RTRIM(b.MarcaCodigo) Marca, RTRIM(b.DescripcionLocal) DescripcionLocal, " +
+                         "RTRIM(c.NombreCompleto) Cliente, (SELECT SUM(CANTIDAD) FROM TBMKardexInternoCC WHERE NUMEROLOTE=a.REFERENCIANUMERO  AND ORDENFABRICACION=a.NUMEROLOTE  AND ESTADO='A') ContraMuestra," +
+                         "(SELECT TOP 1 FechaTransaccion FROM TBMKardexInternoCC WHERE NUMEROLOTE=a.REFERENCIANUMERO  AND ORDENFABRICACION=a.NUMEROLOTE  AND ESTADO='A' AND TipoTransaccion='NI')  FechaIngreso , RTRIM(a.NumeroLotePrincipal)  NumeroCaja " +
                          "FROM PROD_UNILENE2..EP_PROGRAMACIONLOTE a " +
                          "INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.ITEM = b.Item " +
                          "INNER JOIN PROD_UNILENE2..PersonaMast c ON a.Cliente = c.Persona " +
@@ -311,11 +312,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 1;
 
-            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega =@fechaEntrega WHERE NUMEROLOTE=@ordenFabricacion AND REFERENCIANUMERO=@lote ";
+            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega =@fechaEntrega , Proyecto =@destruible , COMENTARIOS=@comentarios   WHERE NUMEROLOTE=@ordenFabricacion AND REFERENCIANUMERO=@lote ";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await connection.ExecuteAsync(sql, new { dato.lote, dato.ordenFabricacion, dato.fechaEntrega });
+                await connection.ExecuteAsync(sql, new { dato.lote, dato.ordenFabricacion, dato.fechaEntrega, dato.destruible , dato.comentarios });
 
                 connection.Dispose();
             }
@@ -625,8 +626,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             int contarB = 1;
             using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
             {
-               
-
                 foreach (DatosFormatoDetallePruebasProtocolos item in dato.TablaPrueba)
                 {
                     await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", commandType: CommandType.StoredProcedure);
@@ -636,7 +635,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return ID;
         }
-
 
         public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote)
         {
@@ -649,6 +647,54 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+
+        public async Task<int> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion)
+        {
+            int result = 1;
+            int ID = 0;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_FORMATO_PROTOCOLO_CABECERA", 
+                        new { ID_IDIOMA = dato.Idioma, FECHA_ANALISIS=dato.fechaanalisis, LOTE=dato.NumeroLote, NUMERODEPARTE=dato.NumeroParte, TECNICA= dato.Tecnica, METODO=dato.Metodo, DETALLE=dato.Detalle, USUARIO= UsuarioSesion }, commandType: CommandType.StoredProcedure);
+                
+                foreach(DatosFormatoDetalleFormatoProtocolo valor in dato.TablaPrueba)
+                {
+                    await connection.QueryAsync("SP_INSERTAR_FORMATO_PROTOCOLO_DETALLE",
+                        new { ID_FORMATO = ID, DESCRIPCION_PRUEBA = valor.descripcionLocal, UNIDAD_MEDIDA = valor.unidadMedida, ESPECIFICACION = valor.especificacion, VALOR = valor.valor , RESULTADO =valor.resultado, DESCRIPCION_METODOLOGIA = valor.metodologia, ORDEN =  valor.orden}, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> ImprimirControlProceso(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> result = new List<DatosFormatoInformacionResultadoProtocolo>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoInformacionResultadoProtocolo>("SP_LISTAR_PRUEBA_RESULTADO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoProtocoloPruebaModel> result = new List<DatosFormatoProtocoloPruebaModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoProtocoloPruebaModel>("SP_REPORTE_FORMATO_PROTOCOLO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+
 
 
     }

@@ -114,12 +114,11 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("FiltrarAreaPersona")]
-        public async Task<ActionResult> FiltrarAreaPersona(int idArea)
+        public async Task<ActionResult> FiltrarAreaPersona(int idArea, string NombrePersona)
         {
-            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioService.FiltrarAreaPersona(idArea);
+            IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel> response = await _usuarioService.FiltrarAreaPersona(idArea, NombrePersona);
             return Ok(response);
         }
-
 
         [HttpGet("LiberalPersona")]
         public async Task<ActionResult> LiberalPersona(int IdAsignacion)
@@ -128,6 +127,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+
+        [HttpGet("ExportarExcelPersonaAsignacion")]
+        public async Task<ActionResult> ExportarExcelPersonaAsignacion(string FechaInicio , string FechaFinal)
+        {   
+            ResponseModel<string> response = await _usuarioService.ExportarExcelPersonaAsignacion(FechaInicio, FechaFinal);
+            return Ok(response);
+        }
 
 
 

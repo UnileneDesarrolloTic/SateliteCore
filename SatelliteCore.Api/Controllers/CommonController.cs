@@ -154,6 +154,7 @@ namespace SatelliteCore.Api.Controllers
             return Ok(MaestroAlmacen);
         }
 
+
         [HttpGet("ListarGrupo")]
         public async Task<IActionResult> ListarGrupo()
         {
@@ -196,5 +197,56 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<IEnumerable<CalibrePruebaEntity>> response = await _commonService.ListarCalibrePrueba();
             return Ok(response);
         }
+
+
+        [HttpGet("TipoDocumentoSsoma")]
+        public async Task<IActionResult> TipoDocumentoSsoma()
+        {
+            ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>> TipoDocumentoSsoma = await _commonService.TipoDocumentoSsoma();
+            return Ok(TipoDocumentoSsoma);
+        }
+
+        [HttpGet("UbicacionSsoma")]
+        public async Task<IActionResult> UbicacionSsoma()
+        {
+            ResponseModel<IEnumerable<UbicacionSsomaEntity>> UbicacionSsoma = await _commonService.UbicacionSsoma();
+            return Ok(UbicacionSsoma);
+        }
+
+        [HttpGet("ProteccionSsoma")]
+        public async Task<IActionResult> ProteccionSsoma()
+        {
+            ResponseModel<IEnumerable<ProteccionEntitySsoma>> ProteccionSsoma = await _commonService.ProteccionSsoma();
+            return Ok(ProteccionSsoma);
+        }
+
+        [HttpGet("EstadoSsoma")]
+        public async Task<IActionResult> EstadoSsoma()
+        {
+            ResponseModel<IEnumerable<EstadoEntitySsoma>> EstadoSsoma = await _commonService.EstadoSsoma();
+            return Ok(EstadoSsoma);
+        }
+
+        [HttpGet("AlmacenamientoSsoma")]
+        public async Task<IActionResult> AlmacenamientoSsoma()
+        {
+            ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>> AlmacenamientoSsoma = await _commonService.AlmacenamientoSsoma();
+            return Ok(AlmacenamientoSsoma);
+        }
+
+        [HttpGet("ResponsableSsoma")]
+        public async Task<IActionResult> ResponsableSsoma()
+        {
+            ResponseModel<IEnumerable<ResponsableSsomaEntity>> AlmacenamientoSsoma = await _commonService.ResponsableSsoma();
+            return Ok(AlmacenamientoSsoma);
+        }
+
+        [HttpGet("DatosCliente")]
+        public async Task<IActionResult> ObtenerDatosCliente(int codigoCliente)
+        {
+            ResponseModel<DatosClienteDTO> cliente = await _commonService.ObtenerDatosCliente(codigoCliente);
+            return Ok(cliente);
+        }
+
     }
 }

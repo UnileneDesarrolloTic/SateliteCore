@@ -409,6 +409,35 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("RegistrarFormatoProtocolo")]
+        public async Task<IActionResult> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato)
+        {
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
 
+            ResponseModel<string> response = await _controlCalidadServices.InsertarCabeceraFormatoProtocolo(dato, UsuarioSesion);
+            return Ok(response);
+        }
+
+        [HttpGet("ImprimirControlProcesoInterno")]
+        public async Task<IActionResult> ImprimirControlProcesoInterno(string NumeroLote)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlProcesoInterno(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpGet("ImprimirControlPruebas")]
+        public async Task<IActionResult> ImprimirControlPruebas(string NumeroLote)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlPruebas(NumeroLote);
+            return Ok(response);
+        }
+
+
+        [HttpGet("ImprimirDocumentoProtocolo")]
+        public async Task<IActionResult> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion);
+            return Ok(response);
+        }
     }
 }

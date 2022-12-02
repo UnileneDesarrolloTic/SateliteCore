@@ -393,7 +393,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph("STATUS")).AddStyle(headerTableCommon);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
-            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph($"FLEXIÓN\nCant: {SeparadorDeMilesDecimal(planMuestreo.UndMuestrearI)} und")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+
+            pruebaFlexionCell = new Cell(1, 1).Add(new Paragraph(flexion.Count > 0 ? $"FLEXIÓN\nCant:  {SeparadorDeMilesDecimal(planMuestreo.UndMuestrearI)} und" : $"FLEXIÓN\nCant:  {SeparadorDeMilesDecimal(0)} und")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebaFlexioTable.AddCell(pruebaFlexionCell);
 
 
@@ -403,34 +404,38 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
 
             Cell cellTablaResultado;
 
-            foreach (AnalisisAgujaFlexionEntity item in flexion)
+            if (flexion.Count > 0)
             {
-                Table tablaResultado = new Table(new float[] { 55, 45 });
-                tablaResultado.SetWidth(UnitValue.CreatePercentValue(100));
-                tablaResultado.SetFixedLayout();
+                foreach (AnalisisAgujaFlexionEntity item in flexion)
+                {
+                    Table tablaResultado = new Table(new float[] { 55, 45 });
+                    tablaResultado.SetWidth(UnitValue.CreatePercentValue(100));
+                    tablaResultado.SetFixedLayout();
 
-                Cell cellResultado = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(item.Llave)} ciclos: ")).AddStyle(cellTableCommon)
-                    .SetBorder(Border.NO_BORDER)
-                    .SetTextAlignment(TextAlignment.CENTER)
-                    .SetPadding(0)
-                    .SetMargin(0);
+                    Cell cellResultado = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(item.Llave)} ciclos: ")).AddStyle(cellTableCommon)
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetPadding(0)
+                        .SetMargin(0);
 
-                tablaResultado.AddCell(cellResultado);
+                    tablaResultado.AddCell(cellResultado);
 
-                cellResultado = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(item.Valor)} %"))
-                    .AddStyle(cellTableCommon)
-                    .SetTextAlignment(TextAlignment.CENTER)
-                    .SetPadding(0)
-                    .SetMargin(0);
+                    cellResultado = new Cell(1, 1).Add(new Paragraph($"{SeparadorDeMilesDecimal(item.Valor)} %"))
+                        .AddStyle(cellTableCommon)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetPadding(0)
+                        .SetMargin(0);
 
-                tablaResultado.AddCell(cellResultado);
+                    tablaResultado.AddCell(cellResultado);
 
-                cellTablaResultado = new Cell(1, 1).Add(tablaResultado)
-                    .SetBorder(Border.NO_BORDER)
-                    .SetTextAlignment(TextAlignment.CENTER);
+                    cellTablaResultado = new Cell(1, 1).Add(tablaResultado)
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.CENTER);
 
-                resultadoFlexion.AddCell(cellTablaResultado);
+                    resultadoFlexion.AddCell(cellTablaResultado);
+                }
             }
+           
 
             cellTablaResultado = new Cell(1, 1).Add(resultadoFlexion).AddStyle(cellTableCommon);
             pruebaFlexioTable.AddCell(cellTablaResultado);
@@ -1398,6 +1403,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
                 case "R":
                     return "RECHAZADO";
                 case "N":
+                    return "NO APLICA";
+                case "C":
                     return "NO APLICA";
                 default:
                     return "";

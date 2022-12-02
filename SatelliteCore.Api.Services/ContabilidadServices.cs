@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Detracciones;
+using System.Text;
 
 namespace SatelliteCore.Api.Services
 {
@@ -33,7 +34,6 @@ namespace SatelliteCore.Api.Services
         public int ProcesarDetraccionContabilidad (DatosFormato64 dato)
         {
 
-          
             int response = 0;
 
             byte[] byteArray = Convert.FromBase64String(dato.base64string);
@@ -99,6 +99,73 @@ namespace SatelliteCore.Api.Services
 
             return reporte;
         }
+
+        public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ConsultarProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            IEnumerable<DatosFormatoDatosProductoCostobase> lista = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
+            return lista;
+        }
+
+
+
+        public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+
+            byte[] byteArray = Convert.FromBase64String(dato.base64);
+
+            string ListarItem;
+
+            using (MemoryStream memStream = new MemoryStream(byteArray))
+            {
+                using (ExcelPackage package = new ExcelPackage(memStream))
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var sheet = package.Workbook.Worksheets.First();
+                    ListarItem = GetListItem<string>(sheet);
+                }
+            }
+
+            dato.base64 = ListarItem;
+
+            IEnumerable<DatosFormatoDatosProductoCostobase>  Listar = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
+
+            return Listar;
+        }
+        private string GetListItem<T>(ExcelWorksheet sheet)
+        {
+            List<string> list = new List<string>();
+            var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
+                new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
+            );
+
+            var startRow = sheet.Dimension.Start.Row;
+            var endRow = sheet.Dimension.End.Row;
+            var Respuesta = "";
+
+            StringBuilder builder = new StringBuilder();
+
+            for (int row = 1; row <= endRow; row++)
+            {
+                builder.Append(sheet.Cells[row, 1].Value).Append(",");
+            }
+            Respuesta = builder.ToString();
+
+            return Respuesta;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item)
+        {
+            IEnumerable<DatosFormatoRecetaItemComponente> lista = await _contabilidadRepository.ConsultarRecetaProducto(Item);
+            return lista;
+        }
+
+        public async Task<IEnumerable<DatosFormatoComponentePrecioUnitario>> ListarItemComponentePrecio(DatosFormatosComponentPrecio dato)
+        {
+            IEnumerable<DatosFormatoComponentePrecioUnitario> lista = await _contabilidadRepository.ListarItemComponentePrecio(dato);
+            return lista;
+        }
+
 
 
 

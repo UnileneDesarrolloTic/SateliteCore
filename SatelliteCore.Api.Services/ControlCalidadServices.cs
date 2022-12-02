@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using SatelliteCore.Api.Models.Generic;
+using SatelliteCore.Api.ReportServices.Contracts.ControlCalidad;
 
 namespace SatelliteCore.Api.Services
 {
@@ -246,7 +247,6 @@ namespace SatelliteCore.Api.Services
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
-
         public async Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario)
         {
             await _controlCalidadRepository.RegistrarPruebasEfectuadasProtocolo(dato, idUsuario);
@@ -256,8 +256,57 @@ namespace SatelliteCore.Api.Services
 
         public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote)
         {
-            IEnumerable<DatosFormatoInformacionResultadoProtocolo> Respuesta = await _controlCalidadRepository.BuscarInformacionResultadoProtocolo(NumeroLote);
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.BuscarInformacionResultadoProtocolo(NumeroLote);
+             return listado;
+        }
+
+        public async Task<ResponseModel<string>> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion)
+        {
+            await _controlCalidadRepository.InsertarCabeceraFormatoProtocolo(dato,UsuarioSesion);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
+
+        public async Task<ResponseModel<string>> ImprimirControlProcesoInterno(string NumeroLote)
+        {
+            DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            ControlProcesoInterno ExporteControlProcesoInterno = new ControlProcesoInterno();
+            string reporte = ExporteControlProcesoInterno.ReporteControlProcesoInterno(listado,Cabecera);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+            return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<string>> ImprimirControlPruebas(string NumeroLote)
+        {
+            DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
+
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            ControldePruebas ExporteControldePruebas = new ControldePruebas();
+            string reporte = ExporteControldePruebas.ReporteControldePruebas(listado, Cabecera);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion)
+        {
+            DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
+            IEnumerable<DatosFormatoProtocoloPruebaModel> listado = await _controlCalidadRepository.ImprimirDocumentoProtocolo(NumeroLote);
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            FormatoPruebaProtocolo ExporteFormatoPrueba = new FormatoPruebaProtocolo();
+            string reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocolo(listado, Cabecera, Opcion);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+            return Respuesta;
+        }
+
+
+
+
     }
 }

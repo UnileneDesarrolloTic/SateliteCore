@@ -74,9 +74,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
 
-        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso()
+        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso(string idClient)
         {
-            return await _licitacionesRepository.ListarProceso();
+            return await _licitacionesRepository.ListarProceso(idClient);
 
         }
 

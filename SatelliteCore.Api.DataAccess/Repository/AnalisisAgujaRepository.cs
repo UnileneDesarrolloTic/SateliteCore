@@ -98,7 +98,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) analisis;
 
             string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, " +
-                "IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
+                "IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie,a.Especialidad Especialidad  FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
                 "INNER JOIN PROD_UNILENE2.dbo.WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item WHERE Lote = @loteAnalisis " +
                 "SELECT IdAnalisis, Lote,TipoRegistro,Llave,Valor,UsuarioRegistro,FechaRegistro FROM TBDAnalisisAgujaFlexion WITH(NOLOCK) WHERE Lote = @loteAnalisis";
 
@@ -123,13 +123,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task GuardarPruebaFlexionAguja(List<GuardarPruebaFlexionAgujaModel> analisis)
+        public async Task GuardarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato)
         {
+
+            string Lote = dato.Lote;
+           
+            string scriptCabecera = "UPDATE TBMAnalisisAgujas SET Especialidad=@Especialidad WHERE Lote=@Lote";
             string script = "INSERT INTO TBDAnalisisAgujaFlexion(Lote, TipoRegistro, Llave, Valor, UsuarioRegistro) VALUES (@lote, @tipoRegistro, @llave, @valor, @usuarioRegistro)";
+            
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(script, analisis);
+                    await context.ExecuteAsync(scriptCabecera, new { Lote, dato.Especialidad });
+                if(dato.Especialidad=="N")
+                    await context.ExecuteAsync(script, dato.Detalle );
             }
         }
 
@@ -139,7 +146,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca," +
                 "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
-                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis " +
+                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis , a.Especialidad " +
                 "FROM SatelliteCore.dbo.TBMAnalisisAgujas a WITH(NOLOCK) " +
                     "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item INNER JOIN WH_ItemFormato c ON c.Grupo = '15' AND c.Tabla = '002' AND c.Codigo = SUBSTRING(b.NumeroDeParte, 2, 2) " +
                     "INNER JOIN WH_ItemFormato d WITH(NOLOCK) ON d.Grupo = '15' AND d.Tabla = '003' AND d.Codigo = SUBSTRING(b.NumeroDeParte, 4, 3) " +

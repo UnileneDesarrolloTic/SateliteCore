@@ -51,6 +51,38 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
+        [HttpPost("ConsultarProductoCostoBase")]
+        public async Task<ActionResult> ConsultarProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            IEnumerable <DatosFormatoDatosProductoCostobase> listado = await _ContabilidadService.ConsultarProductoCostoBase(dato);
+            return Ok(listado);
+        }
+
+        [HttpPost("ProcesarProductoExcel")]
+        public async Task<ActionResult> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            IEnumerable<DatosFormatoDatosProductoCostobase> listado = await _ContabilidadService.ProcesarProductoExcel(dato);
+            return Ok(listado);
+        }
+
+
+        [HttpGet("ConsultarRecetaProducto")]
+        public async Task<ActionResult> ConsultarRecetaProducto(string Item)
+        {
+            IEnumerable<DatosFormatoRecetaItemComponente> listado = await _ContabilidadService.ConsultarRecetaProducto(Item);
+            return Ok(listado);
+        }
+
+        [HttpPost("ListarItemComponentePrecio")]
+        public async Task<ActionResult> ListarItemComponentePrecio(DatosFormatosComponentPrecio dato)
+        {
+            IEnumerable<DatosFormatoComponentePrecioUnitario> listado = await _ContabilidadService.ListarItemComponentePrecio(dato);
+            return Ok(listado);
+        }
+
+
+
+
 
     }
 }
