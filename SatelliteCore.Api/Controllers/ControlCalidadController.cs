@@ -365,7 +365,7 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("BuscarPruebaFormatoProtocolo")]
-        public async Task<IActionResult> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte)
+        public async Task<IActionResult> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte,int Idioma)
         {
             if (NumeroLote == "")
             {
@@ -373,7 +373,7 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> response = await _controlCalidadServices.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte);
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> response = await _controlCalidadServices.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte, Idioma);
             return Ok(response);
         }
 

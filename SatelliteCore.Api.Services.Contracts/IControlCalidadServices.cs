@@ -38,7 +38,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario);
         public Task<ResponseModel<string>> EliminarPruebaDT(string IdPrueba);
         public Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote);
-        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte);
+        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, int Idioma);
         public Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario);
         public Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario);
         public Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario);

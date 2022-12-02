@@ -556,14 +556,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte)
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, int Idioma )
         {
             IEnumerable<DatosFormatosDatoListarPruebaProtocolo> result = new List<DatosFormatosDatoListarPruebaProtocolo>();
              
 
-            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatosDatoListarPruebaProtocolo>("SP_LISTAR_FORMATO_PROTOCOLO", new { NUMERODEPARTE = NumeroParte, LOTE= NumeroLote }, commandType: CommandType.StoredProcedure);
+                result = await connection.QueryAsync<DatosFormatosDatoListarPruebaProtocolo>("usp_lista_formato_protocolo", new {  NumeroParte, NumeroLote , Idioma }, commandType: CommandType.StoredProcedure);
             }
 
             return result;

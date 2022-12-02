@@ -229,9 +229,9 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string  NumeroParte)
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string  NumeroParte, int Idioma)
         {
-            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> Respuesta = await _controlCalidadRepository.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte);
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> Respuesta = await _controlCalidadRepository.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte, Idioma);
             return Respuesta;
         }
 
