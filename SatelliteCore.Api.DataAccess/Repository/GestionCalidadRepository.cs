@@ -213,7 +213,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<DatosFormatoListarSsomaModel> result = new List<DatosFormatoListarSsomaModel>();
 
             string query = " SELECT  a.IdSsoma,a.idTipoDocumento ,b.Descripcion TipoDocumentoDescripcion, ISNULL(a.idUbicacionSsoma,0)  idUbicacionSsoma , ISNULL(a.idProteccionSsoma,0) idProteccionSsoma, ISNULL(a.idEstadoSsoma,0)  idEstadoSsoma, ISNULL(c.Descripcion,'') EstadoDescripcion," +
-                           " a.CodigoDocumento , a.NombreDocumento , a.FechaPublicacion, a.VersionSsoma , a.Vigencia , ISNULL(a.idSsomaAlmacenamiento, 0) idSsomaAlmacenamiento,a.ArchivoPasivo,a.idSsomaResponsable responsable,a.FechaAprobacion, a.FechaRevision , a.Comentario ,DATEDIFF(DAY,a.FechaPublicacion,a.FechaRevision) Dias " +
+                           " a.CodigoDocumento , a.NombreDocumento , a.FechaPublicacion, a.VersionSsoma , a.Vigencia , ISNULL(a.idSsomaAlmacenamiento, 0) idSsomaAlmacenamiento,a.ArchivoPasivo,a.idSsomaResponsable responsable,a.FechaAprobacion, a.FechaRevision , a.Comentario ,DATEDIFF(DAY,a.FechaCreacion,a.FechaRevision) Dias " +
                            " FROM dbo.TBMSsoma a "+
                            " INNER JOIN dbo.TBMSsomaTipoDocumento b ON a.idTipoDocumento = b.idTipoDocumento " +
                            " LEFT JOIN dbo.TBMSsomaEstado c ON a.idEstadoSsoma = c.idEstadoSsoma " +
