@@ -13,6 +13,7 @@ using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Detracciones;
 using System.Text;
+using SatelliteCore.Api.ReportServices.Contracts.AnalisisCosto;
 
 namespace SatelliteCore.Api.Services
 {
@@ -45,7 +46,7 @@ namespace SatelliteCore.Api.Services
                 using (ExcelPackage package = new ExcelPackage(memStream))
                 {
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    var sheet = package.Workbook.Worksheets["UNILENE"];
+                    var sheet = package.Workbook.Worksheets.First();
                     datosArchivos = GetList<FormatoComprobantePagoDetraccion>(sheet);
                 }
             }
@@ -105,6 +106,17 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoDatosProductoCostobase> lista = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
             return lista;
         }
+
+        public async Task<ResponseModel<string>> ExportarExcelProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {   
+            IEnumerable<DatosFormatoDatosProductoCostobase> lista = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
+            AnalisisCostosExcel AnalisisCosto = new AnalisisCostosExcel();
+
+            string reporte = AnalisisCosto.GenerarAnalisisCosto(lista);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        
+        }
+
 
 
 
