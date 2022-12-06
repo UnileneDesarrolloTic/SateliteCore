@@ -352,7 +352,7 @@ namespace SatelliteCore.Api.Controllers
         //FORMATO DE PROTOCOLO
 
         [HttpGet("BuscarNumeroLoteProtocolo")]
-        public async Task<IActionResult> BuscarNumeroLoteProtocolo(string NumeroLote)
+        public async Task<IActionResult> BuscarNumeroLoteProtocolo(string NumeroLote, string Idioma)
         {
             if (NumeroLote == "")
             {
@@ -360,12 +360,12 @@ namespace SatelliteCore.Api.Controllers
                 return BadRequest(responseError);
             }
 
-            ResponseModel<DatosFormatoNumeroLoteProtocoloModel> response = await _controlCalidadServices.BuscarNumeroLoteProtocolo(NumeroLote);
+            ResponseModel<DatosFormatoNumeroLoteProtocoloModel> response = await _controlCalidadServices.BuscarNumeroLoteProtocolo(NumeroLote,Idioma);
             return Ok(response);
         }
 
         [HttpGet("BuscarPruebaFormatoProtocolo")]
-        public async Task<IActionResult> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte,int Idioma)
+        public async Task<IActionResult> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte,string Idioma)
         {
             if (NumeroLote == "")
             {
@@ -432,11 +432,10 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-
         [HttpGet("ImprimirDocumentoProtocolo")]
-        public async Task<IActionResult> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion)
+        public async Task<IActionResult> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma)
         {
-            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion);
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion, Idioma);
             return Ok(response);
         }
     }

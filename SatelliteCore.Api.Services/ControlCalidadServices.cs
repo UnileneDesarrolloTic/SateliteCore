@@ -221,15 +221,15 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote)
+        public async Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote, string Idioma)
         {
             DatosFormatoNumeroLoteProtocoloModel result = new DatosFormatoNumeroLoteProtocoloModel();
-            result= await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            result= await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote, Idioma);
             ResponseModel<DatosFormatoNumeroLoteProtocoloModel> Respuesta = new ResponseModel<DatosFormatoNumeroLoteProtocoloModel>(true, Constante.MESSAGE_SUCCESS, result);
             return Respuesta;
         }
 
-        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string  NumeroParte, int Idioma)
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string  NumeroParte, string Idioma)
         {
             IEnumerable<DatosFormatosDatoListarPruebaProtocolo> Respuesta = await _controlCalidadRepository.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte, Idioma);
             return Respuesta;
@@ -271,7 +271,7 @@ namespace SatelliteCore.Api.Services
         {
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
             IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
-            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote,"1");
             ControlProcesoInterno ExporteControlProcesoInterno = new ControlProcesoInterno();
             string reporte = ExporteControlProcesoInterno.ReporteControlProcesoInterno(listado,Cabecera);
 
@@ -285,7 +285,7 @@ namespace SatelliteCore.Api.Services
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
 
             IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
-            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote,"1");
             ControldePruebas ExporteControldePruebas = new ControldePruebas();
             string reporte = ExporteControldePruebas.ReporteControldePruebas(listado, Cabecera);
 
@@ -293,13 +293,23 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion)
+        public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma)
         {
+            string reporte ="";
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
-            IEnumerable<DatosFormatoProtocoloPruebaModel> listado = await _controlCalidadRepository.ImprimirDocumentoProtocolo(NumeroLote);
-            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote);
+        
+            IEnumerable<DatosFormatoProtocoloPruebaModel> listado = await _controlCalidadRepository.ImprimirDocumentoProtocolo(NumeroLote, Idioma);
+            if (listado.Count() == 0)
+                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No hay Pruebas Efectuadas para ese lote");
+
+
+            Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote, Idioma);
             FormatoPruebaProtocolo ExporteFormatoPrueba = new FormatoPruebaProtocolo();
-            string reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocolo(listado, Cabecera, Opcion);
+            
+            if (Idioma=="1")
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloEspaniol(listado, Cabecera, Opcion);
+            else
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloIngles(listado, Cabecera, Opcion);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
             return Respuesta;

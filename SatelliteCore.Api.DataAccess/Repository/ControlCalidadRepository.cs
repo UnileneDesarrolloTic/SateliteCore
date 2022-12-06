@@ -544,19 +544,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote)
+        public async Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote,string Idioma)
         {
             DatosFormatoNumeroLoteProtocoloModel result = new DatosFormatoNumeroLoteProtocoloModel();
 
-            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryFirstOrDefaultAsync<DatosFormatoNumeroLoteProtocoloModel>("SP_LISTAR_TPRO_PROTOCOLO_CABECERA", new { NUMEROLOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+                result = await connection.QueryFirstOrDefaultAsync<DatosFormatoNumeroLoteProtocoloModel>("usp_listar_tpro_protocolo_cabecera", new { NumeroLote , Idioma }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, int Idioma )
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, string Idioma )
         {
             IEnumerable<DatosFormatosDatoListarPruebaProtocolo> result = new List<DatosFormatosDatoListarPruebaProtocolo>();
              
@@ -682,13 +682,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote)
+        public async Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote, string Idioma)
         {
             IEnumerable<DatosFormatoProtocoloPruebaModel> result = new List<DatosFormatoProtocoloPruebaModel>();
 
-            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatoProtocoloPruebaModel>("SP_REPORTE_FORMATO_PROTOCOLO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+                result = await connection.QueryAsync<DatosFormatoProtocoloPruebaModel>("usp_reporte_formato_protocolo", new { NumeroLote  , Idioma }, commandType: CommandType.StoredProcedure);
             }
 
             return result;

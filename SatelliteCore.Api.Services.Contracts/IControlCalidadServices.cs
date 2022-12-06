@@ -37,8 +37,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> EliminarLeyendaDT(string IdLeyenda);
         public Task<ResponseModel<string>> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario);
         public Task<ResponseModel<string>> EliminarPruebaDT(string IdPrueba);
-        public Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote);
-        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, int Idioma);
+        public Task<ResponseModel<DatosFormatoNumeroLoteProtocoloModel>> BuscarNumeroLoteProtocolo(string NumeroLote, string Idioma);
+        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, string Idioma);
         public Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario);
         public Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario);
         public Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario);
@@ -46,7 +46,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion);
         public Task<ResponseModel<string>> ImprimirControlProcesoInterno(string NumeroLote);
         public Task<ResponseModel<string>> ImprimirControlPruebas(string NumeroLote);
-        public Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion);
+        public Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma);
       
     }
 }
