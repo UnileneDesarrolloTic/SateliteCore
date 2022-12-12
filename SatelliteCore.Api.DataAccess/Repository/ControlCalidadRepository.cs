@@ -694,6 +694,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<ParametroMastEntity> ProtocoloRevisionTerminado()
+        {
+            ParametroMastEntity result = new ParametroMastEntity();
+
+            string sql = "SELECT CompaniaCodigo, AplicacionCodigo, ParametroClave, DescripcionParametro, Explicacion, TipodeDatoFlag, RTRIM(Texto) Texto, Numero, Fecha, FinanceComunFlag,  Estado,  UltimoUsuario, UltimaFechaModif, ExplicacionAdicional,  Texto1  FROM ParametrosMast WHERE parametroclave='FORMISOPT'"; 
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryFirstOrDefaultAsync<ParametroMastEntity>(sql);
+            }
+
+            return result;
+        }
+
+
+
 
 
 

@@ -297,19 +297,24 @@ namespace SatelliteCore.Api.Services
         {
             string reporte ="";
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
-        
+            ParametroMastEntity datosPiePagina = new ParametroMastEntity();
+
+
             IEnumerable<DatosFormatoProtocoloPruebaModel> listado = await _controlCalidadRepository.ImprimirDocumentoProtocolo(NumeroLote, Idioma);
+
             if (listado.Count() == 0)
                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No hay Pruebas Efectuadas para ese lote");
 
 
             Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote, Idioma);
+            datosPiePagina = await _controlCalidadRepository.ProtocoloRevisionTerminado();
+
             FormatoPruebaProtocolo ExporteFormatoPrueba = new FormatoPruebaProtocolo();
             
             if (Idioma=="1")
-                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloEspaniol(listado, Cabecera, Opcion);
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloEspaniol(listado, Cabecera, Opcion , datosPiePagina);
             else
-                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloIngles(listado, Cabecera, Opcion);
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloIngles(listado, Cabecera, Opcion, datosPiePagina);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
             return Respuesta;
