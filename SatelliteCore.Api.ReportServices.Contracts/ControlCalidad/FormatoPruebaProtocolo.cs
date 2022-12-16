@@ -104,7 +104,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
                .SetWidth(150)
-               .SetHeight(50)
+               .SetHeight(52)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetTextAlignment(TextAlignment.LEFT);
@@ -199,9 +199,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderBottom(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            /*.SetBorder(Border.NO_BORDER);*/
+            .SetBorderBottom(Border.NO_BORDER)
+            .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -210,10 +210,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
            .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
            .SetTextAlignment(TextAlignment.JUSTIFIED)
-           .SetBorder(Border.NO_BORDER)
-           /*.SetBorderRight(Border.NO_BORDER)
+           .SetBorderRight(Border.NO_BORDER)
            .SetBorderLeft(Border.NO_BORDER)
-           .SetBorderBottom(Border.NO_BORDER)*/;
+           .SetBorderBottom(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 18).Add(new Paragraph(Cabecera.ITEMDESCRIPCION)
@@ -221,9 +220,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)*/;
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -234,10 +232,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderBottom(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
             .SetBorderRight(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)*/;
+            .SetBorderTop(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentación:")
@@ -245,11 +242,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderRight(Border.NO_BORDER)
-            .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -258,11 +251,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -271,11 +260,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -285,11 +270,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
@@ -297,10 +278,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderBottom(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
             .SetBorderTop(Border.NO_BORDER)
-            .SetBorderLeft(Border.NO_BORDER)*/;
+            .SetBorderLeft(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -310,10 +290,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderBottom(Border.NO_BORDER)
+            .SetBorderBottom(Border.NO_BORDER)
             .SetBorderRight(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)*/;
+            .SetBorderTop(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -322,11 +301,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 2).Add(new Paragraph(Cabecera.REFERENCIANUMERO)
@@ -334,11 +309,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -347,11 +318,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(Cabecera.CANTIDADPRODUCIDA.ToString("#,##0"))
@@ -359,11 +326,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -373,11 +336,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
@@ -385,10 +344,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
             .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)*/;
+            .SetBorderTop(Border.NO_BORDER)
+            .SetBorderLeft(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -400,12 +358,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderBottom(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)
             .SetBorderTop(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)*/;
-
+            .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -415,11 +369,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetBorder(Border.NO_BORDER)
-            /*
-            .SetBorderRight(Border.NO_BORDER)
-            .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)*/;
+            .SetBorderBottom(new SolidBorder(0.50f));
+
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(Cabecera.MARCA)
@@ -428,10 +379,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)*/;
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -441,10 +389,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
              .SetHorizontalAlignment(HorizontalAlignment.CENTER)
              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
              .SetBorder(Border.NO_BORDER)
-             /*.SetBorderLeft(Border.NO_BORDER)
-             .SetBorderBottom(Border.NO_BORDER)
-             .SetBorderTop(Border.NO_BORDER)
-             .SetBorderRight(Border.NO_BORDER)*/;
+             .SetBorderBottom(new SolidBorder(0.50f));
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -454,10 +399,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)*/;
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAANALISIS.ToString("dd/MM/yyyy"))
@@ -466,10 +408,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetMarginLeft(-10)
-            .SetBorder(Border.NO_BORDER)
-            /*.SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)*/;
+            .SetBorderLeft(Border.NO_BORDER)
+            .SetBorderTop(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -747,7 +687,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Document document = new Document(pdf, PageSize.A4);
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            Paragraph Piepagina = new Paragraph(new Text("dsadsadsadsdasd"));
+           
 
             pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
 
@@ -817,7 +757,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
                .SetWidth(150)
-               .SetHeight(50)
+               .SetHeight(52)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetTextAlignment(TextAlignment.LEFT);
@@ -1101,10 +1041,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorderBottom(Border.NO_BORDER)
             .SetBorderRight(Border.NO_BORDER)
             .SetBorderTop(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER);
+            .SetBorderBottom(new SolidBorder(0.50f));
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -1114,10 +1053,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorderRight(Border.NO_BORDER)
-            .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER);
+            .SetBorder(Border.NO_BORDER)
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.MARCA)
@@ -1125,10 +1062,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER);
+            .SetBorder(Border.NO_BORDER)
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -1137,10 +1072,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
              .SetTextAlignment(TextAlignment.LEFT)
              .SetHorizontalAlignment(HorizontalAlignment.CENTER)
              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-             .SetBorderLeft(Border.NO_BORDER)
-             .SetBorderBottom(Border.NO_BORDER)
-             .SetBorderTop(Border.NO_BORDER)
-             .SetBorderRight(Border.NO_BORDER);
+             .SetBorder(Border.NO_BORDER)
+            .SetBorderBottom(new SolidBorder(0.50f));
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
@@ -1149,10 +1082,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER)
-            .SetBorderRight(Border.NO_BORDER);
+            .SetBorder(Border.NO_BORDER)
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAANALISIS.ToString("dd/MM/yyyy"))
@@ -1161,9 +1092,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetMarginLeft(-10)
+            .SetBorderTop(Border.NO_BORDER)
             .SetBorderLeft(Border.NO_BORDER)
-            .SetBorderBottom(Border.NO_BORDER)
-            .SetBorderTop(Border.NO_BORDER);
+            .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
 
@@ -1428,14 +1359,15 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
     }
 
     public class FooterRevisionProtocolo : IEventHandler
-    {
-        /*protected Document doc;
-
-        public  TextFooterEventHandler(Document doc)
+    {   
+        /*
+        protected Document doc;
+        
+        public  TextFooterEventHandler (Document doc)
         {
             this.doc = doc;
-        }*/
-
+        }
+        */
 
         public void HandleEvent(Event @event)
         {

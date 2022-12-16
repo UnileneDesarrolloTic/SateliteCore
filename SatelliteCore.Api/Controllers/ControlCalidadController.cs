@@ -288,7 +288,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("NuevoDescripcionDT")]
         public async Task<IActionResult> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> response = await _controlCalidadServices.NuevoDescripcionDT(dato, idUsuario);
             return Ok(response);
         }
@@ -310,7 +310,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ActualizarDescripcionDT")]
         public async Task<IActionResult> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> response = await _controlCalidadServices.ActualizarDescripcionDT(dato, idUsuario);
             return Ok(response);
         }
@@ -319,7 +319,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarActualizarLeyendaDT")]
         public async Task<IActionResult> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarLeyendaDT(dato, idUsuario);
             return Ok(response);
         }
@@ -335,7 +335,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarActualizarPruebaDT")]
         public async Task<IActionResult> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarPruebaDT(dato, idUsuario);
             return Ok(response);
         }
