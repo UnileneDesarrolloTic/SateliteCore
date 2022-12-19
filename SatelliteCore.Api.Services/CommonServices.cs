@@ -237,6 +237,53 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
+        public async Task<ResponseModel<IEnumerable<GrupoEntity>>> ListarGrupo()
+        {
+            IEnumerable<GrupoEntity> grupo = await _commonRepository.ListarGrupo();
+            ResponseModel<IEnumerable<GrupoEntity>> resultado = new ResponseModel<IEnumerable<GrupoEntity>>(true, Constante.MESSAGE_SUCCESS, grupo);
+
+            return resultado;
+        }
+
+        public async Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo)
+        {
+            IEnumerable<TablaEntity> tabla = await _commonRepository.ListarTabla(Grupo);
+            ResponseModel<IEnumerable<TablaEntity>> resultado = new ResponseModel<IEnumerable<TablaEntity>>(true, Constante.MESSAGE_SUCCESS, tabla);
+
+            return resultado;
+        }
+
+        public async Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo,string Campo)
+        {
+            IEnumerable<MarcaProtocoloEntity> response = await _commonRepository.ListarMarcaProtocolo(Grupo,Campo);
+            ResponseModel<IEnumerable<MarcaProtocoloEntity>> resultado = new ResponseModel<IEnumerable<MarcaProtocoloEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultado;
+        }
+
+        public async Task<ResponseModel<IEnumerable<MetodologiaEntity>>> ListarMetodologiaProtocolo()
+        {
+            IEnumerable<MetodologiaEntity> response = await _commonRepository.ListarMetodologiaProtocolo();
+            ResponseModel<IEnumerable<MetodologiaEntity>> resultadoMaestroAlmacen = new ResponseModel<IEnumerable<MetodologiaEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoMaestroAlmacen;
+        }
+
+        public async Task<ResponseModel<IEnumerable<AgrupadorHebrasEntity>>> ListarAgrupadoHebra()
+        {
+            IEnumerable<AgrupadorHebrasEntity> response = await _commonRepository.ListarAgrupadoHebra();
+            ResponseModel<IEnumerable<AgrupadorHebrasEntity>> resultadoAgrupadoHebras = new ResponseModel<IEnumerable<AgrupadorHebrasEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoAgrupadoHebras;
+        }
+
+        public async Task<ResponseModel<IEnumerable<CalibrePruebaEntity>>> ListarCalibrePrueba()
+        {
+            IEnumerable<CalibrePruebaEntity> response = await _commonRepository.ListarCalibrePrueba();
+            ResponseModel<IEnumerable<CalibrePruebaEntity>> resultadoAgrupadoHebras = new ResponseModel<IEnumerable<CalibrePruebaEntity>>(true, Constante.MESSAGE_SUCCESS, response);
+
+            return resultadoAgrupadoHebras;
+        }
         public async Task<ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>>> TipoDocumentoSsoma()
         {
 

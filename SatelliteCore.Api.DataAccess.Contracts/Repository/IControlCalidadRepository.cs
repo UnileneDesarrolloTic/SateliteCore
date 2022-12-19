@@ -23,5 +23,30 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<FormatoEstructuraObtenerOrdenFabricacion>> ExportarOrdenFabricacionCaja(string anioProduccion);
         public Task<IEnumerable<DatosFormatosListarControlLotes>> ListarControlLotes(DatosFormatoFiltrarControlLotesModel dato);
         public Task<int> ActualizarControlLotes(DatosFormatoControlLotesActualizarFEntrega dato);
+        public Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo,string Tabla);
+        public Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos();
+        public Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra);
+        public Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra);
+        public Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia);
+        public Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo();
+        public Task<int> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario);
+        public Task<int> EliminarDescripcionDT(string IdDescripcion);
+        public Task<IEnumerable<DatosFormatoObtenerAgujasDescripcionModel>> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion);
+        public Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario);
+        public Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario);
+        public Task<int> EliminarLeyendaDT(string IdLeyenda);
+        public Task<int> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario);
+        public Task<int> EliminarPruebaDT(string IdLeyenda);
+        public Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote,string Idioma);
+        public Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte, string Idioma);
+        public Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario);
+        public Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario);
+        public Task<int> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario);
+        public Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote);
+        public Task<int> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion);
+        public Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> ImprimirControlProceso(string NumeroLote);
+        public Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote, string Idioma);
+        public Task<ParametroMastEntity> ProtocoloRevisionTerminado();
+
     }
 }

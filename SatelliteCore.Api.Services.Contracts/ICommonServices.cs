@@ -26,13 +26,19 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<PaginacionModel<FormatoListarMaestroItemModel>> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
         public Task<ResponseModel<IEnumerable<MaestroAlmacenEntity>>> ListarMaestroAlmacen();
         public Task<ResponseModel<bool>> ValidacionPermisoAccesso(string Permiso, int idUsuario);
+        public Task<ResponseModel<IEnumerable<GrupoEntity>>> ListarGrupo();
+        public Task<ResponseModel<IEnumerable<TablaEntity>>> ListarTabla(string Grupo);
+        public Task<ResponseModel<IEnumerable<MarcaProtocoloEntity>>> ListarMarcaProtocolo(string Grupo, string Campo);
+        public Task<ResponseModel<IEnumerable<MetodologiaEntity>>> ListarMetodologiaProtocolo();
+        public Task<ResponseModel<IEnumerable<AgrupadorHebrasEntity>>> ListarAgrupadoHebra();
+        public Task<ResponseModel<IEnumerable<CalibrePruebaEntity>>> ListarCalibrePrueba();
         public Task<ResponseModel<IEnumerable<TipoDocumentoSsomaEntity>>> TipoDocumentoSsoma();
         public Task<ResponseModel<IEnumerable<UbicacionSsomaEntity>>> UbicacionSsoma();
         public Task<ResponseModel<IEnumerable<ProteccionEntitySsoma>>> ProteccionSsoma();
         public Task<ResponseModel<IEnumerable<EstadoEntitySsoma>>> EstadoSsoma();
         public Task<ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>>> AlmacenamientoSsoma();
         public Task<ResponseModel<IEnumerable<ResponsableSsomaEntity>>> ResponsableSsoma();
-
         public Task<ResponseModel<DatosClienteDTO>> ObtenerDatosCliente(int codigoCliente);
+
     }
 }

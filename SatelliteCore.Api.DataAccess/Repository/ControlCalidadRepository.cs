@@ -325,5 +325,393 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
+        public async Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo,string Tabla)
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> result = new List<DatosFormatoTablaNumerodeParte>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaNumerodeParte>("SP_UNILENE_LO_MAESTRO_NUMERO_PARTE", new { GRUPO= Grupo, TABLA=Tabla }, commandType: CommandType.StoredProcedure);
+                
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoTablaAbributoModel>> ListarAtributos()
+        {
+           
+            IEnumerable<DatosFormatoTablaAbributoModel> result = new List<DatosFormatoTablaAbributoModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaAbributoModel>("SP_LISTAR_TPRO_CANTIDAD_AGUJAS", commandType: CommandType.StoredProcedure);
+
+            }
+            return result ;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca,string Hebra)
+        {
+
+            IEnumerable<DatosFormatoTablaDescripcionModel> result = new List<DatosFormatoTablaDescripcionModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaDescripcionModel>("SP_LISTAR_TPRO_DESCRIPCION", new { ID_MARCA = Marca , ID_HEBRA=Hebra } , commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra)
+        {
+
+            IEnumerable<DatosFormatoTablaLeyendaModel> result = new List<DatosFormatoTablaLeyendaModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaLeyendaModel>("SP_LISTAR_TPRO_LEYENDA", new { ID_MARCA = Marca, ID_HEBRA = Hebra }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia)
+        {
+
+            IEnumerable<DatosFormatoTablaPruebasModel> result = new List<DatosFormatoTablaPruebasModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoTablaPruebasModel>("SP_LISTAR_TPRO_PRUEBA", new { Metodologia }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo()
+        {
+
+            IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel> result = new List<DatosFormatoObtenerTablaAgujasNuevoModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoObtenerTablaAgujasNuevoModel>("SP_LISTAR_TPRO_CANTIDAD_AGUJAS", commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+      
+
+        public async Task<int> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato,string idUsuario)
+        {
+
+            int IdDescripcion = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                IdDescripcion = await connection.QuerySingleAsync<int>("SP_INSERTAR_TPRO_DESCRIPCION", new { ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                foreach (DatosFormatoDetalleAgujaDescripcion valor in dato.DetalleAgujas)
+                {   
+                    if(valor.descripcionlocal.Trim()!="" || valor.descripcionlocal.Trim() != "")
+                       await connection.ExecuteAsync("SP_INSERTAR_TPRO_CARACTERISTICA_DESCRIPCION", new { ID_DESCRIPCION = IdDescripcion, ID_CANTIDAD_AGUJA=valor.iD_AGUJA, DESCRIPCIONLOCAL=valor.descripcionlocal, DESCRIPCIONINGLES=valor.descripcioningles }, commandType: CommandType.StoredProcedure);
+                }
+            }
+            return IdDescripcion;
+        }
+
+        public async Task<int> EliminarDescripcionDT(string IdDescripcion)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_DESCRIPCION SET Estado='I' WHERE ID_DESCRIPCION=@IdDescripcion ";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+               await connection.ExecuteAsync(sql,new {IdDescripcion});
+
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoObtenerAgujasDescripcionModel>> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion)
+        {
+
+            IEnumerable<DatosFormatoObtenerAgujasDescripcionModel> result = new List<DatosFormatoObtenerAgujasDescripcionModel>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoObtenerAgujasDescripcionModel>("SP_LISTAR_TPRO_CARACTERISTICAS_DESCRIPCION", new { ID_DESCRIPCION = IdDescripcion }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                foreach (DatosFormatoDetalleAgujaDescripcion valor in dato.DetalleAgujas)
+                {
+                    if (valor.descripcionlocal.Trim() != "" || valor.descripcionlocal.Trim() != "")
+                        await connection.ExecuteAsync("SP_INSERTAR_TPRO_CARACTERISTICA_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_CANTIDAD_AGUJA = valor.iD_AGUJA, DESCRIPCIONLOCAL = valor.descripcionlocal, DESCRIPCIONINGLES = valor.descripcioningles }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            return result;
+        }
+
+        public async Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                if (dato.IdLeyenda == 0)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_LEYENDA", new { NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                }
+                else
+                {
+                    await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_LEYENDA", new { ID_LEYENDA=dato.IdLeyenda, NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            return result;
+        }
+
+
+        public async Task<int> EliminarLeyendaDT(string IdLeyenda)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_LEYENDA SET Estado='I' WHERE ID_LEYENDA=@IdLeyenda ";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync(sql, new { IdLeyenda });
+            }
+
+            return result;
+        }
+
+
+        public async Task<int> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato, string idUsuario)
+        {
+
+            int result = 0;
+
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+               await connection.ExecuteAsync("SP_INSERTAR_TPRO_PRUEBA", new { ID_AGRUPADOR_HEBRA = dato.IdAgrupadoHebra,
+                                                                              ID_METODOLOGIA = dato.IdMedologia, 
+                                                                              CALIBRE_USP = dato.IdCalibre, 
+                                                                              DESCRIPCIONLOCAL = dato.DescripcionLocal, 
+                                                                              DESCRIPCIONINGLES = dato.DescripcionIngle,
+                                                                              UNIDAD_MEDIDA = dato.IdUnidadMedida, 
+                                                                              ESPECIFFICACIONLOCAL = dato.EspecificacionLocal, 
+                                                                              ESPECIFFICACIONINGLES = dato.EspecificacionIngles, 
+                                                                              VALOR = dato.valor, 
+                                                                              USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+
+            }
+            return result;
+        }
+
+        public async Task<int> EliminarPruebaDT(string IdPrueba)
+        {
+
+            int result = 0;
+            string sql = "UPDATE TPRO_PRUEBA_DETALLE SET Estado='I' WHERE ID_PRUEBA=@IdPrueba " +
+                         "UPDATE TPRO_PRUEBA SET Estado='I' WHERE ID_PRUEBA=@IdPrueba";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                await connection.ExecuteAsync(sql, new { IdPrueba });
+            }
+
+            return result;
+        }
+
+
+        public async Task<DatosFormatoNumeroLoteProtocoloModel> BuscarNumeroLoteProtocolo(string NumeroLote,string Idioma)
+        {
+            DatosFormatoNumeroLoteProtocoloModel result = new DatosFormatoNumeroLoteProtocoloModel();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryFirstOrDefaultAsync<DatosFormatoNumeroLoteProtocoloModel>("usp_listar_tpro_protocolo_cabecera", new { NumeroLote , Idioma }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatosDatoListarPruebaProtocolo>> BuscarPruebaFormatoProtocolo(string NumeroLote, string NumeroParte, string Idioma )
+        {
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> result = new List<DatosFormatosDatoListarPruebaProtocolo>();
+             
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatosDatoListarPruebaProtocolo>("usp_lista_formato_protocolo", new {  NumeroParte, NumeroLote , Idioma }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario )
+        {
+            int ID = 0;
+            int contarA = 1;
+            int contarB = 1;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
+                
+                foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'A', SECUENCIA = contarA , COL_1=item.LongitudD  , COL_2=item.DiametroD }, commandType: CommandType.StoredProcedure);
+                    contarA++;
+                }
+        
+                foreach (DatosFormatosTablaBControlProcesos item in dato.TablaResistencia)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'B', SECUENCIA = contarB, COL_1 = item.TensionNewtons, COL_2 = item.AgujasNewtons }, commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+
+        public async Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario)
+        {
+            int ID = 0;
+            int contarA = 1;
+            int contarB = 1;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
+
+                foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'C', SECUENCIA = contarA, COL_1 = item.LongitudD, COL_2 = item.DiametroD }, commandType: CommandType.StoredProcedure);
+                    contarA++;
+                }
+
+                foreach (DatosFormatosTablaBControlProcesos item in dato.TablaResistencia)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", new { ID_CABECERA = ID, TABLA = 'D', SECUENCIA = contarB, COL_1 = item.TensionNewtons, COL_2 = item.AgujasNewtons }, commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+        public async Task<int> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario)
+        {
+            int ID = 0;
+            int contarB = 1;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                foreach (DatosFormatoDetallePruebasProtocolos item in dato.TablaPrueba)
+                {
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_RESULTADO_DETALLE", commandType: CommandType.StoredProcedure);
+                    contarB++;
+                }
+            }
+
+            return ID;
+        }
+
+        public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> BuscarInformacionResultadoProtocolo(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> result = new List<DatosFormatoInformacionResultadoProtocolo>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoInformacionResultadoProtocolo>("SP_LISTAR_PRUEBA_RESULTADO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<int> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion)
+        {
+            int result = 1;
+            int ID = 0;
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_FORMATO_PROTOCOLO_CABECERA", 
+                        new { ID_IDIOMA = dato.Idioma, FECHA_ANALISIS=dato.fechaanalisis, LOTE=dato.NumeroLote, NUMERODEPARTE=dato.NumeroParte, TECNICA= dato.Tecnica, METODO=dato.Metodo, DETALLE=dato.Detalle, USUARIO= UsuarioSesion }, commandType: CommandType.StoredProcedure);
+                
+                foreach(DatosFormatoDetalleFormatoProtocolo valor in dato.TablaPrueba)
+                {
+                    await connection.QueryAsync("SP_INSERTAR_FORMATO_PROTOCOLO_DETALLE",
+                        new { ID_FORMATO = ID, DESCRIPCION_PRUEBA = valor.descripcionLocal, UNIDAD_MEDIDA = valor.unidadMedida, ESPECIFICACION = valor.especificacion, VALOR = valor.valor , RESULTADO =valor.resultado, DESCRIPCION_METODOLOGIA = valor.metodologia, ORDEN =  valor.orden}, commandType: CommandType.StoredProcedure);
+
+                }
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> ImprimirControlProceso(string NumeroLote)
+        {
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> result = new List<DatosFormatoInformacionResultadoProtocolo>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                result = await connection.QueryAsync<DatosFormatoInformacionResultadoProtocolo>("SP_LISTAR_PRUEBA_RESULTADO", new { LOTE = NumeroLote }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote, string Idioma)
+        {
+            IEnumerable<DatosFormatoProtocoloPruebaModel> result = new List<DatosFormatoProtocoloPruebaModel>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatoProtocoloPruebaModel>("usp_reporte_formato_protocolo", new { NumeroLote  , Idioma }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<ParametroMastEntity> ProtocoloRevisionTerminado()
+        {
+            ParametroMastEntity result = new ParametroMastEntity();
+
+            string sql = "SELECT CompaniaCodigo, AplicacionCodigo, ParametroClave, DescripcionParametro, Explicacion, TipodeDatoFlag, RTRIM(Texto) Texto, Numero, Fecha, FinanceComunFlag,  Estado,  UltimoUsuario, UltimaFechaModif, ExplicacionAdicional,  Texto1  FROM ParametrosMast WHERE parametroclave='FORMISOPT'"; 
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryFirstOrDefaultAsync<ParametroMastEntity>(sql);
+            }
+
+            return result;
+        }
+
+
+
+
+
+
     }
 }

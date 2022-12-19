@@ -26,6 +26,13 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(List<FormatoListarMaestroItemModel>, int)> ListarMaestroItem(DatosListarMaestroItemPaginador datos);
         public Task<IEnumerable<MaestroAlmacenEntity>> ListarMaestroAlmacen();
         public Task<bool> ValidacionPermisoAccesso(string Permiso, int idUsuario);
+        public Task<IEnumerable<GrupoEntity>> ListarGrupo();
+        public Task<IEnumerable<TablaEntity>> ListarTabla(string Grupo);
+        public Task<IEnumerable<MarcaProtocoloEntity>> ListarMarcaProtocolo(string Grupo,string Campo);
+        public Task<IEnumerable<MetodologiaEntity>> ListarMetodologiaProtocolo();
+        public Task<IEnumerable<AgrupadorHebrasEntity>> ListarAgrupadoHebra();
+        public Task<IEnumerable<CalibrePruebaEntity>> ListarCalibrePrueba();
+
         public Task<DatosClienteDTO> ObtenerDatosCliente(int codigoCliente);
         public Task ActualizarCorrelativoCodReclamo(int correlativo, int idConfiguracion, int id, string grupo);
         public Task<bool> ValidarExiteConfiguracionDetallePorId(int idConfiguracion, string estado = null);
@@ -35,5 +42,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<EstadoEntitySsoma>> EstadoSsoma();
         public Task<IEnumerable<AlmacenamientoSsomaEntity>> AlmacenamientoSsoma();
         public Task<IEnumerable<ResponsableSsomaEntity>> ResponsableSsoma();
+
     }
 }

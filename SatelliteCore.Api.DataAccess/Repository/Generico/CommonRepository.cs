@@ -274,9 +274,91 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return !result;
         }
 
+
+        public async Task<IEnumerable<GrupoEntity>> ListarGrupo()
+        {
+            IEnumerable<GrupoEntity> lista = new List<GrupoEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<GrupoEntity>("SP_UNILENE_LO_GRUPO_NUMERO_PARTE", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<TablaEntity>> ListarTabla( string Grupo)
+        {
+            IEnumerable<TablaEntity> lista = new List<TablaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<TablaEntity>("SP_UNILENE_LO_TABLAS_GRUPO_NUMERO_PARTE",new {GRUPO=Grupo }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<MarcaProtocoloEntity>> ListarMarcaProtocolo(string Grupo,string Campo)
+        {
+            IEnumerable<MarcaProtocoloEntity> lista = new List<MarcaProtocoloEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<MarcaProtocoloEntity>("SP_UNILENE_LO_VALORES_FORMATO_ITEM", new { Grupo,Campo }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<MetodologiaEntity>> ListarMetodologiaProtocolo()
+        {
+            IEnumerable<MetodologiaEntity> lista = new List<MetodologiaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<MetodologiaEntity>("SP_LISTAR_METODOLOGIA", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<AgrupadorHebrasEntity>> ListarAgrupadoHebra()
+        {
+            IEnumerable<AgrupadorHebrasEntity> lista = new List<AgrupadorHebrasEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<AgrupadorHebrasEntity>("SP_LISTAR_CLASE_HEBRA", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+        public async Task<IEnumerable<CalibrePruebaEntity>> ListarCalibrePrueba()
+        {
+            IEnumerable<CalibrePruebaEntity> lista = new List<CalibrePruebaEntity>();
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<CalibrePruebaEntity>("SP_LISTAR_CALIBRE_PRUEBAS", commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
+
+
+
         public async Task<DatosClienteDTO> ObtenerDatosCliente (int codigoCliente)
         {
             DatosClienteDTO cliente = new DatosClienteDTO();
+
 
             string query = "SELECT RTRIM(a.Documento) Documento, RTRIM(a.NombreCompleto) Nombre, IIF(c.Nacionalidad = 'E', 'EXTRANJERA', 'NACIONAL') Territorio, " +
                 "RTRIM(b.DescripcionCorta) Pais, a.Estado FROM PersonaMast a INNER JOIN ClienteMast c ON a.Persona = c.Cliente " +

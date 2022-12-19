@@ -15,7 +15,6 @@ namespace SatelliteCore.Api.Models.Config
         string ReportRRHH { get; }
         string ContextDMVentas { get; }
         string ContextMongoDB { get; }
-
         string ContextUReporteador { get; }
     }
 }

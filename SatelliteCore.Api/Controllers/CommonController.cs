@@ -155,6 +155,50 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
+        [HttpGet("ListarGrupo")]
+        public async Task<IActionResult> ListarGrupo()
+        {
+            ResponseModel<IEnumerable<GrupoEntity>> response = await _commonService.ListarGrupo();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarTabla")]
+        public async Task<IActionResult> ListarTabla(string Grupo)
+        {
+            ResponseModel<IEnumerable<TablaEntity>> response = await _commonService.ListarTabla(Grupo);
+            return Ok(response);
+        }
+
+
+        [HttpGet("ListarMarcaProtocolo")]
+        public async Task<IActionResult> ListarMarcaProtocolo(string Grupo, string Campo)
+        {
+            ResponseModel<IEnumerable<MarcaProtocoloEntity>> response = await _commonService.ListarMarcaProtocolo(Grupo, Campo);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarMetodologiaProtocolo")]
+        public async Task<IActionResult> ListarMetodologiaProtocolo()
+        {
+            ResponseModel<IEnumerable<MetodologiaEntity>> response = await _commonService.ListarMetodologiaProtocolo();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarAgrupadoHebra")]
+        public async Task<IActionResult> ListarAgrupadoHebra()
+        {
+            ResponseModel<IEnumerable<AgrupadorHebrasEntity>> response = await _commonService.ListarAgrupadoHebra();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarCalibrePrueba")]
+        public async Task<IActionResult> ListarCalibrePrueba()
+        {
+            ResponseModel<IEnumerable<CalibrePruebaEntity>> response = await _commonService.ListarCalibrePrueba();
+            return Ok(response);
+        }
+
+
         [HttpGet("TipoDocumentoSsoma")]
         public async Task<IActionResult> TipoDocumentoSsoma()
         {

@@ -239,5 +239,204 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> response = await _controlCalidadServices.ActualizarControlLotes(dato);
             return Ok(response);
         }
+
+
+        [HttpGet("ListarMaestroNumeroParte")]
+        public async Task<IActionResult> ListarMaestroNumeroParte(string Grupo,string Tabla)
+        {
+            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarAtributos")]
+        public async Task<IActionResult> ListarAtributos()
+        {
+            IEnumerable<DatosFormatoTablaAbributoModel> response = await _controlCalidadServices.ListarAtributos();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarDescripcion")]
+        public async Task<IActionResult> ListarDescripcion(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadServices.ListarDescripcion(Marca, Hebra);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarLeyenda")]
+        public async Task<IActionResult> ListarLeyenda(string Marca, string Hebra)
+        {
+            IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadServices.ListarLeyenda(Marca, Hebra);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarTablaPrueba")]
+        public async Task<IActionResult> ListarTablaPrueba(string Metodologia)
+        {
+            IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadServices.ListarTablaPrueba(Metodologia);
+            return Ok(response);
+        }
+
+       
+
+        [HttpGet("ListarObtenerAgujasDescripcionNuevo")]
+        public async Task<IActionResult> ListarObtenerAgujasDescripcionNuevo()
+        {
+            IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel> response = await _controlCalidadServices.ListarObtenerAgujasDescripcionNuevo();
+            return Ok(response);
+        }
+
+        [HttpPost("NuevoDescripcionDT")]
+        public async Task<IActionResult> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.NuevoDescripcionDT(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("EliminarDescripcionDT")]
+        public async Task<IActionResult> EliminarDescripcionDT(string IdDescripcion)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.EliminarDescripcionDT(IdDescripcion);
+            return Ok(response);
+        }
+
+        [HttpGet("ListarObtenerAgujasDescripcionActualizar")]
+        public async Task<IActionResult> ListarObtenerAgujasDescripcionActualizar(string IdDescripcion)
+        {
+            IEnumerable<DatosFormatoObtenerAgujasDescripcionModel> response = await _controlCalidadServices.ListarObtenerAgujasDescripcionActualizar(IdDescripcion);
+            return Ok(response);
+        }
+
+        [HttpPost("ActualizarDescripcionDT")]
+        public async Task<IActionResult> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.ActualizarDescripcionDT(dato, idUsuario);
+            return Ok(response);
+        }
+
+
+        [HttpPost("RegistrarActualizarLeyendaDT")]
+        public async Task<IActionResult> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarLeyendaDT(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("EliminarLeyendaDT")]
+        public async Task<IActionResult> EliminarLeyendaDT(string IdLeyenda)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.EliminarLeyendaDT(IdLeyenda);
+            return Ok(response);
+        }
+
+
+        [HttpPost("RegistrarActualizarPruebaDT")]
+        public async Task<IActionResult> RegistrarActualizarPruebaDT(DatosFormatoNuevoPruebaModel dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarPruebaDT(dato, idUsuario);
+            return Ok(response);
+        }
+
+
+        [HttpGet("EliminarPruebaDT")]
+        public async Task<IActionResult> EliminarPruebaDT(string IdPrueba)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.EliminarPruebaDT(IdPrueba);
+            return Ok(response);
+        }
+
+
+        //FORMATO DE PROTOCOLO
+
+        [HttpGet("BuscarNumeroLoteProtocolo")]
+        public async Task<IActionResult> BuscarNumeroLoteProtocolo(string NumeroLote, string Idioma)
+        {
+            if (NumeroLote == "")
+            {
+                ResponseModel<string> responseError = new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+                return BadRequest(responseError);
+            }
+
+            ResponseModel<DatosFormatoNumeroLoteProtocoloModel> response = await _controlCalidadServices.BuscarNumeroLoteProtocolo(NumeroLote,Idioma);
+            return Ok(response);
+        }
+
+        [HttpGet("BuscarPruebaFormatoProtocolo")]
+        public async Task<IActionResult> BuscarPruebaFormatoProtocolo(string NumeroLote,string NumeroParte,string Idioma)
+        {
+            if (NumeroLote == "")
+            {
+                ResponseModel<string> responseError = new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "");
+                return BadRequest(responseError);
+            }
+
+            IEnumerable<DatosFormatosDatoListarPruebaProtocolo> response = await _controlCalidadServices.BuscarPruebaFormatoProtocolo(NumeroLote, NumeroParte, Idioma);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarControlProcesoProtocolo")]
+        public async Task<IActionResult> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato )
+        {
+            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlProcesoProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarControlPTProtocolo")]
+        public async Task<IActionResult> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlPTProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("RegistrarPruebasEfectuadasProtocolo")]
+        public async Task<IActionResult> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato)
+        {
+            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarPruebasEfectuadasProtocolo(dato, idUsuario);
+            return Ok(response);
+        }
+
+        [HttpGet("BuscarInformacionResultadoProtocolo")]
+        public async Task<IActionResult> BuscarInformacionResultadoProtocolo(string NumeroLote)
+        {
+
+            IEnumerable<DatosFormatoInformacionResultadoProtocolo> response = await _controlCalidadServices.BuscarInformacionResultadoProtocolo(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpPost("RegistrarFormatoProtocolo")]
+        public async Task<IActionResult> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato)
+        {
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            ResponseModel<string> response = await _controlCalidadServices.InsertarCabeceraFormatoProtocolo(dato, UsuarioSesion);
+            return Ok(response);
+        }
+
+        [HttpGet("ImprimirControlProcesoInterno")]
+        public async Task<IActionResult> ImprimirControlProcesoInterno(string NumeroLote)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlProcesoInterno(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpGet("ImprimirControlPruebas")]
+        public async Task<IActionResult> ImprimirControlPruebas(string NumeroLote)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlPruebas(NumeroLote);
+            return Ok(response);
+        }
+
+        [HttpGet("ImprimirDocumentoProtocolo")]
+        public async Task<IActionResult> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma)
+        {
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion, Idioma);
+            return Ok(response);
+        }
     }
 }

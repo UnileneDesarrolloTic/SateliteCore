@@ -58,6 +58,14 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listado);
         }
 
+
+        [HttpPost("ExportarExcelProductoCostoBase")]
+        public async Task<ActionResult> ExportarExcelProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
+        {
+            ResponseModel<string> listado = await _ContabilidadService.ExportarExcelProductoCostoBase(dato);
+            return Ok(listado);
+        }
+
         [HttpPost("ProcesarProductoExcel")]
         public async Task<ActionResult> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
         {
