@@ -39,5 +39,6 @@ namespace SatelliteCore.Api.Models.Response
         public string ItemSerie { get; set; }
         public string ProtocoloFlag { get; set; }
         public int Linea { get; set; }
+        public DateTime FechaExpiracion { get; set; }
     }   
 }

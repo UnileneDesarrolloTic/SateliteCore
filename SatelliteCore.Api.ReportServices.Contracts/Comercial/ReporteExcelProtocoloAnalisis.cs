@@ -84,25 +84,31 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 worksheet.Cells["H3"].Style.WrapText = true;
                 worksheet.Cells["H3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-
-                worksheet.Cells["I3"].Value = "Orden Fabricación";
+                worksheet.Cells["I3"].Value = "F.Expiración";
                 worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["I3"].Style.Font.Size = 10;
                 worksheet.Cells["I3"].Style.WrapText = true;
                 worksheet.Cells["I3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["J3"].Value = "Comentario";
+
+                worksheet.Cells["J3"].Value = "Orden Fabricación";
                 worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["J3"].Style.Font.Size = 10;
                 worksheet.Cells["J3"].Style.WrapText = true;
                 worksheet.Cells["J3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-
-                worksheet.Cells["K3"].Value = "¿Tiene?";
+                worksheet.Cells["K3"].Value = "Comentario";
                 worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["K3"].Style.Font.Size = 10;
                 worksheet.Cells["K3"].Style.WrapText = true;
                 worksheet.Cells["K3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+
+                worksheet.Cells["L3"].Value = "¿Tiene?";
+                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["L3"].Style.Font.Size = 10;
+                worksheet.Cells["L3"].Style.WrapText = true;
+                worksheet.Cells["L3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
                 int row = 4;
@@ -163,6 +169,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["G" + row].Style.WrapText = true;
                     worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+
                     worksheet.Cells["H" + row].Value = rowitem.Lote;
                     worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["H" + row].Style.Font.Name = "Calibri";
@@ -170,27 +177,34 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["H" + row].Style.WrapText = true;
                     worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["I" + row].Value = rowitem.OrdenFabricacion;
+                    worksheet.Cells["I" + row].Value =  rowitem.FechaExpiracion.ToString("dd/MM/yyyy");
                     worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["I" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["I" + row].Style.Font.Size = 10;
                     worksheet.Cells["I" + row].Style.WrapText = true;
                     worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-
-                    worksheet.Cells["J" + row].Value = rowitem.Comentarios;
+                    worksheet.Cells["J" + row].Value = rowitem.OrdenFabricacion;
                     worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["J" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["J" + row].Style.Font.Size = 10;
                     worksheet.Cells["J" + row].Style.WrapText = true;
                     worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["K" + row].Value = rowitem.ProtocoloFlag;
+
+                    worksheet.Cells["K" + row].Value = rowitem.Comentarios;
                     worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["K" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["K" + row].Style.Font.Size = 10;
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells["L" + row].Value = rowitem.ProtocoloFlag;
+                    worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["L" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["L" + row].Style.Font.Size = 10;
+                    worksheet.Cells["L" + row].Style.WrapText = true;
+                    worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     row++;
                 }
@@ -230,9 +244,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Column(6).Width = 81.43 + 2.71;
             worksheet.Column(7).Width = 12.57 + 2.71;
             worksheet.Column(8).Width = 12.29 + 2.71;
-            worksheet.Column(9).Width = 15.29 + 2.71;
-            worksheet.Column(10).Width = 36.71 + 2.71;
-            worksheet.Column(11).Width = 10.57 + 2.71;
+            worksheet.Column(9).Width = 12.29 + 2.71;
+            worksheet.Column(10).Width = 15.29 + 2.71;
+            worksheet.Column(11).Width = 36.71 + 2.71;
+            worksheet.Column(12).Width = 10.57 + 2.71;
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
@@ -242,7 +257,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A3:K3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
+            worksheet.Cells["A3:L3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
         }
 
 
