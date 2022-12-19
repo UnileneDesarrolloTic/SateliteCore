@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -64,8 +65,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 0;
 
-            string script = "SELECT IIF(b.NumeroDeParte Like '%3__', CAST(c.ValorDecimal1 AS INT), c.ValorEntero3) Cantidad " +
-                "FROM WH_ControlCalidadDetalle a WITH(NOLOCK) INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item " +
+            string script = "SELECT IIF(LEN(b.NumeroDeParte) <= 12, c.ValorDecimal1," +
+                    "IIF(SUBSTRING(b.NumeroDeParte, 13, 3) = '40E', c.ValorEntero3, c.ValorDecimal1)) Cantidad " +
+                "FROM WH_ControlCalidadDetalle a WITH(NOLOCK) " +
+                "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item " +
                 "INNER JOIN SatelliteCore.dbo.TBDConfiguracion c WITH(NOLOCK) ON c.IdConfiguracion = 1 AND c.Grupo = 'RANGO' AND a.CantidadAceptada BETWEEN c.ValorEntero1 AND c.ValorEntero2 AND c.Estado = 'A'" +
                 "WHERE a.ControlNumero = @controlNumero AND a.Linea = @secuencia";
 
@@ -97,8 +100,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) analisis;
 
-            string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, " +
-                "IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie,a.Especialidad Especialidad  FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
+            string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, a.Serie,a.Especialidad Especialidad, a.FechaAnalisis  " +
+                "FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
                 "INNER JOIN PROD_UNILENE2.dbo.WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item WHERE Lote = @loteAnalisis " +
                 "SELECT IdAnalisis, Lote,TipoRegistro,Llave,Valor,UsuarioRegistro,FechaRegistro FROM TBDAnalisisAgujaFlexion WITH(NOLOCK) WHERE Lote = @loteAnalisis";
 
@@ -112,31 +115,73 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return analisis;
         }
 
-        public async Task EliminarPruebaFlexionAguja(string loteAnalisis)
+        public async Task EliminarPruebaFlexionAguja(string loteAnalisis, DateTime fechaAnalisis)
         {
-            string script = "DELETE TBDAnalisisAgujaFlexion WHERE Lote = @loteAnalisis";
+            string script = "UPDATE TBMAnalisisAgujas SET FechaAnalisis=@fechaAnalisis WHERE Lote=@loteAnalisis; DELETE TBDAnalisisAgujaFlexion WHERE Lote = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(script, new { loteAnalisis });
+                await context.ExecuteAsync(script, new { loteAnalisis, fechaAnalisis });
             }
 
         }
 
         public async Task GuardarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato)
         {
-
-            string Lote = dato.Lote;
-           
-            string scriptCabecera = "UPDATE TBMAnalisisAgujas SET Especialidad=@Especialidad WHERE Lote=@Lote";
             string script = "INSERT INTO TBDAnalisisAgujaFlexion(Lote, TipoRegistro, Llave, Valor, UsuarioRegistro) VALUES (@lote, @tipoRegistro, @llave, @valor, @usuarioRegistro)";
-            
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                    await context.ExecuteAsync(scriptCabecera, new { Lote, dato.Especialidad });
-                if(dato.Especialidad=="N")
                     await context.ExecuteAsync(script, dato.Detalle );
+            }
+        }
+
+
+        public async Task ActualizarEspecialidad(string especialidad, string lote)
+        {
+            string script = "UPDATE TBMAnalisisAgujas SET Especialidad=@Especialidad WHERE Lote=@Lote";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { especialidad, lote });
+            }
+        }
+
+        public async Task<string> ObtenerSeriePorLote (string lote)
+        {
+            string serie = "0";
+            string script = "SELECT IIF(a.Especialidad = 'S', '300', IIF(SUBSTRING(b.NumeroDeParte, 13, 3) = '40E', '400', '300')) Serie " +
+                "FROM TBMAnalisisAgujas a INNER JOIN PROD_UNILENE2.dbo.WH_ItemMast b ON a.Item = B.Item WHERE a.Lote = @lote";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                serie = await context.QueryFirstOrDefaultAsync<string>(script, new { lote });
+            }
+
+            return serie;
+        }
+
+
+        public async Task ActualizarSerie (string lote, string serie)
+        {
+            string script = "UPDATE TBMAnalisisAgujas SET Serie = @serie WHERE Lote = @lote";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { lote, serie });
+            }
+        }
+
+
+        public async Task ActualizarCantidadPruebasFlexion (string lote)
+        {
+            string script = "UPDATE a SET CantidadPruebas = IIF(a.Serie = '400', b.ValorEntero3, b.ValorDecimal1) " +
+                "FROM TBMAnalisisAgujas a INNER JOIN TBDConfiguracion b ON b.IdConfiguracion = 1 AND b.Grupo = 'RANGO' AND a.Cantidad BETWEEN b.ValorEntero1 AND b.ValorEntero2 " +
+                "WHERE a.Lote = @lote";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(script, new { lote });
             }
         }
 
@@ -145,8 +190,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
             ObtenerDatosGeneralesDTO result = new ObtenerDatosGeneralesDTO();
 
             string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca," +
-                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,IIF(b.NumeroDeParte Like '%3__', '300', '400') Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
-                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, ISNULL(a.FechaModificacion, a.FechaRegistro) FechaAnalisis , a.Especialidad " +
+                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,a.Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
+                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, a.FechaAnalisis FechaAnalisis , a.Especialidad " +
                 "FROM SatelliteCore.dbo.TBMAnalisisAgujas a WITH(NOLOCK) " +
                     "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item INNER JOIN WH_ItemFormato c ON c.Grupo = '15' AND c.Tabla = '002' AND c.Codigo = SUBSTRING(b.NumeroDeParte, 2, 2) " +
                     "INNER JOIN WH_ItemFormato d WITH(NOLOCK) ON d.Grupo = '15' AND d.Tabla = '003' AND d.Codigo = SUBSTRING(b.NumeroDeParte, 4, 3) " +
@@ -168,7 +213,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             AnalisisAgujaPlanMuestreoEntity result = new AnalisisAgujaPlanMuestreoEntity();
             
-            string script = "SELECT LoteAnalisis,Cantidad,UndMuestrear,UndMuestrearI,UndMuestrearIII,CajasMuestrear,StatusFlexion,Usuario,Fecha FROM TBDAnalisisAgujaPlanMuestreoFlexion WITH(NOLOCK) " +
+            string script = "SELECT a.LoteAnalisis,a.Cantidad,a.UndMuestrear,a.UndMuestrearI,a.UndMuestrearIII,a.CajasMuestrear,a.StatusFlexion,a.Usuario,a.Fecha,b.Especialidad " +
+                "FROM TBDAnalisisAgujaPlanMuestreoFlexion a WITH(NOLOCK) INNER JOIN TBMAnalisisAgujas b WITH(NOLOCK) ON a.LoteAnalisis = b.Lote " +
                 "WHERE LoteAnalisis = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -204,7 +250,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             List<AnalisisAgujaPruebaDimensionalEntity> result = new List<AnalisisAgujaPruebaDimensionalEntity>();
 
-            string script = "SELECT LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,Usuario,Fecha FROM TBDAnalisisAgujaPruebaDimensional WITH(NOLOCK) " +
+            string script = "SELECT LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,DescripcionAux_2,CantidadAux_2,Usuario,Fecha " +
+                "FROM TBDAnalisisAgujaPruebaDimensional WITH(NOLOCK) " +
                 "WHERE LoteAnalisis = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
@@ -227,8 +274,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task RegistrarPruebaDimensional(List<AnalisisAgujaPruebaDimensionalEntity> prueba)
         {
-            string script = "INSERT INTO TBDAnalisisAgujaPruebaDimensional (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,Usuario) " +
-                "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoEstado,@tolerancia,@descripcionAux,@cantidadAux,@usuario)";
+            string script = "INSERT INTO TBDAnalisisAgujaPruebaDimensional (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoEstado,Tolerancia,DescripcionAux,CantidadAux,DescripcionAux_2,CantidadAux_2,Usuario) " +
+                "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoEstado,@tolerancia,@descripcionAux,@cantidadAux,@descripcionAux_2,@cantidadAux_2,@usuario)";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -299,8 +346,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task RegistrarPruebaAspecto(PruebaAspectoYObservacionesDTO datos, string loteAnalisis)
         {
-
-
             string script = "INSERT INTO TBDAnalisisAgujaPruebaAspecto (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoPorcentaje,Tolerancia,Usuario,Fecha) " +
                 "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoPorcentaje,@tolerancia,@usuario,@fecha)";
 

@@ -1,4 +1,6 @@
-﻿namespace SatelliteCore.Api.Models.Response
+﻿using System;
+
+namespace SatelliteCore.Api.Models.Response
 {
     public struct ObtenerAnalisisAgujaModel
     {
@@ -11,5 +13,6 @@
         public int CantidadPruebas { get; set; }
         public string Serie { get; set; }
         public string Especialidad { get; set; }
+        public DateTime FechaAnalisis { get; set; }
     }
 }

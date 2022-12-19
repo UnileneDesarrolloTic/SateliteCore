@@ -2,6 +2,7 @@
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<string> RegistrarAnalisisAguja(ControlAgujasModel matricula);
         public Task ValidarLoteCreado(string controlNumero, int secuencia, int codUsuarioSesion);
         public Task<(ObtenerAnalisisAgujaModel, List<AnalisisAgujaFlexionEntity>)> AnalisisAgujaFlexion(string loteAnalisis);
-        public Task EliminarPruebaFlexionAguja(string loteAnalisis);
+        public Task EliminarPruebaFlexionAguja(string loteAnalisis, DateTime fechaAnalisis);
         public Task GuardarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato);
         public Task<ObtenerDatosGeneralesDTO> ObtenerDatosGenerales(string loteAnalisis);
         public Task<AnalisisAgujaPlanMuestreoEntity> ObtenerPlanMuestreo(string loteAnalisis);
@@ -30,5 +31,9 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<AnalisisAgujaPruebaAspectoEntity>> ObtenerPruebaAspecto(string loteAnalisis);
         public Task EliminarPruebaAspecto(string loteAnalisis);
         public Task RegistrarPruebaAspecto(PruebaAspectoYObservacionesDTO datos, string loteAnalisis);
+        public Task ActualizarEspecialidad(string especialidad, string lote);
+        public Task<string> ObtenerSeriePorLote(string lote);
+        public Task ActualizarSerie(string lote, string serie);
+        public Task ActualizarCantidadPruebasFlexion(string lote);
     }
 }

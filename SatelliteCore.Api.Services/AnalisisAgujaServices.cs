@@ -77,13 +77,27 @@ namespace SatelliteCore.Api.Services
         }
 
         public async Task<ResponseModel<string>> GuardarEditarPruebaFlexionAguja(DatosFormatoRegistroPruebasAgujasModel dato)
-        {
-          
-          
-                string loteAnalisis = dato.Lote;
-                await _analisisAgujaRepository.EliminarPruebaFlexionAguja(loteAnalisis);
-                await _analisisAgujaRepository.GuardarPruebaFlexionAguja(dato);
+        {          
+            string loteAnalisis = dato.Lote;
+            await _analisisAgujaRepository.EliminarPruebaFlexionAguja(loteAnalisis, dato.FechaAnalisis);
 
+            ResponseModel<ObtenerDatosGeneralesDTO> datosGeneralesAnalisis = await ObtenerDatosGenerales(dato.Lote);
+
+            if (datosGeneralesAnalisis.Content.Especialidad != dato.Especialidad)
+            {
+                await _analisisAgujaRepository.ActualizarEspecialidad(dato.Especialidad, dato.Lote);
+                string serieActualizado = await _analisisAgujaRepository.ObtenerSeriePorLote(dato.Lote);
+
+                if (datosGeneralesAnalisis.Content.Serie != serieActualizado)
+                {
+                    await _analisisAgujaRepository.ActualizarSerie(dato.Lote, serieActualizado);
+                    await _analisisAgujaRepository.ActualizarCantidadPruebasFlexion(dato.Lote);
+                }
+
+            }
+
+            if (dato.Especialidad == "N")
+                await _analisisAgujaRepository.GuardarPruebaFlexionAguja(dato);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo los datos de la prueba de flexión !!");
         }
@@ -93,12 +107,14 @@ namespace SatelliteCore.Api.Services
         {
             dynamic datosAnalisis = await AnalisisAgujaFlexion(loteAnalisis);
 
+            if(datosAnalisis.cabecera.Especialidad == "S")
+                return new ResponseModel<string>(false, "Aguja de especialidad no cuenta con prueba de flexión.", null);
+
             ObtenerAnalisisAgujaModel cabeceraAnalisis = datosAnalisis.cabecera;
             List<AnalisisAgujaFlexionEntity> detalleAnalisis = datosAnalisis.detalle;
 
             if (detalleAnalisis.Count < 1)
                 return new ResponseModel<string>(false, "No cuenta con prueba de flexión", null);
-
 
             FlexionAguja flexionAguja = new FlexionAguja();
             string reporte = flexionAguja.GenerarReporte(loteAnalisis, cabeceraAnalisis, detalleAnalisis);
@@ -128,7 +144,6 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> GuardarPlanMuestreo(AnalisisAgujaPlanMuestreoEntity planMuestreo)
         {
-
             planMuestreo.Fecha = DateTime.Now;
 
             await _analisisAgujaRepository.EliminarPlanMuestreo(planMuestreo.LoteAnalisis);
@@ -181,7 +196,7 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<List<AnalisisAgujaPruebaAspectoEntity>>> ObtenerPruebaAspecto(string loteAnalisis)
         {
-            List<AnalisisAgujaPruebaAspectoEntity> result = (List<AnalisisAgujaPruebaAspectoEntity>)await _analisisAgujaRepository.ObtenerPruebaAspecto(loteAnalisis);
+            List<AnalisisAgujaPruebaAspectoEntity> result = (List<AnalisisAgujaPruebaAspectoEntity>) await _analisisAgujaRepository.ObtenerPruebaAspecto(loteAnalisis);
 
             if (result.Count < 1)
                 return new ResponseModel<List<AnalisisAgujaPruebaAspectoEntity>>(false, "No se encontro el lote de análisis", result);
