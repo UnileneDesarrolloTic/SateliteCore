@@ -11,6 +11,8 @@ namespace SatelliteCore.Api.Models.Entities
         public decimal Tolerancia { get; set; }
         public string DescripcionAux { get; set; }
         public int? CantidadAux { get; set; }
+        public string DescripcionAux_2 { get; set; }
+        public int? CantidadAux_2 { get; set; }
         public int Usuario { get; set; }
         public DateTime Fecha { get; set; }
 

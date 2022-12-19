@@ -97,11 +97,11 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("GuardarEditarPruebaFlexionAguja")]
         public async Task<IActionResult> GuardarEditarPruebaFlexion(DatosFormatoRegistroPruebasAgujasModel dato)
         {
-            if (dato.Especialidad == "N")
-            {
-                if (!ModelState.IsValid) 
-                    throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
-            }
+            if (!ModelState.IsValid)
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
+            if (dato.Especialidad == "N" && dato.Detalle.Count < 1)
+                throw new ValidationModelException("Al no ser especialidad debe tener prueba de flexión !!");
                
             ResponseModel<string> result = await _analisisAgujaServices.GuardarEditarPruebaFlexionAguja(dato);
 

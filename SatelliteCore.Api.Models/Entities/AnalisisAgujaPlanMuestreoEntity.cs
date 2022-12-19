@@ -13,6 +13,7 @@ namespace SatelliteCore.Api.Models.Entities
         public string StatusFlexion { get; set; }
         public int Usuario { get; set; }
         public DateTime Fecha { get; set; }
+        public string Especialidad { get; set; }
 
         public bool ValidarDatos()
         {
