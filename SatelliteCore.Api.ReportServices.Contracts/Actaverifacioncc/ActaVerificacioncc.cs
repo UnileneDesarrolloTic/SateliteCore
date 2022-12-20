@@ -11,6 +11,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using iText.Signatures;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
@@ -21,6 +22,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 {
     public class ActaVerificacioncc
     {
+
+        public string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+
         public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias, ListarOpcionesImprimir dato)
         {
             //DOCUMENTO QUE TIENE TRUE 
@@ -100,9 +104,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetMarginBottom(0)
             .SetPadding(0)
             .SetTextAlignment(TextAlignment.RIGHT);
-
-
-
 
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
@@ -212,9 +213,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             }
 
-            
-
-
             document.Close();
 
             byte[] file = ms.ToArray();
@@ -231,15 +229,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             return reporte;
         }
 
-
         public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega,string fechaFinal)
         {
-            
-
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
-            
-
 
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
@@ -280,9 +273,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetFontSize(6)
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
-
-
-
 
             Paragraph titulo1 = new Paragraph("ACTA DE VERIFICACION CUALITATIVA Y CUANTITATIVA").AddStyle(estiloTitulo);
             Paragraph titulo2 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
@@ -656,8 +646,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
              .SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
-
-
             cellFecha = new Cell(1, 1).Add(new Paragraph("OBSERVACIONES")
              .AddStyle(estiloFechaVerificacion))
              .SetTextAlignment(TextAlignment.LEFT)
@@ -671,8 +659,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(new SolidBorder(1));
             tablaDatosFecha.AddCell(cellFecha);
-
-
 
             cellFecha = new Cell(1, 1).Add(new Paragraph("")
                  .AddStyle(estiloFechaVerificacion))
@@ -699,26 +685,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
             tablaDatosFirma.SetFixedLayout().SetFontSize(9);
 
-            
-            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
-
-            Image img2 = new Image(ImageDataFactory
-               .Create(rutaUnilene2))
-               .SetWidth(135)
-               .SetHeight(50)
-               .SetMarginBottom(0)
-               .SetPadding(0)
-               .SetBorder(Border.NO_BORDER)
-               .SetHorizontalAlignment(HorizontalAlignment.CENTER);
-
-
             Cell cellFirma = new Cell(1, 1).Add(new Paragraph("")
                 .AddStyle(estiloFechaVerificacion))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetHeight(8)
                 .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
-
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("")
                .AddStyle(estiloFechaVerificacion))
@@ -732,12 +704,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
               .SetTextAlignment(TextAlignment.CENTER)
               .SetHeight(8)
               .SetBorder(Border.NO_BORDER);
-            tablaDatosFirma.AddCell(cellFirma);
 
-             cellFirma = new Cell(1, 1).Add(new Paragraph(""))
-                          .SetTextAlignment(TextAlignment.CENTER)
-                          .SetBorder(Border.NO_BORDER)
-                          .SetPaddingLeft(20);
             tablaDatosFirma.AddCell(cellFirma);
 
             cellFirma = new Cell(1, 1).Add(new Paragraph(""))
@@ -746,10 +713,42 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                          .SetPaddingLeft(20);
             tablaDatosFirma.AddCell(cellFirma);
 
-            cellFirma = new Cell(1, 1).Add(img2)
+            cellFirma = new Cell(1, 1).Add(new Paragraph(""))
+                         .SetTextAlignment(TextAlignment.CENTER)
+                         .SetBorder(Border.NO_BORDER)
+                         .SetPaddingLeft(20);
+            tablaDatosFirma.AddCell(cellFirma);
+
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(rutaUnilene2))
+               .SetWidth(63)
+               .SetHeight(60)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            Table tableFirma = new Table(new float[] { 1, 2 }).UseAllAvailableWidth();
+            tableFirma.SetWidth(UnitValue.CreatePercentValue(100));
+            tableFirma.SetFixedLayout();
+
+            Cell celdaFirma = new Cell(1, 1).Add(img2)
                         .SetTextAlignment(TextAlignment.CENTER)
-                        .SetBorder(Border.NO_BORDER)
-                        .SetPaddingLeft(20);
+                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER);
+
+            celdaFirma = new Cell(1, 1).Add(new Paragraph("Firmado digitalmente por:\n HARTMANN BUSTAMANTE ERICK - 20197705249\n " +
+                "Motivo: ACTA DE VERIFICACION C.C. \n Fecha: " + fechaActual)
+                        .SetFontSize(7))
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER).SetMarginLeft(30).SetMarginRight(8).SetMarginTop(8);
+
+            cellFirma = new Cell(1,1).Add(tableFirma).SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
 
@@ -771,9 +770,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                .SetTextAlignment(TextAlignment.CENTER)
                .SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
-
-
-
 
             cellFirma = new Cell(1, 1).Add(new Paragraph("Firma y Sello de Representante")
              .AddStyle(estiloFechaVerificacion))
@@ -946,17 +942,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
-            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
-
-            Image img2 = new Image(ImageDataFactory
-               .Create(FirmaLicitaciones))
-               .SetWidth(135)
-               .SetHeight(50)
-               .SetMarginBottom(0)
-               .SetPadding(0)
-               .SetBorder(Border.NO_BORDER)
-               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
-
             //tabla 4
             Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
@@ -983,11 +968,58 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetMarginTop(10) ;
             tablaDatosFecha.AddCell(cellFecha);
 
+            //eddie
 
-            cellFecha = new Cell(1, 1).Add(img2)
-            .SetBorder(Border.NO_BORDER)
-            .SetMarginTop(100);
+            //string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            //Image img2 = new Image(ImageDataFactory
+            //   .Create(FirmaLicitaciones))
+            //   .SetWidth(135)
+            //   .SetHeight(50)
+            //   .SetMarginBottom(0)
+            //   .SetPadding(0)
+            //   .SetBorder(Border.NO_BORDER)
+            //   .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            //cellFecha = new Cell(1, 1).Add(img2)
+            //.SetBorder(Border.NO_BORDER)
+            //.SetMarginTop(100);
+            //tablaDatosFecha.AddCell(cellFecha);
+
+            // ----------------------------
+
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(rutaUnilene2))   
+               .SetWidth(63)
+               .SetHeight(60)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            Table tableFirma = new Table(new float[] { 1, 2 }).UseAllAvailableWidth();
+            tableFirma.SetWidth(UnitValue.CreatePercentValue(100));
+            tableFirma.SetFixedLayout();
+
+            Cell celdaFirma = new Cell(1, 1).Add(img2)
+                        .SetTextAlignment(TextAlignment.RIGHT)
+                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);    
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER);
+
+            celdaFirma = new Cell(1, 1).Add(new Paragraph("Firmado digitalmente por:\n HARTMANN BUSTAMANTE ERICK - 20197705249 \n Motivo: DECLARACIÓN JURADA\n Fecha: " + fechaActual).SetFontSize(7))
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER).SetMarginLeft(30).SetMarginRight(8).SetMarginTop(8);
+
+            cellFecha = new Cell(1, 1).Add(tableFirma).SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
+
+
+            // ----------------------------
 
             document.Add(tablaDatosFecha);
             document.Add(saltoLinea);
@@ -1192,16 +1224,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(saltoLinea);
 
 
-            string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
-
-            Image img2 = new Image(ImageDataFactory
-               .Create(FirmaLicitaciones))
-               .SetWidth(135)
-               .SetHeight(50)
-               .SetMarginBottom(0)
-               .SetPadding(0)
-               .SetBorder(Border.NO_BORDER)
-               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+            
 
 
             //tabla 4
@@ -1212,7 +1235,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
-             .SetPaddingBottom(20);
+             .SetPaddingBottom(10);
             tablaDatosFecha.AddCell(cellFecha);
 
 
@@ -1228,11 +1251,60 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
-            cellFecha = new Cell(1, 1).Add(img2)
-          .SetBorder(Border.NO_BORDER)
-          .SetMarginTop(100);
 
+            // Eddie
+
+            //  string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
+
+            //  Image img2 = new Image(ImageDataFactory
+            //     .Create(FirmaLicitaciones))
+            //     .SetWidth(135)
+            //     .SetHeight(50)
+            //     .SetMarginBottom(0)
+            //     .SetPadding(0)
+            //     .SetBorder(Border.NO_BORDER)
+            //     .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            //  cellFecha = new Cell(1, 1).Add(img2)
+            //.SetBorder(Border.NO_BORDER)
+            //.SetMarginTop(100);
+
+            //  tablaDatosFecha.AddCell(cellFecha);
+
+            // ----------------------------
+
+            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(rutaUnilene2))
+               .SetWidth(63)
+               .SetHeight(60)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            Table tableFirma = new Table(new float[] { 1, 2 }).UseAllAvailableWidth();
+            tableFirma.SetWidth(UnitValue.CreatePercentValue(100));
+            tableFirma.SetFixedLayout();
+
+            Cell celdaFirma = new Cell(1, 1).Add(img2)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER);
+
+            celdaFirma = new Cell(1, 1).Add(new Paragraph("Firmado digitalmente por:\n HARTMANN BUSTAMANTE ERICK - 20197705249 \n Motivo: DECLARACIÓN JURADA\n Fecha: " + fechaActual).SetFontSize(7))
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER).SetMarginLeft(30).SetMarginRight(8).SetMarginTop(8);
+
+            cellFecha = new Cell(1, 1).Add(tableFirma).SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
+
+            // ----------------------------
+
 
             document.Add(tablaDatosFecha);
             document.Add(saltoLinea);

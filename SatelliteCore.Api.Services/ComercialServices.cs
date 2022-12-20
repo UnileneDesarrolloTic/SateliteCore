@@ -106,8 +106,6 @@ namespace SatelliteCore.Api.Services
             ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
             string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato);
 
-
-
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
