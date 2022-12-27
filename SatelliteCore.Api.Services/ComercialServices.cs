@@ -36,16 +36,24 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.RegistrarRespuestas(datos);
         }
 
-        public async Task<(List<DetalleProtocoloAnalisis>, int)> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos)
+        public async Task<ResponseModel<List<DetalleProtocoloAnalisis>>> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos)
         {
-            return await _comercialRepository.ListarProtocoloAnalisis(datos);
+            List<DetalleProtocoloAnalisis> listaProtocolos = new List<DetalleProtocoloAnalisis>();
+
+            if (datos.TipoDocumento == "P" || datos.TipoDocumento == "F")
+                listaProtocolos = await _comercialRepository.ListaProtocolosPorFacturaOPedido(datos);
+            
+
+
+
+            return new ResponseModel<List<DetalleProtocoloAnalisis>>(true, Constante.MESSAGE_SUCCESS, listaProtocolos);
         }
         public async Task<ResponseModel<string>> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
         {
-            (List<DetalleProtocoloAnalisis> lista, int totalRegistros) result =  await _comercialRepository.ListarProtocoloAnalisis(datos);
+            List<DetalleProtocoloAnalisis> listaProtocolo =  await _comercialRepository.ListarProtocoloAnalisis(datos);
 
             ReporteExcelProtocoloAnalisis ExporteProtocoloAnalisis = new ReporteExcelProtocoloAnalisis();
-            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(result.lista);
+            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(listaProtocolo);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 

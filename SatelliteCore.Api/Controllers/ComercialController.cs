@@ -171,21 +171,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListarProtocoloAnalisis")]
         public async Task<ActionResult> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos)
         {
-            try
-            {
-                (List<DetalleProtocoloAnalisis> lista, int totalRegistros) result = await _comercialServices.ListarProtocoloAnalisis(datos);
-
-                PaginacionModel<DetalleProtocoloAnalisis> response
-                        = new PaginacionModel<DetalleProtocoloAnalisis>(result.lista, datos.Pagina, datos.RegistrosPorPagina, result.totalRegistros);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                ResponseModel<string> response
-                        = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
-                return BadRequest(response);
-            }
+            ResponseModel<List<DetalleProtocoloAnalisis>> response = await _comercialServices.ListarProtocoloAnalisis(datos);
+            return Ok(response);
         }
 
         [HttpPost("ListarProtocoloAnalisisExportar")]
