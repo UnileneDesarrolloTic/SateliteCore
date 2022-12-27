@@ -23,7 +23,7 @@ namespace SatelliteCore.Api.Models.Response
         public int ID_DETALLE { get; set; }
         public int ID_FORMATO{ get; set; }
         public string DESCRIPCION_PRUEBA { get; set; }
-        public string UNIDAD_MEDICA { get; set; }
+        public string UNIDAD_MEDIDA { get; set; }
         public string ESPECIFICACION { get; set; }
         public string VALOR { get; set; }
         public string RESULTADO { get; set; }

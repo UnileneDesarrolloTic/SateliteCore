@@ -40,30 +40,24 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
-            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
+            DateTime dateExpiracion = new DateTime(Cabecera.FECHAEXPIRACION.Year, Cabecera.FECHAEXPIRACION.Month, Cabecera.FECHAEXPIRACION.Day);
+            string FeExpiracion = dateExpiracion.ToString("MM-yyyy");
 
-            NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
-            formato.CurrencyGroupSeparator = ".";
-            formato.NumberDecimalSeparator = ",";
+            DateTime dateProduccion = new DateTime(Cabecera.FECHAPRODUCCION.Year, Cabecera.FECHAPRODUCCION.Month, Cabecera.FECHAPRODUCCION.Day);
+            string FeProduccion = dateProduccion.ToString("MM-yyyy");
+
+            bool BuscarFabricacion = Cabecera.ORDENFABRICACION.Contains("PE");
+
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
             string Conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocolo.png");
-           /* string imagenFlooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");*/
             string FirmaLiliaHurtado = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
             string FirmaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
 
             Color bgColorfondo = new DeviceRgb(217, 217, 217);
 
-           
-            /*Image imagenFlooterss = new Image(ImageDataFactory
-             .Create(imagenFlooter))
-             .SetWidth(400)
-             .SetHeight(15)
-             .SetMarginBottom(0)
-             .SetPadding(0)
-             .ScaleAbsolute(50f, 50f)
-             .SetTextAlignment(TextAlignment.CENTER);*/
 
             Image imgFirmaLiliaHurtado = new Image(ImageDataFactory
               .Create(FirmaLiliaHurtado))
@@ -93,14 +87,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             PiePagina.SetFixedLayout();
 
 
-          /*  Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
-            .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
-            .SetBorder(Border.NO_BORDER);
-
-            PiePagina.AddCell(cellFPiePagina);
-
-            document.Add(PiePagina);
-          */
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
                .SetWidth(150)
@@ -157,9 +143,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 .SetFontSize(7)
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
-
-
-
 
             //CABECERA 
             Table tablaDatosTitulo = new Table(3).UseAllAvailableWidth();
@@ -273,7 +256,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
@@ -339,7 +322,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -486,7 +469,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                .SetPaddingRight(10);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION)
+                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION + " " + item.VALOR + item.UNIDAD_MEDIDA)
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.JUSTIFIED)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -695,9 +678,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
 
-            NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
-            formato.CurrencyGroupSeparator = ".";
-            formato.NumberDecimalSeparator = ",";
+            DateTime dateExpiracion = new DateTime(Cabecera.FECHAEXPIRACION.Year, Cabecera.FECHAEXPIRACION.Month, Cabecera.FECHAEXPIRACION.Day);
+            string FeExpiracion = dateExpiracion.ToString("MM-yyyy");
+
+            DateTime dateProduccion = new DateTime(Cabecera.FECHAPRODUCCION.Year, Cabecera.FECHAPRODUCCION.Month, Cabecera.FECHAPRODUCCION.Day);
+            string FeProduccion = dateProduccion.ToString("MM-yyyy");
+
+            bool BuscarFabricacion = Cabecera.ORDENFABRICACION.Contains("PE");
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -940,7 +927,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1022,7 +1009,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1171,7 +1158,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                .SetPaddingRight(10);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION)
+                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION + " " + item.VALOR + item.UNIDAD_MEDIDA)
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.JUSTIFIED)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)

@@ -15,5 +15,7 @@ namespace SatelliteCore.Api.Models.Response
         public string RESULTADO { get; set; }
         public string Metodologia { get; set; }
         public string decimales { get; set; }
+        public string PreResultado { get; set; }
+        public string FlagPreResultado { get; set; }
     }
 }
