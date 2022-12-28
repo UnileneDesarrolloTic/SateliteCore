@@ -213,19 +213,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> EliminarUsuario(int IdPersona)
-        {
-            string sql = "UPDATE PROD_UNILENE2..PersonaMast SET Estado='I' WHERE PERSONA=@IdPersona ;" +
-                         "UPDATE PROD_UNILENE2..Empleadomast SET Estado = 'I' WHERE EMPLEADO = @IdPersona ;";
-            int result = 0;
+        //public async Task<int> EliminarUsuario(int IdPersona)
+        //{
+        //    string sql = "UPDATE PROD_UNILENE2..PersonaMast SET Estado='I' WHERE PERSONA=@IdPersona ;" +
+        //                 "UPDATE PROD_UNILENE2..Empleadomast SET Estado = 'I' WHERE EMPLEADO = @IdPersona ;";
+        //    int result = 0;
 
-            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                await connection.QueryAsync(sql, new { IdPersona });
-            }
+        //    using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+        //    {
+        //        await connection.QueryAsync(sql, new { IdPersona });
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
     }
 }
