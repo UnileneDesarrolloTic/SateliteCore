@@ -136,6 +136,29 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
+        [HttpGet("RegistrarEditarArea")]
+        public async Task<ActionResult> RegistrarEditarArea(int IdArea, string Descripcion)
+        {
+            ResponseModel<AreaPersonalLaboralEntity> response = await _usuarioService.RegistrarEditarArea(IdArea, Descripcion);
+            return Ok(response);
+        }
+
+        [HttpGet("EliminarAreaProduccion")]
+        public async Task<ActionResult> EliminarAreaProduccion(int IdArea)
+        {
+            ResponseModel<string> response = await _usuarioService.EliminarAreaProduccion(IdArea);
+            return Ok(response);
+        }
+
+        [HttpGet("EliminarUsuario")]
+        public async Task<ActionResult> EliminarUsuario(int IdPersona)
+        {
+            ResponseModel<string> response = await _usuarioService.EliminarUsuario(IdPersona);
+            return Ok(response);
+        }
+
+
+
 
 
     }

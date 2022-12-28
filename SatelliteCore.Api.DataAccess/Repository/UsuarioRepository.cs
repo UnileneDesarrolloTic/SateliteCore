@@ -174,5 +174,58 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+
+
+        public async Task<AreaPersonalLaboralEntity> RegistrarEditarArea(int IdArea, string Descripcion)
+        {
+            string sql = "";
+            AreaPersonalLaboralEntity result =  new AreaPersonalLaboralEntity();
+
+            if (IdArea == 0)
+                sql = "INSERT INTO TBMAreasProduccion (Descripcion,Estado) VALUES (@Descripcion,'A');" +
+                      "SELECT IdArea,Descripcion FROM TBMAreasProduccion WHERE IdArea=@@IDENTITY";
+            else
+                sql = "UPDATE TBMAreasProduccion SET Descripcion=@Descripcion WHERE IdArea=@IdArea;" +
+                      "SELECT IdArea,Descripcion FROM TBMAreasProduccion WHERE IdArea=@IdArea";
+
+                using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+                {
+                    result=await connection.QueryFirstOrDefaultAsync<AreaPersonalLaboralEntity>(sql, new { IdArea, Descripcion });
+                }
+
+            return result;
+        }
+
+        public async Task<int> EliminarAreaProduccion(int IdArea)
+        {
+            string sql = "UPDATE TBMAreasProduccion SET Estado='I' WHERE IdArea=@IdArea; " +
+                         "UPDATE TBMAsignacionArea SET TBMAsignacionArea.Estado='I' FROM TBMAsignacionArea " +
+                         "INNER JOIN PROD_UNILENE2..PersonaMast b on b.Persona = TBMAsignacionArea.IdEmpleado " +
+                         "INNER JOIN TBMAreasProduccion c ON TBMAsignacionArea.IdArea = c.IdArea " +
+                         "WHERE CONVERT(varchar, TBMAsignacionArea.FechaAsignacion,103)= CONVERT(varchar, SYSDATETIME(), 103) AND c.IdArea =@IdArea";
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.QueryAsync(sql, new { IdArea });
+            }
+
+            return result;
+        }
+
+        public async Task<int> EliminarUsuario(int IdPersona)
+        {
+            string sql = "UPDATE PROD_UNILENE2..PersonaMast SET Estado='I' WHERE PERSONA=@IdPersona ;" +
+                         "UPDATE PROD_UNILENE2..Empleadomast SET Estado = 'I' WHERE EMPLEADO = @IdPersona ;";
+            int result = 0;
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.QueryAsync(sql, new { IdPersona });
+            }
+
+            return result;
+        }
+
     }
 }
