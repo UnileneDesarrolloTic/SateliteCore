@@ -201,7 +201,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "0 Monto, c.NumeroDeParte, c.ClasificacionRotacion, '' AlmacenCodigo, b.Lote ItemSerie, b.Secuencia Linea, " +
                 "ISNULL( e.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion FROM WH_GuiaRemision a " +
                 "INNER JOIN WH_GuiaRemisionDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.SerieNumero = a.SerieNumero AND b.GuiaNumero = a.GuiaNumero " +
-                "INNER JOIN WH_ItemMast c ON c.Item = b.ItemCodigo LEFT JOIN EP_ProgramacionLote e ON b.Lote = e.NumeroLote WHERE a.CompaniaSocio = '01000000' " +
+                "INNER JOIN WH_ItemMast c ON c.Item = b.ItemCodigo LEFT JOIN EP_ProgramacionLote e ON b.CompaniaSocio = e.CompaniaSocio AND b.Lote = e.NumeroLote WHERE a.CompaniaSocio = '01000000' " +
                 "AND a.GuiaNumero = @NumeroDocumento AND CAST(a.FechaDocumento  AS DATE) BETWEEN @FechaInicio AND @FechaFin AND a.Destinatario = @IdCliente AND " +
                 "b.Lote = @OrdenFabricacion AND b.Lote = @Lote ";
 
@@ -211,7 +211,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 query = $"{query} AND a.TipoDocumento = 'PE'";
 
             if (datos.FechaInicio != null && datos.FechaFin != null)
-                query = $"{query} AND CAST(FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
+                query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
 
             if (!string.IsNullOrEmpty(datos.OrdenFabricacion))
                 query = $"{query} AND b.Lote = @OrdenFabricacion";
