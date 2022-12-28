@@ -24,5 +24,7 @@ namespace SatelliteCore.Api.Models.Dto.AnalisisAgujas
         public string Observaciones { get; set; }
         public DateTime FechaAnalisis { get; set; }
         public string Especialidad { get; set;  }
+        public string Conclusion { get; set; }
+        public string Analista { get; set; }
     }
 }

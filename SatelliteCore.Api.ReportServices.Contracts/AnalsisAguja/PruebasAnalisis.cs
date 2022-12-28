@@ -500,7 +500,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(longitud.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcientoLongitud >= longitud.Tolerancia ? "ACEPTADO" : "SELECCIONADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcientoLongitud >= longitud.Tolerancia ? "ACEPTADO" : "SELECCIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Longitud opción 2 : {longitud.DescripcionAux}")).AddStyle(cellTableCommon).SetPaddingLeft(3);
@@ -576,7 +576,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(diametro.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcentajeDiametro >= diametro.Tolerancia ? "ACEPTADO":"SELECCIONADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcentajeDiametro >= diametro.Tolerancia ? "ACEPTADO": "SELECCIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Diametro opción 2: { diametro.DescripcionAux }")).AddStyle(cellTableCommon).SetPaddingLeft(3);
@@ -652,7 +652,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"> ó = {SeparadorDeMilesDecimal(alambre.Tolerancia)} %")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
-            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcentajeAlambre >= alambre.Tolerancia ? "ACEPTADO" : "SELECCIONADO")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
+            pruebaDimensionaCell = new Cell(3, 1).Add(new Paragraph(porcentajeAlambre >= alambre.Tolerancia ? "ACEPTADO" : "SELECCIÓN")).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER);
             pruebasDimensionalesTable.AddCell(pruebaDimensionaCell);
 
             pruebaDimensionaCell = new Cell(1, 1).Add(new Paragraph($"Alambre opción 2: { alambre.DescripcionAux }")).AddStyle(cellTableCommon).SetPaddingLeft(3);
@@ -1385,30 +1385,33 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             Cell conclusionessCell = new Cell(1, 1).Add(new Paragraph("Aprobado")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
             conclusionesTable.AddCell(conclusionessCell);
 
-            conclusionessCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon);
+            conclusionessCell = new Cell(1, 1).Add(new Paragraph(datosGenerales.Conclusion == "A" ? "X" : "").SetFont(fuenteNegrita)).AddStyle(cellTableCommon)
+                    .SetTextAlignment(TextAlignment.CENTER);
             conclusionesTable.AddCell(conclusionessCell);
 
 
-            conclusionessCell = new Cell(1, 1).Add(new Paragraph("Rechazado")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            conclusionessCell = new Cell(1, 1).Add(new Paragraph("Rechazado")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER)
+                    .SetTextAlignment(TextAlignment.CENTER);
             conclusionesTable.AddCell(conclusionessCell);
 
-            conclusionessCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon);
+            conclusionessCell = new Cell(1, 1).Add(new Paragraph(datosGenerales.Conclusion == "R" ? "X" : "").SetFont(fuenteNegrita)).AddStyle(cellTableCommon)
+                    .SetTextAlignment(TextAlignment.CENTER);
             conclusionesTable.AddCell(conclusionessCell);
 
             conclusionessCell = new Cell(1, 1).Add(new Paragraph("SELECCIONAR AL 100%")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
             conclusionesTable.AddCell(conclusionessCell);
 
-            conclusionessCell = new Cell(1, 1).Add(new Paragraph("")).AddStyle(cellTableCommon);
+            conclusionessCell = new Cell(1, 1).Add(new Paragraph(datosGenerales.Conclusion == "S" ? "X" : "").SetFont(fuenteNegrita)).AddStyle(cellTableCommon).SetTextAlignment(TextAlignment.CENTER); ;
             conclusionesTable.AddCell(conclusionessCell);
 
             document.Add(conclusionesTable.SetMarginBottom(70));
 
             Table responsablesTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
-            Cell responsableCelda = new Cell(1, 1).Add(new Paragraph("ANALISTA: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            Cell responsableCelda = new Cell(1, 1).Add(new Paragraph($"___________________________________\n{datosGenerales.Analista}\nANALISTA")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
             responsablesTable.AddCell(responsableCelda);
 
-            responsableCelda = new Cell(1, 1).Add(new Paragraph("JEFE CONTROL DE CALIDAD: _________________________")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
+            responsableCelda = new Cell(1, 1).Add(new Paragraph("___________________________________\nDra. LILIA HURTADO D.\nJEFE CONTROL DE CALIDAD")).AddStyle(cellTableCommon).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.CENTER);
             responsablesTable.AddCell(responsableCelda);
 
             document.Add(responsablesTable);

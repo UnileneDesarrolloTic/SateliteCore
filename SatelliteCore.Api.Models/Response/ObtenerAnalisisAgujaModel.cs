@@ -14,5 +14,6 @@ namespace SatelliteCore.Api.Models.Response
         public string Serie { get; set; }
         public string Especialidad { get; set; }
         public DateTime FechaAnalisis { get; set; }
+        public string Analista { get; set; }
     }
 }

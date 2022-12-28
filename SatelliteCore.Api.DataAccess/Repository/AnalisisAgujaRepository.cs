@@ -100,8 +100,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (ObtenerAnalisisAgujaModel cabecera, List<AnalisisAgujaFlexionEntity> detalle) analisis;
 
-            string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, a.Serie,a.Especialidad Especialidad, a.FechaAnalisis  " +
+            string script = "SELECT a.ControlNumero, a.OrdenCompra, a.Item, a.DescripcionItem, a.CodProveedor, a.Proveedor, a.CantidadPruebas, a.Serie," +
+                "a.Especialidad Especialidad, a.FechaAnalisis, RTRIM(c.NombreCompleto) Analista " +
                 "FROM TBMAnalisisAgujas a WITH(NOLOCK) " +
+                "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c WITH(NOLOCK) ON a.UsuarioRegistro = c.Persona " +
                 "INNER JOIN PROD_UNILENE2.dbo.WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item WHERE Lote = @loteAnalisis " +
                 "SELECT IdAnalisis, Lote,TipoRegistro,Llave,Valor,UsuarioRegistro,FechaRegistro FROM TBDAnalisisAgujaFlexion WITH(NOLOCK) WHERE Lote = @loteAnalisis";
 
@@ -189,10 +191,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             ObtenerDatosGeneralesDTO result = new ObtenerDatosGeneralesDTO();
 
-            string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca," +
-                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,a.Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad," +
-                "CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, a.FechaAnalisis FechaAnalisis , a.Especialidad " +
+            string script = "SELECT RTRIM(c.Codigo) CodTipo,RTRIM(c.DescripcionLocal) Tipo,RTRIM(d.Codigo) CodLongitud,RTRIM(d.DescripcionLocal) Longitud,RTRIM(f.Codigo) CodBroca, RTRIM(f.DescripcionLocal) Broca, " +
+                "RTRIM(g.Codigo) CodAlambre,RTRIM(g.DescripcionLocal) Alambre,a.Serie,a.OrdenCompra,a.ControlNumero,a.Proveedor,a.Cantidad, CAST(e.ValorDecimal2 AS INT) UndMuestrear,e.ValorEntero3 UndMuestrearI, " +
+                "CAST(e.ValorDecimal2 AS INT) UndMuestrearIII, a.Observaciones, a.FechaAnalisis FechaAnalisis, a.Especialidad, a.Conclusion, RTRIM(i.NombreCompleto) Analista " +
                 "FROM SatelliteCore.dbo.TBMAnalisisAgujas a WITH(NOLOCK) " +
+                    "INNER JOIN PersonaMast i WITH(NOLOCK) ON a.UsuarioRegistro = i.Persona " +
                     "INNER JOIN WH_ItemMast b WITH(NOLOCK) ON a.Item = b.Item INNER JOIN WH_ItemFormato c ON c.Grupo = '15' AND c.Tabla = '002' AND c.Codigo = SUBSTRING(b.NumeroDeParte, 2, 2) " +
                     "INNER JOIN WH_ItemFormato d WITH(NOLOCK) ON d.Grupo = '15' AND d.Tabla = '003' AND d.Codigo = SUBSTRING(b.NumeroDeParte, 4, 3) " +
                     "INNER JOIN SatelliteCore.dbo.TBDConfiguracion e WITH(NOLOCK) ON e.IDConfiguracion = 3 AND e.Grupo = 'BATCH' AND a.Cantidad BETWEEN e.ValorEntero1 AND e.ValorEntero2 AND e.Estado = 'A'" +
@@ -349,12 +352,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
             string script = "INSERT INTO TBDAnalisisAgujaPruebaAspecto (LoteAnalisis,TipoRegistro,Cantidad,BaseCalculoPorcentaje,Tolerancia,Usuario,Fecha) " +
                 "VALUES(@loteAnalisis,@tipoRegistro,@cantidad,@baseCalculoPorcentaje,@tolerancia,@usuario,@fecha)";
 
-            string actualizarObservacionesScript = "UPDATE TBMAnalisisAgujas SET Observaciones = @observaciones WHERE Lote = @loteAnalisis";
+            string actualizarObservacionesScript = "UPDATE TBMAnalisisAgujas SET Observaciones = @observaciones, conclusion = @conclusion WHERE Lote = @loteAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await context.ExecuteAsync(script, datos.Pruebas);
-                await context.ExecuteAsync(actualizarObservacionesScript, new { observaciones = datos.Observaciones, loteAnalisis });
+                await context.ExecuteAsync(actualizarObservacionesScript, new { datos.Observaciones, loteAnalisis, datos.Conclusion });
             }
         }
 

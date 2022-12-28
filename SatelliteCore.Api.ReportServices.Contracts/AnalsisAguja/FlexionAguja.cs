@@ -290,7 +290,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             tableResponsable.SetFixedLayout();
             document.Add(saltoLinea);
 
-            Cell cellResponsable = new Cell(1, 1).Add(new Paragraph($"REALIZADO POR: __________________")
+            Cell cellResponsable = new Cell(1, 1).Add(new Paragraph($"REALIZADO POR: {cabecera.Analista}")
                 .AddStyle(estiloResultadoNegrita))
                 .SetBorder(Border.NO_BORDER)
                 .SetTextAlignment(TextAlignment.CENTER)
@@ -300,7 +300,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalsisAguja
             tableResponsable.AddCell(cellResponsable);
 
 
-            cellResponsable = new Cell(1, 1).Add(new Paragraph($"V° B°: __________________")
+            cellResponsable = new Cell(1, 1).Add(new Paragraph("V° B°: __________________")
                 .AddStyle(estiloResultadoNegrita))
                 .SetBorder(Border.NO_BORDER)
                 .SetTextAlignment(TextAlignment.CENTER)
