@@ -113,12 +113,14 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
+
         public async Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico()
         {
             IEnumerable<DatosFormatoListarPersonaTecnica> response = await _usuarioRepository.ListarPersonaTecnico();
 
             return response;
         }
+
 
 
     }

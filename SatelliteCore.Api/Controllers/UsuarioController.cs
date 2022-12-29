@@ -150,7 +150,6 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-
         [HttpGet("ListarPersonaTecnico")]
         public async Task<ActionResult> ListarPersonaTecnico()
         {

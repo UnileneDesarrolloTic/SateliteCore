@@ -206,6 +206,8 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> GuardarPruebaAspecto(PruebaAspectoYObservacionesDTO datos, int usuario)
         {
+            if(string.IsNullOrEmpty(datos.Conclusion) || (datos.Conclusion != "R" && datos.Conclusion != "A" && datos.Conclusion != "S"))
+                throw new ValidationModelException("Los datos enviados no son válidos.");
 
             DateTime fechaActual = DateTime.Now;
 
@@ -233,7 +235,7 @@ namespace SatelliteCore.Api.Services
         public async Task<ResponseModel<string>> ObtenerReporteAnalisisAguja(string loteAnalisis)
         {
 
-            Task<(ObtenerAnalisisAgujaModel _, List<AnalisisAgujaFlexionEntity> flexion)> analisisFlexion= _analisisAgujaRepository.AnalisisAgujaFlexion(loteAnalisis);
+            Task<(ObtenerAnalisisAgujaModel _, List<AnalisisAgujaFlexionEntity> flexion)> analisisFlexion = _analisisAgujaRepository.AnalisisAgujaFlexion(loteAnalisis);
             Task<ObtenerDatosGeneralesDTO> datosGenerales = _analisisAgujaRepository.ObtenerDatosGenerales(loteAnalisis);
             Task<AnalisisAgujaPlanMuestreoEntity> planMuestreo = _analisisAgujaRepository.ObtenerPlanMuestreo(loteAnalisis);
             Task<List<AnalisisAgujaPruebaDimensionalEntity>> dimensionalCorrosion = _analisisAgujaRepository.ObtenerPruebaDimensional(loteAnalisis);
@@ -245,8 +247,8 @@ namespace SatelliteCore.Api.Services
 
             List<AnalisisAgujaFlexionEntity> flexionAux = analisisFlexion.Result.flexion.FindAll(x => x.TipoRegistro == 2).ToList();
 
-           /* if (flexionAux.Count < 1)
-                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con prueba de flexión");*/
+            /* if (flexionAux.Count < 1)
+                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con prueba de flexión");*/
 
             if (string.IsNullOrEmpty(datosGenerales.Result.OrdenCompra))
                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No cuenta con registros de análisis");

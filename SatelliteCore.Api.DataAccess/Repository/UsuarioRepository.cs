@@ -225,8 +225,5 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
-
-
-
     }
 }
