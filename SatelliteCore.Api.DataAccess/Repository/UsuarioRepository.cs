@@ -213,19 +213,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> EliminarUsuario(int IdPersona)
+
+        public async Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico()
         {
-            string sql = "UPDATE PROD_UNILENE2..PersonaMast SET Estado='I' WHERE PERSONA=@IdPersona ;" +
-                         "UPDATE PROD_UNILENE2..Empleadomast SET Estado = 'I' WHERE EMPLEADO = @IdPersona ;";
-            int result = 0;
+            IEnumerable<DatosFormatoListarPersonaTecnica> result = new List<DatosFormatoListarPersonaTecnica>();
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await connection.QueryAsync(sql, new { IdPersona });
+                result = await connection.QueryAsync<DatosFormatoListarPersonaTecnica>("usp_Listar_persona_unilene_tecnico", commandType: CommandType.StoredProcedure);
             }
 
             return result;
         }
+
+
 
     }
 }

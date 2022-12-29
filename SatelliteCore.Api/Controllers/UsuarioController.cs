@@ -150,15 +150,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("EliminarUsuario")]
-        public async Task<ActionResult> EliminarUsuario(int IdPersona)
+
+        [HttpGet("ListarPersonaTecnico")]
+        public async Task<ActionResult> ListarPersonaTecnico()
         {
-            ResponseModel<string> response = await _usuarioService.EliminarUsuario(IdPersona);
+            IEnumerable<DatosFormatoListarPersonaTecnica> response = await _usuarioService.ListarPersonaTecnico();
             return Ok(response);
         }
-
-
-
 
 
     }

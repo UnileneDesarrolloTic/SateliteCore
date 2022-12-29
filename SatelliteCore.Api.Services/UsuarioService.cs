@@ -113,15 +113,12 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> EliminarUsuario(int IdPersona)
+        public async Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico()
         {
-            await _usuarioRepository.EliminarUsuario(IdPersona);
+            IEnumerable<DatosFormatoListarPersonaTecnica> response = await _usuarioRepository.ListarPersonaTecnico();
 
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con exito");
-
-            return Respuesta;
+            return response;
         }
-
 
 
     }
