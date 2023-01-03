@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,9 +23,10 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<FormatoGuiaPorFacturarModel>> ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato);
         public Task<IEnumerable<FormatoGuiaPorFacturarGeneralModel>> ListarGuiaporFacturarGeneral(DatosEstructuraGuiaPorFacturarModel dato);
         public Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario);
-
-
         public Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorFacturaOPedido(DatosProtocoloAnalisisListado datos);
+        public Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorGuiaRemision(DatosProtocoloAnalisisListado datos);
+        public Task<List<DetalleProtocoloAnalisis>> ListaProtocolosSinTipoDocumento(string ordenFabricacion, string lote);
+        public Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorCotizacion(string numeroDocumento, int idCliente, DateTime? fechaInicio, DateTime? fechaFin);
 
     }
 }

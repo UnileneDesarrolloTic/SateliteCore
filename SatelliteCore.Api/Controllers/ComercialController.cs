@@ -157,6 +157,7 @@ namespace SatelliteCore.Api.Controllers
                 string base64String = Convert.ToBase64String(result, 0, result.Length);
                 ResponseModel<string> response
                         = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -165,7 +166,6 @@ namespace SatelliteCore.Api.Controllers
                         = new ResponseModel<string>(false, "El reporte no se generó", ex.Message);
                 return BadRequest(response);
             }
-
         }
 
         [HttpPost("ListarProtocoloAnalisis")]
@@ -178,19 +178,9 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListarProtocoloAnalisisExportar")]
         public async Task<ActionResult> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
         {
-            try
-            {
-                ResponseModel<string> result = await _comercialServices.ListarProtocoloAnalisisExportar(datos);
-                return Ok(result);
-               
-            }
-            catch (Exception ex)
-            {
-                ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
-                return BadRequest(response);
-            }
+            ResponseModel<string> result = await _comercialServices.ListarProtocoloAnalisisExportar(datos);
+            return Ok(result);
         }
-
 
         [HttpPost("ListarClientes")]
         public async Task<ActionResult> ListarClientes()
@@ -289,8 +279,6 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok();
         }
-
-
 
         [HttpPost("ListarGuiaporFacturarExportar")]
         public async Task<ActionResult> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)

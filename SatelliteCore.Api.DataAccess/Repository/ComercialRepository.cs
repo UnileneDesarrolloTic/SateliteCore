@@ -165,20 +165,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             else
                 query = $"{query} AND a.TipoDocumento = 'PE'";
 
-            if(datos.FechaInicio != null && datos.FechaFin != null)
-                query = $"{query} AND CAST(FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
+            if (!string.IsNullOrEmpty(datos.NumeroDocumento))
+                query = $"{query} AND a.NumeroDocumento = @NumeroDocumento ";
 
-            if(!string.IsNullOrEmpty(datos.OrdenFabricacion))
+            if (!string.IsNullOrEmpty(datos.OrdenFabricacion))
                 query = $"{query} AND b.Lote = @OrdenFabricacion";
 
             if (!string.IsNullOrEmpty(datos.Lote))
                 query = $"{query} AND b.ItemSerie = @Lote";
 
-            if (!string.IsNullOrEmpty(datos.NumeroDocumento))
-                query = $"{query} AND a.NumeroDocumento = @NumeroDocumento ";
-
             if (datos.IdCliente != 0)
                 query = $"{query} AND a.ClienteNumero = @IdCliente ";
+
+            if (datos.FechaInicio != null && datos.FechaFin != null)
+                query = $"{query} AND CAST(FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
 
             query = $"{query} ORDER BY a.TipoDocumento, a.NumeroDocumento, b.Linea ASC ";
 
@@ -191,7 +191,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorGuiaRemision (DatosProtocoloAnalisisListado datos)
+        public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorGuiaRemision(DatosProtocoloAnalisisListado datos)
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
             string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, a.GuiaNumero NumeroDocumento, a.Estado, a.FechaDocumento, a.DestinatarioNombre ClienteNombre, " +
@@ -201,35 +201,92 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "0 Monto, c.NumeroDeParte, c.ClasificacionRotacion, '' AlmacenCodigo, b.Lote ItemSerie, b.Secuencia Linea, " +
                 "ISNULL( e.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion FROM WH_GuiaRemision a " +
                 "INNER JOIN WH_GuiaRemisionDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.SerieNumero = a.SerieNumero AND b.GuiaNumero = a.GuiaNumero " +
-                "INNER JOIN WH_ItemMast c ON c.Item = b.ItemCodigo LEFT JOIN EP_ProgramacionLote e ON b.CompaniaSocio = e.CompaniaSocio AND b.Lote = e.NumeroLote WHERE a.CompaniaSocio = '01000000' " +
-                "AND a.GuiaNumero = @NumeroDocumento AND CAST(a.FechaDocumento  AS DATE) BETWEEN @FechaInicio AND @FechaFin AND a.Destinatario = @IdCliente AND " +
-                "b.Lote = @OrdenFabricacion AND b.Lote = @Lote ";
-
-            if (datos.TipoDocumento == "F")
-                query = $"{query} AND a.TipoDocumento <> 'PE'";
-            else
-                query = $"{query} AND a.TipoDocumento = 'PE'";
-
-            if (datos.FechaInicio != null && datos.FechaFin != null)
-                query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
+                "INNER JOIN WH_ItemMast c ON c.Item = b.ItemCodigo " +
+                "LEFT JOIN EP_ProgramacionLote e ON b.CompaniaSocio = e.CompaniaSocio AND b.Lote = e.NumeroLote " +
+                "WHERE a.CompaniaSocio = '01000000'";
+            
+            if (!string.IsNullOrEmpty(datos.NumeroDocumento))
+                query = $"{query} AND a.GuiaNumero = @NumeroDocumento";
 
             if (!string.IsNullOrEmpty(datos.OrdenFabricacion))
                 query = $"{query} AND b.Lote = @OrdenFabricacion";
 
             if (!string.IsNullOrEmpty(datos.Lote))
-                query = $"{query} AND b.ItemSerie = @Lote";
+                query = $"{query} AND SUBSTRING( e.referencianumero, 1, 8) = @lote";
 
-            if (!string.IsNullOrEmpty(datos.NumeroDocumento))
-                query = $"{query} AND a.NumeroDocumento = @NumeroDocumento ";
+            if(datos.IdCliente != 0)
+                query = $"{query} AND a.Destinatario = @IdCliente ";
 
-            if (datos.IdCliente != 0)
-                query = $"{query} AND a.ClienteNumero = @IdCliente ";
+            if (datos.FechaInicio != null && datos.FechaFin != null)
+                query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
 
             query = $"{query} ORDER BY a.GuiaNumero, b.Secuencia ASC";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 listaProtocolo = await context.QueryAsync<DetalleProtocoloAnalisis>(query, datos);
+            }
+
+            return listaProtocolo.ToList();
+
+        }
+
+        public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosSinTipoDocumento(string ordenFabricacion, string lote)
+        {
+            IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
+
+            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, ''  NumeroDocumento, '' Estado, '' FechaDocumento, '' ClienteNombre, '' MonedaDocumento, " +
+                "0 MontoTotal, '' VoucherPeriodo, '' VoucherNo, '' ClienteNumero, '' ImpresionPendienteFlag, 0 MontoPagado, '' Comentarios, " +
+                "'' FechaVencimiento, '' ProcesoImportacionNumero, '' FormaPagoNombre, '' CreditoFlag, '' Clasificacion, '' ClienteReferencia, b.ITEM ItemCodigo, " +
+                "RTRIM(b.descripcionlocal) Descripcion, a.NUMEROLOTE AS OrdenFabricacion, SUBSTRING(a.referencianumero, 1, 8) AS Lote,'' UnidadCodigo, " +
+                "0 CantidadPedida, 0 Monto, b.NumeroDeParte, b.ClasificacionRotacion, '' AlmacenCodigo, a.NUMEROLote ItemSerie, '' Linea, " +
+                "ISNULL(a.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion " +
+                "FROM ep_programacionlote a INNER JOIN WH_ItemMast b ON b.Item = a.Item WHERE a.CompaniaSocio = '01000000'";
+
+            if (!string.IsNullOrEmpty(ordenFabricacion))
+                query = $"{query} AND a.NumeroLote = @OrdenFabricacion";
+
+            if (!string.IsNullOrEmpty(lote))
+                query = $"{query} AND SUBSTRING( a.referencianumero, 1, 8) = @Lote ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                listaProtocolo = await context.QueryAsync<DetalleProtocoloAnalisis>(query, new { ordenFabricacion, lote });
+            }
+
+            return listaProtocolo.ToList();
+
+        }
+
+        public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorCotizacion(string numeroDocumento, int idCliente, DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
+
+            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, RTRIM(a.NumeroDocumento) NumeroDocumento, a.Estado, a.FechaDocumento, RTRIM(a.ClienteNombre) ClienteNombre, a.MonedaDocumento, " +
+                "a.MontoTotal, ''  VoucherPeriodo, ''  VoucherNo, a.ClienteNumero, ''  ImpresionPendienteFlag, 0  MontoPagado, RTRIM(a.Comentarios) Comentarios, a.FechaVencimiento, " +
+                "''  ProcesoImportacionNumero, RTRIM(c.Descripcion) FormaPagoNombre, c.CreditoFlag, ''  Clasificacion, ''  ClienteReferencia, RTRIM(b.ItemCodigo) ItemCodigo, b.Descripcion, " +
+                "RTRIM(b.OrdenFabricacion) OrdenFabricacion,RTRIM(b.lote) Lote, RTRIM(b.UnidadCodigo) UnidadCodigo, b.CantidadPedida, b.Monto, d.NumeroDeParte, d.ClasificacionRotacion, ''  AlmacenCodigo, ''  ItemSerie, " +
+                "b.Linea, '1900-01-01 00:00:00.000' AS FechaExpiracion " +
+                "FROM CO_Cotizacion a " +
+                "INNER JOIN( SELECT * FROM( SELECT a.CompaniaSocio, a.NumeroDocumento, a.ItemCodigo, a.Descripcion, a.UnidadCodigo, a.CantidadPedida, a.Monto, " +
+                        "a.Linea, b.Lote OrdenFabricacion, SUBSTRING(LoteFabricacion, 1, 8) Lote, ROW_NUMBER() OVER(PARTITION BY a.ItemCodigo ORDER BY b.FechaIngreso DESC) AS Row  " +
+                        "FROM CO_CotizacionDetalle a " +
+                            "LEFT JOIN WH_ItemAlmacenLote b ON b.item = a.ItemCodigo AND lote <> '00' " +
+                        "WHERE NumeroDocumento = @numeroDocumento " +
+                ") x WHERE Row = 1) b ON b.CompaniaSocio = a.CompaniaSocio AND b.NumeroDocumento = a.NumeroDocumento " +
+                "INNER JOIN MA_FormadePago c ON a.FormadePago = c.FormadePago " +
+                "INNER JOIN WH_ItemMast d ON d.Item = b.ItemCodigo " +
+                "WHERE a.CompaniaSocio = '01000000' AND a.NumeroDocumento = @numeroDocumento  ";
+
+            if (idCliente != 0)
+                query = $"{query} a.ClienteNumero = @idCliente";
+
+            if (fechaInicio != null && fechaFin != null)
+                query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                listaProtocolo = await context.QueryAsync<DetalleProtocoloAnalisis>(query, new { numeroDocumento, idCliente, fechaInicio, fechaFin });
             }
 
             return listaProtocolo.ToList();

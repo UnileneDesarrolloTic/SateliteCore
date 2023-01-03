@@ -17,7 +17,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato, int idUsuario);
         public Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea,string NombrePersona);
         public Task<int> LiberalPersona(int IdAsignacion);
-
         public Task<IEnumerable<DatosFormatoPersonaAsignacionExportModel>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal);
     }
 }
