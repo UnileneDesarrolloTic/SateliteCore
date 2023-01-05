@@ -322,7 +322,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)

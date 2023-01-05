@@ -90,7 +90,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<DatosFormatoAsignacionPersonalLaboralModel> ListarAsignacionPersonal()
         {
-            //IEnumerable<FormatoDeAsignacionPersonalLaboralModel> result = new List<FormatoDeAsignacionPersonalLaboralModel>();
 
             DatosFormatoAsignacionPersonalLaboralModel result = new DatosFormatoAsignacionPersonalLaboralModel();
 
@@ -213,19 +212,33 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        //public async Task<int> EliminarUsuario(int IdPersona)
-        //{
-        //    string sql = "UPDATE PROD_UNILENE2..PersonaMast SET Estado='I' WHERE PERSONA=@IdPersona ;" +
-        //                 "UPDATE PROD_UNILENE2..Empleadomast SET Estado = 'I' WHERE EMPLEADO = @IdPersona ;";
-        //    int result = 0;
 
-        //    using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
-        //    {
-        //        await connection.QueryAsync(sql, new { IdPersona });
-        //    }
+        public async Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico()
+        {
+            IEnumerable<DatosFormatoListarPersonaTecnica> result = new List<DatosFormatoListarPersonaTecnica>();
 
-        //    return result;
-        //}
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatoListarPersonaTecnica>("usp_Listar_persona_unilene_tecnico", commandType: CommandType.StoredProcedure);
+            }
 
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatosPersonaPorAreaModel>> ListarPersonaPorArea(int IdArea)
+        {
+            IEnumerable<DatosFormatosPersonaPorAreaModel> result = new List<DatosFormatosPersonaPorAreaModel>();
+
+            string sql = "SELECT b.Persona, RTRIM(b.Busqueda) NombreCompleto , RTRIM(ISNULL(b.Documento,b.DocumentoIdentidad)) Documento  FROM  TBMAsignacionArea a " +
+                        "INNER JOIN PROD_UNILENE2..PersonaMast b on b.Persona = a.IdEmpleado " +
+                        "INNER JOIN TBMAreasProduccion c ON a.IdArea = c.IdArea " +
+                        "WHERE a.IdArea = @IdArea AND CONVERT(varchar, a.FechaAsignacion,103)=CONVERT(varchar, SYSDATETIME(),103) ";
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await connection.QueryAsync<DatosFormatosPersonaPorAreaModel>(sql, new { IdArea  });
+            }
+
+            return result;
+        }
     }
 }

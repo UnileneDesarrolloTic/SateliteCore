@@ -4,12 +4,10 @@ using System.Text;
 
 namespace SatelliteCore.Api.Models.Response
 {
-    public struct DatosFormatoFiltrarTrabajadorAreaModel
+    public struct DatosFormatosPersonaPorAreaModel
     {
-        public int IdAsignacion { get; set; }
         public int Persona { get; set; }
         public string NombreCompleto { get; set; }
-        public string Descripcion { get; set; }
-        
+        public string Documento { get; set; }
     }
 }

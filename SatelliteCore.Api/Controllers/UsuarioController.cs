@@ -150,12 +150,22 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        //[HttpGet("EliminarUsuario")]
-        //public async Task<ActionResult> EliminarUsuario(int IdPersona)
-        //{
-        //    ResponseModel<string> response = await _usuarioService.EliminarUsuario(IdPersona);
-        //    return Ok(response);
-        //}
+        [HttpGet("ListarPersonaTecnico")]
+        public async Task<ActionResult> ListarPersonaTecnico()
+        {
+            IEnumerable<DatosFormatoListarPersonaTecnica> response = await _usuarioService.ListarPersonaTecnico();
+            return Ok(response);
+        }
+
+        [HttpGet("ListarPersonaPorArea")]
+        public async Task<ActionResult> ListarPersonaPorArea(int IdArea)
+        {
+            IEnumerable<DatosFormatosPersonaPorAreaModel> response = await _usuarioService.ListarPersonaPorArea(IdArea);
+            return Ok(response);
+        }
+
+
+
 
     }
 }

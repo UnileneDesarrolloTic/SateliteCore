@@ -125,7 +125,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisCosto
 
                 foreach (DatosFormatoDatosProductoCostobase rowitem in lista)
                 {
-                    worksheet.Row(row).Height = 15.25;
+                    worksheet.Row(row).Height = 28.25;
 
 
                     worksheet.Cells["A" + row].Value = rowitem.CodigoItem;
