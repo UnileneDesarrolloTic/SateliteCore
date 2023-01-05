@@ -21,6 +21,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<AreaPersonalLaboralEntity> RegistrarEditarArea(int IdArea, string Descripcion);
         public Task<int> EliminarAreaProduccion(int IdArea);
         public Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico();
+        public Task<IEnumerable<DatosFormatosPersonaPorAreaModel>> ListarPersonaPorArea(int IdArea);
 
     }
 }

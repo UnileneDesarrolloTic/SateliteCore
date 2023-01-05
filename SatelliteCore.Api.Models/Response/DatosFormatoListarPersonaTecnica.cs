@@ -10,6 +10,7 @@ namespace SatelliteCore.Api.Models.Response
        public string TipoPlanilla { get; set; }
        public string  NombreCompleto { get; set; }
        public int TipoHorario { get; set; }
+       public string Documento { get; set; }
        public bool isSelected { get; set; }
     }
 }

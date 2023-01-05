@@ -70,5 +70,30 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<IEnumerable<ReporteAsistenciaDTO>> listarAsistencia = await _rrhhServices.ListarAsistencia(fecha, usuarioToken);
             return Ok(listarAsistencia);
         }
+
+        [HttpPost("RegistrarHorasExtras")]
+        public async Task<IActionResult> RegistrarHorasExtras(DatosEstructuraHorasExtraCabecera dato)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            ResponseModel<string> response = await _rrhhServices.RegistrarHorasExtras(dato, usuario);
+            return Ok(response);
+        }
+
+        [HttpPost("ListarHoraExtrasPersona")]
+        public async Task<IActionResult> ListarHoraExtrasPersona(DatosFormatoFiltraHoraExtras dato)
+        {
+            IEnumerable<DatosFormatoListarHorasExtrasPersona> listado = await _rrhhServices.ListarHoraExtrasPersona(dato);
+            return Ok(listado);
+        }
+
+        [HttpGet("InformacionHoraExtras")]
+        public async Task<IActionResult> BuscarInformacionHorasExtrasPersona(int Cabecera)
+        {
+            object listado = await _rrhhServices.BuscarInformacionHorasExtrasPersona(Cabecera);
+            return Ok(listado);
+        }
+
+
     }
 }

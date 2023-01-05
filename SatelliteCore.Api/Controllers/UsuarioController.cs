@@ -157,6 +157,15 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("ListarPersonaPorArea")]
+        public async Task<ActionResult> ListarPersonaPorArea(int IdArea)
+        {
+            IEnumerable<DatosFormatosPersonaPorAreaModel> response = await _usuarioService.ListarPersonaPorArea(IdArea);
+            return Ok(response);
+        }
+
+
+
 
     }
 }
