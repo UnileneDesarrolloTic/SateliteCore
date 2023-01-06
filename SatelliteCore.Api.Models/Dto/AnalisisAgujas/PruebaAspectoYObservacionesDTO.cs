@@ -6,6 +6,7 @@ namespace SatelliteCore.Api.Models.Dto.AnalisisAgujas
     public struct PruebaAspectoYObservacionesDTO
     {
         public List<AnalisisAgujaPruebaAspectoEntity> Pruebas { get; set; }
-        public string Observaciones { get; set; }        
+        public string Conclusion { get; set; }
+        public string Observaciones { get; set; }    
     }
 }

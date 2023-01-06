@@ -94,6 +94,34 @@ namespace SatelliteCore.Api.Services
         }
 
 
+        public async Task<ResponseModel<AreaPersonalLaboralEntity>> RegistrarEditarArea(int IdArea, string Descripcion)
+        {
+            AreaPersonalLaboralEntity result = new AreaPersonalLaboralEntity();
+            result=await _usuarioRepository.RegistrarEditarArea(IdArea, Descripcion);
+
+            ResponseModel<AreaPersonalLaboralEntity> Respuesta = new ResponseModel<AreaPersonalLaboralEntity>(true, Constante.MESSAGE_SUCCESS, result);
+
+            return Respuesta;
+        }
+
+        public async Task<ResponseModel<string>> EliminarAreaProduccion(int IdArea)
+        {
+             await _usuarioRepository.EliminarAreaProduccion(IdArea);
+
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con exito");
+
+            return Respuesta;
+        }
+
+        //public async Task<ResponseModel<string>> EliminarUsuario(int IdPersona)
+        //{
+        //    await _usuarioRepository.EliminarUsuario(IdPersona);
+
+        //    ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con exito");
+
+        //    return Respuesta;
+        //}
+
 
 
     }

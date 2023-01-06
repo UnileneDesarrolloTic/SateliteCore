@@ -19,5 +19,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea,string NombrePersona);
         public Task<ResponseModel<string>> LiberalPersona(int IdAsignacion);
         public Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal);
+        public Task<ResponseModel<AreaPersonalLaboralEntity>> RegistrarEditarArea(int IdArea, string Descripcion);
+        public Task<ResponseModel<string>> EliminarAreaProduccion(int IdArea);
+        //public Task<ResponseModel<string>> EliminarUsuario(int IdPersona);
     }
 }

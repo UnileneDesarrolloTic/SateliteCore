@@ -137,35 +137,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("GenerarReporteProtocoloAnalisis")]
         public async Task<ActionResult> GenerarReporteProtocoloAnalisis(DatosReporteProtocoloAnalisis datos)
         {
-            try
-            {
-                string Reporte = "ProtocoloAnalisis&rs:Command=Render";
-                string Formato = "&rs:Format=pdf";
-                string Parametros = "&Lote=" + datos.Lote;
-
-                var theURL = _appConfig.ReportComercialProtocoloAnalisis + Reporte + Parametros + Formato;
-
-                var httpClientHandler = new HttpClientHandler()
-                {
-                    UseDefaultCredentials = true
-                };
-
-                HttpClient webClient = new HttpClient(httpClientHandler);
-
-                Byte[] result = await webClient.GetByteArrayAsync(theURL);
-
-                string base64String = Convert.ToBase64String(result, 0, result.Length);
-                ResponseModel<string> response
-                        = new ResponseModel<string>(true, "El reporte se generó correctamente", base64String);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                ResponseModel<string> response
-                        = new ResponseModel<string>(false, "El reporte no se generó", ex.Message);
-                return BadRequest(response);
-            }
+            ResponseModel<string> reporte = await _comercialServices.GenerarReporteProtocoloAnalisis(datos.OrdenesFabricacion);
+            return Ok(reporte);
         }
 
         [HttpPost("ListarProtocoloAnalisis")]

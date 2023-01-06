@@ -125,9 +125,9 @@ namespace SatelliteCore.Api.Controllers
             if (string.IsNullOrEmpty(loteAnalisis))
                 throw new ValidationModelException("Los datos enviados no son válidos !!");
 
-            ResponseModel<ObtenerDatosGeneralesDTO> reporte = await _analisisAgujaServices.ObtenerDatosGenerales(loteAnalisis);
+            ResponseModel<ObtenerDatosGeneralesDTO> datosGenerales = await _analisisAgujaServices.ObtenerDatosGenerales(loteAnalisis);
 
-            return Ok(reporte);
+            return Ok(datosGenerales);
         }
 
         [HttpGet("ObtenerPlanMuestreo")]
@@ -136,9 +136,9 @@ namespace SatelliteCore.Api.Controllers
             if (string.IsNullOrEmpty(loteAnalisis))
                 throw new ValidationModelException("Los datos enviados no son válidos !!");
 
-            ResponseModel<AnalisisAgujaPlanMuestreoEntity> reporte = await _analisisAgujaServices.ObtenerPlanMuestreo(loteAnalisis);
+            ResponseModel<AnalisisAgujaPlanMuestreoEntity> plan = await _analisisAgujaServices.ObtenerPlanMuestreo(loteAnalisis);
 
-            return Ok(reporte);
+            return Ok(plan);
         }
 
         [HttpPost("GuardarPlanMuestreo")]
@@ -149,9 +149,9 @@ namespace SatelliteCore.Api.Controllers
 
             planMuestreo.Usuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPlanMuestreo(planMuestreo);
+            ResponseModel<string> response = await _analisisAgujaServices.GuardarPlanMuestreo(planMuestreo);
 
-            return Ok(reporte);
+            return Ok(response);
         }
 
         [HttpGet("ObtenerPruebaDimensional")]
@@ -183,9 +183,9 @@ namespace SatelliteCore.Api.Controllers
             }).ToList();
                 
 
-            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaDimensional(nuevoArreglo);
+            ResponseModel<string> pruebaDimensional = await _analisisAgujaServices.GuardarPruebaDimensional(nuevoArreglo);
 
-            return Ok(reporte);
+            return Ok(pruebaDimensional);
         }
 
         [HttpGet("ObtenerPruebaElasticidadPerforacion")]
@@ -216,9 +216,9 @@ namespace SatelliteCore.Api.Controllers
                 return item;
             }).ToList();
 
-            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaElasticidadPerforacion(nuevoArreglo);
+            ResponseModel<string> response = await _analisisAgujaServices.GuardarPruebaElasticidadPerforacion(nuevoArreglo);
 
-            return Ok(reporte);
+            return Ok(response);
         }
 
         [HttpGet("ObtenerPruebaAspecto")]
@@ -238,9 +238,9 @@ namespace SatelliteCore.Api.Controllers
         {
             int usuarioToken = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-            ResponseModel<string> reporte = await _analisisAgujaServices.GuardarPruebaAspecto(datos, usuarioToken);
+            ResponseModel<string> response = await _analisisAgujaServices.GuardarPruebaAspecto(datos, usuarioToken);
 
-            return Ok(reporte);
+            return Ok(response);
         }
 
 

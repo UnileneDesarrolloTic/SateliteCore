@@ -22,6 +22,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<IEnumerable<FormatoGuiaPorFacturarModel>> ListarGuiaporFacturar(DatosEstructuraGuiaPorFacturarModel dato);
         public Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario);
         public Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato);
+        public Task<ResponseModel<string>> GenerarReporteProtocoloAnalisis(List<string> lotes);
 
     }
 }

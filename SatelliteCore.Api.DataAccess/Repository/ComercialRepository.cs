@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Report.Comercial;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
@@ -153,11 +154,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "e.ClasificacionRotacion,b.AlmacenCodigo, b.ItemSerie, b.Linea," +
                 "ISNULL(CAST(f.FechaVencimiento AS DATE), CAST('1900-01-01' AS Date)) AS FechaExpiracion " +
             "FROM CO_Documento a " +
-            "INNER JOIN CO_DocumentoDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.TipoDocumento = a.TipoDocumento AND b.NumeroDocumento = a.NumeroDocumento " +
-            "INNER JOIN CO_TipoDocumento c ON a.TipoDocumento = c.TipoDocumento " +
-            "INNER JOIN MA_FormadePago d ON a.FormadePago = d.FormadePago " +
-            "INNER JOIN WH_ItemMast e ON e.Item = b.ItemCodigo " +
-            "LEFT JOIN WH_ItemAlmacenLote f ON b.ItemCodigo = f.Item AND f.Condicion = 0 AND b.Lote = f.Lote AND b.ItemSerie = f.LoteFabricacion AND b.AlmacenCodigo = f.AlmacenCodigo " +
+                "INNER JOIN CO_DocumentoDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.TipoDocumento = a.TipoDocumento AND b.NumeroDocumento = a.NumeroDocumento " +
+                "INNER JOIN CO_TipoDocumento c ON a.TipoDocumento = c.TipoDocumento " +
+                "INNER JOIN MA_FormadePago d ON a.FormadePago = d.FormadePago " +
+                "INNER JOIN WH_ItemMast e ON e.Item = b.ItemCodigo " +
+                "LEFT JOIN WH_ItemAlmacenLote f ON b.ItemCodigo = f.Item AND f.Condicion = 0 AND b.Lote = f.Lote AND b.ItemSerie = f.LoteFabricacion AND b.AlmacenCodigo = f.AlmacenCodigo " +
             "WHERE a.CompaniaSocio = '01000000' ";
 
             if (datos.TipoDocumento == "F")
@@ -235,11 +236,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
 
-            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, ''  NumeroDocumento, '' Estado, '' FechaDocumento, '' ClienteNombre, '' MonedaDocumento, " +
-                "0 MontoTotal, '' VoucherPeriodo, '' VoucherNo, '' ClienteNumero, '' ImpresionPendienteFlag, 0 MontoPagado, '' Comentarios, " +
-                "'' FechaVencimiento, '' ProcesoImportacionNumero, '' FormaPagoNombre, '' CreditoFlag, '' Clasificacion, '' ClienteReferencia, b.ITEM ItemCodigo, " +
+            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, ''  NumeroDocumento, '' Estado, CAST('1900-01-01 00:00:00.000' AS DATE) FechaDocumento, '' ClienteNombre, '' MonedaDocumento, " +
+                "0 MontoTotal, '' VoucherPeriodo, '' VoucherNo, 0 ClienteNumero, '' ImpresionPendienteFlag, 0 MontoPagado, '' Comentarios, " +
+                "CAST('1900-01-01 00:00:00.000' AS DATE) FechaVencimiento, '' ProcesoImportacionNumero, '' FormaPagoNombre, '' CreditoFlag, '' Clasificacion, '' ClienteReferencia, b.ITEM ItemCodigo, " +
                 "RTRIM(b.descripcionlocal) Descripcion, a.NUMEROLOTE AS OrdenFabricacion, SUBSTRING(a.referencianumero, 1, 8) AS Lote,'' UnidadCodigo, " +
-                "0 CantidadPedida, 0 Monto, b.NumeroDeParte, b.ClasificacionRotacion, '' AlmacenCodigo, a.NUMEROLote ItemSerie, '' Linea, " +
+                "0 CantidadPedida, 0 Monto, b.NumeroDeParte, b.ClasificacionRotacion, '' AlmacenCodigo, a.NUMEROLote ItemSerie, 0 Linea, " +
                 "ISNULL(a.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion " +
                 "FROM ep_programacionlote a INNER JOIN WH_ItemMast b ON b.Item = a.Item WHERE a.CompaniaSocio = '01000000'";
 
@@ -290,7 +291,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return listaProtocolo.ToList();
+        }
 
+        public async Task<List<ValidacionProtocoloDTO>> ValidarSiTieneProtocolo_OF(string ordenesFabricacion)
+        {
+            IEnumerable<ValidacionProtocoloDTO> validacion = new List<ValidacionProtocoloDTO>();
+            
+            using (var context = new SqlConnection(_appConfig.contextSpring))
+            {
+                validacion = await context.QueryAsync<ValidacionProtocoloDTO>("usp_ValidarSiTieneProtocolo_OF", new { ordenesFabricacion }, commandType: CommandType.StoredProcedure);
+            }
+
+            return validacion.ToList();
         }
 
         public async Task<List<DetalleClientes>> ListarClientes()
@@ -429,7 +441,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
+        public async Task<(List<ProtocoloCabeceraModel> cabeceras, List<ProtocoloDetalleModel> detalles)> ObtenerDatosReporteProtocolo(string ordenFabricacion)
+        {
+            List<ProtocoloCabeceraModel> cabeceras = new List<ProtocoloCabeceraModel>();
+            List<ProtocoloDetalleModel> detalles = new List<ProtocoloDetalleModel>();
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                using (var result_db = await context.QueryMultipleAsync("usp_DatosReporteAnalisisProtocolo", new { ordenFabricacion }, commandType: CommandType.StoredProcedure))
+                {
+                    cabeceras = result_db.Read<ProtocoloCabeceraModel>().ToList();
+                    detalles = result_db.Read<ProtocoloDetalleModel>().ToList();
+                }
+            }
+
+            return (cabeceras, detalles);
+        }
 
         public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
         {
