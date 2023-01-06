@@ -43,7 +43,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
                 foreach (DatosEstructuraHorasExtrasDetalle persona in data.ListaPersona)
                 {
-                    await connection.ExecuteAsync("usp_InsertarHorasExtrasDetalle", new { data.idCodigo,IdCabecera, persona.persona , persona.horasextras }, commandType: CommandType.StoredProcedure);
+                    await connection.ExecuteAsync("INSERT INTO TBMHoraExtrasDetalle (IdCabecera,IdPersona,FechaCreacion,cant_horas) VALUES (@IdCabecera,@persona,GETDATE(),@horasextras);", new { data.idCodigo,IdCabecera, persona.persona , persona.horasextras });
                 }
 
                 connection.Dispose();
