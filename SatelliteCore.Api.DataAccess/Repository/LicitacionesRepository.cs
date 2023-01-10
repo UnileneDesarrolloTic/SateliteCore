@@ -125,15 +125,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso(string idClient)
+        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso(int idClient)
         {
             IEnumerable<ListarProcesoEntity> result = new List<ListarProcesoEntity>();
 
-            string sql1 = "SELECT IdProceso, DescripcionProceso ,DescripcionComercial,DescripcionComercialDetalle ,CantItems  FROM TBMLIProceso WHERE Cliente=IIF(@idClient is null,Cliente,@idClient)";
+            string query = "SELECT IdProceso,DescripcionProceso,DescripcionComercial,DescripcionComercialDetalle," +
+                "CantItems, Cliente FROM TBMLIProceso";
+
+            if (idClient != 0)
+                query = $"{query} WHERE Cliente = @idClient";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<ListarProcesoEntity>(sql1, new { idClient  });
+                result = await context.QueryAsync<ListarProcesoEntity>(query, new { idClient  });
             }
             return result;
         }

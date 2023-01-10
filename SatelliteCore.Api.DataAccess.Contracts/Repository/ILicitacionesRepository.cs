@@ -15,7 +15,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<DatosFormatoBuscarOrdenCompraLicitacionesModel> BuscarOrdenCompraLicitaciones(int NumeroProceso, int NumeroEntrega, int Item, string TipoUsuario);
         public Task<int> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato, int idUsuario);
         public Task RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> matricula);
-        public Task<IEnumerable<ListarProcesoEntity>> ListarProceso(string idClient);
+        public Task<IEnumerable<ListarProcesoEntity>> ListarProceso(int idClient);
         public Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega);
         public Task RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> matricula);
 

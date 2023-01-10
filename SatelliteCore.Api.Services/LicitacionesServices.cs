@@ -61,7 +61,7 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato, int idUsuario)
         {
-            int response = await _licitacionesRepository.RegistrarOrdenCompra(dato, idUsuario);
+            int _ = await _licitacionesRepository.RegistrarOrdenCompra(dato, idUsuario);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
 
@@ -74,10 +74,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
 
-        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso(string idClient)
+        public async Task<IEnumerable<ListarProcesoEntity>> ListarProceso(int idClient)
         {
             return await _licitacionesRepository.ListarProceso(idClient);
-
         }
 
         public async Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega)
