@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Comercial;
 using System.Linq;
+using SystemsIntegration.Api.Models.Exceptions;
+using SatelliteCore.Api.Models.Report.Comercial;
 
 namespace SatelliteCore.Api.Services
 {
@@ -36,23 +38,114 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.RegistrarRespuestas(datos);
         }
 
-        public async Task<(List<DetalleProtocoloAnalisis>, int)> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos)
+        public async Task<ResponseModel<List<DetalleProtocoloAnalisis>>> ListarProtocoloAnalisis(DatosProtocoloAnalisisListado datos)
         {
-            return await _comercialRepository.ListarProtocoloAnalisis(datos);
+            ValidarDatosParaListarProtocolos(datos);
+
+            List<DetalleProtocoloAnalisis> listaProtocolos = await FiltrarProtocolosPorFiltroTipoDocumento(datos);
+
+            if(listaProtocolos == null)
+                return new ResponseModel<List<DetalleProtocoloAnalisis>>(true, Constante.MESSAGE_SUCCESS, listaProtocolos);
+
+            string ordenesFabricacion = null;
+
+            listaProtocolos.ForEach(x =>
+            {
+                if (!string.IsNullOrEmpty(x.OrdenFabricacion))
+                    ordenesFabricacion = ordenesFabricacion + x.OrdenFabricacion + ",";
+            });
+
+            if (!string.IsNullOrEmpty(ordenesFabricacion))
+            {
+                List<ValidacionProtocoloDTO> validacion = await _comercialRepository.ValidarSiTieneProtocolo_OF(ordenesFabricacion);
+
+                if (validacion == null)
+                    return new ResponseModel<List<DetalleProtocoloAnalisis>>(true, Constante.MESSAGE_SUCCESS, listaProtocolos);
+
+                int cantidadRegistros = listaProtocolos.Count - 1;
+
+                for (int i = 0; i <= cantidadRegistros; i++)
+                {
+                    DetalleProtocoloAnalisis protocolo = listaProtocolos[i];
+                    string tieneProtocolo = validacion.FirstOrDefault(x => x.OrdenFabricacion == protocolo.OrdenFabricacion)?.Tiene ?? "No";
+
+                    protocolo.TieneProtocolo = tieneProtocolo;
+                    listaProtocolos[i] = protocolo;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(datos.Protocolo))
+                listaProtocolos = listaProtocolos.FindAll(x => x.TieneProtocolo == datos.Protocolo);
+
+            return new ResponseModel<List<DetalleProtocoloAnalisis>>(true, Constante.MESSAGE_SUCCESS, listaProtocolos);
         }
+
         public async Task<ResponseModel<string>> ListarProtocoloAnalisisExportar(DatosProtocoloAnalisisListado datos)
         {
-            (List<DetalleProtocoloAnalisis> lista, int totalRegistros) result =  await _comercialRepository.ListarProtocoloAnalisis(datos);
+            ValidarDatosParaListarProtocolos(datos);
+
+            List<DetalleProtocoloAnalisis> listaProtocolo = await FiltrarProtocolosPorFiltroTipoDocumento(datos);
+
+            if (listaProtocolo.Count < 1)
+                return new ResponseModel<string>(false, "No se encontro protocolo para exportar.", null);
 
             ReporteExcelProtocoloAnalisis ExporteProtocoloAnalisis = new ReporteExcelProtocoloAnalisis();
-            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(result.lista);
+            string reporte = ExporteProtocoloAnalisis.GenerarReporteProtocoloAnalisis(listaProtocolo);
 
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
-
-
-            return Respuesta;
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
+        public async Task<ResponseModel<string>> GenerarReporteProtocoloAnalisis(List<string> ordenesFabricacion)
+        {
+            if (ordenesFabricacion == null)
+                throw new ValidationModelException("Las Ordenes de fabricación no válidos.");
+
+            string cadenaOrdenFabricación = null;
+            string mensajeReturn = Constante.MESSAGE_SUCCESS;
+
+            ordenesFabricacion.ForEach(l =>
+            {
+                if (string.IsNullOrEmpty(l))
+                    throw new ValidationModelException("Ordenes de fabricación no válidos.");
+
+                cadenaOrdenFabricación = cadenaOrdenFabricación + l + ",";
+            });
+
+            (List<ProtocoloCabeceraModel> cabecerasPro, List<ProtocoloDetalleModel> detallesPro) 
+                = await _comercialRepository.ObtenerDatosReporteProtocolo(cadenaOrdenFabricación);
+
+            if (cabecerasPro.Count < 1)
+            {
+                mensajeReturn = "No se encontro datos de los protocolos solicitados.";
+                return new ResponseModel<string>(false, mensajeReturn, null);
+            }
+
+
+            if (cabecerasPro.Count < ordenesFabricacion.Count)
+                mensajeReturn = "No se pudo encontrar datos de algunas Ord. Fabricación enviada.";
+
+            
+            List<ProtocoloReportModel> listaProtocolo = new List<ProtocoloReportModel>();
+
+            foreach (ProtocoloCabeceraModel cabecera in cabecerasPro)
+            {
+                List<ProtocoloDetalleModel> detalle = detallesPro.FindAll(x => x.OrdenFabricacion == cabecera.OrdenFabricacion);
+
+                if(detalle.Count < 1)
+                    throw new ValidationModelException($"No se pudo encontrar el detalle del OF: {cabecera.OrdenFabricacion}");
+
+                ProtocoloReportModel datoProtocolo = new ProtocoloReportModel();
+                datoProtocolo.Cabecera = cabecera;
+                datoProtocolo.Detalle = detallesPro.FindAll(x => x.OrdenFabricacion == cabecera.OrdenFabricacion);
+
+                listaProtocolo.Add(datoProtocolo);
+            }
+
+            ReportePdfProtocoloAnalisis protocolo = new ReportePdfProtocoloAnalisis(listaProtocolo);
+            string reporte = protocolo.GenerarReporte();
+
+            return new ResponseModel<string>(true, mensajeReturn, reporte);
+        }
 
         public async Task<List<DetalleClientes>> ListarClientes()
         {
@@ -77,6 +170,9 @@ namespace SatelliteCore.Api.Services
             FormatoReporteGuiaRemisionesModel respuesta = await _comercialRepository.NumerodeGuiaLicitacion(final);
             IEnumerable<FormatoReporteProtocoloModel> ListarProtocolo = await _comercialRepository.NumerodeGuiaProtocolo(final);
 
+            if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
+                return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");
+
             List<DReportGuiaRemisionModel> aux = null;
 
             foreach (CReporteGuiaRemisionModel guia in respuesta.CabeceraReporteGuiaRemision)
@@ -100,13 +196,8 @@ namespace SatelliteCore.Api.Services
             }
 
 
-            if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
-                return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");
-
             ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
             string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato);
-
-
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
@@ -128,25 +219,69 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.ListarGuiaporFacturar(dato);
         }
 
-
         public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
         {
             await _comercialRepository.RegistrarGuiaporFacturar(dato, idUsuario);
         }
 
-
-
         public async Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
         {
-            string reporte = "";
-            IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = new List<FormatoGuiaPorFacturarModel>();
-            listaGuiaPorFacturar = await _comercialRepository.ListarGuiaporFacturar(dato);
+            IEnumerable<FormatoGuiaPorFacturarModel> listaGuiaPorFacturar = await _comercialRepository.ListarGuiaporFacturar(dato);
+
             ReporteGuiaporFacturar GuiaFactura = new ReporteGuiaporFacturar();
-            reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
+            string reporte = GuiaFactura.ExportarListarGuiaPorFactura(listaGuiaPorFacturar, dato);
             return reporte;
         }
 
+        private void ValidarDatosParaListarProtocolos(DatosProtocoloAnalisisListado datos)
+        {
+            if (string.IsNullOrEmpty(datos.Lote) && string.IsNullOrEmpty(datos.OrdenFabricacion) && string.IsNullOrEmpty(datos.TipoDocumento))
+                throw new ValidationModelException("Debe de contar como mínimo con los filtros: Ord. Fabricacion, Lote ó Documento");
 
+            if (!string.IsNullOrEmpty(datos.TipoDocumento) && string.IsNullOrEmpty(datos.NumeroDocumento))
+                throw new ValidationModelException("Debe de ingresar el tipo y número de documento");
+
+            if ((datos.FechaInicio == null && datos.FechaFin != null) || (datos.FechaInicio != null && datos.FechaFin == null))
+                throw new ValidationModelException("Las fechas no son válidas.");
+
+            if (datos.FechaInicio != null && datos.FechaFin != null)
+            {
+                if (datos.FechaInicio > datos.FechaFin)
+                    throw new ValidationModelException("La fecha inicio no puede ser mayor a la fecha fin.");
+
+                if (datos.FechaInicio?.ToString("MM/yyyy") != datos.FechaFin?.ToString("MM/yyyy"))
+                    throw new ValidationModelException("Las fechas deben pertenecer al mismo periodo");
+            }
+        }
+
+        private async Task<List<DetalleProtocoloAnalisis>> FiltrarProtocolosPorFiltroTipoDocumento(DatosProtocoloAnalisisListado datos)
+        {
+            List<DetalleProtocoloAnalisis> listaProtocolos = new List<DetalleProtocoloAnalisis>();
+
+            if (datos.TipoDocumento == "")
+                listaProtocolos = await _comercialRepository.ListaProtocolosSinTipoDocumento(datos.OrdenFabricacion, datos.Lote);
+
+            if (datos.TipoDocumento == "P" || datos.TipoDocumento == "F")
+            {
+                datos.NumeroDocumento = $"%{datos.NumeroDocumento.Trim()}";
+                listaProtocolos = await _comercialRepository.ListaProtocolosPorFacturaOPedido(datos);
+            }
+
+            if (datos.TipoDocumento == "G")
+            {
+                datos.NumeroDocumento = $"%{datos.NumeroDocumento.Trim()}";
+                listaProtocolos = await _comercialRepository.ListaProtocolosPorGuiaRemision(datos);
+            }
+
+
+            if (datos.TipoDocumento == "C")
+            {
+                datos.NumeroDocumento = datos.NumeroDocumento.Trim().PadLeft(10, '0');
+                listaProtocolos = await _comercialRepository.ListaProtocolosPorCotizacion(datos.NumeroDocumento, datos.IdCliente, datos.FechaInicio, datos.FechaFin);
+            }
+
+            return listaProtocolos;
+        }
 
     }
 }

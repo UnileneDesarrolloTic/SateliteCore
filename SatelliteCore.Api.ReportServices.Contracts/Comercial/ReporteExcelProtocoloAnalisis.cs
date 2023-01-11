@@ -1,8 +1,5 @@
 ﻿using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
-using SatelliteCore.Api.Models.Generic;
-using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
 using System.Collections.Generic;
@@ -12,7 +9,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 {
     public class ReporteExcelProtocoloAnalisis
     {
-         public string GenerarReporteProtocoloAnalisis(List<DetalleProtocoloAnalisis> dato)
+        public string GenerarReporteProtocoloAnalisis(List<DetalleProtocoloAnalisis> dato)
         {
 
             byte[] file;
@@ -22,84 +19,86 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             using (var excelPackage = new ExcelPackage())
             {
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Protocolo Analisis");
-                worksheet.Cells.Style.Font.Name = "Arial";
+                worksheet.Cells.Style.Font.Name = "Calibri";
+                worksheet.Cells.Style.Font.Size = 10;
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
 
                 ConfigurarTamanioDeCeldas(worksheet);
                 UnirCeldas(worksheet);
-                pintarCabecera(worksheet);
-                TextoNegrita(worksheet);
+                PintarCabecera(worksheet);
 
                 worksheet.Cells["A1"].Value = "INFORMACIÓN PROTOCOLO DE ANALISIS";
                 worksheet.Cells["A1"].Style.Font.Size = 16;
                 worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                worksheet.Row(3).Height = 16;
+
                 worksheet.Cells["A3"].Value = "Documento";
                 worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["A3"].Style.Font.Size = 10;
+                worksheet.Cells["A3"].Style.Font.Size = 11;
                 worksheet.Cells["A3"].Style.WrapText = true;
                 worksheet.Cells["A3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["B3"].Value = "Fecha";
                 worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["B3"].Style.Font.Size = 10;
+                worksheet.Cells["B3"].Style.Font.Size = 11;
                 worksheet.Cells["B3"].Style.WrapText = true;
                 worksheet.Cells["B3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["C3"].Value = "Fecha vencimiento";
                 worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["C3"].Style.Font.Size = 10;
+                worksheet.Cells["C3"].Style.Font.Size = 11;
                 worksheet.Cells["C3"].Style.WrapText = true;
                 worksheet.Cells["C3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
                 worksheet.Cells["D3"].Value = "Nombre Cliente";
                 worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["D3"].Style.Font.Size = 10;
+                worksheet.Cells["D3"].Style.Font.Size = 11;
                 worksheet.Cells["D3"].Style.WrapText = true;
                 worksheet.Cells["D3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["E3"].Value = "Item";
                 worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["E3"].Style.Font.Size = 9;
+                worksheet.Cells["E3"].Style.Font.Size = 11;
                 worksheet.Cells["E3"].Style.WrapText = true;
                 worksheet.Cells["E3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["F3"].Value = "Descripción";
                 worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["F3"].Style.Font.Size = 10;
+                worksheet.Cells["F3"].Style.Font.Size = 11;
                 worksheet.Cells["F3"].Style.WrapText = true;
                 worksheet.Cells["F3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["G3"].Value = "Cantidad";
                 worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["G3"].Style.Font.Size = 10;
+                worksheet.Cells["G3"].Style.Font.Size = 11;
                 worksheet.Cells["G3"].Style.WrapText = true;
                 worksheet.Cells["G3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["H3"].Value = "Lote";
                 worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["H3"].Style.Font.Size = 10;
+                worksheet.Cells["H3"].Style.Font.Size = 11;
                 worksheet.Cells["H3"].Style.WrapText = true;
                 worksheet.Cells["H3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["I3"].Value = "F.Expiración";
                 worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["I3"].Style.Font.Size = 10;
+                worksheet.Cells["I3"].Style.Font.Size = 11;
                 worksheet.Cells["I3"].Style.WrapText = true;
                 worksheet.Cells["I3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
                 worksheet.Cells["J3"].Value = "Orden Fabricación";
                 worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["J3"].Style.Font.Size = 10;
+                worksheet.Cells["J3"].Style.Font.Size = 11;
                 worksheet.Cells["J3"].Style.WrapText = true;
                 worksheet.Cells["J3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["K3"].Value = "Comentario";
                 worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["K3"].Style.Font.Size = 10;
+                worksheet.Cells["K3"].Style.Font.Size = 11;
                 worksheet.Cells["K3"].Style.WrapText = true;
                 worksheet.Cells["K3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -115,91 +114,71 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
                 foreach (DetalleProtocoloAnalisis rowitem in dato)
                 {
-
                     worksheet.Row(row).Height = 15.25;
 
                     worksheet.Cells["A" + row].Value = rowitem.NumeroDocumento;
                     worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["A" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["A" + row].Style.Font.Size = 10;
                     worksheet.Cells["A" + row].Style.WrapText = true;
                     worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["B" + row].Value = rowitem.FechaDocumento.ToString("dd/MM/yyyy");
+                    string fechaDocumento = rowitem.FechaDocumento == null ? "" : rowitem.FechaDocumento?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["B" + row].Value = fechaDocumento;
                     worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["B" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["B" + row].Style.Font.Size = 10;
                     worksheet.Cells["B" + row].Style.WrapText = true;
                     worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    string fechaVencimiento = rowitem.FechaVencimiento == null ? "" : rowitem.FechaVencimiento?.ToString("dd/MM/yyyy");
 
-                    worksheet.Cells["C" + row].Value = rowitem.FechaVencimiento.ToString("dd/MM/yyyy");
+                    worksheet.Cells["C" + row].Value = fechaVencimiento;
                     worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["C" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["C" + row].Style.Font.Size = 10;
                     worksheet.Cells["C" + row].Style.WrapText = true;
                     worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["D" + row].Value = rowitem.ClienteNombre;
                     worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["D" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["D" + row].Style.Font.Size = 10;
                     worksheet.Cells["D" + row].Style.WrapText = true;
                     worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["E" + row].Value = rowitem.ItemCodigo;
                     worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["E" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["E" + row].Style.Font.Size = 10;
                     worksheet.Cells["E" + row].Style.WrapText = true;
                     worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["F" + row].Value = rowitem.Descripcion;
                     worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["F" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["F" + row].Style.Font.Size = 10;
                     worksheet.Cells["F" + row].Style.WrapText = true;
                     worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["G" + row].Value = rowitem.CantidadPedida;
                     worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["G" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["G" + row].Style.Numberformat.Format = "#,##0.00";
-                    worksheet.Cells["G" + row].Style.Font.Size = 10;
-                    worksheet.Cells["G" + row].Style.WrapText = true;
-                    worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
+                    worksheet.Cells["G" + row].Style.Numberformat.Format = "#,##0";
+                    worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     worksheet.Cells["H" + row].Value = rowitem.Lote;
                     worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["H" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["H" + row].Style.Font.Size = 10;
                     worksheet.Cells["H" + row].Style.WrapText = true;
                     worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["I" + row].Value =  rowitem.FechaExpiracion.ToString("dd/MM/yyyy");
+                    string fechaExpiracion = rowitem.FechaExpiracion == null ? "" : rowitem.FechaExpiracion?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["I" + row].Value = fechaExpiracion;
                     worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["I" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["I" + row].Style.Font.Size = 10;
                     worksheet.Cells["I" + row].Style.WrapText = true;
                     worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["J" + row].Value = rowitem.OrdenFabricacion;
                     worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["J" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["J" + row].Style.Font.Size = 10;
                     worksheet.Cells["J" + row].Style.WrapText = true;
-                    worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
                     worksheet.Cells["K" + row].Value = rowitem.Comentarios;
                     worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["K" + row].Style.Font.Name = "Calibri";
-                    worksheet.Cells["K" + row].Style.Font.Size = 10;
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["L" + row].Value = rowitem.ProtocoloFlag;
+
+                    worksheet.Cells["L" + row].Value = rowitem.TieneProtocolo ?? "No";
                     worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["L" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["L" + row].Style.Font.Size = 10;
@@ -209,13 +188,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     row++;
                 }
 
-
-
-
-
-
-
-                    file = excelPackage.GetAsByteArray();
+                file = excelPackage.GetAsByteArray();
 
                 if (file == null || file.Length == 0)
                     return reporte;
@@ -224,14 +197,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
                 return reporte;
             }
-
-        
-         }
-
-        private static void AlineacionesTexto(ExcelWorksheet worksheet)
-        {
-
-
         }
 
         private static void ConfigurarTamanioDeCeldas(ExcelWorksheet worksheet)
@@ -255,15 +220,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             worksheet.Cells["A1:K1"].Merge = true;
         }
 
-        private static void pintarCabecera(ExcelWorksheet worksheet)
+        private static void PintarCabecera(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A3:L3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
-        }
-
-
-        private static void TextoNegrita(ExcelWorksheet worksheet)
-        {
-
         }
     }
 }
