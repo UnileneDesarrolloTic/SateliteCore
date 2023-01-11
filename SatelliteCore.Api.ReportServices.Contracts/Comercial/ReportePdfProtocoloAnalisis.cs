@@ -107,7 +107,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             .SetVerticalAlignment(VerticalAlignment.MIDDLE);
             tablaDatosTitulo.AddCell(cellTitulo);
 
-            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + protocolo.Cabecera.OrdenFabricacion + " \n").AddStyle(estiloCabeceraSubtituloLote))
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°: " + protocolo.Cabecera.OrdenFabricacion + " \n").AddStyle(estiloCabeceraSubtituloLote))
                             .Add(new Paragraph(protocolo.Cabecera.NumeroParte + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
                 .SetTextAlignment(TextAlignment.RIGHT)
                 .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -381,7 +381,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(detalle.Resultado).AddStyle(estiloTextoDetalleProtocolo))
+                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(detalle.Resultado ?? "").AddStyle(estiloTextoDetalleProtocolo))
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                     .SetVerticalAlignment(VerticalAlignment.TOP)

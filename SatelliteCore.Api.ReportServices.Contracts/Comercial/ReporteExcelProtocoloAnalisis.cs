@@ -121,12 +121,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["A" + row].Style.WrapText = true;
                     worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["B" + row].Value = rowitem.FechaDocumento.ToString("dd/MM/yyyy");
+                    string fechaDocumento = rowitem.FechaDocumento == null ? "" : rowitem.FechaDocumento?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["B" + row].Value = fechaDocumento;
                     worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["B" + row].Style.WrapText = true;
                     worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["C" + row].Value = rowitem.FechaVencimiento.ToString("dd/MM/yyyy");
+                    string fechaVencimiento = rowitem.FechaVencimiento == null ? "" : rowitem.FechaVencimiento?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["C" + row].Value = fechaVencimiento;
                     worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["C" + row].Style.WrapText = true;
                     worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -151,13 +155,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["G" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-
                     worksheet.Cells["H" + row].Value = rowitem.Lote;
                     worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["H" + row].Style.WrapText = true;
                     worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["I" + row].Value =  rowitem.FechaExpiracion.ToString("dd/MM/yyyy");
+                    string fechaExpiracion = rowitem.FechaExpiracion == null ? "" : rowitem.FechaExpiracion?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["I" + row].Value = fechaExpiracion;
                     worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["I" + row].Style.WrapText = true;
                     worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -172,7 +177,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                    worksheet.Cells["L" + row].Value = rowitem.ProtocoloFlag;
+
+                    worksheet.Cells["L" + row].Value = rowitem.TieneProtocolo ?? "No";
                     worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["L" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["L" + row].Style.Font.Size = 10;

@@ -262,14 +262,23 @@ namespace SatelliteCore.Api.Services
                 listaProtocolos = await _comercialRepository.ListaProtocolosSinTipoDocumento(datos.OrdenFabricacion, datos.Lote);
 
             if (datos.TipoDocumento == "P" || datos.TipoDocumento == "F")
+            {
+                datos.NumeroDocumento = $"%{datos.NumeroDocumento.Trim()}";
                 listaProtocolos = await _comercialRepository.ListaProtocolosPorFacturaOPedido(datos);
+            }
 
             if (datos.TipoDocumento == "G")
+            {
+                datos.NumeroDocumento = $"%{datos.NumeroDocumento.Trim()}";
                 listaProtocolos = await _comercialRepository.ListaProtocolosPorGuiaRemision(datos);
+            }
 
 
             if (datos.TipoDocumento == "C")
+            {
+                datos.NumeroDocumento = datos.NumeroDocumento.Trim().PadLeft(10, '0');
                 listaProtocolos = await _comercialRepository.ListaProtocolosPorCotizacion(datos.NumeroDocumento, datos.IdCliente, datos.FechaInicio, datos.FechaFin);
+            }
 
             return listaProtocolos;
         }

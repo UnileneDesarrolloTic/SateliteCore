@@ -145,21 +145,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorFacturaOPedido(DatosProtocoloAnalisisListado datos)
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
-            string query = "SELECT	a.CompaniaSocio, a.TipoDocumento, a.NumeroDocumento," +
-                "a.Estado, a.FechaDocumento, a.ClienteNumero, a.ClienteNombre, a.MonedaDocumento," +
-                "a.MontoTotal, a.VoucherPeriodo, a.VoucherNo, a.ClienteNumero,a.ImpresionPendienteFlag, a.MontoPagado," +
-                "a.Comentarios, a.FechaVencimiento,a.ProcesoImportacionNumero, d.Descripcion FormaPagoNombre, d.CreditoFlag," +
-                "c.Clasificacion, a.ClienteReferencia, b.ItemCodigo, b.Descripcion,b.Lote AS OrdenFabricacion, " +
-                "RTRIM(b.ItemSerie) AS Lote, b.UnidadCodigo,b.CantidadPedida, b.Monto, e.NumeroDeParte, " +
-                "e.ClasificacionRotacion,b.AlmacenCodigo, b.ItemSerie, b.Linea," +
-                "ISNULL(CAST(f.FechaVencimiento AS DATE), CAST('1900-01-01' AS Date)) AS FechaExpiracion " +
-            "FROM CO_Documento a " +
-                "INNER JOIN CO_DocumentoDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.TipoDocumento = a.TipoDocumento AND b.NumeroDocumento = a.NumeroDocumento " +
-                "INNER JOIN CO_TipoDocumento c ON a.TipoDocumento = c.TipoDocumento " +
-                "INNER JOIN MA_FormadePago d ON a.FormadePago = d.FormadePago " +
-                "INNER JOIN WH_ItemMast e ON e.Item = b.ItemCodigo " +
-                "LEFT JOIN WH_ItemAlmacenLote f ON b.ItemCodigo = f.Item AND f.Condicion = 0 AND b.Lote = f.Lote AND b.ItemSerie = f.LoteFabricacion AND b.AlmacenCodigo = f.AlmacenCodigo " +
-            "WHERE a.CompaniaSocio = '01000000' ";
+            string query = "SELECT	RTRIM(a.NumeroDocumento) NumeroDocumento, a.FechaDocumento, a.FechaVencimiento, RTRIM(a.ClienteNombre) ClienteNombre, " +
+                    "RTRIM(b.ItemCodigo) ItemCodigo, b.Descripcion, b.CantidadPedida, RTRIM(b.ItemSerie) AS Lote, f.FechaVencimiento AS FechaExpiracion, " +
+                    "RTRIM(b.Lote) AS OrdenFabricacion, RTRIM(a.Comentarios) Comentarios " +
+                "FROM CO_Documento a " +
+                    "INNER JOIN CO_DocumentoDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.TipoDocumento = a.TipoDocumento AND b.NumeroDocumento = a.NumeroDocumento " +
+                    "INNER JOIN MA_FormadePago d ON a.FormadePago = d.FormadePago " +
+                    "LEFT JOIN WH_ItemAlmacenLote f ON b.ItemCodigo = f.Item AND f.Condicion = 0 AND b.Lote = f.Lote AND b.ItemSerie = f.LoteFabricacion AND b.AlmacenCodigo = f.AlmacenCodigo " +
+                "WHERE a.CompaniaSocio = '01000000' ";
 
             if (datos.TipoDocumento == "F")
                 query = $"{query} AND a.TipoDocumento <> 'PE'";
@@ -167,7 +160,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 query = $"{query} AND a.TipoDocumento = 'PE'";
 
             if (!string.IsNullOrEmpty(datos.NumeroDocumento))
-                query = $"{query} AND a.NumeroDocumento = @NumeroDocumento ";
+                query = $"{query} AND RTRIM(a.NumeroDocumento) Like @NumeroDocumento ";
 
             if (!string.IsNullOrEmpty(datos.OrdenFabricacion))
                 query = $"{query} AND b.Lote = @OrdenFabricacion";
@@ -179,7 +172,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 query = $"{query} AND a.ClienteNumero = @IdCliente ";
 
             if (datos.FechaInicio != null && datos.FechaFin != null)
-                query = $"{query} AND CAST(FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
+                query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
 
             query = $"{query} ORDER BY a.TipoDocumento, a.NumeroDocumento, b.Linea ASC ";
 
@@ -195,19 +188,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<List<DetalleProtocoloAnalisis>> ListaProtocolosPorGuiaRemision(DatosProtocoloAnalisisListado datos)
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
-            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, a.GuiaNumero NumeroDocumento, a.Estado, a.FechaDocumento, a.DestinatarioNombre ClienteNombre, " +
-                "'' MonedaDocumento, 0 MontoTotal, '' VoucherPeriodo, '' VoucherNo, a.Destinatario ClienteNumero, '' ImpresionPendienteFlag, 0 MontoPagado, " +
-                "a.Comentarios, '' FechaVencimiento, '' ProcesoImportacionNumero, '' FormaPagoNombre, '' CreditoFlag, '' Clasificacion, '' ClienteReferencia, " +
-                "b.ItemCodigo, b.Descripcion, b.Lote AS OrdenFabricacion, ISNULL(substring(e.referencianumero, 1, 8), b.Lote) Lote, b.UnidadCodigo, 0 CantidadPedida, " +
-                "0 Monto, c.NumeroDeParte, c.ClasificacionRotacion, '' AlmacenCodigo, b.Lote ItemSerie, b.Secuencia Linea, " +
-                "ISNULL( e.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion FROM WH_GuiaRemision a " +
+            string query = "SELECT	a.GuiaNumero NumeroDocumento, a.FechaDocumento, null FechaVencimiento, " +
+                "RTRIM(a.DestinatarioNombre) ClienteNombre, RTRIM(b.ItemCodigo) ItemCodigo, 0 CantidadPedida," +
+                "ISNULL(substring(e.referencianumero, 1, 8), b.Lote) Lote, e.FechaExpiracion, " +
+                "RTRIM(b.Lote) AS OrdenFabricacion, RTRIM(a.Comentarios) Comentarios " +
+                "FROM WH_GuiaRemision a " +
                 "INNER JOIN WH_GuiaRemisionDetalle b ON b.CompaniaSocio = a.CompaniaSocio AND b.SerieNumero = a.SerieNumero AND b.GuiaNumero = a.GuiaNumero " +
-                "INNER JOIN WH_ItemMast c ON c.Item = b.ItemCodigo " +
                 "LEFT JOIN EP_ProgramacionLote e ON b.CompaniaSocio = e.CompaniaSocio AND b.Lote = e.NumeroLote " +
                 "WHERE a.CompaniaSocio = '01000000'";
             
             if (!string.IsNullOrEmpty(datos.NumeroDocumento))
-                query = $"{query} AND a.GuiaNumero = @NumeroDocumento";
+                query = $"{query} AND RTRIM(a.GuiaNumero) LIKE @NumeroDocumento";
 
             if (!string.IsNullOrEmpty(datos.OrdenFabricacion))
                 query = $"{query} AND b.Lote = @OrdenFabricacion";
@@ -236,12 +227,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
 
-            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, ''  NumeroDocumento, '' Estado, CAST('1900-01-01 00:00:00.000' AS DATE) FechaDocumento, '' ClienteNombre, '' MonedaDocumento, " +
-                "0 MontoTotal, '' VoucherPeriodo, '' VoucherNo, 0 ClienteNumero, '' ImpresionPendienteFlag, 0 MontoPagado, '' Comentarios, " +
-                "CAST('1900-01-01 00:00:00.000' AS DATE) FechaVencimiento, '' ProcesoImportacionNumero, '' FormaPagoNombre, '' CreditoFlag, '' Clasificacion, '' ClienteReferencia, b.ITEM ItemCodigo, " +
-                "RTRIM(b.descripcionlocal) Descripcion, a.NUMEROLOTE AS OrdenFabricacion, SUBSTRING(a.referencianumero, 1, 8) AS Lote,'' UnidadCodigo, " +
-                "0 CantidadPedida, 0 Monto, b.NumeroDeParte, b.ClasificacionRotacion, '' AlmacenCodigo, a.NUMEROLote ItemSerie, 0 Linea, " +
-                "ISNULL(a.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion " +
+            string query = "SELECT null  NumeroDocumento, null FechaDocumento, CAST('1900-01-01 00:00:00.000' AS DATE) FechaVencimiento, " +
+                "null ClienteNombre, RTRIM(b.ITEM) ItemCodigo, RTRIM(b.descripcionlocal) Descripcion, 0 CantidadPedida, " +
+                "SUBSTRING(a.referencianumero, 1, 8) AS Lote, ISNULL(a.FechaExpiracion, '1900-01-01 00:00:00.000') AS FechaExpiracion, " +
+                "a.NUMEROLOTE AS OrdenFabricacion, null Comentarios " +
                 "FROM ep_programacionlote a INNER JOIN WH_ItemMast b ON b.Item = a.Item WHERE a.CompaniaSocio = '01000000'";
 
             if (!string.IsNullOrEmpty(ordenFabricacion))
@@ -263,11 +252,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
 
-            string query = "SELECT	a.CompaniaSocio, '' TipoDocumento, RTRIM(a.NumeroDocumento) NumeroDocumento, a.Estado, a.FechaDocumento, RTRIM(a.ClienteNombre) ClienteNombre, a.MonedaDocumento, " +
-                "a.MontoTotal, ''  VoucherPeriodo, ''  VoucherNo, a.ClienteNumero, ''  ImpresionPendienteFlag, 0  MontoPagado, RTRIM(a.Comentarios) Comentarios, a.FechaVencimiento, " +
-                "''  ProcesoImportacionNumero, RTRIM(c.Descripcion) FormaPagoNombre, c.CreditoFlag, ''  Clasificacion, ''  ClienteReferencia, RTRIM(b.ItemCodigo) ItemCodigo, b.Descripcion, " +
-                "RTRIM(b.OrdenFabricacion) OrdenFabricacion,RTRIM(b.lote) Lote, RTRIM(b.UnidadCodigo) UnidadCodigo, b.CantidadPedida, b.Monto, d.NumeroDeParte, d.ClasificacionRotacion, ''  AlmacenCodigo, ''  ItemSerie, " +
-                "b.Linea, '1900-01-01 00:00:00.000' AS FechaExpiracion " +
+            string query = "SELECT RTRIM(a.NumeroDocumento) NumeroDocumento, a.FechaDocumento, a.FechaVencimiento, " +
+                "RTRIM(a.ClienteNombre) ClienteNombre, RTRIM(b.ItemCodigo) ItemCodigo, b.Descripcion, b.CantidadPedida,RTRIM(b.lote) Lote, " +
+                "null AS FechaExpiracion, RTRIM(b.OrdenFabricacion) OrdenFabricacion, RTRIM(a.Comentarios) Comentarios " +
                 "FROM CO_Cotizacion a " +
                 "INNER JOIN( SELECT * FROM( SELECT a.CompaniaSocio, a.NumeroDocumento, a.ItemCodigo, a.Descripcion, a.UnidadCodigo, a.CantidadPedida, a.Monto, " +
                         "a.Linea, b.Lote OrdenFabricacion, SUBSTRING(LoteFabricacion, 1, 8) Lote, ROW_NUMBER() OVER(PARTITION BY a.ItemCodigo ORDER BY b.FechaIngreso DESC) AS Row  " +
@@ -275,12 +262,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
                             "LEFT JOIN WH_ItemAlmacenLote b ON b.item = a.ItemCodigo AND lote <> '00' " +
                         "WHERE NumeroDocumento = @numeroDocumento " +
                 ") x WHERE Row = 1) b ON b.CompaniaSocio = a.CompaniaSocio AND b.NumeroDocumento = a.NumeroDocumento " +
-                "INNER JOIN MA_FormadePago c ON a.FormadePago = c.FormadePago " +
-                "INNER JOIN WH_ItemMast d ON d.Item = b.ItemCodigo " +
-                "WHERE a.CompaniaSocio = '01000000' AND a.NumeroDocumento = @numeroDocumento  ";
+                "WHERE a.CompaniaSocio = '01000000' AND a.NumeroDocumento = @numeroDocumento ";
 
             if (idCliente != 0)
-                query = $"{query} a.ClienteNumero = @idCliente";
+                query = $"{query} AND a.ClienteNumero = @idCliente";
 
             if (fechaInicio != null && fechaFin != null)
                 query = $"{query} AND CAST(a.FechaDocumento AS DATE) BETWEEN @FechaInicio AND @FechaFin";
@@ -335,8 +320,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return result;
-
-
         }
 
         public async Task<FormatoReporteGuiaRemisionesModel> NumerodeGuiaLicitacion(string dato)
@@ -381,7 +364,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-
         public async Task<IEnumerable<FormatoReporteProtocoloModel>> NumerodeGuiaProtocolo(string dato)
         {
             string nuevovalor = dato.Replace("'","");
@@ -394,9 +376,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
-
-
-
 
         public async Task<DatoPedidoDocumentoModel> NumeroPedido(string pedido)
         {
@@ -461,8 +440,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
         {
 
-            string script ="";
-
+            string script;
             if (dato.comentariosEntrega)
                script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' , AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE()  WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
             else
