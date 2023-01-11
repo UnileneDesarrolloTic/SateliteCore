@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SatelliteCore.Api.Models.Request
+﻿namespace SatelliteCore.Api.Models.Request
 {
     public class DatosRequestFormatoContratoProcesoModel
     {
