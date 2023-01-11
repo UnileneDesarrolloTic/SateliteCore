@@ -12,6 +12,7 @@ namespace SatelliteCore.Api.Models.Request
         public string Justificacion { get; set; }
         public string Persona { get; set; }
         public string Estado { get; set;  }
+        public string Periodo { get; set; }
         public List<DatosEstructuraHorasExtrasDetalle> ListaPersona { get; set; }
 
     }

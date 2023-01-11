@@ -39,7 +39,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                IdCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_InsertarHorasExtrasCabecera", new { data.idCodigo, data.Area, data.Persona, data.Justificacion, data.FechaRegistro, usuario, data.Estado}, commandType: CommandType.StoredProcedure);
+                IdCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_InsertarHorasExtrasCabecera", new { data.idCodigo, data.Area, data.Persona, data.Justificacion, data.FechaRegistro, usuario, data.Estado, data.Periodo}, commandType: CommandType.StoredProcedure);
 
                 foreach (DatosEstructuraHorasExtrasDetalle persona in data.ListaPersona)
                 {
@@ -54,12 +54,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<IEnumerable<DatosFormatoListarHorasExtrasPersona>> ListarHoraExtrasPersona(DatosFormatoFiltraHoraExtras data)
         {
             IEnumerable<DatosFormatoListarHorasExtrasPersona> result = new List<DatosFormatoListarHorasExtrasPersona>();
+            string sql = "";
 
-            string sql = "SELECT a.IdCabecera, a.IdArea,b.Descripcion NombreArea,a.FechaRegistro,(CASE a.TipoPersona WHEN 'E' THEN 'EMPLEADO' ELSE 'OBRERO' END) TipoPersona,(CASE a.Estado WHEN 'AP' THEN 'APROBADO' WHEN 'GE' THEN 'GENERADO' ELSE 'ANULADO' END) Estado , a.Justificacion ,ISNULL(a.UsuarioAprobacion,'-----------')  UsuarioAprobacion,ISNULL(a.FechaAprobacion, CAST( '1900-01-01 00:00:00.000' AS DATETIME)) FechaAprobacion  FROM  TBMHoraExtrasCabecera  a " +
-                         "INNER JOIN TBMAreasProduccion b ON b.IdArea = a.IdArea WHERE a.Estado = IIF(@Estado = 'TD', a.Estado, @Estado) AND a.FechaRegistro BETWEEN @FechaInicio AND @FechaFin";
+            if (data.TipoFiltro == false)
+            {
+                sql = "SELECT a.IdCabecera, a.IdArea,b.Descripcion NombreArea,a.FechaRegistro,(CASE a.TipoPersona WHEN 'E' THEN 'EMPLEADO' ELSE 'OBRERO' END) TipoPersona,(CASE a.Estado WHEN 'AP' THEN 'APROBADO' WHEN 'GE' THEN 'GENERADO' ELSE 'ANULADO' END) Estado , a.Justificacion ,ISNULL(a.UsuarioAprobacion,'-----------')  UsuarioAprobacion,ISNULL(a.FechaAprobacion, CAST( '1900-01-01 00:00:00.000' AS DATETIME)) FechaAprobacion  , ISNULL(a.Periodo,'') Periodo  FROM  TBMHoraExtrasCabecera  a " +
+                      "INNER JOIN TBMAreasProduccion b ON b.IdArea = a.IdArea WHERE a.Estado = IIF(@Estado = 'TD', a.Estado, @Estado) AND a.FechaRegistro BETWEEN @FechaInicio AND @FechaFin";
+            }
+            else
+            {
+                sql = "SELECT a.IdCabecera, a.IdArea,b.Descripcion NombreArea,a.FechaRegistro,(CASE a.TipoPersona WHEN 'E' THEN 'EMPLEADO' ELSE 'OBRERO' END) TipoPersona,(CASE a.Estado WHEN 'AP' THEN 'APROBADO' WHEN 'GE' THEN 'GENERADO' ELSE 'ANULADO' END) Estado , a.Justificacion ,ISNULL(a.UsuarioAprobacion,'-----------')  UsuarioAprobacion,ISNULL(a.FechaAprobacion, CAST( '1900-01-01 00:00:00.000' AS DATETIME)) FechaAprobacion , ISNULL(a.Periodo,'') Periodo  FROM  TBMHoraExtrasCabecera  a " +
+                      "INNER JOIN TBMAreasProduccion b ON b.IdArea = a.IdArea WHERE a.Estado = IIF(@Estado = 'TD', a.Estado, @Estado) AND a.Periodo=@Periodo";
+            }
+
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatoListarHorasExtrasPersona>(sql, new { data.Estado,data.FechaInicio, data.FechaFin });
+                result = await connection.QueryAsync<DatosFormatoListarHorasExtrasPersona>(sql, new { data.Estado,data.FechaInicio, data.FechaFin,data.Periodo });
 
                 connection.Dispose();
             }
@@ -70,7 +80,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (DatosFormatoHorasExtrasCabeceraModel cabecera, List<DatosFormatoHorasExtrasDetalle> detalle) HorasExtrasPersona;
 
-            string sql = "SELECT a.IdCabecera,a.IdArea,b.Descripcion,a.Justificacion,a.FechaRegistro,a.TipoPersona, a.Estado  FROM TBMHoraExtrasCabecera a  " +
+            string sql = "SELECT a.IdCabecera,a.IdArea,b.Descripcion,a.Justificacion,a.FechaRegistro,a.TipoPersona, a.Estado, ISNULL(a.Periodo,'') Periodo  FROM TBMHoraExtrasCabecera a  " +
                          "INNER JOIN  TBMAreasProduccion b ON a.IdArea = b.IdArea WHERE a.IdCabecera = @Cabecera ; " +
                          "SELECT c.IdDetalle,c.IdCabecera,c.IdPersona,RTRIM(d.Busqueda) NombrePersona, RTRIM(ISNULL(d.Documento,d.DocumentoIdentidad)) Documento , c.cant_horas horasextras  FROM TBMHoraExtrasDetalle c  " +
                          "INNER JOIN PROD_UNILENE2..PersonaMast d ON c.IdPersona = d.Persona  WHERE c.IdCabecera = @Cabecera ";
