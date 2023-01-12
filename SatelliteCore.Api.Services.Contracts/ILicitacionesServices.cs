@@ -16,7 +16,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<DatosFormatoBuscarOrdenCompraLicitacionesModel>> BuscarOrdenCompraLicitaciones(int NumeroProceso, int NumeroEntrega, int Item, string TipoUsuario);
         public Task<ResponseModel<string>> RegistrarOrdenCompra(DatoFormatoRegistrarOrdenCompraLicitaciones dato, int idUsuario);
         public Task<ResponseModel<string>> RegistrarDistribuccionProceso(List<DatoFormatoDistribuccionLPModel> dato);
-        public Task<IEnumerable<ListarProcesoEntity>> ListarProceso(string idClient);
+        public Task<IEnumerable<ListarProcesoEntity>> ListarProceso(int idClient);
         public Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega);
         public Task<ResponseModel<string>> RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> dato);
         public Task<ResponseModel<IEnumerable<ListarGuiaInformeLPModel>>> ListarGuiaInformacion(string NumeroEntrega, string OrdenCompra);
