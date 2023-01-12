@@ -14,6 +14,9 @@ using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.ReportServices.Contracts.Detracciones;
 using System.Text;
 using SatelliteCore.Api.ReportServices.Contracts.AnalisisCosto;
+using SatelliteCore.Api.Models.Response.Contabilidad;
+using SatelliteCore.Api.Models.Request.Contabildad;
+using MongoDB.Bson;
 
 namespace SatelliteCore.Api.Services
 {
@@ -117,9 +120,6 @@ namespace SatelliteCore.Api.Services
         
         }
 
-
-
-
         public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
         {
 
@@ -178,7 +178,35 @@ namespace SatelliteCore.Api.Services
             return lista;
         }
 
+        public async Task<(List<FormatoListadoInformacionTransaccionKardex>, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
+        {
+            return await _contabilidadRepository.InformacionTransaccionKardex(dato);
+        }
 
+        public async Task<ResponseModel<string>> RegistrarInformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato, string usuario)
+        {
+            
+            if (dato.CheckCierre==false)
+                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "Debe activar el check para poder guardarlo");
+
+            (List<FormatoListadoInformacionTransaccionKardex> Listado, int totalRegistros) result;
+
+            result =   await _contabilidadRepository.InformacionTransaccionKardex(dato);
+            DatoFormatoRegistrarTransaccionKardex docRegistrado = new DatoFormatoRegistrarTransaccionKardex();
+
+            docRegistrado.Tipo = dato.Tipo;
+            docRegistrado.Periodo = dato.Periodo;
+            docRegistrado.CheckCierre = dato.CheckCierre;
+            docRegistrado.InformacionDetalle = result.Listado;
+
+            //BsonDocument docFormatoBson = BsonDocument.Parse(docRegistrado.ToString());
+
+            string idMongoDB = await _contabilidadRepository.RegistrarInformacionTransaccionKardex(docRegistrado);
+
+            await _contabilidadRepository.GuardarInformacionTransaccionKardex(idMongoDB, docRegistrado.Tipo, docRegistrado.Periodo, docRegistrado.CheckCierre,usuario);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado");
+        }
 
 
     }

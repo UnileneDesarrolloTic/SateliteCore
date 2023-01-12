@@ -1,4 +1,6 @@
 ﻿using System;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,6 +14,8 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System.IO;
 using System.Text;
+using SatelliteCore.Api.Models.Response.Contabilidad;
+using SatelliteCore.Api.Models.Request.Contabildad;
 
 namespace SatelliteCore.Api.DataAccess.Repository
 {
@@ -116,7 +120,46 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result_db;
         }
 
+        public async Task<(List<FormatoListadoInformacionTransaccionKardex>, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
+        {
+            (List<FormatoListadoInformacionTransaccionKardex> Listado, int totalRegistros) result;
 
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using (var result_db = await connection.QueryMultipleAsync("usp_InformacionTransaccionKardex", new {dato.Periodo,dato.Tipo,dato.Pagina,dato.RegistrosPorPagina }, commandType: CommandType.StoredProcedure))
+                {
+                    result.Listado = result_db.Read<FormatoListadoInformacionTransaccionKardex>().ToList();
+                    result.totalRegistros = result_db.Read<int>().First();
+                }
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+
+        public async Task<string> RegistrarInformacionTransaccionKardex(DatoFormatoRegistrarTransaccionKardex docRegistrado)
+        {
+            IMongoDatabase integrationContext = new MongoClient(_appConfig.ContextMongoDB).GetDatabase("UnileneReporte");
+            IMongoCollection<DatoFormatoRegistrarTransaccionKardex> _requestModel = integrationContext.GetCollection<DatoFormatoRegistrarTransaccionKardex>("TransaccionHistorica");
+            await _requestModel.InsertOneAsync(docRegistrado);
+
+            string idMongoDB = ""; //Transaccionkardex.GetValue("_id", "").ToString();
+            return idMongoDB;
+        }
+
+        public async Task GuardarInformacionTransaccionKardex(string idMongoDB, string Tipo, string Periodo, bool CheckCierre, string usuario)
+        {
+            string sql = "INSERT INTO TBMCierreHistoricoContable (Codigo,Periodo,CheckCierre,CantidadTotal,MontoTotal,Tipo,Usuario,FechaRegistro) VALUES (@idMongoDB,@Tipo,@Periodo,@CheckCierre,0,0,@usuario,GETDATE())";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync(sql, new { idMongoDB, Tipo, Periodo, CheckCierre, usuario });
+                connection.Dispose();
+            }
+
+            
+        }
 
 
     }

@@ -1,9 +1,13 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.Contabildad;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Contabilidad;
 using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -88,9 +92,23 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listado);
         }
 
+        [HttpPost("InformacionTransaccionKardex")]
+        public async Task<ActionResult> InformacionTransaccionKardex (DatoFormatoFiltroTransaccionKardex  dato) 
+        {
+            (List<FormatoListadoInformacionTransaccionKardex> lista, int totalRegistros) = await _ContabilidadService.InformacionTransaccionKardex(dato);
+            PaginacionModel<FormatoListadoInformacionTransaccionKardex> response = new PaginacionModel<FormatoListadoInformacionTransaccionKardex>(lista, dato.Pagina, dato.RegistrosPorPagina, totalRegistros);
 
+            return Ok(response);
+        }
 
+        [HttpPost("RegistrarInformacionTransaccionKardex")]
+        public async Task<ActionResult> RegistrarInformacionTransaccionKardex (DatoFormatoFiltroTransaccionKardex dato)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> resultado = await _ContabilidadService.RegistrarInformacionTransaccionKardex(dato, usuario);
+            return Ok(resultado);
 
+        }
 
     }
 }
