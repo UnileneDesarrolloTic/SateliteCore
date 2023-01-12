@@ -269,11 +269,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 "RTRIM(b.OrdenFabricacion) OrdenFabricacion,RTRIM(b.lote) Lote, RTRIM(b.UnidadCodigo) UnidadCodigo, b.CantidadPedida, b.Monto, d.NumeroDeParte, d.ClasificacionRotacion, ''  AlmacenCodigo, ''  ItemSerie, " +
                 "b.Linea, '1900-01-01 00:00:00.000' AS FechaExpiracion " +
                 "FROM CO_Cotizacion a " +
-                "INNER JOIN( SELECT * FROM( SELECT a.CompaniaSocio, a.NumeroDocumento, a.ItemCodigo, a.Descripcion, a.UnidadCodigo, a.CantidadPedida, a.Monto, " +
-                        "a.Linea, b.Lote OrdenFabricacion, SUBSTRING(LoteFabricacion, 1, 8) Lote, ROW_NUMBER() OVER(PARTITION BY a.ItemCodigo ORDER BY b.FechaIngreso DESC) AS Row  " +
-                        "FROM CO_CotizacionDetalle a " +
-                            "LEFT JOIN WH_ItemAlmacenLote b ON b.item = a.ItemCodigo AND lote <> '00' " +
-                        "WHERE NumeroDocumento = @numeroDocumento " +
+                "INNER JOIN( SELECT * FROM( " +
+                    "SELECT b.FechaIngreso, a.CompaniaSocio, a.NumeroDocumento, a.ItemCodigo, a.Descripcion, a.UnidadCodigo, a.CantidadPedida, a.Monto, a.Linea, " +
+                        "b.Lote OrdenFabricacion, SUBSTRING(LoteFabricacion, 1, 8) Lote, " +
+                        "ROW_NUMBER() OVER(PARTITION BY a.ItemCodigo ORDER BY(LEFT(LoteFabricacion, 1) + RIGHT(RTRIM(LoteFabricacion), 1)) DESC) AS Row " +
+                    "FROM CO_CotizacionDetalle a " +
+                        "LEFT JOIN WH_ItemAlmacenLote b ON b.item = a.ItemCodigo AND lote<> '00' " +
+                    "WHERE NumeroDocumento = @numeroDocumento AND LoteFabricacion IS NOT NULL AND Lote IS NOT NULL AND " +
+                        "LEFT(LoteFabricacion, 2) NOT IN('OT', 'PE') AND AlmacenCodigo IN('ALMPRT', 'ALMVTO', 'ALMLICIT', 'ALMDRO', 'CONTRCALID') " +
                 ") x WHERE Row = 1) b ON b.CompaniaSocio = a.CompaniaSocio AND b.NumeroDocumento = a.NumeroDocumento " +
                 "INNER JOIN MA_FormadePago c ON a.FormadePago = c.FormadePago " +
                 "INNER JOIN WH_ItemMast d ON d.Item = b.ItemCodigo " +

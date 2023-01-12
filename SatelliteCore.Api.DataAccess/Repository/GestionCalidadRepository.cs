@@ -208,7 +208,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int TipoDocumento, string Codigo , int Estado)
+        public async Task<IEnumerable<DatosFormatoListarSsomaModel>> ListarSsoma(int tipoDocumento, string codigo , int estado)
         {
             IEnumerable<DatosFormatoListarSsomaModel> result = new List<DatosFormatoListarSsomaModel>();
 
@@ -217,12 +217,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
                            " FROM dbo.TBMSsoma a "+
                            " INNER JOIN dbo.TBMSsomaTipoDocumento b ON a.idTipoDocumento = b.idTipoDocumento " +
                            " LEFT JOIN dbo.TBMSsomaEstado c ON a.idEstadoSsoma = c.idEstadoSsoma " +
-                           " WHERE a.idTipoDocumento = IIF(@TipoDocumento = 0, b.idTipoDocumento, @TipoDocumento) AND " +
-                           " a.CodigoDocumento = IIF(@Codigo is null, a.CodigoDocumento, @Codigo)  AND  a.idEstadoSsoma = IIF(@Estado = 0, a.idEstadoSsoma, @Estado)  AND a.Estado = 'A' ";
+                           " WHERE a.Estado = 'A'";
+
+            if(tipoDocumento != 0)
+                query = $"{query} AND a.idTipoDocumento = @tipoDocumento";
+            
+            if(!string.IsNullOrEmpty(codigo))
+                query = $"{query} AND a.CodigoDocumento = @codigo";
+
+            if (estado != 0)
+                query = $"{query} AND a.idEstadoSsoma = @estado";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<DatosFormatoListarSsomaModel>(query, new { TipoDocumento , Codigo, Estado });
+                result = await context.QueryAsync<DatosFormatoListarSsomaModel>(query, new { tipoDocumento , codigo, estado });
             }
 
             return result;
