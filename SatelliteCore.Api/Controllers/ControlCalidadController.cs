@@ -244,7 +244,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ListarMaestroNumeroParte")]
         public async Task<IActionResult> ListarMaestroNumeroParte(string Grupo,string Tabla)
         {
-            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            IEnumerable<DatosFormatoTablaNumerodeParte> response = await _controlCalidadServices.ListarMaestroNumeroParte(Grupo, Tabla, Usuario);
             return Ok(response);
         }
 
@@ -258,21 +259,24 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ListarDescripcion")]
         public async Task<IActionResult> ListarDescripcion(string Marca, string Hebra)
         {
-            IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadServices.ListarDescripcion(Marca, Hebra);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadServices.ListarDescripcion(Marca, Hebra, Usuario);
             return Ok(response);
         }
 
         [HttpGet("ListarLeyenda")]
         public async Task<IActionResult> ListarLeyenda(string Marca, string Hebra)
         {
-            IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadServices.ListarLeyenda(Marca, Hebra);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadServices.ListarLeyenda(Marca, Hebra, Usuario);
             return Ok(response);
         }
 
         [HttpGet("ListarTablaPrueba")]
         public async Task<IActionResult> ListarTablaPrueba(string Metodologia)
         {
-            IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadServices.ListarTablaPrueba(Metodologia);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadServices.ListarTablaPrueba(Metodologia, Usuario);
             return Ok(response);
         }
 
@@ -296,7 +300,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("EliminarDescripcionDT")]
         public async Task<IActionResult> EliminarDescripcionDT(string IdDescripcion)
         {
-            ResponseModel<string> response = await _controlCalidadServices.EliminarDescripcionDT(IdDescripcion);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.EliminarDescripcionDT(IdDescripcion, Usuario);
             return Ok(response);
         }
 
@@ -310,8 +315,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ActualizarDescripcionDT")]
         public async Task<IActionResult> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
-            ResponseModel<string> response = await _controlCalidadServices.ActualizarDescripcionDT(dato, idUsuario);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.ActualizarDescripcionDT(dato, Usuario);
             return Ok(response);
         }
 
@@ -319,15 +324,16 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarActualizarLeyendaDT")]
         public async Task<IActionResult> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarLeyendaDT(dato, idUsuario);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarActualizarLeyendaDT(dato, Usuario);
             return Ok(response);
         }
 
         [HttpGet("EliminarLeyendaDT")]
         public async Task<IActionResult> EliminarLeyendaDT(string IdLeyenda)
         {
-            ResponseModel<string> response = await _controlCalidadServices.EliminarLeyendaDT(IdLeyenda);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.EliminarLeyendaDT(IdLeyenda, Usuario);
             return Ok(response);
         }
 
@@ -380,16 +386,16 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarControlProcesoProtocolo")]
         public async Task<IActionResult> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato )
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlProcesoProtocolo(dato, idUsuario);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlProcesoProtocolo(dato, Usuario);
             return Ok(response);
         }
 
         [HttpPost("RegistrarControlPTProtocolo")]
         public async Task<IActionResult> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato)
         {
-            string idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity).ToString();
-            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlPTProtocolo(dato, idUsuario);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.RegistrarControlPTProtocolo(dato, Usuario);
             return Ok(response);
         }
 
@@ -413,7 +419,6 @@ namespace SatelliteCore.Api.Controllers
         public async Task<IActionResult> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato)
         {
             string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
-
             ResponseModel<string> response = await _controlCalidadServices.InsertarCabeceraFormatoProtocolo(dato, UsuarioSesion);
             return Ok(response);
         }
@@ -421,21 +426,24 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ImprimirControlProcesoInterno")]
         public async Task<IActionResult> ImprimirControlProcesoInterno(string NumeroLote)
         {
-            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlProcesoInterno(NumeroLote);
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlProcesoInterno(NumeroLote, UsuarioSesion);
             return Ok(response);
         }
 
         [HttpGet("ImprimirControlPruebas")]
         public async Task<IActionResult> ImprimirControlPruebas(string NumeroLote)
         {
-            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlPruebas(NumeroLote);
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirControlPruebas(NumeroLote, UsuarioSesion);
             return Ok(response);
         }
 
         [HttpGet("ImprimirDocumentoProtocolo")]
         public async Task<IActionResult> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma)
         {
-            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion, Idioma);
+            string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _controlCalidadServices.ImprimirDocumentoProtocolo(NumeroLote, Opcion, Idioma, UsuarioSesion);
             return Ok(response);
         }
     }

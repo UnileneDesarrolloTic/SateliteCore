@@ -490,5 +490,16 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return lista;
         }
+
+        public async Task RegistroLogEvento(LogTrazaEvento Evento)
+        {
+            string query = "INSERT INTO TBLogTrazaEvento(IdEvento,Usuario,Fecha,Opcional) VALUES (@IdEvento,@Usuario,GETDATE(),@Opcional);";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync(query,new { Evento.IdEvento,Evento.Usuario,Evento.Opcional });
+                connection.Dispose();
+            }
+        }
     }
 }
