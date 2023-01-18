@@ -16,8 +16,10 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ConsultarProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato);
         public Task<IEnumerable<DatosFormatoRecetaItemComponente>> ConsultarRecetaProducto(string Item);
         public Task<IEnumerable<DatosFormatoComponentePrecioUnitario>> ListarItemComponentePrecio(DatosFormatosComponentPrecio dato);
-        public Task<(List<FormatoListadoInformacionTransaccionKardex>, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato);
-        public Task<string> RegistrarInformacionTransaccionKardex(DatoFormatoRegistrarTransaccionKardex docRegistrado);
-        public Task GuardarInformacionTransaccionKardex(string idMongoDB,string Tipo, string Periodo,bool CheckCierre, string usuario);
+        public Task<(List<FormatoListadoInformacionTransaccionKardex>, FormatoCabeceraTransaccionKardex, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato);
+        public Task<bool> GuardarInformacionTransaccionKardex(DatoFormatoRegistrarTransaccionKardex docRegistrado, string usuario);
+        public Task<IEnumerable<FormatoDatosCierreHistorico>> ListarInformacionReporteCierre(string Periodo);
+        public Task<IEnumerable<FormatoListadoInformacionTransaccionKardex>> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo);
+        public Task AnularReporteCierre(int Id, string usuario);
     }
 }

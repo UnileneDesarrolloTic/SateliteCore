@@ -8,8 +8,9 @@ namespace SatelliteCore.Api.Models.Request.Contabildad
     {
         public string Periodo { get; set; }
         public string Tipo { get; set; }
+        public bool CheckCierre { get; set; }
         public int Pagina { get; set; }
         public int RegistrosPorPagina { get; set; }
-        public bool CheckCierre { get; set; }
+
     }
 }

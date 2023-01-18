@@ -17,6 +17,7 @@ using SatelliteCore.Api.ReportServices.Contracts.AnalisisCosto;
 using SatelliteCore.Api.Models.Response.Contabilidad;
 using SatelliteCore.Api.Models.Request.Contabildad;
 using MongoDB.Bson;
+using SatelliteCore.Api.Models.Generic;
 
 namespace SatelliteCore.Api.Services
 {
@@ -31,11 +32,11 @@ namespace SatelliteCore.Api.Services
         public async Task<IEnumerable<DetraccionesEntity>> ListarDetraccion()
         {
 
-            IEnumerable<DetraccionesEntity> lista  = await _contabilidadRepository.ListarDetraccion();
+            IEnumerable<DetraccionesEntity> lista = await _contabilidadRepository.ListarDetraccion();
             return lista;
         }
 
-        public int ProcesarDetraccionContabilidad (DatosFormato64 dato)
+        public int ProcesarDetraccionContabilidad(DatosFormato64 dato)
         {
 
             int response = 0;
@@ -99,7 +100,7 @@ namespace SatelliteCore.Api.Services
         public string GenerarBlogNotasDetraccion(FormatoProcesoDetracciones dato)
         {
             GenerarBlogNotas Detraccion = new GenerarBlogNotas();
-            string reporte =  Detraccion.ProcesarGenerarBlogNotas(dato);
+            string reporte = Detraccion.ProcesarGenerarBlogNotas(dato);
 
             return reporte;
         }
@@ -111,13 +112,13 @@ namespace SatelliteCore.Api.Services
         }
 
         public async Task<ResponseModel<string>> ExportarExcelProductoCostoBase(DatosFormatoFiltrarAnalisisCostoRequest dato)
-        {   
+        {
             IEnumerable<DatosFormatoDatosProductoCostobase> lista = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
             AnalisisCostosExcel AnalisisCosto = new AnalisisCostosExcel();
 
             string reporte = AnalisisCosto.GenerarAnalisisCosto(lista);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
-        
+
         }
 
         public async Task<IEnumerable<DatosFormatoDatosProductoCostobase>> ProcesarProductoExcel(DatosFormatoFiltrarAnalisisCostoRequest dato)
@@ -139,7 +140,7 @@ namespace SatelliteCore.Api.Services
 
             dato.base64 = ListarItem;
 
-            IEnumerable<DatosFormatoDatosProductoCostobase>  Listar = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
+            IEnumerable<DatosFormatoDatosProductoCostobase> Listar = await _contabilidadRepository.ConsultarProductoCostoBase(dato);
 
             return Listar;
         }
@@ -178,36 +179,62 @@ namespace SatelliteCore.Api.Services
             return lista;
         }
 
-        public async Task<(List<FormatoListadoInformacionTransaccionKardex>, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
+        public async Task<InformacionTransaccionKardex> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
         {
-            return await _contabilidadRepository.InformacionTransaccionKardex(dato);
+            (List<FormatoListadoInformacionTransaccionKardex> detalle, FormatoCabeceraTransaccionKardex cabecera, int totalRegistros) result;
+            InformacionTransaccionKardex Informacion = new InformacionTransaccionKardex();
+
+            result = await _contabilidadRepository.InformacionTransaccionKardex(dato);
+            Informacion.ContentidoCabecera = result.cabecera;
+            Informacion.ContentidoDetalle = new PaginacionModel<FormatoListadoInformacionTransaccionKardex>(result.detalle, dato.Pagina, dato.RegistrosPorPagina, result.totalRegistros);
+
+            return Informacion;
         }
 
         public async Task<ResponseModel<string>> RegistrarInformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato, string usuario)
         {
-            
-            if (dato.CheckCierre==false)
+
+            if (dato.CheckCierre == false)
                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "Debe activar el check para poder guardarlo");
 
-            (List<FormatoListadoInformacionTransaccionKardex> Listado, int totalRegistros) result;
+            (List<FormatoListadoInformacionTransaccionKardex> detalle, FormatoCabeceraTransaccionKardex cabecera, int totalRegistros) result;
 
-            result =   await _contabilidadRepository.InformacionTransaccionKardex(dato);
+            result = await _contabilidadRepository.InformacionTransaccionKardex(dato);
             DatoFormatoRegistrarTransaccionKardex docRegistrado = new DatoFormatoRegistrarTransaccionKardex();
 
             docRegistrado.Tipo = dato.Tipo;
             docRegistrado.Periodo = dato.Periodo;
             docRegistrado.CheckCierre = dato.CheckCierre;
-            docRegistrado.InformacionDetalle = result.Listado;
+            docRegistrado.InformacionDetalle = result.detalle;
+            docRegistrado.CCantidadTotal = result.cabecera.CCantidadTotal;
+            docRegistrado.CMontoTotal = result.cabecera.CMontoTotal;
 
-            //BsonDocument docFormatoBson = BsonDocument.Parse(docRegistrado.ToString());
+            bool respuesta = await _contabilidadRepository.GuardarInformacionTransaccionKardex(docRegistrado,usuario);
 
-            string idMongoDB = await _contabilidadRepository.RegistrarInformacionTransaccionKardex(docRegistrado);
-
-            await _contabilidadRepository.GuardarInformacionTransaccionKardex(idMongoDB, docRegistrado.Tipo, docRegistrado.Periodo, docRegistrado.CheckCierre,usuario);
-
-            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado");
+            if(respuesta==false)
+                return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
+            else
+                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "El Proceso "+ dato.Periodo + " ya se encuentra registrado");
         }
 
+        public async Task<IEnumerable<FormatoDatosCierreHistorico>> ListarInformacionReporteCierre(string Periodo)
+        {
+            IEnumerable<FormatoDatosCierreHistorico> InformacionReporte = new List<FormatoDatosCierreHistorico>();
+            InformacionReporte = await _contabilidadRepository.ListarInformacionReporteCierre(Periodo);
+            return InformacionReporte;
+        }
 
+        public async Task<IEnumerable<FormatoListadoInformacionTransaccionKardex>> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo)
+        {
+            IEnumerable<FormatoListadoInformacionTransaccionKardex> InformacionReporte = new List<FormatoListadoInformacionTransaccionKardex>();
+            InformacionReporte = await _contabilidadRepository.ListarDetalleReporteCierre(Id, Periodo, Tipo);
+            return InformacionReporte;
+        }
+
+        public async Task<ResponseModel<string>> AnularReporteCierre(int Id , string usuario)
+        {
+                await _contabilidadRepository.AnularReporteCierre(Id,usuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Anulado con exito");
+        }
     }
 }

@@ -95,10 +95,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("InformacionTransaccionKardex")]
         public async Task<ActionResult> InformacionTransaccionKardex (DatoFormatoFiltroTransaccionKardex  dato) 
         {
-            (List<FormatoListadoInformacionTransaccionKardex> lista, int totalRegistros) = await _ContabilidadService.InformacionTransaccionKardex(dato);
-            PaginacionModel<FormatoListadoInformacionTransaccionKardex> response = new PaginacionModel<FormatoListadoInformacionTransaccionKardex>(lista, dato.Pagina, dato.RegistrosPorPagina, totalRegistros);
-
-            return Ok(response);
+            InformacionTransaccionKardex Informacion = await _ContabilidadService.InformacionTransaccionKardex(dato);
+            return Ok(Informacion);
         }
 
         [HttpPost("RegistrarInformacionTransaccionKardex")]
@@ -110,5 +108,26 @@ namespace SatelliteCore.Api.Controllers
 
         }
 
+        [HttpGet("ListarInformacionReporteCierre")]
+        public async Task<ActionResult> ListarInformacionReporteCierre(string Periodo)
+        {
+            IEnumerable<FormatoDatosCierreHistorico> Resultado = await _ContabilidadService.ListarInformacionReporteCierre(Periodo);
+            return Ok(Resultado);
+        }
+
+        [HttpGet("ListarDetalleReporteCierre")]
+        public async Task<ActionResult> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo)
+        {
+            IEnumerable<FormatoListadoInformacionTransaccionKardex> Resultado = await _ContabilidadService.ListarDetalleReporteCierre(Id, Periodo,Tipo);
+            return Ok(Resultado);
+        }
+
+        [HttpGet("AnularReporteCierre")]
+        public async Task<ActionResult> AnularReporteCierre(int Id)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> resultado = await _ContabilidadService.AnularReporteCierre(Id,usuario);
+            return Ok(resultado);
+        }
     }
 }

@@ -120,16 +120,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result_db;
         }
 
-        public async Task<(List<FormatoListadoInformacionTransaccionKardex>, int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
+        public async Task<(List<FormatoListadoInformacionTransaccionKardex>, FormatoCabeceraTransaccionKardex , int)> InformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato)
         {
-            (List<FormatoListadoInformacionTransaccionKardex> Listado, int totalRegistros) result;
+            (List<FormatoListadoInformacionTransaccionKardex> detalle, FormatoCabeceraTransaccionKardex cabecera, int totalRegistros) result;
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using (var result_db = await connection.QueryMultipleAsync("usp_InformacionTransaccionKardex", new {dato.Periodo,dato.Tipo,dato.Pagina,dato.RegistrosPorPagina }, commandType: CommandType.StoredProcedure))
+                using (var result_db = await connection.QueryMultipleAsync("usp_InformacionTransaccionKardex", new { dato.Periodo, dato.Tipo, dato.Pagina, dato.RegistrosPorPagina }, commandType: CommandType.StoredProcedure))
                 {
-                    result.Listado = result_db.Read<FormatoListadoInformacionTransaccionKardex>().ToList();
+                    result.detalle = result_db.Read<FormatoListadoInformacionTransaccionKardex>().ToList();
                     result.totalRegistros = result_db.Read<int>().First();
+                    result.cabecera = result_db.Read<FormatoCabeceraTransaccionKardex>().FirstOrDefault();
                 }
                 connection.Dispose();
             }
@@ -137,28 +138,62 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-
-        public async Task<string> RegistrarInformacionTransaccionKardex(DatoFormatoRegistrarTransaccionKardex docRegistrado)
+        public async Task<bool> GuardarInformacionTransaccionKardex(DatoFormatoRegistrarTransaccionKardex docRegistrado, string usuario)
         {
-            IMongoDatabase integrationContext = new MongoClient(_appConfig.ContextMongoDB).GetDatabase("UnileneReporte");
-            IMongoCollection<DatoFormatoRegistrarTransaccionKardex> _requestModel = integrationContext.GetCollection<DatoFormatoRegistrarTransaccionKardex>("TransaccionHistorica");
-            await _requestModel.InsertOneAsync(docRegistrado);
-
-            string idMongoDB = ""; //Transaccionkardex.GetValue("_id", "").ToString();
-            return idMongoDB;
-        }
-
-        public async Task GuardarInformacionTransaccionKardex(string idMongoDB, string Tipo, string Periodo, bool CheckCierre, string usuario)
-        {
-            string sql = "INSERT INTO TBMCierreHistoricoContable (Codigo,Periodo,CheckCierre,CantidadTotal,MontoTotal,Tipo,Usuario,FechaRegistro) VALUES (@idMongoDB,@Tipo,@Periodo,@CheckCierre,0,0,@usuario,GETDATE())";
+            int idCabecera = 0;
+            bool result = true;
+            string sql = "SELECT IIF (EXISTS(SELECT 1 FROM TBMCierreHistorico WHERE Periodo=@Periodo AND Tipo=@Tipo AND CheckCierre=@CheckCierre AND Estado='A'), CAST(1 AS BIT), CAST(0 AS BIT)) AS exite";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await connection.ExecuteAsync(sql, new { idMongoDB, Tipo, Periodo, CheckCierre, usuario });
+                result = await connection.QueryFirstOrDefaultAsync<bool>(sql, new { docRegistrado.Periodo, docRegistrado.Tipo,docRegistrado.CheckCierre});
+
+                if (!result)
+                {
+                    idCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_RegistrarCabeceraReporteHistorico", new { docRegistrado.Periodo, docRegistrado.CheckCierre, docRegistrado.CCantidadTotal, docRegistrado.CMontoTotal, docRegistrado.Tipo, usuario }, commandType: CommandType.StoredProcedure);
+                    foreach (FormatoListadoInformacionTransaccionKardex valor in docRegistrado.InformacionDetalle)
+                        await connection.ExecuteAsync("usp_RegistrarDetalleReporteHistorico", new { docRegistrado.Tipo, idCabecera, docRegistrado.Periodo, valor.TipoDocumento, valor.NumeroDocumento, valor.TransaccionCodigo, valor.ReferenciaTipoDocumento, valor.ReferenciaNumeroDocumento, valor.Secuencia, valor.Item, valor.Lote, valor.Cantidad, valor.PrecioUnitario, valor.MontoTotal, valor.MontoTotalReal, valor.CodigoUnico }, commandType: CommandType.StoredProcedure);
+                }
+
+                connection.Dispose();
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<FormatoDatosCierreHistorico>> ListarInformacionReporteCierre(string Periodo)
+        {
+            IEnumerable<FormatoDatosCierreHistorico> Result =  new  List<FormatoDatosCierreHistorico>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                Result = await connection.QueryAsync<FormatoDatosCierreHistorico>("usp_Listado_ReporteCierre", new { Periodo }, commandType: CommandType.StoredProcedure);
                 connection.Dispose();
             }
 
-            
+            return Result;
+        }
+
+        public async Task<IEnumerable<FormatoListadoInformacionTransaccionKardex>> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo)
+        {
+            IEnumerable<FormatoListadoInformacionTransaccionKardex> Result = new List<FormatoListadoInformacionTransaccionKardex>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                Result = await connection.QueryAsync<FormatoListadoInformacionTransaccionKardex>("usp_ResultadoComparacionReporteCierre", new { Id, Periodo, Tipo }, commandType: CommandType.StoredProcedure);
+                connection.Dispose();
+            }
+
+            return Result;
+        }
+
+        public async Task AnularReporteCierre(int Id, string usuario)
+        {
+            string sql = "UPDATE TBMCierreHistorico SET Estado='I', UsuarioModificacion=@usuario,FechaModificacion=GETDATE()  WHERE Id=@Id";
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await connection.ExecuteAsync(sql, new { Id, usuario });
+                connection.Dispose();
+            }
         }
 
 
