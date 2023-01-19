@@ -13,5 +13,6 @@ namespace SatelliteCore.Api.Models.Response
         public DateTime FechaRegistro { get; set; }
         public string TipoPersona { get; set; }
         public string Estado { get; set; }
+        public string Periodo { get; set; }
     }
 }

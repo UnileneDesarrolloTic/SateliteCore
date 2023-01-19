@@ -451,14 +451,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        public async Task<int> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string Usuario)
         {
 
             int result = 0;
 
             using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_DESCRIPCION", new { ID_DESCRIPCION = dato.IdDescripcion, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, DESCRIPCIONLOCAL = dato.DescripcionLocal, DESCRIPCIONINGLES = dato.DescripcionIngles, USUARIO = Usuario }, commandType: CommandType.StoredProcedure);
                 foreach (DatosFormatoDetalleAgujaDescripcion valor in dato.DetalleAgujas)
                 {
                     if (valor.descripcionlocal.Trim() != "" || valor.descripcionlocal.Trim() != "")
@@ -469,7 +469,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario)
+        public async Task<int> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string Usuario)
         {
 
             int result = 0;
@@ -478,11 +478,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
             {
                 if (dato.IdLeyenda == 0)
                 {
-                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_LEYENDA", new { NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                    await connection.ExecuteAsync("SP_INSERTAR_TPRO_LEYENDA", new { NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = Usuario }, commandType: CommandType.StoredProcedure);
                 }
                 else
                 {
-                    await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_LEYENDA", new { ID_LEYENDA=dato.IdLeyenda, NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = idUsuario }, commandType: CommandType.StoredProcedure);
+                    await connection.ExecuteAsync("SP_ACTUALIZAR_TPRO_LEYENDA", new { ID_LEYENDA=dato.IdLeyenda, NUM_REGISTRO = dato.RegistroSanitario, ID_MARCA = dato.Marca, ID_HEBRA = dato.Hebra, TECNICA = dato.TecnicaEspaniol, METODO = dato.MetodoEspaniol, DETALLE = dato.DetalleEspaniol, TECNICA_INGLES = dato.TecnicaIngles, METODO_INGLES = dato.MetodoIngles, DETALLE_INGLES = dato.DetalleIngles, USUARIO = Usuario }, commandType: CommandType.StoredProcedure);
                 }
 
             }
@@ -569,14 +569,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario )
+        public async Task<int> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string Usuario)
         {
             int ID = 0;
             int contarA = 1;
             int contarB = 1;
             using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = Usuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
                 
                 foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
                 {
@@ -595,14 +595,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario)
+        public async Task<int> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string Usuario)
         {
             int ID = 0;
             int contarA = 1;
             int contarB = 1;
             using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = idUsuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
+                ID = await connection.QueryFirstOrDefaultAsync<int>("SP_INSERTAR_TPRO_RESULTADO_CABECERA", new { LOTE = dato.Numerolote, USUARIO = Usuario, FECHA_ANALISIS = dato.fechaanalisis }, commandType: CommandType.StoredProcedure);
 
                 foreach (DatosFormatosTablaAControlProcesos item in dato.TablaLongitud)
                 {
