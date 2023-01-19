@@ -337,5 +337,6 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<DatosClienteDTO>(true, Constante.MESSAGE_SUCCESS, datosCliente); ;
         }
 
+
     }
 }

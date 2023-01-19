@@ -16,10 +16,13 @@ namespace SatelliteCore.Api.Services
     public class ControlCalidadServices : IControlCalidadServices
     {
         private readonly IControlCalidadRepository _controlCalidadRepository;
+        private readonly ICommonRepository _commonRepository;
 
-        public ControlCalidadServices(IControlCalidadRepository controlCalidadRepository)
+
+        public ControlCalidadServices(IControlCalidadRepository controlCalidadRepository, ICommonRepository commonRepository)
         {
             _controlCalidadRepository = controlCalidadRepository;
+            _commonRepository = commonRepository;
         }
         public async Task<(List<CertificadoEsterilizacionEntity>, int)> ListarCertificados(DatosListarCertificadoPaginado datos)
         {
@@ -106,11 +109,14 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo, string Tabla)
+        public async Task<IEnumerable<DatosFormatoTablaNumerodeParte>> ListarMaestroNumeroParte(string Grupo, string Tabla, string Usuario)
         {
             IEnumerable<DatosFormatoTablaNumerodeParte> result = new List<DatosFormatoTablaNumerodeParte>();
-
             IEnumerable <DatosFormatoTablaNumerodeParte> Respuesta = await _controlCalidadRepository.ListarMaestroNumeroParte(Grupo,Tabla);
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_BUSCAR_NUMERO_DE_PARTE;
+            evento.Usuario = Usuario;
+            await _commonRepository.RegistroLogEvento(evento);
 
             foreach (DatosFormatoTablaNumerodeParte valor in Respuesta)
             {
@@ -137,25 +143,38 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
-        public async Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra)
+        public async Task<IEnumerable<DatosFormatoTablaDescripcionModel>> ListarDescripcion(string Marca, string Hebra,string Usuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_BUSCAR_DESCRIPCION;
+            evento.Usuario = Usuario;
+
             IEnumerable<DatosFormatoTablaDescripcionModel> response = await _controlCalidadRepository.ListarDescripcion(Marca, Hebra);
+            await _commonRepository.RegistroLogEvento(evento);
             return response;
         }
-        public async Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra)
+        public async Task<IEnumerable<DatosFormatoTablaLeyendaModel>> ListarLeyenda(string Marca, string Hebra,string Usuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_BUSCAR_LEYENDA;
+            evento.Usuario = Usuario;
+
             IEnumerable<DatosFormatoTablaLeyendaModel> response = await _controlCalidadRepository.ListarLeyenda(Marca, Hebra);
+            await _commonRepository.RegistroLogEvento(evento);
             return response;
         }
 
-        public async Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia)
+        public async Task<IEnumerable<DatosFormatoTablaPruebasModel>> ListarTablaPrueba(string Metodologia,string Usuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_BUSCAR_PRUEBAS;
+            evento.Usuario = Usuario;
+
             IEnumerable<DatosFormatoTablaPruebasModel> response = await _controlCalidadRepository.ListarTablaPrueba(Metodologia);
+            await _commonRepository.RegistroLogEvento(evento);
+
             return response;
         }
-
-
-        
 
         public async Task<IEnumerable<DatosFormatoObtenerTablaAgujasNuevoModel>> ListarObtenerAgujasDescripcionNuevo()
         {
@@ -166,13 +185,23 @@ namespace SatelliteCore.Api.Services
  
         public async Task<ResponseModel<string>> NuevoDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_GUARDAR_DESCRIPCION;
+            evento.Usuario = idUsuario;
+
+            await _commonRepository.RegistroLogEvento(evento);
             await _controlCalidadRepository.NuevoDescripcionDT(dato, idUsuario);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> EliminarDescripcionDT(string IdDescripcion)
+        public async Task<ResponseModel<string>> EliminarDescripcionDT(string IdDescripcion,string Usuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_ELIMINAR_DESCRIPCION;
+            evento.Usuario = Usuario;
+            evento.Opcional = IdDescripcion;
+
             await _controlCalidadRepository.EliminarDescripcionDT(IdDescripcion);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con éxito");
             return Respuesta;
@@ -184,23 +213,40 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
-        public async Task<ResponseModel<string>> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string idUsuario)
+        public async Task<ResponseModel<string>> ActualizarDescripcionDT(DatosFormatoActualizacionDescripcionModel dato, string Usuario)
         {
-            await _controlCalidadRepository.ActualizarDescripcionDT(dato, idUsuario);
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_ACTUALIZAR_DESCRIPCION;
+            evento.Usuario = Usuario;
+
+            await _controlCalidadRepository.ActualizarDescripcionDT(dato, Usuario);
+            await _commonRepository.RegistroLogEvento(evento);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string idUsuario)
+        public async Task<ResponseModel<string>> RegistrarActualizarLeyendaDT(DatosFormatoLeyendaDTModel dato, string Usuario)
         {
-            await _controlCalidadRepository.RegistrarActualizarLeyendaDT(dato, idUsuario);
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Actualizacion con éxito");
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = dato.IdLeyenda == 0 ? ConstanteLog.AP_GUARDAR_LEYENDA : ConstanteLog.AP_ACTUALIZAR_LEYENDA;
+            evento.Usuario = Usuario;
+            evento.Opcional = dato.RegistroSanitario;
+
+            await _controlCalidadRepository.RegistrarActualizarLeyendaDT(dato, Usuario);
+            await _commonRepository.RegistroLogEvento(evento);
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, dato.IdLeyenda==0 ? "Registrar con éxito" : "Actualizacion con éxito");
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> EliminarLeyendaDT(string IdLeyenda)
+        public async Task<ResponseModel<string>> EliminarLeyendaDT(string IdLeyenda,string Usuario)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.AP_ELIMINAR_LEYENDA;
+            evento.Usuario = Usuario;
+            evento.Opcional = IdLeyenda;
+
             await _controlCalidadRepository.EliminarLeyendaDT(IdLeyenda);
+            await _commonRepository.RegistroLogEvento(evento);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Eliminado con éxito");
             return Respuesta;
         }
@@ -235,15 +281,28 @@ namespace SatelliteCore.Api.Services
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string idUsuario)
+        public async Task<ResponseModel<string>> RegistrarControlProcesoProtocolo(DatosFormatoControlProcesosProtocoloModel dato, string Usuario)
         {
-            await _controlCalidadRepository.RegistrarControlProcesoProtocolo(dato, idUsuario);
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.FP_GUARDAR_CONTROL_DE_PROCESOS_INTERNO;
+            evento.Usuario = Usuario;
+            evento.Opcional = dato.Numerolote;
+
+            await _controlCalidadRepository.RegistrarControlProcesoProtocolo(dato, Usuario);
+            await _commonRepository.RegistroLogEvento(evento);
+
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
-        public async Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string idUsuario)
+        public async Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string Usuario)
         {
-            await _controlCalidadRepository.RegistrarControlPTProtocolo(dato, idUsuario);
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.FP_GUARDAR_CONTROL_DE_PRUEBA_PT;
+            evento.Usuario = Usuario;
+            evento.Opcional = dato.Numerolote;
+
+            await _controlCalidadRepository.RegistrarControlPTProtocolo(dato, Usuario);
+            await _commonRepository.RegistroLogEvento(evento);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
@@ -262,43 +321,66 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato, string UsuarioSesion)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.FP_GUARDAR_PRUEBAS_EFECTUADAS;
+            evento.Usuario = UsuarioSesion;
+            evento.Opcional = dato.NumeroLote;
+
             await _controlCalidadRepository.InsertarCabeceraFormatoProtocolo(dato,UsuarioSesion);
+            await _commonRepository.RegistroLogEvento(evento);
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> ImprimirControlProcesoInterno(string NumeroLote)
+        public async Task<ResponseModel<string>> ImprimirControlProcesoInterno(string NumeroLote, string UsuarioSesion)
         {
+            LogTrazaEvento evento = new LogTrazaEvento();
+
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
             IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
             Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote,"1");
             ControlProcesoInterno ExporteControlProcesoInterno = new ControlProcesoInterno();
             string reporte = ExporteControlProcesoInterno.ReporteControlProcesoInterno(listado,Cabecera);
 
+            evento.IdEvento = ConstanteLog.FP_IMPRIMIR_CONTROL_DE_PROCESOS_INTERNO;
+            evento.Usuario = UsuarioSesion;
+            evento.Opcional = NumeroLote;
+            await _commonRepository.RegistroLogEvento(evento);
+
+
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
             return Respuesta;
         }
 
 
-        public async Task<ResponseModel<string>> ImprimirControlPruebas(string NumeroLote)
+        public async Task<ResponseModel<string>> ImprimirControlPruebas(string NumeroLote,string UsuarioSesion)
         {
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
+            LogTrazaEvento evento = new LogTrazaEvento();
 
             IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
             Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote,"1");
             ControldePruebas ExporteControldePruebas = new ControldePruebas();
             string reporte = ExporteControldePruebas.ReporteControldePruebas(listado, Cabecera);
+            evento.IdEvento = ConstanteLog.FP_IMPRIMIR_CONTROL_DE_PRUEBA_PT;
+            evento.Usuario = UsuarioSesion;
+            evento.Opcional = NumeroLote;
+            await _commonRepository.RegistroLogEvento(evento);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
             return Respuesta;
         }
 
-        public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma)
+        public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma,string UsuarioSesion)
         {
             string reporte ="";
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
             ParametroMastEntity datosPiePagina = new ParametroMastEntity();
-
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.FP_IMPRIMIR_PRUEBAS_EFECTUADAS;
+            evento.Usuario = UsuarioSesion;
+            evento.Opcional = "Lote: " + NumeroLote +" Idioma: "+ Idioma  + " Firma: " + Opcion.ToString();
+            await _commonRepository.RegistroLogEvento(evento);
 
             IEnumerable<DatosFormatoProtocoloPruebaModel> listado = await _controlCalidadRepository.ImprimirDocumentoProtocolo(NumeroLote, Idioma);
 
