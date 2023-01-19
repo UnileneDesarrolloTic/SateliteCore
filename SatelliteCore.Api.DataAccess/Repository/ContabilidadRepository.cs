@@ -143,6 +143,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
             int idCabecera = 0;
             bool result = true;
             string sql = "SELECT IIF (EXISTS(SELECT 1 FROM TBMCierreHistorico WHERE Periodo=@Periodo AND Tipo=@Tipo AND CheckCierre=@CheckCierre AND Estado='A'), CAST(1 AS BIT), CAST(0 AS BIT)) AS exite";
+            string sqlCabecera = "INSERT INTO TBMCierreHistorico (Periodo,CheckCierre,CantidadTotal,MontoTotal,Tipo,Estado,UsuarioCreacion,FechaRegistro) VALUES (@Periodo,@CheckCierre,@CCantidadTotal,@CMontoTotal,@Tipo,'A',@usuario,GETDATE()) " +
+                                 " SELECT @@IDENTITY";
+
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -150,7 +153,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
                 if (!result)
                 {
-                    idCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_RegistrarCabeceraReporteHistorico", new { docRegistrado.Periodo, docRegistrado.CheckCierre, docRegistrado.CCantidadTotal, docRegistrado.CMontoTotal, docRegistrado.Tipo, usuario }, commandType: CommandType.StoredProcedure);
+                    idCabecera = await connection.QueryFirstOrDefaultAsync<int>(sqlCabecera, new { docRegistrado.Periodo, docRegistrado.CheckCierre, docRegistrado.CCantidadTotal, docRegistrado.CMontoTotal, docRegistrado.Tipo, usuario });
                     foreach (FormatoListadoInformacionTransaccionKardex valor in docRegistrado.InformacionDetalle)
                         await connection.ExecuteAsync("usp_RegistrarDetalleReporteHistorico", new { docRegistrado.Tipo, idCabecera, docRegistrado.Periodo, valor.TipoDocumento, valor.NumeroDocumento, valor.TransaccionCodigo, valor.ReferenciaTipoDocumento, valor.ReferenciaNumeroDocumento, valor.Secuencia, valor.Item, valor.Lote, valor.Cantidad, valor.PrecioUnitario, valor.MontoTotal, valor.MontoTotalReal, valor.CodigoUnico }, commandType: CommandType.StoredProcedure);
                 }
@@ -188,7 +191,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task AnularReporteCierre(int Id, string usuario)
         {
-            string sql = "UPDATE TBMCierreHistorico SET Estado='I', UsuarioModificacion=@usuario,FechaModificacion=GETDATE()  WHERE Id=@Id";
+            string sql = "UPDATE TBMCierreHistorico SET Estado = 'I', UsuarioModificacion = @usuario, FechaModificacion = GETDATE() WHERE Id = @Id";
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 await connection.ExecuteAsync(sql, new { Id, usuario });

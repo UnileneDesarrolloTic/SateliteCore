@@ -3,16 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Entities;
-using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.Contabildad;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Contabilidad;
 using SatelliteCore.Api.Services.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -95,13 +93,20 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("InformacionTransaccionKardex")]
         public async Task<ActionResult> InformacionTransaccionKardex (DatoFormatoFiltroTransaccionKardex  dato) 
         {
+            if (string.IsNullOrEmpty(dato.Periodo) || string.IsNullOrEmpty(dato.Tipo))
+                throw new ValidationModelException("Los datos enviados no son válidos");
+
             InformacionTransaccionKardex Informacion = await _ContabilidadService.InformacionTransaccionKardex(dato);
             return Ok(Informacion);
         }
 
         [HttpPost("RegistrarInformacionTransaccionKardex")]
         public async Task<ActionResult> RegistrarInformacionTransaccionKardex (DatoFormatoFiltroTransaccionKardex dato)
-        {
+        {   
+
+            if(string.IsNullOrEmpty(dato.Periodo) || string.IsNullOrEmpty(dato.Tipo))
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
             string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> resultado = await _ContabilidadService.RegistrarInformacionTransaccionKardex(dato, usuario);
             return Ok(resultado);
@@ -111,6 +116,9 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ListarInformacionReporteCierre")]
         public async Task<ActionResult> ListarInformacionReporteCierre(string Periodo)
         {
+            if (string.IsNullOrEmpty(Periodo))
+                throw new ValidationModelException("El periodo no válido.");
+
             IEnumerable<FormatoDatosCierreHistorico> Resultado = await _ContabilidadService.ListarInformacionReporteCierre(Periodo);
             return Ok(Resultado);
         }
