@@ -13,5 +13,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> RegistrarHorasExtras(DatosEstructuraHorasExtraCabecera dato, string usuario);
         public Task<IEnumerable<DatosFormatoListarHorasExtrasPersona>> ListarHoraExtrasPersona(DatosFormatoFiltraHoraExtras dato);
         public Task<object> BuscarInformacionHorasExtrasPersona(int Cabecera);
+        public Task ProcesarHorasExtrasPlanilla(string periodo);
+        public Task<string> ReporteHorasExtrasGeneradas(string periodo);
+        public Task<string> FormatoAutorizacionSobretiempo(int id);
     }
 }

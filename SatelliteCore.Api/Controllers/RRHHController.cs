@@ -87,11 +87,32 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listado);
         }
 
+        [HttpGet("ProcesarHorasExtrasPlanilla")]
+        public async Task<IActionResult> ProcesarHorasExtrasPlanilla(string periodo)
+        {
+            await _rrhhServices.ProcesarHorasExtrasPlanilla(periodo);
+            return Ok();
+        }
+
         [HttpGet("InformacionHoraExtras")]
         public async Task<IActionResult> BuscarInformacionHorasExtrasPersona(int Cabecera)
         {
             object listado = await _rrhhServices.BuscarInformacionHorasExtrasPersona(Cabecera);
             return Ok(listado);
+        }
+
+        [HttpGet("ReporteHorasExtrasGenerada")]
+        public async Task<IActionResult> ReporteHorasExtrasGenerada(string periodo)
+        {
+            string reporte =  await _rrhhServices.ReporteHorasExtrasGeneradas(periodo);
+            return Ok(reporte);
+        }
+
+        [HttpGet("FormatoAutorizacionSobretiempo")]
+        public async Task<IActionResult> FormatoAutorizacionSobretiempo(int id)
+        {
+            string reporte = await _rrhhServices.FormatoAutorizacionSobretiempo(id);
+            return Ok(reporte);
         }
 
 

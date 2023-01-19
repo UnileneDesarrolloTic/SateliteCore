@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SatelliteCore.Api.Models.Response
 {
@@ -15,6 +13,6 @@ namespace SatelliteCore.Api.Models.Response
         public string Estado { get; set; }
         public string Periodo { get; set; }
         public string UsuarioAprobacion { get; set; }
-        public DateTime FechaAprobacion { get; set; }
+        public DateTime? FechaAprobacion { get; set; }
     }
 }
