@@ -189,7 +189,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DetalleProtocoloAnalisis> listaProtocolo = new List<DetalleProtocoloAnalisis>();
             string query = "SELECT	a.GuiaNumero NumeroDocumento, a.FechaDocumento, null FechaVencimiento, " +
-                "RTRIM(a.DestinatarioNombre) ClienteNombre, RTRIM(b.ItemCodigo) ItemCodigo, 0 CantidadPedida," +
+                "RTRIM(a.DestinatarioNombre) ClienteNombre, RTRIM(b.ItemCodigo) ItemCodigo, RTRIM(b.Descripcion) Descripcion, 0 CantidadPedida," +
                 "ISNULL(substring(e.referencianumero, 1, 8), b.Lote) Lote, e.FechaExpiracion, " +
                 "RTRIM(b.Lote) AS OrdenFabricacion, RTRIM(a.Comentarios) Comentarios " +
                 "FROM WH_GuiaRemision a " +
