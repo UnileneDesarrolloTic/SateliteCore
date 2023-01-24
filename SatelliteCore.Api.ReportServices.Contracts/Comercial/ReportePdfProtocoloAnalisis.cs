@@ -17,7 +17,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 {
     public class ReportePdfProtocoloAnalisis
     {
-        private List<ProtocoloReportModel> protocolos;
+        private readonly List<ProtocoloReportModel> protocolos;
 
         private Image imgFirmaLiliaHurtado;
         private Image imgFirmaMilagrosMunoz;

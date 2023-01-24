@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Dto.RRHH;
+using SatelliteCore.Api.Models.Report.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.RRHH;
 using SatelliteCore.Api.Models.Response;
@@ -61,7 +62,7 @@ namespace SatelliteCore.Api.Services
         public async Task<string> ReporteHorasExtrasGeneradas(string periodo)
         {
             if(string.IsNullOrEmpty(periodo))
-                throw new ValidationModelException("Error al generar el reporte !!");
+                throw new ValidationModelException("Error en los datos enviados !!");
 
             periodo = periodo.Replace("-", "");
 
@@ -91,6 +92,24 @@ namespace SatelliteCore.Api.Services
                 throw new Exception("Error al generar el reporte !!");
 
             return reporte;
+        }
+        public async Task<ResponseModel<string>> AutorizacionSobretiempoPorPersona(string periodo)
+        {
+            if(string.IsNullOrEmpty(periodo) || periodo.Length != 7)
+                throw new ValidationModelException("Error en los datos enviados !!");
+
+            periodo = periodo.Replace("-", "");
+
+            AutorizacionSobretiempoPersonaDTO datos = await _rrhhRepository.ListarHorasExtraExportas(periodo);
+
+            if(datos.Cabecera.Count <= 0)
+                return new ResponseModel<string>(false, "No se encontro registros para este periodo", null);
+            
+
+            AutorizacionSobretiempoPorPersona_PDF reporte = new AutorizacionSobretiempoPorPersona_PDF(datos);
+            string rpt = reporte.Exportar();
+
+            return new ResponseModel<string>(true, Constante.MESSSGE_SUCCESS_REPORT, rpt);
         }
     }
 }

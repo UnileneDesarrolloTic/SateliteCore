@@ -115,6 +115,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(reporte);
         }
 
+        [HttpGet("RptAutorizacionSobretiempoPorPersona")]
+        public async Task<IActionResult> AutorizacionSobretiempoPorPersona(string periodo)
+        {
+            ResponseModel<string> reporte = await _rrhhServices.AutorizacionSobretiempoPorPersona(periodo);
+            return Ok(reporte);
+        }
+
 
     }
 }

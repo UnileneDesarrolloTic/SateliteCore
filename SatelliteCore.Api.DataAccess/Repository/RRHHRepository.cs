@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Dto.RRHH;
+using SatelliteCore.Api.Models.Report.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.RRHH;
 using SatelliteCore.Api.Models.Response;
@@ -25,10 +26,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<IEnumerable<ReporteAsistenciaDTO>> ListarAsistencia(DateTime fecha, int usuarioToken)
         {
-            IEnumerable<ReporteAsistenciaDTO> listaAsistencia = new List<ReporteAsistenciaDTO>();
-
             using SqlConnection context = new SqlConnection(_appConfig.contextSpring);
-            listaAsistencia = await context.QueryAsync<ReporteAsistenciaDTO>("usp_ObtenerReporteDiarioAsistencia_Satelite", new { fecha, usuario = usuarioToken }, commandType: CommandType.StoredProcedure);
+            IEnumerable<ReporteAsistenciaDTO> listaAsistencia = await context.QueryAsync<ReporteAsistenciaDTO>("usp_ObtenerReporteDiarioAsistencia_Satelite", new { fecha, usuario = usuarioToken }, commandType: CommandType.StoredProcedure);
 
             return listaAsistencia;
         }
@@ -82,10 +81,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task ProcesarHorasExtrasPlanilla(string periodo)
         {
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                _ = await context.ExecuteAsync("usp_RRHH_ProcesarHorasExtrasPlanilla", new { periodo }, commandType: CommandType.StoredProcedure);
-            }
+            using SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB);
+            _ = await context.ExecuteAsync("usp_RRHH_ProcesarHorasExtrasPlanilla", new { periodo }, commandType: CommandType.StoredProcedure);
         }
 
         public async Task<(DatosFormatoHorasExtrasCabeceraModel, List<DatosFormatoHorasExtrasDetalle>)> BuscarInformacionHorasExtrasPersona(int Cabecera)
@@ -129,7 +126,34 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return lista.ToList();
+        }
 
+        public async Task<AutorizacionSobretiempoPersonaDTO> ListarHorasExtraExportas(string periodo)
+        {
+            AutorizacionSobretiempoPersonaDTO result = new AutorizacionSobretiempoPersonaDTO();
+
+            string query = "SELECT IdPersona, RTRIM(c.NombreCompleto) Nombres, f.Descripcion Area, " +
+               "a.FechaRegistro, SUBSTRING( CONVERT(VARCHAR, a.FechaRegistro, 8), 0, 6) HoraInicio, " +
+               "SUBSTRING(CONVERT(VARCHAR, DATEADD(HOUR, cant_horas, FechaRegistro), 8), 0, 6) HoraFin, b.Cant_horas, " +
+               "ROW_NUMBER() OVER(PARTITION BY IdPersona ORDER BY IdPersona) Contador INTO #temp_HorasExtras " +
+               "FROM TBMHoraExtrasCabecera a " +
+               "INNER JOIN TBMHoraExtrasDetalle b ON a.IdCabecera = b.IdCabecera " +
+               "INNER JOIN PROD_UNILENE2.dbo.PersonaMast c ON b.IdPersona = c.Persona " +
+               "INNER JOIN PROD_UNILENE2.dbo.EmpleadoMast e ON c.Persona = e.Empleado " +
+               "INNER JOIN PROD_UNILENE2.dbo.HR_PuestoEmpresa f ON e.CodigoCargo = f.CodigoPuesto " +
+               "WHERE Periodo = @Periodo AND a.Estado = 'PR'; " +
+               "SELECT IdPersona, Nombres, Area FROM #temp_HorasExtras WHERE Contador = 1; " +
+               "SELECT IdPersona, FechaRegistro, HoraInicio, HoraFin, Cant_horas FROM #temp_HorasExtras " +
+               "DROP TABLE #temp_HorasExtras";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using SqlMapper.GridReader multi = await context.QueryMultipleAsync(query, new { periodo });
+                result.Cabecera = multi.Read<AutoSobretiempoPersonaCabeceraDTO>().ToList();
+                result.Detalle = multi.Read<AutoSobretiempoPersonaDetalleDTO>().ToList();
+            }
+
+            return result;
         }
     }
 }

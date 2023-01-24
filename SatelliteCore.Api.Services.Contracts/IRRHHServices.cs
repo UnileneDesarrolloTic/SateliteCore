@@ -16,5 +16,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task ProcesarHorasExtrasPlanilla(string periodo);
         public Task<string> ReporteHorasExtrasGeneradas(string periodo);
         public Task<string> FormatoAutorizacionSobretiempo(int id);
+        public Task<ResponseModel<string>> AutorizacionSobretiempoPorPersona(string periodo);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SatelliteCore.Api.Models.Dto.RRHH;
+using SatelliteCore.Api.Models.Report.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.RRHH;
 using SatelliteCore.Api.Models.Response;
@@ -16,5 +17,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(DatosFormatoHorasExtrasCabeceraModel, List<DatosFormatoHorasExtrasDetalle>)> BuscarInformacionHorasExtrasPersona(int Cabecera);
         public Task ProcesarHorasExtrasPlanilla(string periodo);
         public Task<List<HorasExtraExportDTO>> ListarHorasExtrasGeneradas(string periodo);
+        public Task<AutorizacionSobretiempoPersonaDTO> ListarHorasExtraExportas(string periodo);
+
     }
 }
