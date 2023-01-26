@@ -8,6 +8,8 @@ namespace SatelliteCore.Api.Models.Report.RRHH
         public int IdPersona { get; set; }
         public string Nombres { get; set; }
         public string Area { get; set; }
+        public string CentroCosto { get; set; }
+        public string SubArea { get; set; }
     }
 
     public struct AutoSobretiempoPersonaDetalleDTO

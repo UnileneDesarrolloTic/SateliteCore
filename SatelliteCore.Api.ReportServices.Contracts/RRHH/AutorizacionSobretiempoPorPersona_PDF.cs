@@ -83,9 +83,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
-            Style estiloTitulo = new Style().SetFontSize(12).SetFont(fuenteNegrita).SetFontColor(ColorConstants.BLACK).SetPaddingBottom(10f);
-            Style headerDetalle = new Style().SetFontSize(9).SetFont(fuenteNegrita).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
-            Style bodyDetalle = new Style().SetFontSize(9).SetFont(fuenteNormal).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
+            Style estiloTitulo = new Style().SetFontSize(10).SetFont(fuenteNegrita).SetFontColor(ColorConstants.BLACK).SetPaddingBottom(10f);
+            Style headerDetalle = new Style().SetFontSize(8).SetFont(fuenteNegrita).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
+            Style bodyDetalle = new Style().SetFontSize(8).SetFont(fuenteNormal).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
             Style centrado = new Style().SetVerticalAlignment(VerticalAlignment.MIDDLE).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetTextAlignment(TextAlignment.CENTER);
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
 
@@ -100,29 +100,40 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
 
             headerDocTable.AddCell(cellHeaderDoc).SetMarginTop(9f);
 
-            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Apellidos y Nombres: ").SetPaddingTop(2f).SetFont(fuenteNegrita));
+            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Apellidos y Nombres: ").SetPaddingTop(2f).SetFont(fuenteNegrita).SetFontSize(8));
             headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
 
-            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.Nombres).SetPaddingTop(2f));
+            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.Nombres).SetPaddingTop(2f).SetFontSize(8));
             headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
 
-            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Área: ").SetPaddingTop(2f).SetFont(fuenteNegrita));
+            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Cargo: ").SetPaddingTop(2f).SetFont(fuenteNegrita).SetFontSize(8));
             headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
 
-            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.Area));
-            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER).SetPaddingTop(2f));
+            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.Area).SetPaddingTop(2f).SetFontSize(8));
+            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
+
+            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Área: ").SetPaddingTop(2f).SetFont(fuenteNegrita).SetFontSize(8));
+            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
+
+            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.CentroCosto).SetPaddingTop(2f).SetFontSize(8));
+            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
+
+            cellHeaderDoc = new Cell(1, 2).Add(new Paragraph("Sub-Área: ").SetPaddingTop(2f).SetFont(fuenteNegrita).SetFontSize(8));
+            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
+
+            cellHeaderDoc = new Cell(1, 4).Add(new Paragraph(cabecera.SubArea).SetPaddingTop(2f).SetFontSize(8));
+            headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
 
             Paragraph textoAutorizacion = new Paragraph().SetFont(fuenteNegrita);
             textoAutorizacion.Add(new Text("Autorización: ").SetFont(fuenteNegrita));
             textoAutorizacion.Add(new Text(", el que suscribe el presente documento, manifiesta que voluntariamente han realizado trabajo en sobretiempo, según el siguiente detalle: ").SetFont(fuenteNormal));
 
-            cellHeaderDoc = new Cell(1, 6).Add(textoAutorizacion.SetPaddingTop(4f));
+            cellHeaderDoc = new Cell(1, 6).Add(textoAutorizacion.SetPaddingTop(4f).SetFontSize(7));
             headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER)).SetMarginBottom(4f).SetFontSize(9);
 
             document.Add(headerDocTable);
 
             Table detalleTable = new Table(new float[] { 10f, 25f, 25f, 25f, 15f }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
-            //Table detalleTable = new Table(new float[] { 10f, 35f, 20f, 20f, 15f }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
             Cell cellDetalle = new Cell(2, 1).Add(new Paragraph("N°").AddStyle(headerDetalle)).AddStyle(centrado);
             detalleTable.AddCell(cellDetalle);
@@ -173,7 +184,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
 
             Table footerTable = new Table(new float[] { 50f, 50f }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
-            Cell cellFooter = new Cell(1, 1).Add(new Paragraph("-------------------------------------------\nFirma del trabajador").SetFontSize(10));
+            Cell cellFooter = new Cell(1, 1).Add(new Paragraph("-------------------------------------------\nFirma y sello del Gerente o\n Jefe de Área").SetFontSize(9));
+            footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER));
+
+            cellFooter = new Cell(1, 1).Add(new Paragraph("-------------------------------------------\nFirma del trabajador").SetFontSize(9));
             footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER));
 
             document.Add(footerTable.SetTextAlignment(TextAlignment.CENTER));
