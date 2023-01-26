@@ -1,30 +1,29 @@
 ﻿using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
+using iText.Kernel.Events;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
-using iText.Kernel.Events;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
-using SatelliteCore.Api.Models.Entities;
-using iText.Kernel.Pdf.Canvas;
 
 namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 {
     public class FormatoPruebaProtocolo
     {
-        public string ReporteFormatoPruebaProtocoloEspaniol(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion , ParametroMastEntity datosPiePagina)
+        public string ReporteFormatoPruebaProtocoloEspaniol(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina)
         {
-           
+
             string reporte = null;
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
@@ -36,9 +35,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Document document = new Document(pdf, PageSize.A4);
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
-            Paragraph saltoLinea = new Paragraph(new Text("\n"));
-            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
             DateTime dateExpiracion = new DateTime(Cabecera.FECHAEXPIRACION.Year, Cabecera.FECHAEXPIRACION.Month, Cabecera.FECHAEXPIRACION.Day);
             string FeExpiracion = dateExpiracion.ToString("MM-yyyy");
@@ -163,7 +159,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetVerticalAlignment(VerticalAlignment.MIDDLE);
             tablaDatosTitulo.AddCell(cellTitulo);
 
-            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:"+ Cabecera.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE+" \n").AddStyle(estiloCabeceraSubtituloCodsut))
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + Cabecera.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
@@ -172,7 +168,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.Add(tablaDatosTitulo);
 
-            
+
             Table tablaDatosdeCabecera = new Table(20).UseAllAvailableWidth();
             tablaDatosTitulo.SetFixedLayout().SetPaddingBottom(3);
 
@@ -415,7 +411,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBackgroundColor(bgColorfondo);
             tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-            cellDetalleProtocolo = new Cell(1,6).Add(new Paragraph("Especificaciones")
+            cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph("Especificaciones")
             .AddStyle(estiloNegritaDetalleProtocolo))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -510,7 +506,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.Add(tablaDetalleProtocolo);
 
-            
+
             Table tablaTecnicaPropia = new Table(6).UseAllAvailableWidth();
             tablaTecnicaPropia.SetFixedLayout();
 
@@ -582,7 +578,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             tablaTecnicaPropia.AddCell(cellTecnicaPropia);
 
             document.Add(tablaTecnicaPropia);
-            
+
             Table tablaobservacion = new Table(1).UseAllAvailableWidth();
             tablaobservacion.SetFixedLayout();
 
@@ -633,10 +629,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 document.Add(tablaFirmaResponsables);
 
             }
-            
 
 
-            
+
+
 
 
             document.Close();
@@ -657,7 +653,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
         }
 
 
-        public string ReporteFormatoPruebaProtocoloIngles(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion , ParametroMastEntity datosPiePagina)
+        public string ReporteFormatoPruebaProtocoloIngles(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina)
         {
             string reporte = null;
             MemoryStream ms = new MemoryStream();
@@ -670,7 +666,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             Document document = new Document(pdf, PageSize.A4);
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-           
+
 
             pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
 
@@ -729,17 +725,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetPadding(0)
             .SetTextAlignment(TextAlignment.LEFT);
 
-           /* Table PiePagina = new Table(2).UseAllAvailableWidth();
-            PiePagina.SetFixedLayout();
+            /* Table PiePagina = new Table(2).UseAllAvailableWidth();
+             PiePagina.SetFixedLayout();
 
 
-            Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
-            .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
-            .SetBorder(Border.NO_BORDER);
+             Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
+             .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
+             .SetBorder(Border.NO_BORDER);
 
-            PiePagina.AddCell(cellFPiePagina);
+             PiePagina.AddCell(cellFPiePagina);
 
-            document.Add(PiePagina);*/
+             document.Add(PiePagina);*/
 
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
@@ -1341,12 +1337,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
         }
 
- 
-        
+
+
     }
 
     public class FooterRevisionProtocolo : IEventHandler
-    {   
+    {
         /*
         protected Document doc;
         

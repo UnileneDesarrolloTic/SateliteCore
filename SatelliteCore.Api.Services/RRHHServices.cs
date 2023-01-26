@@ -45,8 +45,10 @@ namespace SatelliteCore.Api.Services
 
         public async Task ProcesarHorasExtrasPlanilla(string periodo)
         {
-            if (string.IsNullOrEmpty(periodo))
+            if (string.IsNullOrEmpty(periodo) || periodo.Length  != 7)
                 throw new ValidationModelException("Error en los datos enviados.");
+
+            periodo = periodo.Replace("-", "");
 
             await _rrhhRepository.ProcesarHorasExtrasPlanilla(periodo);
         }

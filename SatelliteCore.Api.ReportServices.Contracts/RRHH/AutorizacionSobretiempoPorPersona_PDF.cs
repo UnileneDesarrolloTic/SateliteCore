@@ -1,9 +1,11 @@
 ﻿using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
+using iText.Kernel.Events;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
@@ -36,6 +38,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
             PdfDocumentInfo docInfo = pdf.GetDocumentInfo();
             docInfo.SetTitle("Autorización de sobretiempo");
             docInfo.SetAuthor("Sistema Satelite");
+
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterAutorizacionSobretiempoPorPersona_PDF());
 
             Document document = new Document(pdf, PageSize.A5);
             document.SetMargins(5, 25, 30, 25);
@@ -87,7 +91,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
             Style headerDetalle = new Style().SetFontSize(8).SetFont(fuenteNegrita).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
             Style bodyDetalle = new Style().SetFontSize(8).SetFont(fuenteNormal).SetFontColor(ColorConstants.BLACK).SetHorizontalAlignment(HorizontalAlignment.CENTER);
             Style centrado = new Style().SetVerticalAlignment(VerticalAlignment.MIDDLE).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetTextAlignment(TextAlignment.CENTER);
-            Paragraph saltoLinea = new Paragraph(new Text("\n"));
 
             document.Add(img);
 
@@ -125,7 +128,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
             headerDocTable.AddCell(cellHeaderDoc.SetBorder(Border.NO_BORDER));
 
             Paragraph textoAutorizacion = new Paragraph().SetFont(fuenteNegrita);
-            textoAutorizacion.Add(new Text("Autorización: ").SetFont(fuenteNegrita));
+            textoAutorizacion.Add(new Text("Autorización").SetFont(fuenteNegrita));
             textoAutorizacion.Add(new Text(", el que suscribe el presente documento, manifiesta que voluntariamente han realizado trabajo en sobretiempo, según el siguiente detalle: ").SetFont(fuenteNormal));
 
             cellHeaderDoc = new Cell(1, 6).Add(textoAutorizacion.SetPaddingTop(4f).SetFontSize(7));
@@ -170,28 +173,41 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                 cellDetalle = new Cell(1, 1).Add(new Paragraph(d.HoraFin).AddStyle(centrado).AddStyle(bodyDetalle));
                 detalleTable.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 1).Add(new Paragraph(d.Cant_horas.ToString()).AddStyle(centrado).AddStyle(bodyDetalle));
+                string cantidadHorasFormat = string.Format("{0:#0.#0}", d.Cant_horas).Replace(",", ":");
+
+                cellDetalle = new Cell(1, 1).Add(new Paragraph(cantidadHorasFormat).AddStyle(centrado).AddStyle(bodyDetalle));
                 detalleTable.AddCell(cellDetalle);
 
                 indice++;
             }
 
             document.Add(detalleTable);
+        }
 
-            document.Add(saltoLinea);
-            document.Add(saltoLinea);
-            document.Add(saltoLinea);
+    }
+    public class FooterAutorizacionSobretiempoPorPersona_PDF : IEventHandler
+    {
+        public void HandleEvent(Event @event)
+        {
+            PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+            PdfDocument pdf = documentoEvento.GetDocument();
+            PdfPage pagina = documentoEvento.GetPage();
+            PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamAfter(), pagina.GetResources(), pdf);
+
+            Style centrado = new Style().SetVerticalAlignment(VerticalAlignment.MIDDLE).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetTextAlignment(TextAlignment.CENTER);
 
             Table footerTable = new Table(new float[] { 50f, 50f }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout();
 
             Cell cellFooter = new Cell(1, 1).Add(new Paragraph("-------------------------------------------\nFirma y sello del Gerente o\n Jefe de Área").SetFontSize(9));
-            footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER));
+            footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER)).AddStyle(centrado);
 
             cellFooter = new Cell(1, 1).Add(new Paragraph("-------------------------------------------\nFirma del trabajador").SetFontSize(9));
-            footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER));
+            footerTable.AddCell(cellFooter.SetBorder(Border.NO_BORDER)).AddStyle(centrado);
 
-            document.Add(footerTable.SetTextAlignment(TextAlignment.CENTER));
+            Rectangle rectangulo = new Rectangle(15, -45, pagina.GetPageSize().GetWidth() - 50, 100);
+
+            new Canvas(pdfCanvas, rectangulo).Add(footerTable);
+
         }
-
     }
 }

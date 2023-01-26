@@ -56,7 +56,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             string query = "SELECT a.IdCabecera, a.IdArea,b.Descripcion NombreArea,a.FechaRegistro," +
                                 "(CASE a.TipoPersona WHEN 'E' THEN 'EMPLEADO' ELSE 'OBRERO' END) TipoPersona," +
-                                "(CASE a.Estado WHEN 'AP' THEN 'APROBADO' WHEN 'GE' THEN 'GENERADO' WHEN 'PR' THEN 'PROCESADO   ' ELSE 'ANULADO' END) Estado, " +
+                                "(CASE a.Estado WHEN 'AP' THEN 'APROBADO' WHEN 'GE' THEN 'GENERADO' WHEN 'PR' THEN 'PROCESADO' ELSE 'ANULADO' END) Estado, " +
                                 "a.Justificacion, ISNULL(a.UsuarioAprobacion,'-----------')  UsuarioAprobacion, ISNULL(a.Periodo,'') Periodo," +
                                 "a.FechaAprobacion " +
                             "FROM  TBMHoraExtrasCabecera a " +
@@ -133,9 +133,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
             AutorizacionSobretiempoPersonaDTO result = new AutorizacionSobretiempoPersonaDTO();
 
             string query = "SELECT IdPersona, RTRIM(c.NombreCompleto) Nombres, f.Descripcion Area, " +
-                   "a.FechaRegistro, SUBSTRING( CONVERT(VARCHAR, a.FechaRegistro, 8), 0, 6) HoraInicio, " +
-                   "SUBSTRING(CONVERT(VARCHAR, DATEADD(HOUR, cant_horas, FechaRegistro), 8), 0, 6) HoraFin, b.Cant_horas," +
-                   "'CENTRO DE COSTO USUARIO' CentroCosto, d.Descripcion SubArea, ROW_NUMBER() OVER(PARTITION BY IdPersona ORDER BY IdPersona) Contador " +
+                   "a.FechaRegistro,CONVERT(VARCHAR(5), a.FechaRegistro, 8) HoraInicio, b.Cant_horas," +
+                   "CONVERT(VARCHAR(5), DATEADD(MINUTE, ((b.Cant_horas - FLOOR(b.Cant_horas)) * 100), DATEADD(HOUR,cant_horas, FechaRegistro)), 8) HoraFin, " +
+                   "RTRIM(UPPER(g.LocalName)) CentroCosto, d.Descripcion SubArea, ROW_NUMBER() OVER(PARTITION BY IdPersona ORDER BY IdPersona) Contador " +
                "INTO #temp_HorasExtras " +
                "FROM TBMHoraExtrasCabecera a " +
                    "INNER JOIN TBMHoraExtrasDetalle b ON a.IdCabecera = b.IdCabecera " +
@@ -143,6 +143,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                    "INNER JOIN TBMAreasProduccion d ON a.IdArea = d.IdArea " +
                    "INNER JOIN PROD_UNILENE2.dbo.EmpleadoMast e ON c.Persona = e.Empleado " +
                    "INNER JOIN PROD_UNILENE2.dbo.HR_PuestoEmpresa f ON e.CodigoCargo = f.CodigoPuesto " +
+                   "LEFT JOIN  PROD_UNILENE2.dbo.AC_CostCenterMst g ON e.CentroCostos = g.CostCenter " +
                "WHERE Periodo = @Periodo AND a.Estado = 'PR'; " +
 
                "SELECT IdPersona, Nombres, Area, CentroCosto, SubArea FROM #temp_HorasExtras WHERE Contador = 1; " +
