@@ -173,7 +173,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                 cellDetalle = new Cell(1, 1).Add(new Paragraph(d.HoraFin).AddStyle(centrado).AddStyle(bodyDetalle));
                 detalleTable.AddCell(cellDetalle);
 
-                string cantidadHorasFormat = string.Format("{0:#0.#0}", d.Cant_horas).Replace(",", ":");
+                string cantidadHorasFormat = string.Format("{0:#0.#0}", d.Cant_horas).Replace(",", ":").Replace(".", ":");
 
                 cellDetalle = new Cell(1, 1).Add(new Paragraph(cantidadHorasFormat).AddStyle(centrado).AddStyle(bodyDetalle));
                 detalleTable.AddCell(cellDetalle);
