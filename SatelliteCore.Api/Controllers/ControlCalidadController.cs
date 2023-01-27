@@ -419,6 +419,10 @@ namespace SatelliteCore.Api.Controllers
         public async Task<IActionResult> InsertarCabeceraFormatoProtocolo(DatosFormatoCabeceraFormatoProtocolo dato)
         {
             string UsuarioSesion = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            if (!ModelState.IsValid)
+                throw new ValidationModelException("Los datos enviados no son válidos !!");
+
             ResponseModel<string> response = await _controlCalidadServices.InsertarCabeceraFormatoProtocolo(dato, UsuarioSesion);
             return Ok(response);
         }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SatelliteCore.Api.Models.Response.Contabilidad
 {
-    public class FormatoListadoInformacionTransaccionKardex
+    public struct FormatoListadoInformacionTransaccionKardex
     {
         public string TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }

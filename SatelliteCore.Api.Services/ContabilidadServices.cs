@@ -193,14 +193,16 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> RegistrarInformacionTransaccionKardex(DatoFormatoFiltroTransaccionKardex dato, string usuario)
         {
-
             if (dato.CheckCierre == false)
-                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "Debe activar el check para poder guardarlo");
+                return new ResponseModel<string>(false, "Debe activar el check, para poder registrar", "");
 
             (List<FormatoListadoInformacionTransaccionKardex> detalle, FormatoCabeceraTransaccionKardex cabecera, int totalRegistros) result;
 
             result = await _contabilidadRepository.InformacionTransaccionKardex(dato);
             DatoFormatoRegistrarTransaccionKardex docRegistrado = new DatoFormatoRegistrarTransaccionKardex();
+
+            if (result.detalle.Count()==0)
+                return new ResponseModel<string>(false, "Para el registro debe contener información", "");
 
             docRegistrado.Tipo = dato.Tipo;
             docRegistrado.Periodo = dato.Periodo;
@@ -214,27 +216,53 @@ namespace SatelliteCore.Api.Services
             if(respuesta==false)
                 return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con exito");
             else
-                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "El Proceso "+ dato.Periodo + " ya se encuentra registrado");
+                return new ResponseModel<string>(false, "El Proceso " + dato.Periodo + " ya se encuentra registrado", "");
         }
 
-        public async Task<IEnumerable<FormatoDatosCierreHistorico>> ListarInformacionReporteCierre(string Periodo)
+        public async Task<ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>> ListarInformacionReporteCierrePeriodo(string periodo)
         {
             IEnumerable<FormatoDatosCierreHistorico> InformacionReporte = new List<FormatoDatosCierreHistorico>();
-            InformacionReporte = await _contabilidadRepository.ListarInformacionReporteCierre(Periodo);
-            return InformacionReporte;
+            InformacionReporte = await _contabilidadRepository.ListarInformacionReporteCierrePeriodo(periodo);
+            if (InformacionReporte.Count() == 0)
+                return new ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>(false, "No hay información Registrada", InformacionReporte);
+
+            ResponseModel<IEnumerable<FormatoDatosCierreHistorico>> respuesta = new ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>(true, Constante.MESSAGE_SUCCESS, InformacionReporte);
+            return respuesta;
         }
 
-        public async Task<IEnumerable<FormatoListadoInformacionTransaccionKardex>> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo)
+        public async Task<ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>> ListarInformacionReporteCierreAnio(int anio)
         {
-            IEnumerable<FormatoListadoInformacionTransaccionKardex> InformacionReporte = new List<FormatoListadoInformacionTransaccionKardex>();
+            IEnumerable<FormatoDatosCierreHistorico> InformacionReporteAnio = new List<FormatoDatosCierreHistorico>();
+            InformacionReporteAnio = await _contabilidadRepository.ListarInformacionReporteCierreAnio(anio.ToString());
+            if (InformacionReporteAnio.Count() == 0)
+                return new ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>(false, "No hay información Registrada", InformacionReporteAnio);
+
+            ResponseModel<IEnumerable<FormatoDatosCierreHistorico>> respuesta = new ResponseModel<IEnumerable<FormatoDatosCierreHistorico>>(true, Constante.MESSAGE_SUCCESS, InformacionReporteAnio);
+            return respuesta;
+        }
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoMostrarDetalleReporte>>> ListarDetalleReporteCierre(int Id, string Periodo, string Tipo)
+        {
+            IEnumerable<DatosFormatoMostrarDetalleReporte> InformacionReporte = new List<DatosFormatoMostrarDetalleReporte>();
             InformacionReporte = await _contabilidadRepository.ListarDetalleReporteCierre(Id, Periodo, Tipo);
-            return InformacionReporte;
+            if (InformacionReporte.Count() == 0)
+                return new ResponseModel<IEnumerable<DatosFormatoMostrarDetalleReporte>>(false, "No hay comparación entre el historico con el actual", InformacionReporte);
+
+            
+            ResponseModel<IEnumerable<DatosFormatoMostrarDetalleReporte>> respuesta = new ResponseModel<IEnumerable<DatosFormatoMostrarDetalleReporte>>(true, Constante.MESSAGE_SUCCESS, InformacionReporte);
+
+            return respuesta;
         }
 
         public async Task<ResponseModel<string>> AnularReporteCierre(int Id , string usuario)
         {
                 await _contabilidadRepository.AnularReporteCierre(Id,usuario);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Anulado con exito");
+        }
+        public async Task<ResponseModel<string>> RestablecerReporteCierre(DatosFormatoRestablecerCierre dato, string usuario)
+        {
+            await _contabilidadRepository.RestablecerReporteCierre(dato, usuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Restablecido con exito");
         }
     }
 }

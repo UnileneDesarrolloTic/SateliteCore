@@ -14,5 +14,7 @@ namespace SatelliteCore.Api.Models.Response.Contabilidad
         public decimal MontoTotalActual { get; set; }
         public decimal CantidadTotalActual { get; set; }
         public bool Comparacion { get; set; }
+        public int CantidadDiferencia { get; set; }
+        public int MontoDiferencia { get; set; }
     }
 }
