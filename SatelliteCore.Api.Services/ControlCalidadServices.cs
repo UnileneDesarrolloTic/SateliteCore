@@ -338,6 +338,9 @@ namespace SatelliteCore.Api.Services
 
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
             IEnumerable<DatosFormatoInformacionResultadoProtocolo> listado = await _controlCalidadRepository.ImprimirControlProceso(NumeroLote);
+            if(listado.Count()==0)
+                return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No hay información registrada");
+
             Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote,"1");
             ControlProcesoInterno ExporteControlProcesoInterno = new ControlProcesoInterno();
             string reporte = ExporteControlProcesoInterno.ReporteControlProcesoInterno(listado,Cabecera);

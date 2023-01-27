@@ -79,6 +79,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetPadding(0)
             .SetTextAlignment(TextAlignment.LEFT);
 
+            Paragraph saltoLinea = new Paragraph(new Text("\n"));
             Table PiePagina = new Table(2).UseAllAvailableWidth();
             PiePagina.SetFixedLayout();
 
@@ -178,7 +179,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            /*.SetBorder(Border.NO_BORDER);*/
             .SetBorderBottom(Border.NO_BORDER)
             .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
@@ -629,11 +629,40 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 document.Add(tablaFirmaResponsables);
 
             }
+            else
+            {
+                document.Add(saltoLinea);
+                document.Add(saltoLinea);
+                document.Add(saltoLinea);
+                document.Add(saltoLinea);
+
+                Table tablaFirmaResponsables = new Table(2).UseAllAvailableWidth();
+                tablaFirmaResponsables.SetFixedLayout();
+
+                Cell cellFirma = new Cell(1, 1).Add(new Paragraph("____________________________"))
+               .SetTextAlignment(TextAlignment.CENTER)
+               .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("____________________________"))
+                  .SetTextAlignment(TextAlignment.CENTER)
+                  .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de control calidad"))
+                     .SetTextAlignment(TextAlignment.CENTER)
+                     .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Gerente Técnico"))
+                 .SetTextAlignment(TextAlignment.CENTER)
+                 .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                document.Add(tablaFirmaResponsables);
 
 
-
-
-
+            }
 
             document.Close();
 
@@ -691,16 +720,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             Color bgColorfondo = new DeviceRgb(217, 217, 217);
 
-
-            /*Image imagenFlooterss = new Image(ImageDataFactory
-             .Create(imagenFlooter))
-             .SetWidth(400)
-             .SetHeight(15)
-             .SetMarginBottom(0)
-             .SetPadding(0)
-             .ScaleAbsolute(50f, 50f)
-             .SetTextAlignment(TextAlignment.CENTER);
-            */
             Image imgFirmaLiliaHurtado = new Image(ImageDataFactory
               .Create(FirmaLiliaHurtado))
               .SetWidth(150)
@@ -887,7 +906,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(Cabecera.Presentacion)
+            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(Cabecera.Presentacion == null ? "" : Cabecera.Presentacion)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1318,6 +1337,39 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 document.Add(tablaFirmaResponsables);
 
             }
+            else
+            {
+
+                document.Add(saltoLinea);
+              
+                Table tablaFirmaResponsables = new Table(2).UseAllAvailableWidth();
+                tablaFirmaResponsables.SetFixedLayout();
+
+                Cell cellFirma = new Cell(1, 1).Add(new Paragraph("____________________________"))
+               .SetTextAlignment(TextAlignment.CENTER)
+               .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("____________________________"))
+                  .SetTextAlignment(TextAlignment.CENTER)
+                  .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de control calidad"))
+                     .SetTextAlignment(TextAlignment.CENTER)
+                     .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Gerente Técnico"))
+                 .SetTextAlignment(TextAlignment.CENTER)
+                 .SetBorder(Border.NO_BORDER);
+                tablaFirmaResponsables.AddCell(cellFirma);
+
+                document.Add(tablaFirmaResponsables);
+
+
+            }
+
 
             document.Close();
 

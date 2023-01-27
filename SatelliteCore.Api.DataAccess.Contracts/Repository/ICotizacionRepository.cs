@@ -20,8 +20,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<BsonDocument> ObtenerDatosReporte(string idObject);
         public Task<CotizacionRegistroEntity> ObtenerDatosRegistro(string codReporte);
         public Task Actualizar(string id, int usuarioSesion, BsonDocument cotizacion);
-
-
         public Task<IEnumerable<ListaFormatoCotizacion>> ListarFormatoCotizacion();
         public Task<IEnumerable<CamposFormatoCotizacionModel>> CamposFormatosCotizacion(int idFormato);
     }
