@@ -38,11 +38,11 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                int IdCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_InsertarHorasExtrasCabecera", new { data.idCodigo, data.Area, data.Persona, data.Justificacion, data.FechaRegistro, usuario, data.Estado }, commandType: CommandType.StoredProcedure);
+                int IdCabecera = await connection.QueryFirstOrDefaultAsync<int>("usp_InsertarHorasExtrasCabecera", new { data.IdCodigo, data.Area, data.Persona, data.Justificacion, data.FechaRegistro, usuario, data.Estado }, commandType: CommandType.StoredProcedure);
 
                 foreach (DatosEstructuraHorasExtrasDetalle persona in data.ListaPersona)
                 {
-                    await connection.ExecuteAsync("INSERT INTO TBMHoraExtrasDetalle (IdCabecera,IdPersona,FechaCreacion,cant_horas) VALUES (@IdCabecera,@persona,GETDATE(),@horasextras);", new { data.idCodigo, IdCabecera, persona.persona, persona.horasextras });
+                    await connection.ExecuteAsync("INSERT INTO TBMHoraExtrasDetalle (IdCabecera,IdPersona,FechaCreacion,cant_horas) VALUES (@IdCabecera,@persona,GETDATE(),@horasextras);", new { data.IdCodigo, IdCabecera, persona.persona, persona.horasextras });
                 }
 
                 connection.Dispose();
@@ -133,8 +133,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
             AutorizacionSobretiempoPersonaDTO result = new AutorizacionSobretiempoPersonaDTO();
 
             string query = "SELECT IdPersona, RTRIM(c.NombreCompleto) Nombres, f.Descripcion Area, " +
-                   "a.FechaRegistro,CONVERT(VARCHAR(5), a.FechaRegistro, 8) HoraInicio, b.Cant_horas," +
-                   "CONVERT(VARCHAR(5), DATEADD(MINUTE, ((b.Cant_horas - FLOOR(b.Cant_horas)) * 100), DATEADD(HOUR,cant_horas, FechaRegistro)), 8) HoraFin, " +
+                   "a.FechaRegistro,CONVERT(VARCHAR(5), a.FechaRegistro, 8) HoraInicio," +
+                   "CONVERT(VARCHAR(5), DATEADD(MINUTE, ((b.Cant_horas - FLOOR(b.Cant_horas)) * 60), DATEADD(HOUR,cant_horas, FechaRegistro)), 8) HoraFin," +
+                   "CONVERT(VARCHAR, FLOOR(b.Cant_horas)) + ':'+ IIF( FLOOR((b.Cant_horas - FLOOR(b.Cant_horas)) * 60) < 10, '0' + CONVERT(VARCHAR, FLOOR((b.Cant_horas - FLOOR(b.Cant_horas)) * 60)), CONVERT(VARCHAR, FLOOR((b.Cant_horas - FLOOR(b.Cant_horas)) * 60)) ) Cant_horas, " +
                    "RTRIM(UPPER(g.LocalName)) CentroCosto, d.Descripcion SubArea, ROW_NUMBER() OVER(PARTITION BY IdPersona ORDER BY IdPersona) Contador " +
                "INTO #temp_HorasExtras " +
                "FROM TBMHoraExtrasCabecera a " +

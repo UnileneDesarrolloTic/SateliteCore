@@ -8,6 +8,7 @@ namespace SatelliteCore.Api.Models.Dto.GestionCalidad
         public string NumeroDocumento { get; set; }
         public DateTime FechaDocumento { get; set; }
         public string Estado { get; set; }
+        public string Cliente { get; set; }
         public string TipoVenta { get; set; }
         public string ComercialPedidoNumero { get; set; }
         public string Comentarios { get; set; }

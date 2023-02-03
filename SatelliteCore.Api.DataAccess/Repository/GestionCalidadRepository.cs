@@ -135,13 +135,22 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<VentasPorClienteDTO> ventas = new List<VentasPorClienteDTO>();
 
-            string query = "SELECT a.TipoDocumento,RTRIM(a.NumeroDocumento)NumeroDocumento,a.FechaDocumento,a.Estado,a.TipoVenta,MontoTotal,RTRIM(ComercialPedidoNumero) ComercialPedidoNumero, " +
+            string query = "SELECT a.TipoDocumento,RTRIM(a.NumeroDocumento)NumeroDocumento,a.FechaDocumento,a.Estado,RTRIM(a.ClienteNombre) Cliente,a.TipoVenta,MontoTotal,RTRIM(ComercialPedidoNumero) ComercialPedidoNumero, " +
                 "RTRIM(Comentarios) Comentarios, RTRIM(b.ItemCodigo) ItemCodigo,RTRIM(c.NumeroDeParte) NumeroDeParte,RTRIM(d.DescripcionLocal) Linea, RTRIM(e.DescripcionLocal) Familia, RTRIM(f.DescripcionLocal) SubFamilia, " +
                 "RTRIM(b.Lote) Lote,RTRIM(b.ItemSerie) ItemSerie,b.Descripcion,RTRIM(b.UnidadCodigo) UnidadCodigo,b.CantidadEntregada, b.PrecioUnitario,b.Monto FROM CO_Documento a " +
                 "INNER JOIN co_documentodetalle b ON a.CompaniaSocio = b.CompaniaSocio AND a.Tipodocumento = b.TipoDocumento AND a.Numerodocumento = b.Numerodocumento " +
                 "INNER JOIN WH_ItemMast c ON b.Itemcodigo = c.Item INNER JOIN WH_ClaseLinea d ON c.Linea = d.Linea INNER JOIN WH_ClaseFamilia e ON e.Linea = c.Linea AND e.Familia = c.Familia " +
                 "INNER JOIN wh_clasesubfamilia f ON f.Linea = c.Linea AND f.Familia = c.Familia AND f.SubFamilia = c.SubFamilia " +
-                "WHERE a.Estado <> 'AN' AND a.ClienteNumero = @cliente AND a.TipoDocumento <> 'PE' AND a.FechaDocumento BETWEEN @fechaInicio AND @fechaFin";
+                "WHERE a.Estado <> 'AN' AND a.TipoDocumento <> 'PE'";
+
+            if (!string.IsNullOrEmpty(filtros.Lote))
+                query = $"{query} AND b.Lote = @lote";
+
+            if (filtros.Cliente != 0)
+                query = $"{query} AND a.ClienteNumero = @cliente";
+
+            if (filtros.FechaInicio != null && filtros.FechaFin != null)
+                query = $"{query} AND a.FechaDocumento BETWEEN @fechaInicio AND @fechaFin";
 
             if (!string.IsNullOrEmpty(filtros.Linea))
                 query = $"{query} AND c.Linea = @linea";
