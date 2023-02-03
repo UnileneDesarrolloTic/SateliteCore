@@ -73,7 +73,10 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> ReporteVentasPorCliente(RequestFiltroVentaCliente filtros)
         {
-            if (!filtros.ValidarDatos() || !Shared.ValidarFecha(filtros.FechaInicio) || !Shared.ValidarFecha(filtros.FechaFin) || filtros.FechaInicio > filtros.FechaFin)
+            if (!filtros.ValidarDatos())
+                throw new ValidationModelException(Constante.MODEL_VALIDATION_FAILED);
+
+            if ((Shared.ValidarFecha(filtros.FechaInicio) && !Shared.ValidarFecha(filtros.FechaFin)) || (!Shared.ValidarFecha(filtros.FechaInicio) && Shared.ValidarFecha(filtros.FechaFin)))
                 throw new ValidationModelException(Constante.MODEL_VALIDATION_FAILED);
 
             List<VentasPorClienteDTO> ventas = await _gestionCalidadRepository.VentasPorCliente(filtros);
