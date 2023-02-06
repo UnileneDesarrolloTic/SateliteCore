@@ -178,30 +178,21 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("ListarDocumentoLicitacion")]
         public async Task<ActionResult> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion datos)
         {   
+
             IEnumerable<FormatoLicitaciones> response = await _comercialServices.ListarDocumentoLicitacion(datos);
             return Ok(response);
         }
 
        [HttpPost("NumerodeGuiaLicitacion")]
        public async Task<ActionResult> NumerodeGuiaLicitacion(ListarOpcionesImprimir datos)
-        {
-          
-            try
+       {
+            if (datos.ListaGuias.Count == 0)
             {
-                if (datos.ListaGuias.Count == 0)
-                {
-                    throw new ValidationModelException("Debe Seleccionar una o varias guias");
-                  
-                }
+                throw new ValidationModelException("Debe Seleccionar una o varias guias");
+            }
 
-                ResponseModel<string> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                ResponseModel<string> response = new ResponseModel<string>(false, "La lista no se pudo cargar", ex.Message);
-                return BadRequest(response);
-            }
+            ResponseModel<string> response = await _comercialServices.NumerodeGuiaLicitacion(datos);
+            return Ok(response);
         }
 
        [HttpGet("NumeroPedido")]

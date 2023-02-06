@@ -18,7 +18,7 @@ namespace SatelliteCore.Api.Models.Report.RRHH
         public DateTime FechaRegistro { get; set; }
         public string HoraInicio { get; set; }
         public string HoraFin { get; set; }
-        public decimal Cant_horas { get; set; }
+        public string Cant_horas { get; set; }
     }
 
     public struct AutorizacionSobretiempoPersonaDTO

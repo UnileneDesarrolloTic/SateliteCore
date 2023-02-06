@@ -49,53 +49,56 @@ namespace SatelliteCore.Api.ReportServices.Contracts.GestionCalidad
                 workSheet.Cells["E5"].Value = "Estado";
                 workSheet.Cells["E5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["F5"].Value = "Tipo Venta";
+                workSheet.Cells["F5"].Value = "Cliente";
                 workSheet.Cells["F5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["G5"].Value = "Pedido";
+                workSheet.Cells["G5"].Value = "Tipo Venta";
                 workSheet.Cells["G5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["H5"].Value = "Item";
+                workSheet.Cells["H5"].Value = "Pedido";
                 workSheet.Cells["H5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["I5"].Value = "N° Parte";
+                workSheet.Cells["I5"].Value = "Item";
                 workSheet.Cells["I5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["J5"].Value = "Linea";
+                workSheet.Cells["J5"].Value = "N° Parte";
                 workSheet.Cells["J5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["K5"].Value = "Familia";
+                workSheet.Cells["K5"].Value = "Linea";
                 workSheet.Cells["K5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["L5"].Value = "Sub Familia";
+                workSheet.Cells["L5"].Value = "Familia";
                 workSheet.Cells["L5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["M5"].Value = "Lote";
+                workSheet.Cells["M5"].Value = "Sub Familia";
                 workSheet.Cells["M5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["N5"].Value = "Item Serie";
+                workSheet.Cells["N5"].Value = "Lote";
                 workSheet.Cells["N5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["O5"].Value = "Descripción";
+                workSheet.Cells["O5"].Value = "Item Serie";
                 workSheet.Cells["O5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["P5"].Value = "Und";
+                workSheet.Cells["P5"].Value = "Descripción";
                 workSheet.Cells["P5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["Q5"].Value = "Entregado";
+                workSheet.Cells["Q5"].Value = "Und";
                 workSheet.Cells["Q5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["R5"].Value = "Precio Und";
+                workSheet.Cells["R5"].Value = "Entregado";
                 workSheet.Cells["R5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["S5"].Value = "Monto"; 
+                workSheet.Cells["S5"].Value = "Precio Und";
                 workSheet.Cells["S5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["T5"].Value = "Total";
+                workSheet.Cells["T5"].Value = "Monto"; 
                 workSheet.Cells["T5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                workSheet.Cells["U5"].Value = "Comentario";
+                workSheet.Cells["U5"].Value = "Total";
                 workSheet.Cells["U5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                workSheet.Cells["V5"].Value = "Comentario";
+                workSheet.Cells["V5"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
 
 
@@ -116,53 +119,56 @@ namespace SatelliteCore.Api.ReportServices.Contracts.GestionCalidad
                     workSheet.Cells["E" + index].Value = venta.Estado;
                     workSheet.Cells["E" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["F" + index].Value = venta.TipoVenta;
+                    workSheet.Cells["F" + index].Value = venta.Cliente;
                     workSheet.Cells["F" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["G" + index].Value = venta.ComercialPedidoNumero;
+                    workSheet.Cells["G" + index].Value = venta.TipoVenta;
                     workSheet.Cells["G" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["H" + index].Value = venta.ItemCodigo;
+                    workSheet.Cells["H" + index].Value = venta.ComercialPedidoNumero;
                     workSheet.Cells["H" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["I" + index].Value = venta.NumeroDeParte;
+                    workSheet.Cells["I" + index].Value = venta.ItemCodigo;
                     workSheet.Cells["I" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["J" + index].Value = venta.Linea;
+                    workSheet.Cells["J" + index].Value = venta.NumeroDeParte;
                     workSheet.Cells["J" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["K" + index].Value = venta.Familia;
+                    workSheet.Cells["K" + index].Value = venta.Linea;
                     workSheet.Cells["K" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["L" + index].Value = venta.SubFamilia;
+                    workSheet.Cells["L" + index].Value = venta.Familia;
                     workSheet.Cells["L" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["M" + index].Value = venta.Lote;
+                    workSheet.Cells["M" + index].Value = venta.SubFamilia;
                     workSheet.Cells["M" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["N" + index].Value = venta.ItemSerie;
+                    workSheet.Cells["N" + index].Value = venta.Lote;
                     workSheet.Cells["N" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["O" + index].Value = venta.Descripcion;
+                    workSheet.Cells["O" + index].Value = venta.ItemSerie;
                     workSheet.Cells["O" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["P" + index].Value = venta.UnidadCodigo;
+                    workSheet.Cells["P" + index].Value = venta.Descripcion;
                     workSheet.Cells["P" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["Q" + index].Value = venta.CantidadEntregada;
+                    workSheet.Cells["Q" + index].Value = venta.UnidadCodigo;
                     workSheet.Cells["Q" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["R" + index].Value = venta.PrecioUnitario;
+                    workSheet.Cells["R" + index].Value = venta.CantidadEntregada;
                     workSheet.Cells["R" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["S" + index].Value = venta.Monto;
+                    workSheet.Cells["S" + index].Value = venta.PrecioUnitario;
                     workSheet.Cells["S" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["T" + index].Value = venta.MontoTotal;
+                    workSheet.Cells["T" + index].Value = venta.Monto;
                     workSheet.Cells["T" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    workSheet.Cells["U" + index].Value = venta.Comentarios;
+                    workSheet.Cells["U" + index].Value = venta.MontoTotal;
                     workSheet.Cells["U" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                    workSheet.Cells["V" + index].Value = venta.Comentarios;
+                    workSheet.Cells["V" + index].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                     index++;
                 }
@@ -186,42 +192,45 @@ namespace SatelliteCore.Api.ReportServices.Contracts.GestionCalidad
         private static void EstilosCelda(ExcelWorksheet workSheet, int index)
         {
 
-            workSheet.Cells["B5:U5"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheet.Cells["B6:U"+ index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            workSheet.Cells["B5:V5"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheet.Cells["B6:V"+ index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-            workSheet.Cells["B5:U5"].Style.Font.Size = 12;
-            workSheet.Cells["B5:U5"].Style.Font.Bold = true;
-            workSheet.Cells["B6:U" + index].Style.WrapText = true;
+            workSheet.Cells["B5:V5"].Style.Font.Size = 12;
+            workSheet.Cells["B5:V5"].Style.Font.Bold = true;
+            workSheet.Cells["B6:V" + index].Style.WrapText = true;
 
             workSheet.Cells["D6:D" + index].Style.Numberformat.Format = "dd/MM/yyyy hh:mm";
-            workSheet.Cells["R6:T" + index].Style.Numberformat.Format = "#,##0.00";
-            workSheet.Cells["Q6:Q" + index].Style.Numberformat.Format = "#,##0";
+            workSheet.Cells["S6:U" + index].Style.Numberformat.Format = "#,##0.00";
+            workSheet.Cells["R6:R" + index].Style.Numberformat.Format = "#,##0";
 
             workSheet.Row(5).Style.Font.Size = 12;
 
             workSheet.Column(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheet.Column(5).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             workSheet.Column(6).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            workSheet.Column(16).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheet.Column(7).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheet.Column(17).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-            workSheet.Column(3).Width = 14;
-            workSheet.Column(4).Width = 17;
-            workSheet.Column(7).Width = 14;
-            workSheet.Column(8).Width = 13;
-            workSheet.Column(9).Width = 26;
-            workSheet.Column(10).Width = 23;
-            workSheet.Column(11).Width = 27;
-            workSheet.Column(12).Width = 18;
-            workSheet.Column(13).Width = 17;
-            workSheet.Column(14).Width = 11;
-            workSheet.Column(15).Width = 65;
-            workSheet.Column(17).Width = 11;
-            workSheet.Column(18).Width = 11;
-            workSheet.Column(19).Width = 11;
-            workSheet.Column(20).Width = 11;
-            workSheet.Column(21).Width = 70;
+            workSheet.Column(3).Width = 16;
+            workSheet.Column(4).Width = 19;
+            workSheet.Column(6).Width = 45;
+            workSheet.Column(7).Width = 12;
+            workSheet.Column(8).Width = 22;
+            workSheet.Column(9).Width = 22;
+            workSheet.Column(10).Width = 24;
+            workSheet.Column(11).Width = 25;
+            workSheet.Column(12).Width = 25;
+            workSheet.Column(13).Width = 25;
+            workSheet.Column(14).Width = 18;
+            workSheet.Column(15).Width = 18;
+            workSheet.Column(16).Width = 60;
+            workSheet.Column(17).Width = 16;
+            workSheet.Column(18).Width = 18;
+            workSheet.Column(19).Width = 18;
+            workSheet.Column(20).Width = 18;
+            workSheet.Column(21).Width = 18;
+            workSheet.Column(22).Width = 65;
 
-            workSheet.Cells["B5:U5"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#BDD7EE"));
+            workSheet.Cells["B5:V5"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#BDD7EE"));
         }
 
     }

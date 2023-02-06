@@ -21,6 +21,10 @@ namespace SatelliteCore.Api.CrossCutting.Helpers
         public static bool ValidarFecha(object inValue)
         {
             bool bValid;
+
+            if (inValue == null)
+                return false;
+
             try
             {
                 DateTime myDT = DateTime.Parse(inValue.ToString());

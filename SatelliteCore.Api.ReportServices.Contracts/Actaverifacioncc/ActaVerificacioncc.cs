@@ -11,7 +11,6 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using iText.Signatures;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using System;
@@ -28,12 +27,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
         public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias, ListarOpcionesImprimir dato)
         {
             //DOCUMENTO QUE TIENE TRUE 
-            Boolean documentoActaCC = dato.Acta;
-            Boolean documentoCondiciones = dato.Condicion;
-            Boolean documentoProtocolo = dato.Protocolo;
-            Boolean documentoRsanitario = dato.Carta;
-            Boolean documentoBPA = dato.practicas;
-            Boolean documentoManufactura = dato.Manufactura;
+            bool documentoActaCC = dato.Acta;
+            bool documentoCondiciones = dato.Condicion;
+            bool documentoProtocolo = dato.Protocolo;
+            bool documentoRsanitario = dato.Carta;
+            bool documentoBPA = dato.practicas;
+            bool documentoManufactura = dato.Manufactura;
 
             string fechahoy = DateTime.Today.ToLongDateString().ToString();
             string[] separarfecha = fechahoy.Split(',');
@@ -42,8 +41,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             int contador = 0;
             int contadoArray = NumeroGuias.Count;
             string reporte = null;
-           
-           
+
+
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdf = new PdfDocument(writer);
@@ -51,16 +50,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             docInfo.SetTitle("Licitaciones");
             docInfo.SetAuthor("Sistema Licitaciones");
 
-           
             Document document = new Document(pdf, documentoActaCC ? PageSize.A4.Rotate() : PageSize.A4);
-            //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterProtocolos(document, prueba));
-
-
             document.SetMargins(5, 15, 30, 15);
 
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
             string Conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocolo.png");
-            string FirmaLiliaHurtado= System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
+            string FirmaLiliaHurtado = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
             string FirmaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
 
             string CertificadoBPA = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\CERTIFICADOBPA1310-21.jpg");
@@ -108,7 +103,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             foreach (CReporteGuiaRemisionModel cabecera in NumeroGuias)
             {
                 string Entrega = "";
-                
+
 
                 switch (cabecera.NumeroEntrega)
                 {
@@ -153,8 +148,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                         break;
                 }
 
-              
-
                 if (documentoActaCC)
                     GenerarPdf(document, cabecera, Entrega, fechaFinal);
 
@@ -176,14 +169,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                     Carta(document, cabecera, rutaUnilene, fechaFinal);
                 }
 
-                
-                if (cabecera.DetalleGuia[0].DetalleProtocolo.Count > 0 )
+
+                if (cabecera.DetalleGuia[0].DetalleProtocolo.Count > 0)
                     if (documentoProtocolo)
-                    {   
+                    {
                         if (documentoActaCC || documentoCondiciones || documentoRsanitario)
                             document.Add(new AreaBreak(PageSize.A4));
 
-                        Protocolo(document, cabecera, rutaUnilene, fechaFinal, Conclusion , imgFirmaLiliaHurtado , imgFirmaFirmaMilagrosMunoz);
+                        Protocolo(document, cabecera, rutaUnilene, fechaFinal, Conclusion, imgFirmaLiliaHurtado, imgFirmaFirmaMilagrosMunoz);
                     }
 
                 if (documentoBPA)
@@ -191,7 +184,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                     if (documentoActaCC || documentoCondiciones || documentoRsanitario)
                         document.Add(new AreaBreak(PageSize.A4));
 
-                    buenaspracticasalmacenamiento(document,imgCertificadoBPA);
+                    buenaspracticasalmacenamiento(document, imgCertificadoBPA);
                 }
 
                 if (documentoManufactura)
@@ -208,7 +201,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                     document.Add(new AreaBreak());
                 }
 
-                
+
                 contador++;
 
             }
@@ -229,7 +222,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             return reporte;
         }
 
-        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega,string fechaFinal)
+        public void GenerarPdf(Document document, CReporteGuiaRemisionModel cabecera, string Entrega, string fechaFinal)
         {
             Color bgColour = new DeviceRgb(161, 205, 241);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -245,10 +238,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(img);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
-            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
             Style estiloTitulo = new Style()
                 .SetFontSize(9)
@@ -302,7 +293,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
              .AddStyle(estiloCabecera))
              .SetFont(fuenteNegrita)
              .SetTextAlignment(TextAlignment.RIGHT)
-             .SetBorder(Border.NO_BORDER);             
+             .SetBorder(Border.NO_BORDER);
 
             tablaDatosGenerales.AddCell(cellDG);
 
@@ -612,13 +603,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo=="" || detalle.NumeroMuestreo=="-" ? "NO REQUIERE" : detalle.NumeroMuestreo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroMuestreo == "" || detalle.NumeroMuestreo == "-" ? "NO REQUIERE" : detalle.NumeroMuestreo)
                    .AddStyle(estiloDetalle))
                    .SetTextAlignment(TextAlignment.CENTER)
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 tablaDatosDetalle.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo=="" || detalle.NumeroEnsayo =="-" ? "NO REQUIERE" : detalle.NumeroEnsayo)
+                cellDetalle = new Cell(1, 2).Add(new Paragraph(detalle.NumeroEnsayo == "" || detalle.NumeroEnsayo == "-" ? "NO REQUIERE" : detalle.NumeroEnsayo)
                  .AddStyle(estiloDetalle))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -748,7 +739,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER).SetMarginLeft(30).SetMarginRight(8).SetMarginTop(8);
 
-            cellFirma = new Cell(1,1).Add(tableFirma).SetBorder(Border.NO_BORDER);
+            cellFirma = new Cell(1, 1).Add(tableFirma).SetBorder(Border.NO_BORDER);
             tablaDatosFirma.AddCell(cellFirma);
 
 
@@ -807,18 +798,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosinformacion.AddCell(cellInformacion);
 
             document.Add(tablaDatosinformacion);
-           
-
-           /* document.Add(new AreaBreak(PageSize.A4));
-            Compromiso(document, cabecera, rutaUnilene, fechaFinal);
-            document.Add(new AreaBreak(PageSize.A4));
-            Condiciones(document, cabecera, rutaUnilene, fechaFinal);*/
 
         }
 
         public void Compromiso(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
-           
+
 
             Color bgColour = new DeviceRgb(161, 205, 241);
 
@@ -912,7 +897,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
 
-            Paragraph LictacionPublica = new Paragraph( cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC " + cabecera.OrdenCompra).AddStyle(estilotextoNegrita);
+            Paragraph LictacionPublica = new Paragraph(cabecera.DescripcionProceso + " - " + cabecera.DescripcionComercialDetalle + " (" + cabecera.CantItems.ToString() + "-ITEMS)-ITEM " + cabecera.DetalleGuia[0].NumeroItem.ToString() + ":" + cabecera.DetalleGuia[0].Descripcion + " . Es perteneciente a la OC " + cabecera.OrdenCompra).AddStyle(estilotextoNegrita);
 
             //tabla 3
             Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
@@ -965,7 +950,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
-            .SetMarginTop(10) ;
+            .SetMarginTop(10);
             tablaDatosFecha.AddCell(cellFecha);
 
             //eddie
@@ -991,7 +976,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
 
             Image img2 = new Image(ImageDataFactory
-               .Create(rutaUnilene2))   
+               .Create(rutaUnilene2))
                .SetWidth(63)
                .SetHeight(60)
                .SetMarginBottom(0)
@@ -1005,7 +990,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Cell celdaFirma = new Cell(1, 1).Add(img2)
                         .SetTextAlignment(TextAlignment.RIGHT)
-                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);    
+                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);
 
             tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER);
 
@@ -1040,11 +1025,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         public void Condiciones(Document document, CReporteGuiaRemisionModel cabecera, string rutaUnilene, string fechaFinal)
         {
-
-
-            Color bgColour = new DeviceRgb(161, 205, 241);
-
-
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
                .SetWidth(150)
@@ -1057,10 +1037,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
-            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
             Style estiloTitulo = new Style()
                 .SetFontSize(9)
@@ -1083,12 +1060,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                 .SetFontSize(9)
                 .SetFontColor(ColorConstants.BLACK);
 
-            Style estiloFechaVerificacion = new Style()
-                .SetFontSize(6)
-                .SetFont(fuenteNegrita)
-                .SetFontColor(ColorConstants.BLACK);
 
-            Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA  DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo).SetMarginTop(10);
+            Paragraph titulo1 = new Paragraph("DECLARACIÓN JURADA DE CONDICIONES ESPECIALES DE EMBALAJE").AddStyle(estiloTitulo).SetMarginTop(10);
             Paragraph titulo2 = new Paragraph(cabecera.DescripcionProceso).AddStyle(estiloTitulo);
 
             document.Add(saltoLinea);
@@ -1119,7 +1092,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDeclaracionJuramento = new Table(1).UseAllAvailableWidth();
             tablaDeclaracionJuramento.SetFixedLayout();
 
-            Paragraph Nombre = new Paragraph("LUIS GERMAN CASTILLO VASQUEZ ").AddStyle(estiloNegrita);
+            Paragraph Nombre = new Paragraph("ERICK HARTMANN BUSTAMANTE ").AddStyle(estiloNegrita);
             Paragraph ruc = new Paragraph("20197705249, DECLARO BAJO JURAMENTO ").AddStyle(estiloNegrita);
 
 
@@ -1130,13 +1103,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDeclaracionJuramento.AddCell(cellPresente);
 
 
-            cellPresente = new Cell(1, 1).Add(new Paragraph("El que se suscribe, ").Add(Nombre).Add("identificado con DNI Nº 07227297, Representante Legal de UNILENE S.A.C , con RUC Nº ").Add(ruc).Add("la información que a continuación se detalla respecto a las condiciones especiales de embalaje de la: ")
+            cellPresente = new Cell(1, 1).Add(new Paragraph("El que se suscribe, ").Add(Nombre).Add("identificado con DNI Nº 44656730, Representante Legal de UNILENE S.A.C , con RUC Nº ").Add(ruc).Add("la información que a continuación se detalla respecto a las condiciones especiales de embalaje de la: ")
                  .AddStyle(estiloTexto))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
             tablaDeclaracionJuramento.AddCell(cellPresente);
-
-
 
             cellPresente = new Cell(1, 1).Add(new Paragraph(cabecera.DetalleGuia[0].Descripcion)
                .AddStyle(estiloNegrita))
@@ -1223,11 +1194,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaDatosContenido);
             document.Add(saltoLinea);
 
-
-            
-
-
-            //tabla 4
             Table tablaDatosFecha = new Table(2).UseAllAvailableWidth();
             tablaDatosFecha.SetFixedLayout();
 
@@ -1251,32 +1217,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             .SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
-
-            // Eddie
-
-            //  string FirmaLicitaciones = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLicitaciones.png");
-
-            //  Image img2 = new Image(ImageDataFactory
-            //     .Create(FirmaLicitaciones))
-            //     .SetWidth(135)
-            //     .SetHeight(50)
-            //     .SetMarginBottom(0)
-            //     .SetPadding(0)
-            //     .SetBorder(Border.NO_BORDER)
-            //     .SetHorizontalAlignment(HorizontalAlignment.LEFT);
-
-            //  cellFecha = new Cell(1, 1).Add(img2)
-            //.SetBorder(Border.NO_BORDER)
-            //.SetMarginTop(100);
-
-            //  tablaDatosFecha.AddCell(cellFecha);
-
-            // ----------------------------
-
-            string rutaUnilene2 = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
+            string rutaSelloErick = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
 
             Image img2 = new Image(ImageDataFactory
-               .Create(rutaUnilene2))
+               .Create(rutaSelloErick))
                .SetWidth(63)
                .SetHeight(60)
                .SetMarginBottom(0)
@@ -1342,8 +1286,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
@@ -1366,11 +1308,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Style estiloTexto = new Style()
                 .SetFontSize(9)
-                .SetFontColor(ColorConstants.BLACK);
-
-            Style estiloFechaVerificacion = new Style()
-                .SetFontSize(6)
-                .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
 
             Paragraph titulo1 = new Paragraph("CARTA DE GARANTÍA DE CALIDAD DE LOS PRODUCTOS OFERTADOS").AddStyle(estiloTitulo).SetMarginTop(10);
@@ -1417,8 +1354,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             document.Add(tablaDatosParrafo);
 
-
-
             Table tablaDatosContenido = new Table(1).UseAllAvailableWidth();
             tablaDatosContenido.SetFixedLayout();
 
@@ -1429,7 +1364,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                .SetPaddingBottom(20);
             tablaDatosContenido.AddCell(cellContenido);
 
-            cellContenido = new Cell(1, 1).Add(new Paragraph("Asimismo, informamos que las condiciones de embalaje son en cajas de cartón y que el transporte es de mayor seguridad, cualquier reclamo de los productos entregados correspondiente a orden de compra ").Add(new Paragraph("Nº "+ cabecera.OrdenCompra).AddStyle(estiloNegrita)).Add (" serán cambiados dentro de las (24) veinticuatro horas siguientes")
+            cellContenido = new Cell(1, 1).Add(new Paragraph("Asimismo, informamos que las condiciones de embalaje son en cajas de cartón y que el transporte es de mayor seguridad, cualquier reclamo de los productos entregados correspondiente a orden de compra ").Add(new Paragraph("Nº " + cabecera.OrdenCompra).AddStyle(estiloNegrita)).Add(" serán cambiados dentro de las (24) veinticuatro horas siguientes")
              .AddStyle(estiloTexto))
              .SetTextAlignment(TextAlignment.JUSTIFIED)
              .SetBorder(Border.NO_BORDER)
@@ -1480,9 +1415,36 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDatosFecha.AddCell(cellFecha);
 
 
-            cellFecha = new Cell(1, 1).Add(new Paragraph(""))//imagen
-            .SetBorder(Border.NO_BORDER)
-            .SetMarginTop(100);
+
+
+            string rutaSelloErick = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Sello_RepLegal_ErickHartmann.png");
+
+            Image img2 = new Image(ImageDataFactory
+               .Create(rutaSelloErick))
+               .SetWidth(63)
+               .SetHeight(60)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetBorder(Border.NO_BORDER)
+               .SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            Table tableFirma = new Table(new float[] { 1, 2 }).UseAllAvailableWidth();
+            tableFirma.SetWidth(UnitValue.CreatePercentValue(100));
+            tableFirma.SetFixedLayout();
+
+            Cell celdaFirma = new Cell(1, 1).Add(img2)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER);
+
+            celdaFirma = new Cell(1, 1).Add(new Paragraph("Firmado digitalmente por:\n HARTMANN BUSTAMANTE ERICK - 20197705249 \n Motivo: DECLARACIÓN JURADA\n Fecha: " + fechaActual).SetFontSize(7))
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER);
+
+            tableFirma.AddCell(celdaFirma).SetBorder(Border.NO_BORDER).SetMarginLeft(30).SetMarginRight(8).SetMarginTop(8);
+
+            cellFecha = new Cell(1, 1).Add(tableFirma).SetBorder(Border.NO_BORDER);
             tablaDatosFecha.AddCell(cellFecha);
 
             document.Add(tablaDatosFecha);
@@ -1523,7 +1485,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
 
             Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
-            .SetFixedPosition(0f, document.GetBottomMargin()-2, 0f)
+            .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
             .SetBorder(Border.NO_BORDER);
 
             PiePagina.AddCell(cellFPiePagina);
@@ -1551,9 +1513,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
-            Paragraph saltoLinea = new Paragraph(new Text("\n"));
-            LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
             Style estiloTitulo = new Style()
                 .SetFontSize(14)
@@ -1634,10 +1593,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             document.Add(tablaDatosTitulo);
 
-
             Table tablaDatosdeCabecera = new Table(6).UseAllAvailableWidth();
             tablaDatosTitulo.SetFixedLayout().SetPaddingBottom(3);
-
 
             Cell cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Producto:")
            .AddStyle(estiloCabeceraVariable))
@@ -2058,17 +2015,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaFirmaResponsables);
 
 
-        
+
         }
-        
+
         public void buenaspracticasalmacenamiento(Document document, Image imgCertificadoBPA)
         {
 
-
             Table tablaCertificadoBPA = new Table(1).UseAllAvailableWidth();
             tablaCertificadoBPA.SetFixedLayout();
-
-
 
             Cell cellCertificadoBPA = new Cell(1, 1).Add(imgCertificadoBPA)
             .SetTextAlignment(TextAlignment.CENTER)
@@ -2079,14 +2033,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             document.Add(cellCertificadoBPA);
 
-
-
         }
 
         public void DocumentoManufactura(Document document, Image imgManufacturaP1, Image imgManufacturaP2)
         {
-
-
             Table tablaManufacturaP1 = new Table(1).UseAllAvailableWidth();
             tablaManufacturaP1.SetFixedLayout();
             Cell cellManufacturaP1 = new Cell(1, 1).Add(imgManufacturaP1)
@@ -2110,47 +2060,40 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaManufacturaP2.AddCell(cellManufacturaP2);
 
             document.Add(tablaManufacturaP2);
-
-
-
         }
 
-        public class FooterProtocolos : IEventHandler
-        {
-
-        
-
-
-            public void HandleEvent(Event @event)
-            {
-                PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
-                PdfDocument pdf = documentoEvento.GetDocument();
-                PdfPage pagina = documentoEvento.GetPage();
-                PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamBefore(), pagina.GetResources(), pdf);
+        //public class FooterProtocolos : IEventHandler
+        //{
+        //    public void HandleEvent(Event @event)
+        //    {
+        //        PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+        //        PdfDocument pdf = documentoEvento.GetDocument();
+        //        PdfPage pagina = documentoEvento.GetPage();
+        //        PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamBefore(), pagina.GetResources(), pdf);
 
 
-                PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                Style estiloFooter = new Style().SetFontSize(8)
-                        .SetFont(fuenteNegrita)
-                        .SetFontColor(ColorConstants.BLACK)
-                        .SetMargin(0)
-                        .SetPadding(0)
-                        .SetFontSize(8);
+        //        PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+        //        Style estiloFooter = new Style().SetFontSize(8)
+        //                .SetFont(fuenteNegrita)
+        //                .SetFontColor(ColorConstants.BLACK)
+        //                .SetMargin(0)
+        //                .SetPadding(0)
+        //                .SetFontSize(8);
 
 
-                Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
+        //        Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
 
-                Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045;Rev.11").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
-                tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
-                
-                
-                Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 200);
+        //        Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045;Rev.11").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+        //        tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
 
-               
-                new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
 
-            }
-        }
+        //        Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 200);
+
+
+        //        new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
+
+        //    }
+        //}
 
 
 
