@@ -5,9 +5,11 @@ using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -194,6 +196,18 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> response = await _pronosticoServices.ActualizarFechaPrometidaMasiva(datos);
             return Ok(response);
         }
+
+
+        [HttpGet("MostrarProveedorDrogueria")]
+        public async Task<ActionResult> MostrarProveedorDrogueria(string id)
+        {   
+            if(string.IsNullOrEmpty(id))
+                throw new ValidationModelException("Los datos enviados no son válidos.");
+
+            ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>> response = await _pronosticoServices.MostrarProveedorDrogueria(id);
+            return Ok(response);
+        }
+
 
 
 

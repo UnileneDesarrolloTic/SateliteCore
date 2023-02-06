@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -203,6 +204,13 @@ namespace SatelliteCore.Api.Services
         {
             await _pronosticoRepository.ActualizarFechaComprometidaMasiva(dato);
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+        }
+
+        public async Task<ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>>> MostrarProveedorDrogueria (string id)
+        {
+            IEnumerable<FormatoDatosProveedorDrogueria> resultado = new List<FormatoDatosProveedorDrogueria>();
+            resultado= await _pronosticoRepository.MostrarProveedorDrogueria(id);
+            return new ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>>(true,Constante.MESSAGE_SUCCESS,resultado);
         }
 
     }

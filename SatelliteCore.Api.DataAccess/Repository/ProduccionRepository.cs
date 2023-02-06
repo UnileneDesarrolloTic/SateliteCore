@@ -4,6 +4,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -280,12 +281,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
         {
             int result = 0;
-            //string scriptCabecera = "UPDATE PROD_UNILENE2..WH_OrdenCompra SET FechaEnvioProveedor=@FechaLlegada WHERE NumeroOrden=@Documento ";
+            
             string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden=@NumeroOrden  AND Item=@Item AND estado<>'CO' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-               // await context.ExecuteAsync(scriptCabecera, new { dato.FechaLlegada ,dato.Documento});
+               
                foreach(DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)
                 {
                     await context.ExecuteAsync(script, new { item.NumeroOrden, item.Item, dato.FechaLlegada });
@@ -297,6 +298,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
+        public async Task<IEnumerable<FormatoDatosProveedorDrogueria>> MostrarProveedorDrogueria (string id)
+        {
+            IEnumerable<FormatoDatosProveedorDrogueria> result = new List<FormatoDatosProveedorDrogueria>();
+
+            string script = "SELECT Id Idconfiguracion, Descripcion Proveedor FROM TBMConfiguracion WHERE Estado = 'A' AND Id IN ('16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35');";
+            
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+               result = await context.QueryAsync<FormatoDatosProveedorDrogueria>(script, new { id });
+            }
+            return result;
+        }
 
     }
 }
