@@ -1092,7 +1092,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             Table tablaDeclaracionJuramento = new Table(1).UseAllAvailableWidth();
             tablaDeclaracionJuramento.SetFixedLayout();
 
-            Paragraph Nombre = new Paragraph("LUIS GERMAN CASTILLO VASQUEZ ").AddStyle(estiloNegrita);
+            Paragraph Nombre = new Paragraph("ERICK HARTMANN BUSTAMANTE ").AddStyle(estiloNegrita);
             Paragraph ruc = new Paragraph("20197705249, DECLARO BAJO JURAMENTO ").AddStyle(estiloNegrita);
 
 
@@ -1103,7 +1103,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             tablaDeclaracionJuramento.AddCell(cellPresente);
 
 
-            cellPresente = new Cell(1, 1).Add(new Paragraph("El que se suscribe, ").Add(Nombre).Add("identificado con DNI Nº 07227297, Representante Legal de UNILENE S.A.C , con RUC Nº ").Add(ruc).Add("la información que a continuación se detalla respecto a las condiciones especiales de embalaje de la: ")
+            cellPresente = new Cell(1, 1).Add(new Paragraph("El que se suscribe, ").Add(Nombre).Add("identificado con DNI Nº 44656730, Representante Legal de UNILENE S.A.C , con RUC Nº ").Add(ruc).Add("la información que a continuación se detalla respecto a las condiciones especiales de embalaje de la: ")
                  .AddStyle(estiloTexto))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
