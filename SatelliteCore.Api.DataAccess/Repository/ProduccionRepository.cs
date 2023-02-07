@@ -298,15 +298,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<FormatoDatosProveedorDrogueria>> MostrarProveedorDrogueria (string id)
+        public async Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria()
         {
-            IEnumerable<FormatoDatosProveedorDrogueria> result = new List<FormatoDatosProveedorDrogueria>();
-
-            string script = "SELECT Id Idconfiguracion, Descripcion Proveedor FROM TBMConfiguracion WHERE Estado = 'A' AND Id IN ('16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35');";
+            IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-               result = await context.QueryAsync<FormatoDatosProveedorDrogueria>(script, new { id });
+               result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria", commandType: CommandType.StoredProcedure);
             }
             return result;
         }

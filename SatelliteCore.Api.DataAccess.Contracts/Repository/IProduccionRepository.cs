@@ -25,6 +25,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato);
         public Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra);
         public Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato);
-        public Task<IEnumerable<FormatoDatosProveedorDrogueria>> MostrarProveedorDrogueria(string id);
+        public Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria();
     }
 }

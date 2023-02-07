@@ -206,11 +206,11 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
 
-        public async Task<ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>>> MostrarProveedorDrogueria (string id)
+        public async Task<ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>> SeguimientoOCDrogueria()
         {
-            IEnumerable<FormatoDatosProveedorDrogueria> resultado = new List<FormatoDatosProveedorDrogueria>();
-            resultado= await _pronosticoRepository.MostrarProveedorDrogueria(id);
-            return new ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>>(true,Constante.MESSAGE_SUCCESS,resultado);
+            IEnumerable<DatosFormatoReporteSeguimientoDrogueria> resultado = new List<DatosFormatoReporteSeguimientoDrogueria>();
+            resultado= await _pronosticoRepository.SeguimientoOCDrogueria();
+            return new ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>(true,Constante.MESSAGE_SUCCESS,resultado);
         }
 
     }

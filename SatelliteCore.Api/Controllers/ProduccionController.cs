@@ -198,13 +198,10 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
-        [HttpGet("MostrarProveedorDrogueria")]
-        public async Task<ActionResult> MostrarProveedorDrogueria(string id)
+        [HttpGet("SeguimientoOCDrogueria")]
+        public async Task<ActionResult> SeguimientoOCDrogueria()
         {   
-            if(string.IsNullOrEmpty(id))
-                throw new ValidationModelException("Los datos enviados no son válidos.");
-
-            ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>> response = await _pronosticoServices.MostrarProveedorDrogueria(id);
+            ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> response = await _pronosticoServices.SeguimientoOCDrogueria();
             return Ok(response);
         }
 

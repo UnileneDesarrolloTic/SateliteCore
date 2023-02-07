@@ -26,6 +26,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato);
         public Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra);
         public Task<ResponseModel<string>> ActualizarFechaPrometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato);
-        public Task<ResponseModel<IEnumerable<FormatoDatosProveedorDrogueria>>> MostrarProveedorDrogueria(string id);
+        public Task<ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>> SeguimientoOCDrogueria();
     }
 }
