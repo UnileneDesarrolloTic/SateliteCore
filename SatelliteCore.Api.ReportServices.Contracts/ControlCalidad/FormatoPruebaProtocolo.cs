@@ -649,7 +649,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                   .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);
 
-                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de control calidad"))
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de Control de Calidad"))
                      .SetTextAlignment(TextAlignment.CENTER)
                      .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);
@@ -1355,7 +1355,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                   .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);
 
-                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de control calidad"))
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de Control de Calidad"))
                      .SetTextAlignment(TextAlignment.CENTER)
                      .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);

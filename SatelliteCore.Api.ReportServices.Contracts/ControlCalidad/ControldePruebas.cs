@@ -86,6 +86,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
              .SetFontColor(ColorConstants.BLACK)
              .SetFont(fuenteNormal);
 
+            Style InputTablaTexto = new Style()
+             .SetFontSize(7.5f)
+             .SetFontColor(ColorConstants.BLACK)
+             .SetFont(fuenteNormal);
+
 
 
             Image img = new Image(ImageDataFactory
@@ -205,13 +210,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.Add(tablaDatosGenerales);
 
-            document.Add(saltoLinea);
-
+           
             List<DatosFormatoInformacionResultadoProtocolo> listadoTablaC = listado.Where(x => x.TABLA == "C").ToList();
             List<DatosFormatoInformacionResultadoProtocolo> listadoTablaD = listado.Where(x => x.TABLA == "D").ToList();
 
             Table tablaDatosMedicion = new Table(33).UseAllAvailableWidth();
-            tablaDatosMedicion.SetFixedLayout().SetFontSize(4).SetMarginTop(35);
+            tablaDatosMedicion.SetFixedLayout().SetFontSize(4).SetMarginTop(47);
 
             Cell cellDetalle = new Cell(1, 11).Add(new Paragraph("")
                  .AddStyle(estiloTablaCabecera))
@@ -813,14 +817,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 6).Add(new Paragraph((listadoTablaC[i].SECUENCIA == 12) ? listadoTablaC[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaC[i].COL_1, 1).ToString("#,##0.0",formato))
-                       .AddStyle(InputTabla))
+                       .AddStyle(InputTablaTexto))
                        .SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 2).Add(new Paragraph((listadoTablaC[i].SECUENCIA == 12) ? listadoTablaC[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaC[i].COL_2, 2).ToString("#,##0.00", formato))
-                      .AddStyle(InputTabla))
+                      .AddStyle(InputTablaTexto))
                       .SetTextAlignment(TextAlignment.CENTER)
                       .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
@@ -845,14 +849,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 tablaDatosMedicion.AddCell(cellDetalle);
 
                 cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaD[i].SECUENCIA == 13) ? listadoTablaD[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaD[i].COL_1, 1).ToString("#,##0.0", formato))
-                  .AddStyle(InputTabla))
+                  .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
                 tablaDatosMedicion.AddCell(cellDetalle);
 
                 cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaD[i].SECUENCIA == 13) ? listadoTablaD[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaD[i].COL_2, 1).ToString("#,##0.0", formato))
-                  .AddStyle(InputTabla))
+                  .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
