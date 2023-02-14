@@ -7,6 +7,7 @@ using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Services
@@ -206,11 +207,40 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
 
-        public async Task<ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>> SeguimientoOCDrogueria()
+        public async Task<ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>> SeguimientoOCDrogueria(int idproveedor)
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> resultado = new List<DatosFormatoReporteSeguimientoDrogueria>();
-            resultado= await _pronosticoRepository.SeguimientoOCDrogueria();
+            resultado= await _pronosticoRepository.SeguimientoOCDrogueria(idproveedor);
+            if (resultado.Count()==0)
+                return new ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>(false, "No hay Item a comprar", resultado);
             return new ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>(true,Constante.MESSAGE_SUCCESS,resultado);
+        }
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>>> MostrarOrdenCompraDrogueria(string Item)
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> resultado = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
+            resultado = await _pronosticoRepository.MostrarOrdenCompraDrogueria(Item);
+            return new ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>>(true, Constante.MESSAGE_SUCCESS, resultado);
+        }
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>> MostrarProveedorDrogueria()
+        {
+            IEnumerable<DatosFormatoMostrarProveedorDrogueria> resultado = new List<DatosFormatoMostrarProveedorDrogueria>();
+            resultado = await _pronosticoRepository.MostrarProveedorDrogueria();
+            return new ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>(true, Constante.MESSAGE_SUCCESS, resultado);
+        }
+
+        public async Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna)
+        {
+            IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
+            result = await _pronosticoRepository.SeguimientoOCDrogueria(idproveedor);
+            if (result.Count() == 0)
+                return new ResponseModel<string>(false, "No hay informacion para exportar a excel", "");
+
+            ReporteExcelCompraDrogueria ExporteCompraDrogueria = new ReporteExcelCompraDrogueria();
+            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
     }

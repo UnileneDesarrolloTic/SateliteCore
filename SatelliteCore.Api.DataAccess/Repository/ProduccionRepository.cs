@@ -298,13 +298,46 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria()
+        public async Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria(int idproveedor)
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-               result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria", commandType: CommandType.StoredProcedure);
+               result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria",new { idproveedor }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> MostrarOrdenCompraDrogueria(string Item)
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> result = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
+
+            string sql = "SELECT RTRIM(c.NumeroOrden) NumeroOrden, RTRIM(d.NombreCompleto) Proveedor, b.CantidadPedida Cantidad, " +
+                        "b.CantidadRecibida, (b.CantidadPedida - b.CantidadRecibida) CantidadPendiente, b.FechaPrometida, DATEDIFF(DAY, c.FechaPrometida, GETDATE()) DiferenciaFecha " +
+                        "FROM WH_OrdenCompraDetalle b " +
+                        "INNER JOIN WH_OrdenCompra c ON b.CompaniaSocio = c.CompaniaSocio AND c.NumeroOrden = b.NumeroOrden " +
+                        "INNER JOIN PersonaMast d ON c.Proveedor = d.Persona " +
+                        "WHERE c.AlmacenCodigo IN ('TRANSITO') AND b.Estado IN ('PR','PE') AND c.Estado IN ('AP','PR') AND LEFT(c.NumeroOrden, 3) = 'FOR' AND  LEN(c.NumeroOrden) = 9  AND b.Item = @Item ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>(sql, new {Item });
+            }
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoMostrarProveedorDrogueria>> MostrarProveedorDrogueria()
+        {
+            IEnumerable<DatosFormatoMostrarProveedorDrogueria> result = new List<DatosFormatoMostrarProveedorDrogueria>();
+
+            string sql = "SELECT Id IdProveedor, Descripcion NombreProveedor FROM TBMConfiguracion " +
+                         "WHERE Observaciones='PROVEEDORDROGUERIA'  AND Estado = 'A' ;";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoMostrarProveedorDrogueria>(sql);
             }
             return result;
         }

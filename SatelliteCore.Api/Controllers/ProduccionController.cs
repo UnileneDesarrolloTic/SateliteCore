@@ -199,14 +199,43 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpGet("SeguimientoOCDrogueria")]
-        public async Task<ActionResult> SeguimientoOCDrogueria()
-        {   
-            ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> response = await _pronosticoServices.SeguimientoOCDrogueria();
+        public async Task<ActionResult> SeguimientoOCDrogueria(int idproveedor)
+        {
+            if (string.IsNullOrEmpty(idproveedor.ToString()))
+                throw new ValidationModelException("El proveedor es obligatorio");
+
+            ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> response = await _pronosticoServices.SeguimientoOCDrogueria(idproveedor);
             return Ok(response);
         }
 
 
+        [HttpGet("MostrarOrdenCompraDrogueria")]
+        public async Task<ActionResult> MostrarOrdenCompraDrogueria(string Item)
+        {
+            if (string.IsNullOrEmpty(Item))
+                throw new ValidationModelException("El Item es obligatorio");
 
+            ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> response = await _pronosticoServices.MostrarOrdenCompraDrogueria(Item);
+            return Ok(response);
+        }
+
+        [HttpGet("MostrarProveedorDrogueria")]
+        public async Task<ActionResult> MostrarProveedorDrogueria ()
+        {
+            ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>> response = await _pronosticoServices.MostrarProveedorDrogueria();
+            return Ok(response);
+        }
+
+
+        [HttpGet("ExcelCompraDrogueria")]
+        public async Task<ActionResult> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna)
+        {
+            if (string.IsNullOrEmpty(idproveedor.ToString()))
+                throw new ValidationModelException("El proveedor es obligatorio");
+
+            ResponseModel<string> response = await _pronosticoServices.ExcelCompraDrogueria(idproveedor,mostrarcolumna);
+            return Ok(response);
+        }
 
 
 
