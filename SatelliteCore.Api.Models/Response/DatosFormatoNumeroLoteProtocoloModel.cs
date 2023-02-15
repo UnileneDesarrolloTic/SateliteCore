@@ -20,8 +20,8 @@ namespace SatelliteCore.Api.Models.Response
         public string TECNICA { get; set; }
         public string METODO { get; set; }
         public string DETALLE { get; set; }
-        public decimal DMinimo { get; set; }
-        public decimal DMaximo { get; set; }
+        public string DMinimo { get; set; }
+        public string DMaximo { get; set; }
         public decimal R_PromedioMinimo { get; set; }
         public decimal R_individualMinimo { get; set; }
         public decimal S_PromedioMinimo { get; set; }
