@@ -207,7 +207,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["U3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["U3"].Style.Font.Size = 9;
 
-                worksheet.Cells["V3"].Value = "COMPRAR";
+                worksheet.Cells["V3"].Value = "coeficiente de variacion";
                 worksheet.Cells["V3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["V3"].Style.WrapText = true;
                 worksheet.Cells["V3"].Style.Font.Bold = true;
@@ -215,7 +215,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["V3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["V3"].Style.Font.Size = 9;
 
-                worksheet.Cells["W3"].Value = "Volumen caja m3";
+
+                worksheet.Cells["W3"].Value = "COMPRAR";
                 worksheet.Cells["W3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["W3"].Style.WrapText = true;
                 worksheet.Cells["W3"].Style.Font.Bold = true;
@@ -223,7 +224,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["W3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["W3"].Style.Font.Size = 9;
 
-                worksheet.Cells["X3"].Value = "Total m3 Comprar";
+                worksheet.Cells["X3"].Value = "Volumen caja m3";
                 worksheet.Cells["X3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["X3"].Style.WrapText = true;
                 worksheet.Cells["X3"].Style.Font.Bold = true;
@@ -231,7 +232,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["X3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["X3"].Style.Font.Size = 9;
 
-                worksheet.Cells["Y3"].Value = "PrecioFOB";
+                worksheet.Cells["Y3"].Value = "Total m3 Comprar";
                 worksheet.Cells["Y3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["Y3"].Style.WrapText = true;
                 worksheet.Cells["Y3"].Style.Font.Bold = true;
@@ -239,14 +240,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["Y3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["Y3"].Style.Font.Size = 9;
 
-
-                worksheet.Cells["Z3"].Value = "PrecioFOB Total";
+                worksheet.Cells["Z3"].Value = "PrecioFOB";
                 worksheet.Cells["Z3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["Z3"].Style.Font.Bold = true;
                 worksheet.Cells["Z3"].Style.WrapText = true;
+                worksheet.Cells["Z3"].Style.Font.Bold = true;
                 worksheet.Cells["Z3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["Z3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["Z3"].Style.Font.Size = 9;
+
+
+                worksheet.Cells["AA3"].Value = "PrecioFOB Total";
+                worksheet.Cells["AA3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["AA3"].Style.Font.Bold = true;
+                worksheet.Cells["AA3"].Style.WrapText = true;
+                worksheet.Cells["AA3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["AA3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells["AA3"].Style.Font.Size = 9;
 
                 //Listar los agrupadores
 
@@ -392,35 +401,41 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                             worksheet.Cells["U" + row].Style.WrapText = true;
                             worksheet.Cells["U" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                            worksheet.Cells["V" + row].Value = rowitem.CantidadComprar;
+                            worksheet.Cells["V" + row].Value = rowitem.Variacion;
                             worksheet.Cells["V" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0";
+                            worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0.00";
                             worksheet.Cells["V" + row].Style.WrapText = true;
                             worksheet.Cells["V" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                            worksheet.Cells["W" + row].Value = rowitem.VolumenCaja;
+                            worksheet.Cells["W" + row].Value = rowitem.CantidadComprar;
                             worksheet.Cells["W" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells["W" + row].Style.Numberformat.Format = "#,##0.000";
+                            worksheet.Cells["W" + row].Style.Numberformat.Format = "#,##0";
                             worksheet.Cells["W" + row].Style.WrapText = true;
                             worksheet.Cells["W" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                            worksheet.Cells["X" + row].Value = rowitem.TotalComprar;
+                            worksheet.Cells["X" + row].Value = rowitem.VolumenCaja;
                             worksheet.Cells["X" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.00";
+                            worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.000";
                             worksheet.Cells["X" + row].Style.WrapText = true;
                             worksheet.Cells["X" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                            worksheet.Cells["Y" + row].Value = rowitem.PrecioFOBFinal;
+                            worksheet.Cells["Y" + row].Value = rowitem.TotalComprar;
                             worksheet.Cells["Y" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells["Y" + row].Style.Numberformat.Format = "$#,##0.0000";
+                            worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
                             worksheet.Cells["Y" + row].Style.WrapText = true;
                             worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                            worksheet.Cells["Z" + row].Value = rowitem.PrecioFOBTotalFinal;
+                            worksheet.Cells["Z" + row].Value = rowitem.PrecioFOBFinal;
                             worksheet.Cells["Z" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            worksheet.Cells["Z" + row].Style.Numberformat.Format = "$#,##0.00";
+                            worksheet.Cells["Z" + row].Style.Numberformat.Format = "$#,##0.0000";
                             worksheet.Cells["Z" + row].Style.WrapText = true;
                             worksheet.Cells["Z" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                            worksheet.Cells["AA" + row].Value = rowitem.PrecioFOBTotalFinal;
+                            worksheet.Cells["AA" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                            worksheet.Cells["AA" + row].Style.Numberformat.Format = "$#,##0.00";
+                            worksheet.Cells["AA" + row].Style.WrapText = true;
+                            worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                             totalCompra = totalCompra + rowitem.TotalComprar;
                             costoTotalFOB = costoTotalFOB + rowitem.PrecioFOBTotalFinal;
@@ -433,17 +448,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["W" + row].Style.Font.Bold = true;
                     worksheet.Cells["W" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["X" + row].Value = totalCompra;
-                    worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.00";
-                    worksheet.Cells["X" + row].Style.Font.Bold = true;
-                    worksheet.Cells["X" + row].Style.WrapText = true;
-                    worksheet.Cells["X" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells["Y" + row].Value = totalCompra;
+                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["Y" + row].Style.Font.Bold = true;
+                    worksheet.Cells["Y" + row].Style.WrapText = true;
+                    worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["Z" + row].Value = costoTotalFOB;
-                    worksheet.Cells["Z" + row].Style.Numberformat.Format = "$#,##0.00";
-                    worksheet.Cells["Z" + row].Style.Font.Bold = true;
-                    worksheet.Cells["Z" + row].Style.WrapText = true;
-                    worksheet.Cells["Z" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells["AA" + row].Value = costoTotalFOB;
+                    worksheet.Cells["AA" + row].Style.Numberformat.Format = "$#,##0.00";
+                    worksheet.Cells["AA" + row].Style.Font.Bold = true;
+                    worksheet.Cells["AA" + row].Style.WrapText = true;
+                    worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     row = row + 2;
                 }
@@ -462,6 +477,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Column(18).Hidden = false;
                     worksheet.Column(19).Hidden = false;
                     worksheet.Column(20).Hidden = false;
+                    worksheet.Column(22).Hidden = false;
                 }
                 else
                 {
@@ -475,7 +491,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Column(16).Hidden = true;
                     worksheet.Column(18).Hidden = true;
                     worksheet.Column(19).Hidden = true;
-                    worksheet.Column(20).Hidden = true;
+                    worksheet.Column(22).Hidden = true;
                 }
 
 
@@ -524,10 +540,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(20).Width = 10.71 + 2.71;
             worksheet.Column(21).Width = 7.71 + 2.71;
             worksheet.Column(22).Width = 7.71 + 2.71;
-            worksheet.Column(23).Width = 8.71 + 2.71;
-            worksheet.Column(24).Width = 8.71 + 2.71;
-            worksheet.Column(25).Width = 10.71;
-            worksheet.Column(26).Width = 12.71 ;
+            worksheet.Column(23).Width = 7.71 + 2.71;
+            worksheet.Column(24).Width = 7.71 + 2.71;
+            worksheet.Column(25).Width = 8.71 + 2.71;
+            worksheet.Column(26).Width = 8.71 + 2.71;
+            worksheet.Column(27).Width = 9.71 + 2.71;
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
@@ -539,8 +556,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
         {
             worksheet.Cells["A3:D3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
             worksheet.Cells["E3:J3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffe180"));
-            worksheet.Cells["K3:U3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
-            worksheet.Cells["V3:Z3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
+            worksheet.Cells["K3:Q3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
+            worksheet.Cells["R3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF"));
+            worksheet.Cells["S3:U3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
+            worksheet.Cells["V3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF"));
+            worksheet.Cells["W3:AA3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
         }
 
 
