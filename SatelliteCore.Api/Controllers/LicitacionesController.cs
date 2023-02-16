@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 using System.Security.Claims;
-
+using System.Linq;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -145,6 +145,9 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarContratoProceso")]
         public async Task<IActionResult> RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato)
         {
+            if (!ModelState.IsValid)
+                throw new ValidationModelException("Los datos para registrar el contrato no son válidos !!");
+
             ResponseModel<string> result = await _licitacionesServices.RegistrarContratoProceso(dato);
             return Ok(result);
         }

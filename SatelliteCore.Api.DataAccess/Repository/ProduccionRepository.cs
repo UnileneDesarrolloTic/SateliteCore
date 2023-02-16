@@ -333,7 +333,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<DatosFormatoMostrarProveedorDrogueria> result = new List<DatosFormatoMostrarProveedorDrogueria>();
 
             string sql = "SELECT Id IdProveedor, Descripcion NombreProveedor FROM TBMConfiguracion " +
-                         "WHERE Observaciones='PROVEEDORDROGUERIA'  AND Estado = 'A' ;";
+                         "WHERE Observaciones='PROVEEDORDROGUERIA' AND Estado = 'A' ;";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
