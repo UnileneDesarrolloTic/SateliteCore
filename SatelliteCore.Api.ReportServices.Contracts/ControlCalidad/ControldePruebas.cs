@@ -36,6 +36,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             docInfo.SetAuthor("Control de Calidad");
 
             Document document = new Document(pdf, PageSize.A4);
+            Rectangle lineTxtRect = new Rectangle(10, 10, 10, 100);
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
@@ -76,21 +77,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
              .SetFont(fuenteNormal);
 
             Style estiloTablaCabecera = new Style()
-              .SetFontSize(6.0f)
+              .SetFontSize(6.5f)
               .SetFontColor(ColorConstants.BLACK)
               .SetFont(fuenteNegrita)
               .SetBackgroundColor(bgColour);
 
             Style InputTabla = new Style()
-             .SetFontSize(6.7f)
+             .SetFontSize(6.5f)
              .SetFontColor(ColorConstants.BLACK)
              .SetFont(fuenteNormal);
 
             Style InputTablaTexto = new Style()
-             .SetFontSize(8.2f)
+             .SetFontSize(7.5f)
              .SetFontColor(ColorConstants.BLACK)
              .SetFont(fuenteNormal);
-
 
 
             Image img = new Image(ImageDataFactory
@@ -124,14 +124,15 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.Add(tablaDatosCabecera);
 
+            /*Paragraph NumeroOrdenFabricacion = new Paragraph("Orden Fab.:"+ Cabecera.ORDENFABRICACION).AddStyle(estiloOrdenFabricacion);
+            document.Add(NumeroOrdenFabricacion);*/
+
             Style estiloTitulo = new Style()
               .SetFontSize(12)
               .SetFont(fuenteNegrita)
               .SetMarginTop(-8)
               .SetFontColor(ColorConstants.BLACK)
               .SetTextAlignment(TextAlignment.CENTER);
-
-
 
             Paragraph titulo = new Paragraph("REPORTE DE ANÁLISIS DE SUTURAS").AddStyle(estiloTitulo);
             document.Add(titulo);
@@ -145,7 +146,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
               .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
               .SetVerticalAlignment(VerticalAlignment.BOTTOM)
               .SetBorder(Border.NO_BORDER);
-
             tablaDatosGenerales.AddCell(cellDG);
 
             cellDG = new Cell(1, 31).Add(new Paragraph(Cabecera.ITEMDESCRIPCION)
@@ -153,10 +153,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetHorizontalAlignment(HorizontalAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
-
             tablaDatosGenerales.AddCell(cellDG);
-
-
 
             cellDG = new Cell(1, 3).Add(new Paragraph("LOTE:")
                 .AddStyle(estiloCabecera))
@@ -179,14 +176,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 .AddStyle(estiloCabecera))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
-
             tablaDatosGenerales.AddCell(cellDG);
 
             cellDG = new Cell(1, 5).Add(new Paragraph(ExpiracionFe)
                 .AddStyle(estiloCabeceraInput))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
-
             tablaDatosGenerales.AddCell(cellDG);
 
             cellDG = new Cell(1, 8).Add(new Paragraph("F.Inicio de análisis:")
@@ -194,135 +189,40 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 .SetTextAlignment(TextAlignment.RIGHT)
                 .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
                 .SetBorder(Border.NO_BORDER);
-
             tablaDatosGenerales.AddCell(cellDG);
 
             cellDG = new Cell(1, 7).Add(new Paragraph("_______________")
                 .AddStyle(estiloCabeceraInput))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetBorder(Border.NO_BORDER);
-                //.SetBorderBottom(new SolidBorder(1));
-
+            //.SetBorderBottom(new SolidBorder(1));
             tablaDatosGenerales.AddCell(cellDG);
 
             document.Add(tablaDatosGenerales);
 
-           
+
+            Paragraph rectanguloTabla1 = new Paragraph()
+                                .SetHeight(8)
+                                .SetWidth(8)
+                                .SetBackgroundColor(ColorConstants.WHITE)
+                                .SetBorder(new SolidBorder(ColorConstants.BLACK, 0.5f));
+
+            Paragraph rectanguloTabla2 = new Paragraph()
+                       .SetHeight(23)
+                       .SetWidth(60)
+                       .SetBackgroundColor(ColorConstants.WHITE)
+                       .SetTextAlignment(TextAlignment.CENTER)
+                       .SetBorder(new SolidBorder(ColorConstants.BLACK, 0.5f));
+
             List<DatosFormatoInformacionResultadoProtocolo> listadoTablaC = listado.Where(x => x.TABLA == "C").ToList();
             List<DatosFormatoInformacionResultadoProtocolo> listadoTablaD = listado.Where(x => x.TABLA == "D").ToList();
 
             Table tablaDatosMedicion = new Table(33).UseAllAvailableWidth();
-            tablaDatosMedicion.SetFixedLayout().SetFontSize(4).SetMarginTop(57);
-
-            Cell cellDetalle = new Cell(1, 11).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetHeight(0.0f)
-               .SetBorder(Border.NO_BORDER);
-
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3).Add(new Paragraph("")
-                .AddStyle(estiloTablaCabecera))
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetHeight(0.00f)
-                .SetBackgroundColor(bgColour)
-                .SetBorder(Border.NO_BORDER)
-                .SetBorderLeft(new SolidBorder(0.5f))
-                .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.00f)
-              .SetWidth(0.1f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderLeft(new SolidBorder(0.5f))
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 4)
-               .SetBackgroundColor(bgColour)
-               .SetHeight(0.00f)
-               .SetBorder(Border.NO_BORDER)
-               .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.00f)
-              .SetWidth(0.1f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderRight(new SolidBorder(0.5f))
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 2)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.00f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderRight(new SolidBorder(0.5f))
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-            .AddStyle(estiloTablaCabecera))
-            .SetTextAlignment(TextAlignment.CENTER)
-            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetHeight(0.00f)
-            .SetBorder(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
+            tablaDatosMedicion.SetFixedLayout().SetFontSize(4).SetMarginTop(55);
 
 
-            cellDetalle = new Cell(1, 1)
-              .SetHeight(0.00f)
-              .SetBackgroundColor(bgColour)
-              .SetWidth(0.1f)
-              .SetBorderBottom(Border.NO_BORDER)
-              .SetBorderRight(Border.NO_BORDER)
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 2)
-              .SetHeight(0.00f)
-              .SetBackgroundColor(bgColour)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderBottom(new SolidBorder(0.5f))
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-            cellDetalle = new Cell(1, 1)
-               .SetHeight(0.00f)
-               .SetBackgroundColor(bgColour)
-               .SetWidth(0.1f)
-               .SetBorder(Border.NO_BORDER)
-               .SetBorderRight(new SolidBorder(0.5f))
-               .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3)
-              .SetHeight(0.00f)
-              .SetBackgroundColor(bgColour)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderTop(new SolidBorder(0.5f))
-              .SetBorderRight(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3)
-              .SetHeight(0.00f)
-              .SetBackgroundColor(bgColour)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderTop(new SolidBorder(0.5f))
-              .SetBorderRight(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-            //bloque 2
-             cellDetalle = new Cell(1, 11)
-                .SetHeight(8)
+            //bloque 1
+            Cell cellDetalle = new Cell(1, 12)
                 .SetBorder(Border.NO_BORDER);
             tablaDatosMedicion.AddCell(cellDetalle);
 
@@ -331,14 +231,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                 .SetBorder(Border.NO_BORDER)
                 .SetBorderLeft(new SolidBorder(0.5f))
                 .SetBorderRight(new SolidBorder(0.5f))
-                .SetHeight(8);
-
+                .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 1)
                .SetBackgroundColor(bgColour)
                .SetBorder(Border.NO_BORDER)
-               .SetHeight(8)
+               .SetBorderTop(new SolidBorder(0.5f))
                .SetWidth(0.1f);
             tablaDatosMedicion.AddCell(cellDetalle);
 
@@ -347,69 +246,53 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                .SetTextAlignment(TextAlignment.CENTER)
                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                .SetBackgroundColor(bgColour)
-               .SetHeight(8)
-               .SetBorder(Border.NO_BORDER);
+               .SetBorder(Border.NO_BORDER)
+               .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 1)
                .SetBackgroundColor(bgColour)
                .SetWidth(0.1f)
                .SetBorder(Border.NO_BORDER)
-               .SetHeight(8)
-               .SetBorderRight(new SolidBorder(0.5f));
+               .SetBorderRight(new SolidBorder(0.5f))
+               .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 2).Add(new Paragraph("Diametro")
+            cellDetalle = new Cell(1, 2).Add(new Paragraph("Diámetro")
               .AddStyle(estiloTablaCabecera))
               .SetTextAlignment(TextAlignment.CENTER)
               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
               .SetBackgroundColor(bgColour)
               .SetBorder(Border.NO_BORDER)
-              .SetHeight(8)
-              .SetBorderRight(new SolidBorder(0.5f));
-
+              .SetBorderRight(new SolidBorder(0.5f))
+              .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            // CAMBIA A LA OTRA TABLA  
+            //SEPARADOR
             cellDetalle = new Cell(1, 1)
-            .SetHeight(8)
             .SetBorder(Border.NO_BORDER);
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            //OTRA TABLA 
-            cellDetalle = new Cell(1, 1)
-             .SetBorder(Border.NO_BORDER)
-             .SetBackgroundColor(bgColour)
-             .SetBorderLeft(new SolidBorder(0.5f))
-             .SetBorderRight(new SolidBorder(0.5f))
-             .SetHeight(8)
-             .SetWidth(0.1f);
-            tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 2)
-             .SetBorder(Border.NO_BORDER)
-             .SetHeight(8);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1)
+            //OTRA TABLA
+            cellDetalle = new Cell(2, 3)
+               .Add(rectanguloTabla2)
                .SetBorder(Border.NO_BORDER)
                .SetBackgroundColor(bgColour)
                .SetBorderLeft(new SolidBorder(0.5f))
                .SetBorderRight(new SolidBorder(0.5f))
-               .SetHeight(8)
-               .SetWidth(0.1f);
+               .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 3).Add(new Paragraph("Resistencia a")
               .AddStyle(estiloTablaCabecera))
               .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.BOTTOM)
+              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
               .SetBackgroundColor(bgColour)
               .SetBorder(Border.NO_BORDER)
               .SetBorderLeft(new SolidBorder(0.5f))
-              .SetHeight(8)
-              .SetBorderRight(new SolidBorder(0.5f));
-
+              .SetBorderRight(new SolidBorder(0.5f))
+              .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 3).Add(new Paragraph("Unión Hebra - ")
@@ -419,150 +302,91 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
               .SetBackgroundColor(bgColour)
               .SetBorder(Border.NO_BORDER)
               .SetBorderLeft(new SolidBorder(0.5f))
-              .SetHeight(8)
-              .SetBorderRight(new SolidBorder(0.5f));
-
+              .SetBorderRight(new SolidBorder(0.5f))
+              .SetBorderTop(new SolidBorder(0.5f));
             tablaDatosMedicion.AddCell(cellDetalle);
 
 
-            //bloque 3
-
-            cellDetalle = new Cell(1, 11)
-                .SetHeight(8)
+            //bloque 2
+            cellDetalle = new Cell(1, 12)
+                .SetHeight(4)
                 .SetBorder(Border.NO_BORDER);
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 3)
                 .SetBackgroundColor(bgColour)
                 .SetBorder(Border.NO_BORDER)
-                .SetHeight(8)
                 .SetBorderLeft(new SolidBorder(0.5f));
-
             tablaDatosMedicion.AddCell(cellDetalle);
-
 
             cellDetalle = new Cell(1, 1)
                .SetBackgroundColor(bgColour)
                .SetBorder(Border.NO_BORDER)
                .SetBorderLeft(new SolidBorder(0.5f))
-               .SetHeight(8)
                .SetWidth(0.1f);
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 1).Add(new Paragraph("cm")
                .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
+               .SetTextAlignment(TextAlignment.RIGHT)
                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                .SetBackgroundColor(bgColour)
-               .SetBorder(Border.NO_BORDER)
-               .SetHeight(8)
-               .SetBorderTop(new SolidBorder(Color.ConvertCmykToRgb(bgColourBorder), 0.7f))
-               .SetBorderBottom(new SolidBorder(Color.ConvertCmykToRgb(bgColourBorder), 0.7f));
+               .SetBorder(Border.NO_BORDER);
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
+            cellDetalle = new Cell(1, 1).Add(rectanguloTabla1)
                .SetTextAlignment(TextAlignment.CENTER)
                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetHeight(8)
+               .SetBorder(Border.NO_BORDER)
+               .SetBackgroundColor(bgColour)
                .SetWidth(0.1f);
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 1).Add(new Paragraph("m")
                .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
+               .SetTextAlignment(TextAlignment.RIGHT)
                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                .SetBackgroundColor(bgColour)
-               .SetBorder(Border.NO_BORDER)
-               .SetHeight(8)
-               .SetBorderTop(new SolidBorder(Color.ConvertCmykToRgb(bgColourBorder), 0.7f))
-               .SetBorderBottom(new SolidBorder(Color.ConvertCmykToRgb(bgColourBorder), 0.7f));
+               .SetBorder(Border.NO_BORDER);
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
+            cellDetalle = new Cell(1, 1).Add(rectanguloTabla1)
                .SetTextAlignment(TextAlignment.CENTER)
-               .SetHeight(8)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
+               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+               .SetBorder(Border.NO_BORDER)
+               .SetBackgroundColor(bgColour)
+               .SetWidth(0.1f);
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-            .AddStyle(estiloTablaCabecera))
-            .SetTextAlignment(TextAlignment.CENTER)
-            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+            cellDetalle = new Cell(1, 1)
             .SetBackgroundColor(bgColour)
             .SetBorder(Border.NO_BORDER)
-            .SetHeight(8)
             .SetBorderRight(new SolidBorder(0.5f));
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
-
+            //DIAMETRO
             cellDetalle = new Cell(1, 2).Add(new Paragraph("(mm)")
             .AddStyle(estiloTablaCabecera))
             .SetTextAlignment(TextAlignment.CENTER)
-            .SetVerticalAlignment(VerticalAlignment.BOTTOM)
+            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
             .SetBackgroundColor(bgColour)
             .SetBorder(Border.NO_BORDER)
-            .SetMarginTop(5)
-            .SetHeight(8)
             .SetBorderRight(new SolidBorder(0.5f));
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-            .AddStyle(estiloTablaCabecera))
-            .SetTextAlignment(TextAlignment.CENTER)
-            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetHeight(8)
+            //SEPARADOR
+            cellDetalle = new Cell(1, 1)
             .SetBorder(Border.NO_BORDER);
             tablaDatosMedicion.AddCell(cellDetalle);
 
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetBorder(Border.NO_BORDER)
-               .SetBackgroundColor(bgColour)
-               .SetBorderLeft(new SolidBorder(0.5f))
-               .SetBorderRight(new SolidBorder(0.5f))
-               .SetHeight(8)
-               .SetWidth(0.1f);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 2).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetBorder(Border.NO_BORDER)
-               .SetBorderLeft(new SolidBorder(0.5f))
-               .SetHeight(7)
-               .SetBorderRight(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
-               .SetBorder(Border.NO_BORDER)
-               .SetBackgroundColor(bgColour)
-               .SetHeight(8)
-               .SetWidth(0.1f);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-            cellDetalle = new Cell(1, 3).Add(new Paragraph("la Tension")
+            cellDetalle = new Cell(1, 3).Add(new Paragraph("la Tensión")
               .AddStyle(estiloTablaCabecera))
               .SetTextAlignment(TextAlignment.CENTER)
               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
               .SetBackgroundColor(bgColour)
               .SetBorder(Border.NO_BORDER)
-              .SetHeight(8)
               .SetBorderLeft(new SolidBorder(0.5f))
               .SetBorderRight(new SolidBorder(0.5f));
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
             cellDetalle = new Cell(1, 3).Add(new Paragraph("Aguja")
@@ -571,155 +395,21 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
               .SetBackgroundColor(bgColour)
               .SetBorder(Border.NO_BORDER)
-              .SetHeight(8)
               .SetBorderLeft(new SolidBorder(0.5f))
               .SetBorderRight(new SolidBorder(0.5f));
-
             tablaDatosMedicion.AddCell(cellDetalle);
 
-
-            //bloque 4
-
-            cellDetalle = new Cell(1, 11).Add(new Paragraph("")
-                 .AddStyle(estiloTablaCabecera))
-                 .SetTextAlignment(TextAlignment.CENTER)
-                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                 .SetHeight(0.01f)
-                 .SetBorder(Border.NO_BORDER);
-
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3).Add(new Paragraph("")
-                .AddStyle(estiloTablaCabecera))
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetHeight(0.01f)
-                .SetBackgroundColor(bgColour)
-                .SetBorder(Border.NO_BORDER)
-                .SetBorderLeft(new SolidBorder(0.5f))
-                .SetBorderBottom(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.01f)
-              .SetWidth(0.1f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderBottom(new SolidBorder(0.5f))
-              .SetBorderLeft(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 4).Add(new Paragraph("")  // longitud
-               .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetBackgroundColor(bgColour)
-               .SetHeight(0.01f)
-               .SetBorder(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.01f)
-              .SetWidth(0.1f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderRight(new SolidBorder(0.5f))
-              .SetBorderBottom(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 2).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetBackgroundColor(bgColour)
-              .SetHeight(0.01f)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderBottom(new SolidBorder(0.5f))
-              .SetBorderRight(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-            .AddStyle(estiloTablaCabecera))
-            .SetTextAlignment(TextAlignment.CENTER)
-            .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .SetHeight(0.01f)
-            .SetBorder(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetHeight(0.01f)
-              .SetBackgroundColor(bgColour)
-              .SetWidth(0.1f)
-              .SetBorderTop(Border.NO_BORDER)
-              .SetBorderBottom(Border.NO_BORDER)
-              .SetBorderRight(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 2).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetHeight(0.01f)
-              .SetBackgroundColor(bgColour)
-              .SetBorder(Border.NO_BORDER)
-              .SetBorderBottom(new SolidBorder(0.5f))
-              .SetBorderTop(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-            cellDetalle = new Cell(1, 1).Add(new Paragraph("")
-               .AddStyle(estiloTablaCabecera))
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-               .SetHeight(0.01f)
-               .SetBackgroundColor(bgColour)
-               .SetWidth(0.1f)
-               .SetBorder(Border.NO_BORDER)
-               .SetBorderRight(new SolidBorder(0.5f))
-               .SetBorderBottom(new SolidBorder(0.5f));
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetHeight(0.01f)
-              .SetBackgroundColor(bgColour)
-              .SetBorderTop(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-            cellDetalle = new Cell(1, 3).Add(new Paragraph("")
-              .AddStyle(estiloTablaCabecera))
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-              .SetHeight(0.01f)
-              .SetBackgroundColor(bgColour)
-              .SetBorderTop(Border.NO_BORDER);
-            tablaDatosMedicion.AddCell(cellDetalle);
-
-
-
+  
             for (int i = 0; i < 13; i++)
             {
 
                 if (i > 11)
                 {
-                    cellDetalle = new Cell(2, 11).Add(new Paragraph("")
+                    cellDetalle = new Cell(2, 12).Add(new Paragraph("")
                     .AddStyle(InputTabla))
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                     .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 3).Add(new Paragraph("")
@@ -727,7 +417,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                         .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 6).Add(new Paragraph("")
@@ -735,7 +424,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                        .SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 2).Add(new Paragraph("")
@@ -743,7 +431,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                       .SetTextAlignment(TextAlignment.CENTER)
                       .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                       .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 1).Add(new Paragraph("")
@@ -759,33 +446,29 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                     var SecuenciaA = listadoTablaC[i].SECUENCIA == 11 ? "Promedio" : listadoTablaC[i].SECUENCIA == 12 ? "Desv. Est.:" : listadoTablaC[i].SECUENCIA.ToString();
 
 
-                    cellDetalle = new Cell(2, 11).Add(new Paragraph("")
+                    cellDetalle = new Cell(2, 12).Add(new Paragraph("")
                      .AddStyle(InputTabla))
                      .SetTextAlignment(TextAlignment.CENTER)
                      .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                      .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 3).Add(new Paragraph(SecuenciaA)
                         .AddStyle(InputTabla))
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
-                    cellDetalle = new Cell(2, 6).Add(new Paragraph((listadoTablaC[i].SECUENCIA == 12) ? listadoTablaC[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaC[i].COL_1, 1).ToString("#,##0.0",formato))
+                    cellDetalle = new Cell(2, 6).Add(new Paragraph((listadoTablaC[i].SECUENCIA == 12) ? listadoTablaC[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaC[i].COL_1, 1).ToString("#,##0.0", formato))
                        .AddStyle(InputTablaTexto))
                        .SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 2).Add(new Paragraph((listadoTablaC[i].SECUENCIA == 12) ? listadoTablaC[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaC[i].COL_2, 2).ToString("#,##0.00", formato))
                       .AddStyle(InputTablaTexto))
                       .SetTextAlignment(TextAlignment.CENTER)
                       .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
 
                     cellDetalle = new Cell(2, 1).Add(new Paragraph("")
@@ -793,34 +476,31 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                          .SetTextAlignment(TextAlignment.CENTER)
                          .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                          .SetBorder(Border.NO_BORDER);
-
                     tablaDatosMedicion.AddCell(cellDetalle);
                 }
 
-                var SecuenciaB = listadoTablaD[i].SECUENCIA ==11 ? "Promedio" : listadoTablaD[i].SECUENCIA == 12 ? "Ind. Min.:" : listadoTablaD[i].SECUENCIA == 13 ? "Desv. Est.:" : listadoTablaD[i].SECUENCIA.ToString();
+                var SecuenciaB = listadoTablaD[i].SECUENCIA == 11 ? "Promedio" : listadoTablaD[i].SECUENCIA == 12 ? "Ind. Min.:" : listadoTablaD[i].SECUENCIA == 13 ? "Desv. Est.:" : listadoTablaD[i].SECUENCIA.ToString();
 
-                cellDetalle = new Cell(2, 4).Add(new Paragraph(SecuenciaB)
+                cellDetalle = new Cell(2, 3).Add(new Paragraph(SecuenciaB)
                    .AddStyle(InputTabla))
                    .SetTextAlignment(TextAlignment.CENTER)
                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                 tablaDatosMedicion.AddCell(cellDetalle);
 
                 cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaD[i].SECUENCIA == 13) ? listadoTablaD[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaD[i].COL_1, 1).ToString("#,##0.0", formato))
                   .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                 tablaDatosMedicion.AddCell(cellDetalle);
 
                 cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaD[i].SECUENCIA == 13) ? listadoTablaD[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaD[i].COL_2, 1).ToString("#,##0.0", formato))
                   .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
                 tablaDatosMedicion.AddCell(cellDetalle);
 
             }
+            
 
             document.Add(tablaDatosMedicion);
 
