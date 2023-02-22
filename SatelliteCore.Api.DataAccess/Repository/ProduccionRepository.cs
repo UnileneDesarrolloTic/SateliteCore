@@ -302,7 +302,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria",new { idproveedor }, commandType: CommandType.StoredProcedure);
             }
@@ -313,16 +313,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> result = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
 
-            string sql = "SELECT RTRIM(c.NumeroOrden) NumeroOrden, RTRIM(d.NombreCompleto) Proveedor, b.CantidadPedida Cantidad, " +
-                        "b.CantidadRecibida, (b.CantidadPedida - b.CantidadRecibida) CantidadPendiente, b.FechaPrometida, DATEDIFF(DAY, c.FechaPrometida, GETDATE()) DiferenciaFecha " +
-                        "FROM WH_OrdenCompraDetalle b " +
-                        "INNER JOIN WH_OrdenCompra c ON b.CompaniaSocio = c.CompaniaSocio AND c.NumeroOrden = b.NumeroOrden " +
-                        "INNER JOIN PersonaMast d ON c.Proveedor = d.Persona " +
-                        "WHERE c.AlmacenCodigo IN ('TRANSITO') AND b.Estado IN ('PR','PE') AND c.Estado IN ('AP','PR') AND LEFT(c.NumeroOrden, 3) = 'FOR' AND  LEN(c.NumeroOrden) = 9  AND b.Item = @Item ";
-
+          
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>(sql, new {Item });
+                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>("usp_MostrarOdenCompraDrogueria", new {Item } , commandType: CommandType.StoredProcedure);
             }
             return result;
         }
