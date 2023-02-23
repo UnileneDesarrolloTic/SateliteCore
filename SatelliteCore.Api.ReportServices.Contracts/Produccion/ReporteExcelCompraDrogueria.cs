@@ -491,6 +491,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Column(16).Hidden = true;
                     worksheet.Column(18).Hidden = true;
                     worksheet.Column(19).Hidden = true;
+                    worksheet.Column(20).Hidden = true;
                     worksheet.Column(22).Hidden = true;
                 }
 
