@@ -237,7 +237,12 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-
+        [HttpGet("MostrarOrdenCompraPrevios")]
+        public async Task<ActionResult> MostrarOrdenCompraPrevios()
+        {
+            ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>> response = await _pronosticoServices.MostrarOrdenCompraPrevios();
+            return Ok(response);
+        }
 
 
 

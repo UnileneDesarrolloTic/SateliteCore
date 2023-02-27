@@ -336,5 +336,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+
+        public async Task<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>> MostrarOrdenCompraPrevios()
+        {
+            IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> result = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
+
+            string sql = "SELECT NumeroCodigo, Clasificacion, Proveedor, DescripcionProveedor, Procedencia,  MonedaCodigo, FechaPreparacion,  MontoTotal, Estado FROM TBMCompra";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<FormatoDatosCabeceraOrdenCompraPrevio>(sql);
+            }
+            return result;
+        }
     }
 }
