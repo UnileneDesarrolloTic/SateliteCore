@@ -31,5 +31,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>> MostrarProveedorDrogueria();
         public Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor,bool mostrarcolumna);
         public Task<ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>> MostrarOrdenCompraPrevios();
+        public Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor);
     }
 }

@@ -6,9 +6,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
 {
     public struct FormatoDatosCabeceraOrdenCompraPrevio
     {
-        public string NumeroCodigo { get; set; }
+        public int Proveedor { get; set; }
         public string Clasificacion { get; set; }
-        public string Proveedor { get; set; }
         public string DescripcionProveedor { get; set; }
         public string Procedencia { get; set; }
         public string MonedaCodigo { get; set; }

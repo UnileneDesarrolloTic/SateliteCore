@@ -341,7 +341,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> result = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
 
-            string sql = "SELECT NumeroCodigo, Clasificacion, Proveedor, DescripcionProveedor, Procedencia,  MonedaCodigo, FechaPreparacion,  MontoTotal, Estado FROM TBMCompra";
+            string sql = "SELECT Proveedor, Clasificacion, Proveedor, DescripcionProveedor, Procedencia,  MonedaCodigo, FechaPreparacion,  MontoTotal, Estado FROM TBMTempCompra";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -349,5 +349,24 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor)
+        {
+            (object cabecera, object detalle) informacionOrdenCompra;
+
+            string script = "SELECT Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado FROM TBMTempCompra WHERE Proveedor = @proveedor " +
+                            "SELECT Proveedor, Secuencia, Item, Descripcion, Presentacion, CantidadPedida, PrecioUnitario, MontoTotal, Moneda, Estado, FechaPrometida FROM TBDTempCompra WHERE Proveedor = @proveedor ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using var result = await context.QueryMultipleAsync(script, new { proveedor });
+                informacionOrdenCompra.cabecera = result.Read().FirstOrDefault();
+                informacionOrdenCompra.detalle = result.Read().ToList();
+            }
+
+            return informacionOrdenCompra;
+        }
+
     }
 }

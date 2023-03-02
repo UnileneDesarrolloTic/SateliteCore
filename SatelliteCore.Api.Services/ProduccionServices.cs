@@ -250,5 +250,11 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>(true, Constante.MESSAGE_SUCCESS, resultado);
         }
 
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor)
+        {
+            (object cabecera, object detalle) response = await _pronosticoRepository.VisualizarOrdenCompraSimulada(proveedor);
+            return response;
+        }
+
     }
 }

@@ -244,6 +244,18 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("VisualizarOrdenCompraSimulada")]
+        public async Task<ActionResult> VisualizarOrdenCompraSimulada (string proveedor)
+        {   
+            if(string.IsNullOrEmpty(proveedor))
+                throw new ValidationModelException("El proveedor es obligatorio");
+
+            (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompraSimulada(proveedor);
+            object response = new { cabecera, detalle };
+
+            return Ok(response);
+        }
+
 
 
     }
