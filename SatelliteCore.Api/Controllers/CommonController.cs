@@ -10,6 +10,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -148,7 +149,10 @@ namespace SatelliteCore.Api.Controllers
 
         [HttpGet("ValidacionPermisoAccesso")]
         public async Task<IActionResult> ValidacionPermisoAccesso(string Permiso)
-        {
+        {   
+            if(string.IsNullOrEmpty(Permiso))
+                throw new ValidationModelException("verificar el parametro enviado");
+
             int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
             ResponseModel<bool> MaestroAlmacen = await _commonService.ValidacionPermisoAccesso(Permiso, idUsuario);
             return Ok(MaestroAlmacen);

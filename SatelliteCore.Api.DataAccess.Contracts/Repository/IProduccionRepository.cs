@@ -1,5 +1,6 @@
 ﻿using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
@@ -28,5 +29,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria(int idproveedor);
         public Task<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> MostrarOrdenCompraDrogueria(string Item);
         public Task<IEnumerable<DatosFormatoMostrarProveedorDrogueria>> MostrarProveedorDrogueria();
+        public Task<IEnumerable<DatosFormatoMostrarOrdenCompraVencidas>> MostrarOrdenCompraVencidas();
+        public Task<int> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato, string usuario);
     }
 }

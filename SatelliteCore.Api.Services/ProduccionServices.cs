@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
@@ -241,6 +242,19 @@ namespace SatelliteCore.Api.Services
             string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        }
+
+        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraVencidas>> MostrarOrdenCompraVencidas()
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado = new List<DatosFormatoMostrarOrdenCompraVencidas>();
+            listado = await _pronosticoRepository.MostrarOrdenCompraVencidas();
+            return listado;
+        }
+
+        public async Task<ResponseModel<string>> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
+        {
+            await _pronosticoRepository.EditarEstadoOCVencidas(dato, usuario);
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
 
     }

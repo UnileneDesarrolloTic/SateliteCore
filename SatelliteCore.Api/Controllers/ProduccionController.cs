@@ -4,6 +4,7 @@ using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.Services.Contracts;
@@ -237,6 +238,25 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+
+        [HttpGet("MostrarOrdenCompraVencidas")]
+        public async Task<ActionResult> MostrarOrdenCompraVencidas()
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado= await _pronosticoServices.MostrarOrdenCompraVencidas();
+            return Ok(listado);
+        }
+
+
+        [HttpPost("EditarEstadoOCVencidas")]
+        public async Task<ActionResult> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato)
+        {   
+              if(string.IsNullOrEmpty(dato.numeroOrden) || string.IsNullOrEmpty(dato.excluir) || string.IsNullOrEmpty(dato.item))
+                    throw new ValidationModelException("verificar los parametros enviados");
+
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> respuesta = await _pronosticoServices.EditarEstadoOCVencidas(dato, usuario);
+            return Ok(respuesta);
+        }
 
 
 

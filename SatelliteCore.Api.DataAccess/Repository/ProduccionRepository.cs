@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
@@ -335,6 +336,38 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+
+        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraVencidas>> MostrarOrdenCompraVencidas()
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado = new List<DatosFormatoMostrarOrdenCompraVencidas>();
+
+            string sql = "SELECT Item, NumeroOrden, CantidadPedida, CantidadRecibida, Comentario, Excluir FROM TBOrdenCompraVencidas WHERE Estado = 'A'";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                listado = await context.QueryAsync<DatosFormatoMostrarOrdenCompraVencidas>(sql);
+            }
+            return listado;
+        }
+
+
+        public async Task<int> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
+        {
+            int respuesta = 0;
+            string sql = "";
+            if (dato.excluir=="S")
+                sql = "UPDATE TBOrdenCompraVencidas SET Excluir = 'N', UsuarioModificacion = @usuario, FechaModificacion = GETDATE() WHERE Item = @item AND NumeroOrden = @numeroOrden;";
+            else
+                sql = "UPDATE TBOrdenCompraVencidas SET Excluir = 'S', UsuarioModificacion = @usuario, FechaModificacion = GETDATE() WHERE Item = @item AND NumeroOrden = @numeroOrden;";
+
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                await context.ExecuteAsync(sql, new { usuario, dato.item, dato.numeroOrden });
+            }
+            return respuesta;
+        }
+
 
     }
 }
