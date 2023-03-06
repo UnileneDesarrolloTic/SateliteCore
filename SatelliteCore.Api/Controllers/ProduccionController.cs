@@ -246,20 +246,22 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listado);
         }
 
-
-        [HttpPost("EditarEstadoOCVencidas")]
-        public async Task<ActionResult> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato)
+        
+        [HttpPost("GuardarOrdenCompraVencida")]
+        public async Task<ActionResult> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato)
         {   
-              if(string.IsNullOrEmpty(dato.numeroOrden) || string.IsNullOrEmpty(dato.excluir) || string.IsNullOrEmpty(dato.item))
+              if(string.IsNullOrEmpty(dato.item) || string.IsNullOrEmpty(dato.numeroOrden))
                     throw new ValidationModelException("verificar los parametros enviados");
 
             string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
-            ResponseModel<string> respuesta = await _pronosticoServices.EditarEstadoOCVencidas(dato, usuario);
+            ResponseModel<string> respuesta = await _pronosticoServices.GuardarOrdenCompraVencida(dato, usuario);
             return Ok(respuesta);
         }
-
+        
 
 
 
     }
 }
+
+

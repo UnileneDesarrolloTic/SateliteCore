@@ -351,19 +351,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<int> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
+        public async Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
         {
             int respuesta = 0;
             string sql = "";
-            if (dato.excluir=="S")
-                sql = "UPDATE TBOrdenCompraVencidas SET Excluir = 'N', UsuarioModificacion = @usuario, FechaModificacion = GETDATE() WHERE Item = @item AND NumeroOrden = @numeroOrden;";
-            else
-                sql = "UPDATE TBOrdenCompraVencidas SET Excluir = 'S', UsuarioModificacion = @usuario, FechaModificacion = GETDATE() WHERE Item = @item AND NumeroOrden = @numeroOrden;";
+            
+             sql = "INSERT INTO SatelliteCore..TBOrdenCompraVencidas (NumeroOrden, Item, CantidadPedida, CantidadRecibida, Comentario, Excluir, Estado, UsuarioCreacion, FechaCreacion) " +
+                    "SELECT RTRIM(@numeroOrden), RTRIM(@item), CantidadPedida, CantidadRecibida, @comentario, 'N', 'A', @usuario, GETDATE() FROM WH_OrdenCompraDetalle " +
+                    "WHERE NumeroOrden = RTRIM(@numeroOrden) AND Item = RTRIM(@item) AND COMPANIASOCIO='01000000'";
 
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                await context.ExecuteAsync(sql, new { usuario, dato.item, dato.numeroOrden });
+                await context.ExecuteAsync(sql, new { dato.item, dato.numeroOrden, dato.comentario,usuario });
             }
             return respuesta;
         }

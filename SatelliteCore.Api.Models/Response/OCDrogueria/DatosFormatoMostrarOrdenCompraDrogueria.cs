@@ -13,7 +13,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public decimal CantidadKardex { get; set; }
         public decimal CantidadTransito { get; set; }
         public DateTime FechaPreparacion { get; set; }
-        public int TiempoGeneral { get; set; }
+        public decimal TiempoGeneral { get; set; }
         public DateTime NuevoTiempoEntrega { get; set; }
+        public int DiasFalta { get; set; }
     }
 }

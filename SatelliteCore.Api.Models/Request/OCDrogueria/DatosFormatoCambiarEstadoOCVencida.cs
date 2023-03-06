@@ -8,6 +8,6 @@ namespace SatelliteCore.Api.Models.Request.OCDrogueria
     {
         public string item { get; set; }
         public string numeroOrden { get; set; }
-        public string excluir{ get; set; }
+        public string comentario { get; set; }
     }
 }

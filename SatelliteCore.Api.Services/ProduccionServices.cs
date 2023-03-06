@@ -251,10 +251,10 @@ namespace SatelliteCore.Api.Services
             return listado;
         }
 
-        public async Task<ResponseModel<string>> EditarEstadoOCVencidas(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
+        public async Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
         {
-            await _pronosticoRepository.EditarEstadoOCVencidas(dato, usuario);
-            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
+            await _pronosticoRepository.GuardarOrdenCompraVencida(dato, usuario);
+            return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
 
     }
