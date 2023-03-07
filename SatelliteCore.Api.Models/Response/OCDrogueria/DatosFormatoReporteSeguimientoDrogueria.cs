@@ -39,7 +39,7 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public int TotalComprar { get; set; }
         public decimal PrecioFOBFinal { get; set; }
         public decimal PrecioFOBTotalFinal { get; set; }
-
+        public string ColorVariacion { get; set; }
 
     }
 }

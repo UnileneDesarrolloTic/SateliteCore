@@ -286,6 +286,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                             worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                             worksheet.Cells["B" + row].Style.WrapText = true;
                             worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
+                            worksheet.Cells["B" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(rowitem.ColorVariacion));
 
                             worksheet.Cells["C" + row].Value = rowitem.Puerto;
                             worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);

@@ -4,6 +4,7 @@ using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.Services.Contracts;
@@ -212,13 +213,10 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("MostrarOrdenCompraDrogueria")]
         public async Task<ActionResult> MostrarOrdenCompraDrogueria(string Item)
         {
-            if (string.IsNullOrEmpty(Item))
-                throw new ValidationModelException("El Item es obligatorio");
-
             ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> response = await _pronosticoServices.MostrarOrdenCompraDrogueria(Item);
             return Ok(response);
         }
-
+            
         [HttpGet("MostrarProveedorDrogueria")]
         public async Task<ActionResult> MostrarProveedorDrogueria ()
         {
@@ -256,7 +254,18 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("GuardarOrdenCompraVencida")]
+        public async Task<ActionResult> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato)
+        {   
+              if(string.IsNullOrEmpty(dato.item) || string.IsNullOrEmpty(dato.numeroOrden))
+                    throw new ValidationModelException("verificar los parametros enviados");
 
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> respuesta = await _pronosticoServices.GuardarOrdenCompraVencida(dato, usuario);
+            return Ok(respuesta);
+        }
 
     }
 }
+
+

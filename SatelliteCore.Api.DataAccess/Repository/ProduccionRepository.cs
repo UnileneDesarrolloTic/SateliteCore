@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
@@ -336,7 +337,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-
         public async Task<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>> MostrarOrdenCompraPrevios()
         {
             IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> result = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
@@ -367,6 +367,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return informacionOrdenCompra;
         }
+        public async Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
+        {
+            int respuesta = 0;
+            string sql = "";
+            
+             sql = "INSERT INTO SatelliteCore..TBOrdenCompraVencidas (NumeroOrden, Item, CantidadPedida, CantidadRecibida, Comentario, Excluir, Estado, UsuarioCreacion, FechaCreacion) " +
+                    "SELECT RTRIM(@numeroOrden), RTRIM(@item), CantidadPedida, CantidadRecibida, @comentario, 'N', 'A', @usuario, GETDATE() FROM WH_OrdenCompraDetalle " +
+                    "WHERE NumeroOrden = RTRIM(@numeroOrden) AND Item = RTRIM(@item) AND COMPANIASOCIO='01000000'";
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                await context.ExecuteAsync(sql, new { dato.item, dato.numeroOrden, dato.comentario,usuario });
+            }
+            return respuesta;
+        }
+       
     }
 }

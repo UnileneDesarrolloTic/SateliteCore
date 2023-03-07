@@ -6,6 +6,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
 {
     public struct DatosFormatoMostrarOrdenCompraDrogueria
     {   
+        public string ItemFinal { get; set; }
+        public string Descripcion { get; set; }
         public string NumeroOrden { get; set; }
         public string Proveedor { get; set; }
         public decimal CantidadPedida { get; set; }
@@ -13,5 +15,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public decimal CantidadKardex { get; set; }
         public decimal CantidadTransito { get; set; }
         public DateTime FechaPreparacion { get; set; }
+        public decimal TiempoGeneral { get; set; }
+        public DateTime NuevoTiempoEntrega { get; set; }
+        public int DiasFalta { get; set; }
     }
 }
