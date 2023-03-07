@@ -243,19 +243,12 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
-
-        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraVencidas>> MostrarOrdenCompraVencidas()
-        {
-            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado = new List<DatosFormatoMostrarOrdenCompraVencidas>();
-            listado = await _pronosticoRepository.MostrarOrdenCompraVencidas();
-            return listado;
-        }
-
+        
         public async Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
         {
             await _pronosticoRepository.GuardarOrdenCompraVencida(dato, usuario);
             return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
-
+        
     }
 }

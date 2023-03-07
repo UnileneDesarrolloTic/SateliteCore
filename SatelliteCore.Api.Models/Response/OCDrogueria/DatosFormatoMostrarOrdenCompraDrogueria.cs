@@ -6,6 +6,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
 {
     public struct DatosFormatoMostrarOrdenCompraDrogueria
     {   
+        public string ItemFinal { get; set; }
+        public string Descripcion { get; set; }
         public string NumeroOrden { get; set; }
         public string Proveedor { get; set; }
         public decimal CantidadPedida { get; set; }

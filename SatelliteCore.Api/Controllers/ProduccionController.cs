@@ -213,13 +213,10 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("MostrarOrdenCompraDrogueria")]
         public async Task<ActionResult> MostrarOrdenCompraDrogueria(string Item)
         {
-            if (string.IsNullOrEmpty(Item))
-                throw new ValidationModelException("El Item es obligatorio");
-
             ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> response = await _pronosticoServices.MostrarOrdenCompraDrogueria(Item);
             return Ok(response);
         }
-
+            
         [HttpGet("MostrarProveedorDrogueria")]
         public async Task<ActionResult> MostrarProveedorDrogueria ()
         {
@@ -238,15 +235,6 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-
-        [HttpGet("MostrarOrdenCompraVencidas")]
-        public async Task<ActionResult> MostrarOrdenCompraVencidas()
-        {
-            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado= await _pronosticoServices.MostrarOrdenCompraVencidas();
-            return Ok(listado);
-        }
-
-        
         [HttpPost("GuardarOrdenCompraVencida")]
         public async Task<ActionResult> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato)
         {   
@@ -257,9 +245,7 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> respuesta = await _pronosticoServices.GuardarOrdenCompraVencida(dato, usuario);
             return Ok(respuesta);
         }
-        
-
-
+       
 
     }
 }

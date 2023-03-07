@@ -337,20 +337,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraVencidas>> MostrarOrdenCompraVencidas()
-        {
-            IEnumerable<DatosFormatoMostrarOrdenCompraVencidas> listado = new List<DatosFormatoMostrarOrdenCompraVencidas>();
-
-            string sql = "SELECT Item, NumeroOrden, CantidadPedida, CantidadRecibida, Comentario, Excluir FROM TBOrdenCompraVencidas WHERE Estado = 'A'";
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                listado = await context.QueryAsync<DatosFormatoMostrarOrdenCompraVencidas>(sql);
-            }
-            return listado;
-        }
-
-
         public async Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
         {
             int respuesta = 0;
@@ -366,7 +352,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return respuesta;
         }
-
+       
 
     }
 }
