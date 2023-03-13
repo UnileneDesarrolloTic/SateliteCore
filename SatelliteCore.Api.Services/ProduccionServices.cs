@@ -10,6 +10,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -253,6 +254,9 @@ namespace SatelliteCore.Api.Services
 
         public async Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor)
         {
+            if (string.IsNullOrEmpty(proveedor))
+                throw new ValidationModelException("El proveedor es obligatorio");
+
             (object cabecera, object detalle) response = await _pronosticoRepository.VisualizarOrdenCompraSimulada(proveedor);
             return response;
         }
@@ -262,6 +266,18 @@ namespace SatelliteCore.Api.Services
             await _pronosticoRepository.GuardarOrdenCompraVencida(dato, usuario);
             return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
-        
+
+        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria()
+        {
+            await _pronosticoRepository.GenerarOrdenCompraDrogueria();
+            return new ResponseModel<string>(true, "Se genero Correctamente", "");
+        }
+
+        public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
+        {
+            await _pronosticoRepository.RegistrarOrdenCompraDrogueria(dato, strusuario, idusuario);
+            return new ResponseModel<string>(true, "Se registro la orden de compra", "");
+        }
+
     }
 }

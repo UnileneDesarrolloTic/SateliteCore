@@ -341,7 +341,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> result = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
 
-            string sql = "SELECT Proveedor, Clasificacion, Proveedor, DescripcionProveedor, Procedencia,  MonedaCodigo, FechaPreparacion,  MontoTotal, Estado FROM TBMTempCompra";
+            string sql = "SELECT Proveedor, Clasificacion, Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera, DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida FROM TBMTempCompra";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -355,8 +355,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (object cabecera, object detalle) informacionOrdenCompra;
 
-            string script = "SELECT Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado FROM TBMTempCompra WHERE Proveedor = @proveedor " +
-                            "SELECT Proveedor, Secuencia, Item, Descripcion, Presentacion, CantidadPedida, PrecioUnitario, MontoTotal, Moneda, Estado, FechaPrometida FROM TBDTempCompra WHERE Proveedor = @proveedor ";
+            string script = "SELECT Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera , DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida  FROM TBMTempCompra WHERE Proveedor = @proveedor " +
+                            "SELECT Proveedor, Secuencia, Item, Descripcion, Presentacion, CantidadPedida, PrecioUnitario, MontoTotal, Moneda, Estado, FechaPrometida, ColorVariacion, IdGestionarColor FROM TBDTempCompra WHERE Proveedor = @proveedor ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -382,6 +382,38 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return respuesta;
         }
-       
+
+        public async Task<int> GenerarOrdenCompraDrogueria()
+        {
+            int result = 0 ;
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {   
+                result = await context.ExecuteAsync("usp_generar_orden_compra", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<int> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
+        {
+            string numeroOrden = "";
+            int secuencia = 1;
+            int result = 0;
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal } ,commandType: CommandType.StoredProcedure);
+
+                foreach (DatosFormatoGuardarDetalleOrdenCompra producto in dato.detalle)
+                {
+                    await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
+                    secuencia++;
+                }
+
+
+            }
+            return result;
+        }
+
     }
 }

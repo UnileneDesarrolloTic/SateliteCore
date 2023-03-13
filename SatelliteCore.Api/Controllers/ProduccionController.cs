@@ -243,11 +243,8 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("VisualizarOrdenCompraSimulada")]
-        public async Task<ActionResult> VisualizarOrdenCompraSimulada (string proveedor)
-        {   
-            if(string.IsNullOrEmpty(proveedor))
-                throw new ValidationModelException("El proveedor es obligatorio");
-
+        public async Task<ActionResult> VisualizarOrdenCompraSimulada(string proveedor)
+        {
             (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompraSimulada(proveedor);
             object response = new { cabecera, detalle };
 
@@ -262,6 +259,23 @@ namespace SatelliteCore.Api.Controllers
 
             string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> respuesta = await _pronosticoServices.GuardarOrdenCompraVencida(dato, usuario);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("GenerarOrdenCompraDrogueria")]
+        public async Task<ActionResult> GenerarOrdenCompraDrogueria()
+        {
+            ResponseModel<string> respuesta = await _pronosticoServices.GenerarOrdenCompraDrogueria();
+            return Ok(respuesta);
+        }
+
+        [HttpPost("RegistrarOrdenCompraDrogueria")]
+        public async Task<ActionResult> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato)
+        {
+            string strusuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            int idusuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> respuesta = await _pronosticoServices.RegistrarOrdenCompraDrogueria(dato, strusuario, idusuario);
             return Ok(respuesta);
         }
 

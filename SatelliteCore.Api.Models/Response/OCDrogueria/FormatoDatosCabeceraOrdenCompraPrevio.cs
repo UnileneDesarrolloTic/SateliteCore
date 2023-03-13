@@ -14,5 +14,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public DateTime FechaPreparacion { get; set; }
         public decimal MontoTotal { get; set; }
         public string Estado { get; set; }
+        public int IdGestionarColor { get; set; }
+        public int DiasEspera { get; set; }
+        public DateTime FechaPrometida { get; set; }
     }
 }
