@@ -23,6 +23,8 @@ namespace SatelliteCore.Api.Models.Response.Logistica
         public DateTime FechaRecepcion { get; set; }
         public DateTime? FechaRetornoComercial { get; set; }
         public DateTime? FechaRetornoAlmacen { get; set; }
+        public int DiasAtrasoAlmacen { get; set; }
+        public int DiasAtrasoComercial { get; set; }
         public string DepartamentoCliente { get; set; }
 
 

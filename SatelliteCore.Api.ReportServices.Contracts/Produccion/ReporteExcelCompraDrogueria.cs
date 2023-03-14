@@ -38,6 +38,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["B" + fila].Value = gestion.Descripcion;
                     worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["B" + fila].Style.Font.Bold=true;
                     fila++;
                 }
 

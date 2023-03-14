@@ -152,7 +152,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                .SetBorderLeft(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentación").AddStyle(estiloNegrita))
+            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentación:").AddStyle(estiloNegrita))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -218,24 +218,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Tamaño de Lote : ").AddStyle(estiloNegrita))
-                .SetTextAlignment(TextAlignment.LEFT)
-                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetTextAlignment(TextAlignment.RIGHT)
+                .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER);
+                .SetBorder(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(string.Format("{0:###,##0.##}", protocolo.Cabecera.TamanoLote)).AddStyle(estiloTexto))
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetTextAlignment(TextAlignment.LEFT)
+                .SetHorizontalAlignment(HorizontalAlignment.LEFT)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER);
+                .SetWidth(60.9f)
+                .SetBorder(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
