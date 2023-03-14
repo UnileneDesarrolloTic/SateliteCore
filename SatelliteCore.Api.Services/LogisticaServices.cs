@@ -2,9 +2,11 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Logistica;
 using SatelliteCore.Api.ReportServices.Contracts.Logistica;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.Services
@@ -17,9 +19,21 @@ namespace SatelliteCore.Api.Services
         {
             _logisticaRepository = logisticaRepository;
         }
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia)
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string serie)
         {
-            return await _logisticaRepository.ObtenerNumeroGuias(NumeroGuia);
+            return await _logisticaRepository.ObtenerNumeroGuias(numeroguia, serie);
+        }
+
+        public async Task<ResponseModel<string>> ExportarExcelRetornoGuia()
+        {
+            IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
+            result = await _logisticaRepository.ExportarExcelRetornoGuia();
+            if(result.Count()==0)
+               return new ResponseModel<string>(false, "No hay datos para exportar", "");
+
+            ReporteRetornoGuias_Excel ExporteReporteRetornoGuiaExcel = new ReporteRetornoGuias_Excel();
+            string reporte = ExporteReporteRetornoGuiaExcel.GenerarReporte(result);
+            return new ResponseModel<string> (true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
         public async Task<ResponseModel<string>> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)

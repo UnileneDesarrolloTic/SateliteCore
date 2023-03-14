@@ -352,7 +352,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return respuesta;
         }
-       
+        
+        public async Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor()
+        {
+            IEnumerable<DatosFormatoGestionItemDrogueriaColor> result = new List<DatosFormatoGestionItemDrogueriaColor>();
+
+            string query = "SELECT ValorTexto1 Color, ValorTexto2 Descripcion FROM TBDConfiguracion WHERE IdConfiguracion = 35 AND Estado='A'";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoGestionItemDrogueriaColor>(query);
+            }
+            return result;
+        }
 
     }
 }

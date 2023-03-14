@@ -3,6 +3,7 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Logistica;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -19,7 +20,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             _appConfig = appConfig;
         }
 
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string NumeroGuia)
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string serie)
         {
             IEnumerable<DatosFormatoPlanOrdenServicosD> result = new List<DatosFormatoPlanOrdenServicosD>();
 
@@ -27,16 +28,15 @@ namespace SatelliteCore.Api.DataAccess.Repository
                             "RTRIM(a.FACTURA_NUMERO) OrdenServicios , a.FECHA_RETORNO FechaRetorno " +
                             "FROM UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D  a " +
                             "INNER JOIN PROD_UNILENE2..PersonaMast b ON a.CLIENTE = b.Persona " +
-                            "WHERE a.ESTADO = 'A' AND a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim(@NumeroGuia)), 10)";
+                            "WHERE a.ESTADO = 'A' AND  a.SERIE=RTRIM(@serie) AND  a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim(@numeroguia)), 10)";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>(script, new { NumeroGuia });
+                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>(script, new { numeroguia, serie });
             }
 
             return result;
         }
-
 
         public async Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
         {
@@ -49,6 +49,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
             return 1;
+        }
+
+        public async Task<IEnumerable<DatosFormatosReporteRetornoGuia>> ExportarExcelRetornoGuia()
+        {
+            IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatosReporteRetornoGuia>("usp_reporte_retornoguia_excel", commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<DatosFormatoItemVentas>> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato)

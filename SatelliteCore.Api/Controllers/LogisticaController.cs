@@ -23,12 +23,12 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ObtenerNumeroGuias")]
-        public async Task<IActionResult> ObtenerNumeroGuias(string NumeroGuia)
+        public async Task<IActionResult> ObtenerNumeroGuias(string numeroguia, string serie)
         {
-            if (NumeroGuia == "")
-                throw new ValidationModelException("Debe Ingresar el numero de la guia");
+            if (string.IsNullOrEmpty(numeroguia) || string.IsNullOrEmpty(serie))
+                throw new ValidationModelException("Debe ingresar información completa");
 
-            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(NumeroGuia);
+            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(numeroguia, serie);
 
             return Ok(listaAnalisis);
         }
@@ -43,6 +43,15 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("ExportarExcelRetornoGuia")]
+        public async Task<IActionResult> ExportarExcelRetornoGuia()
+        {
+            ResponseModel<string> response = await _logisticaServices.ExportarExcelRetornoGuia();
+            return Ok(response);
+        }
+
+
 
         [HttpPost("ListarItemVentas")]
         public async Task<IActionResult> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato)
