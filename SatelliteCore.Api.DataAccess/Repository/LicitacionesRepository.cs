@@ -4,6 +4,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Dashboard;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -230,7 +231,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 result= await context.QueryAsync<DatosFormatodashboardLicitaciones>("usp_Listar_Informacion_DashboardLicitaciones", commandType: CommandType.StoredProcedure);
                 
             }
+            return result;
+        }
 
+        public async Task<IEnumerable<DatosFormatoResumenProcesoLicitaciones>> DashboardLicitacionesExportarRProceso()
+        {
+            IEnumerable<DatosFormatoResumenProcesoLicitaciones> result = new List<DatosFormatoResumenProcesoLicitaciones>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoResumenProcesoLicitaciones>("usp_dashboard_Licitaciones_otros_procesos", commandType: CommandType.StoredProcedure);
+
+            }
             return result;
         }
 

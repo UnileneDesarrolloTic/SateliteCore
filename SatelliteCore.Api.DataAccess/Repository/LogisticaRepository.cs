@@ -20,19 +20,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             _appConfig = appConfig;
         }
 
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string serie)
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
         {
             IEnumerable<DatosFormatoPlanOrdenServicosD> result = new List<DatosFormatoPlanOrdenServicosD>();
 
-            string script = "SELECT CONCAT(RTRIM(a.SERIE),'-',RTRIM(a.NUMERO_DOCUMENTO))  NumeroGuia, FECHA_DOCUMENTO FechaDocumento, RTRIM(b.NombreCompleto) Cliente , " +
-                            "RTRIM(a.FACTURA_NUMERO) OrdenServicios , a.FECHA_RETORNO FechaRetorno " +
-                            "FROM UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D  a " +
-                            "INNER JOIN PROD_UNILENE2..PersonaMast b ON a.CLIENTE = b.Persona " +
-                            "WHERE a.ESTADO = 'A' AND  a.SERIE=RTRIM(@serie) AND  a.NUMERO_DOCUMENTO = RIGHT('0000000000' + Ltrim(Rtrim(@numeroguia)), 10)";
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>(script, new { numeroguia, serie });
+                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>("usp_informacion_retorno_guia_satelite", new { numeroguia}, commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -40,10 +34,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
         {
-            string script = "UPDATE UNILENE_REPORTEADOR..TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=@fechaRetorno  WHERE " +
+            string script = "UPDATE TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=@fechaRetorno  WHERE " +
                             "CONCAT(RTRIM(SERIE),'-',RTRIM(NUMERO_DOCUMENTO))=@numeroGuia AND Estado='A'";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
             {
                 await context.ExecuteAsync(script, dato);
             }

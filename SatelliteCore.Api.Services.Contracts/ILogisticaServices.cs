@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.Services.Contracts
 {
     public interface ILogisticaServices
     {
-        public Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string serie);
+        public Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia);
         public Task<ResponseModel<string>> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato);
         public Task<ResponseModel<string>> ExportarExcelRetornoGuia();
         public Task<IEnumerable<DatosFormatoItemVentas>> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato);

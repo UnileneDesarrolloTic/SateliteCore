@@ -23,12 +23,12 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ObtenerNumeroGuias")]
-        public async Task<IActionResult> ObtenerNumeroGuias(string numeroguia, string serie)
+        public async Task<IActionResult> ObtenerNumeroGuias(string numeroguia)
         {
-            if (string.IsNullOrEmpty(numeroguia) || string.IsNullOrEmpty(serie))
+            if (string.IsNullOrEmpty(numeroguia))
                 throw new ValidationModelException("Debe ingresar información completa");
 
-            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(numeroguia, serie);
+            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(numeroguia);
 
             return Ok(listaAnalisis);
         }

@@ -19,9 +19,9 @@ namespace SatelliteCore.Api.Services
         {
             _logisticaRepository = logisticaRepository;
         }
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string serie)
+        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
         {
-            return await _logisticaRepository.ObtenerNumeroGuias(numeroguia, serie);
+            return await _logisticaRepository.ObtenerNumeroGuias(numeroguia);
         }
 
         public async Task<ResponseModel<string>> ExportarExcelRetornoGuia()

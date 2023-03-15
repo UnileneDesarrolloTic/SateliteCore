@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.ReportServices.Contracts.Dashboard;
+using SatelliteCore.Api.Models.Response.Dashboard;
 
 namespace SatelliteCore.Api.Services
 {
@@ -112,17 +113,27 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
 
-       public async Task<ResponseModel<string>> DashboardLicitacionesExportar()
+       public async Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion)
         {
-            IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar();
+            string reporte = "";
 
-            ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
-            string reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+            if (opcion == "a") 
+            {
+                IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar();
+                ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
+                reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+            }
+            else 
+            {
+                IEnumerable<DatosFormatoResumenProcesoLicitaciones> listado = await _licitacionesRepository.DashboardLicitacionesExportarRProceso();
+                ReporteLicitacionResumenProceso_Excel ExporteDashboardResumenProceso = new ReporteLicitacionResumenProceso_Excel();
+                reporte = ExporteDashboardResumenProceso.GenerarReporteDashboardLicitaciones(listado);
+
+            }
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 
             return Respuesta;
         }
-
     }
 }
