@@ -35,7 +35,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                 pintarCabecera(worksheet);
 
                 worksheet.Cells["A1:L2"].Merge = true;
-                worksheet.Cells["A1:L2"].Value = "Generación de Excel Resumen otros proceso " + DateTime.Now;
+                worksheet.Cells["A1:L2"].Value = "Generación de Excel : Resumen otros procesos " + DateTime.Now;
                 worksheet.Cells["A1:L2"].Style.Font.Size = 24;
                 worksheet.Cells["A1:L2"].Style.WrapText = true;
                 worksheet.Cells["A1:L2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
