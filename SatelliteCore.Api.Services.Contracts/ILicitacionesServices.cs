@@ -22,6 +22,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<ListarGuiaInformeLPModel>>> ListarGuiaInformacion(string NumeroEntrega, string OrdenCompra);
         public Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso);
         public Task<ResponseModel<string>> RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> dato);
-        public Task<ResponseModel<string>> DashboardLicitacionesExportar();
+        public Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion);
     }
 }

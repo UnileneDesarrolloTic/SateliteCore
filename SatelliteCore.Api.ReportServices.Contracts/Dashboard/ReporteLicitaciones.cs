@@ -30,7 +30,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                 pintarCabecera(worksheet);
                 TextoNegrita(worksheet);
 
-                worksheet.Cells["A1"].Value = "INFORMACIÓN DEL DASHBOARD DE LICITACIONES";
+                worksheet.Cells["A1"].Value = "INFORMACIÓN DEL DASHBOARD DE LICITACIONES (Detalle facturación)";
                 worksheet.Cells["A1"].Style.Font.Size = 16;
                 worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 

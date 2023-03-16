@@ -402,15 +402,26 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal } ,commandType: CommandType.StoredProcedure);
+                numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal }, commandType: CommandType.StoredProcedure);
 
                 foreach (DatosFormatoGuardarDetalleOrdenCompra producto in dato.detalle)
                 {
                     await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
                     secuencia++;
                 }
+            }
+            return result;
+        }
+        
+        public async Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor()
+        {
+            IEnumerable<DatosFormatoGestionItemDrogueriaColor> result = new List<DatosFormatoGestionItemDrogueriaColor>();
 
+            string query = "SELECT ValorTexto1 Color, ValorTexto2 Descripcion FROM TBDConfiguracion WHERE IdConfiguracion = 35 AND Estado='A'";
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                result = await context.QueryAsync<DatosFormatoGestionItemDrogueriaColor>(query);
             }
             return result;
         }

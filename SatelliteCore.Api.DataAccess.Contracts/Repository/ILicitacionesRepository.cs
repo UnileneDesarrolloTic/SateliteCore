@@ -3,6 +3,7 @@ using SatelliteCore.Api.Models.Request;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SatelliteCore.Api.Models.Entities;
+using SatelliteCore.Api.Models.Response.Dashboard;
 
 namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
@@ -18,14 +19,11 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<ListarProcesoEntity>> ListarProceso(int idClient);
         public Task<IEnumerable<DatosFormatoProgramacionMuestraModel>> ListarProgramaMuestraLIP(int IdProceso, string NumeroEntrega);
         public Task RegistrarProgramacionMuestreo(List<DatosFormatoMuestraEnsayoLIP> matricula);
-
         public Task<IEnumerable<ListarGuiaInformeLPModel>> ListarGuiaInformacion(string NumeroEntrega,string OrdenCompra);
-
         public Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso);
-
         public Task RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> matricula);
-
         public Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar();
+        public Task<IEnumerable<DatosFormatoResumenProcesoLicitaciones>> DashboardLicitacionesExportarRProceso();
 
     }
 }
