@@ -272,6 +272,10 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("RegistrarOrdenCompraDrogueria")]
         public async Task<ActionResult> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato)
         {
+            int encontrarPendiente = dato.detalle.FindIndex(x => x.estado == "PE"); 
+            if(encontrarPendiente != -1)
+                throw new ValidationModelException("verificar los parametros enviados");
+           
             string strusuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             int idusuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 

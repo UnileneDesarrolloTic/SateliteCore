@@ -274,7 +274,7 @@ namespace SatelliteCore.Api.Services
         public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria()
         {
             await _pronosticoRepository.GenerarOrdenCompraDrogueria();
-            return new ResponseModel<string>(true, "Se genero Correctamente", "");
+            return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
         }
 
         public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
