@@ -153,12 +153,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("DashboardLicitacionesExportar")]
-        public  async Task<IActionResult> DashboardLicitacionesExportar(string opcion)
+        public  async Task<IActionResult> DashboardLicitacionesExportar(string opcion, int anio)
         {
-            if (string.IsNullOrEmpty(opcion))
-                throw new ValidationModelException("La información recibida es invalida");
-
-            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar(opcion);
+            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar(opcion, anio);
             return Ok(result);
         }
 

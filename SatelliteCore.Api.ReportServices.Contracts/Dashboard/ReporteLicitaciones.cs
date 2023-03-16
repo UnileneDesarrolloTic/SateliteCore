@@ -29,8 +29,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
 
                 ConfigurarTamanioDeCeldas(worksheet);
                 UnirCeldas(worksheet);
-                pintarCabecera(worksheet);
-                TextoNegrita(worksheet);
+                PintarCabecera(worksheet);
 
                 worksheet.Cells["A1"].Value = "INFORMACIÓN DEL DASHBOARD DE LICITACIONES (Detalle facturación)";
                 worksheet.Cells["A1"].Style.Font.Size = 16;
@@ -99,7 +98,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
 
                     worksheet.Row(row).Height = 15.25;
 
-                    //worksheet.Cells[$"A{row},B{row},C{row},D{row},E{row},F{row},G{row},H{row},I{row},J{row},K{row},L{row},M{row},N{row},O{row},P{row}"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells[$"A{row},B{row},C{row},D{row},E{row},F{row},G{row},H{row},I{row},J{row},K{row},L{row},M{row},N{row},O{row},P{row}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["A" + row].Value = rowitem.Proceso;
@@ -117,54 +115,42 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                     worksheet.Cells["E" + row].Value = rowitem.Entrega;
                     worksheet.Cells["E" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["E" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["F" + row].Value = rowitem.Guia;
                     worksheet.Cells["F" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["G" + row].Value = rowitem.FechaGuia.ToString("dd/MM/yyyy");
                     worksheet.Cells["G" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["H" + row].Value = rowitem.MontoGuiado;
                     worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["H" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["I" + row].Value = rowitem.EstadoFacturacion;
                     worksheet.Cells["I" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["J" + row].Value = rowitem.Factura;
                     worksheet.Cells["J" + row].Style.WrapText = true;
-                   
 
                     worksheet.Cells["K" + row].Value = rowitem.MontoFactura;
                     worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["K" + row].Style.WrapText = true;
-                   
 
                     worksheet.Cells["L" + row].Value = rowitem.EstadoComercial;
                     worksheet.Cells["L" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["M" + row].Value = rowitem.EstadoLogistica;
                     worksheet.Cells["M" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["N" + row].Value = rowitem.Estado;
                     worksheet.Cells["N" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["O" + row].Value = rowitem.Usuario;
                     worksheet.Cells["O" + row].Style.WrapText = true;
-                    
 
                     worksheet.Cells["P" + row].Value = rowitem.MontoTotalFactura;
                     worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";   
                     worksheet.Cells["P" + row].Style.WrapText = true;
-                    
 
                     row++;
                 }
@@ -213,15 +199,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
             worksheet.Cells["A1:P1"].Merge=true;
         }
 
-        private static void pintarCabecera(ExcelWorksheet worksheet)
+        private static void PintarCabecera(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A3:P3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#D8D8D8"));
-        }
-
-
-        private static void TextoNegrita(ExcelWorksheet worksheet)
-        {
-
         }
     }
 }

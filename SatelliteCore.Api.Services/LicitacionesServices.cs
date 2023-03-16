@@ -11,6 +11,7 @@ using SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.ReportServices.Contracts.Dashboard;
 using SatelliteCore.Api.Models.Response.Dashboard;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -113,22 +114,33 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
 
-       public async Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion)
+       public async Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion, int anio)
         {
+           
+            if (string.IsNullOrEmpty(opcion))
+                throw new ValidationModelException("La información recibida no es válido");
+
             string reporte = "";
 
-            if (opcion == "a") 
+            if (opcion == "facturacion") 
             {
-                IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar();
-                ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
-                reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+                if (anio > 2017)
+                {
+                    IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar(anio);
+                    ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
+                    reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+                }
+                else
+                {
+                    return new ResponseModel<string>(false, "Debe ser apartir del 2018", null);
+                }
+                
             }
             else 
             {
                 IEnumerable<DatosFormatoResumenProcesoLicitaciones> listado = await _licitacionesRepository.DashboardLicitacionesExportarRProceso();
                 ReporteLicitacionResumenProceso_Excel ExporteDashboardResumenProceso = new ReporteLicitacionResumenProceso_Excel();
                 reporte = ExporteDashboardResumenProceso.GenerarReporteDashboardLicitaciones(listado);
-
             }
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);

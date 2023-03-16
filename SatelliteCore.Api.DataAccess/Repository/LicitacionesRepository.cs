@@ -222,13 +222,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar()
+        public async Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar(int anio)
         {
             IEnumerable<DatosFormatodashboardLicitaciones> result = new List<DatosFormatodashboardLicitaciones>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result= await context.QueryAsync<DatosFormatodashboardLicitaciones>("usp_Listar_Informacion_DashboardLicitaciones", commandType: CommandType.StoredProcedure);
+                result= await context.QueryAsync<DatosFormatodashboardLicitaciones>("usp_Listar_Informacion_DashboardLicitaciones",new { anio }, commandType: CommandType.StoredProcedure);
                 
             }
             return result;
