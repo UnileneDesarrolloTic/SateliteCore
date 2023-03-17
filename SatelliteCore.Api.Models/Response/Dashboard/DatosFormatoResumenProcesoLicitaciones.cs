@@ -11,6 +11,7 @@ namespace SatelliteCore.Api.Models.Response.Dashboard
         public int IdDetalle { get; set; }
         public int NumeroItem { get; set; }
         public string DescripcionItem { get; set; }
+        public string Agrupador { get; set; }
         public string CodItem { get; set; }
         public decimal PrecioUnitario { get; set; }
         public int Cliente { get; set; }

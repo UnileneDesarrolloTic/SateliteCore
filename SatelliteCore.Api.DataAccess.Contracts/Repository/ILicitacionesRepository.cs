@@ -22,7 +22,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<ListarGuiaInformeLPModel>> ListarGuiaInformacion(string NumeroEntrega,string OrdenCompra);
         public Task<IEnumerable<EstructuraListaContratoProceso>> ListarContratoProceso(string proceso);
         public Task RegistrarContratoProceso(List<DatosRequestFormatoContratoProcesoModel> matricula);
-        public Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar();
+        public Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar(int anio);
         public Task<IEnumerable<DatosFormatoResumenProcesoLicitaciones>> DashboardLicitacionesExportarRProceso();
 
     }

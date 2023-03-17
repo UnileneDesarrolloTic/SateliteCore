@@ -24,7 +24,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
             using (var excelPackage = new ExcelPackage())
             {
 
-                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Dashboard Licitaciones Resumen Proceso");
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Dashboard Licitaciones Resumen por proceso");
                 worksheet.Cells.Style.Font.Name = "Arial";
                 worksheet.Cells.Style.Font.Size = 12;
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -32,78 +32,58 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
 
                 ConfigurarTamanioDeCeldas(worksheet);
                 UnirCeldas(worksheet);
-                pintarCabecera(worksheet);
+                PintarCabecera(worksheet);
 
                 worksheet.Cells["A1:L2"].Merge = true;
-                worksheet.Cells["A1:L2"].Value = "Generación de Excel : Resumen otros procesos " + DateTime.Now;
+                worksheet.Cells["A1:L2"].Value = "Generación de Excel : Resumen por procesos " + DateTime.Now;
                 worksheet.Cells["A1:L2"].Style.Font.Size = 24;
                 worksheet.Cells["A1:L2"].Style.WrapText = true;
                 worksheet.Cells["A1:L2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["A1:L2"].Style.VerticalAlignment = ExcelVerticalAlignment.Bottom;
 
 
-                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3"].Style.Font.Bold = true;
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3"].Style.Font.Bold = true;
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["A3"].Value = "IdProceso";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["A3"].Style.WrapText = true;
-                worksheet.Cells["A3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["B3"].Value = "Descripción Proceso";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B3"].Style.WrapText = true;
-                worksheet.Cells["B3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["C3"].Value = "Entidad";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["C3"].Style.WrapText = true;
-                worksheet.Cells["C3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["D3"].Value = "CodItem";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["D3"].Value = "Agrupador";
                 worksheet.Cells["D3"].Style.WrapText = true;
-                worksheet.Cells["D3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["E3"].Value = "Descripción Item";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["E3"].Value = "CodItem";
                 worksheet.Cells["E3"].Style.WrapText = true;
-                worksheet.Cells["E3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["F3"].Value = "Número Entrega";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                
+                worksheet.Cells["F3"].Value = "Descripción Item";
                 worksheet.Cells["F3"].Style.WrapText = true;
-                worksheet.Cells["F3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells["G3"].Value = "Primera Fecha: Fecha vencimiento";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                
+                worksheet.Cells["G3"].Value = "Número Entrega";
                 worksheet.Cells["G3"].Style.WrapText = true;
-                worksheet.Cells["G3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["H3"].Value = "Cantidad Adjudicada";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["H3"].Value = "Primera Fecha: Fecha vencimiento";
                 worksheet.Cells["H3"].Style.WrapText = true;
-                worksheet.Cells["H3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["I3"].Value = "Precio Unitario";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["I3"].Value = "Cantidad Adjudicada";
                 worksheet.Cells["I3"].Style.WrapText = true;
-                worksheet.Cells["I3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells["J3"].Value = "Monto Adjudicado (S/.)";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                
+                worksheet.Cells["J3"].Value = "Precio Unitario";
                 worksheet.Cells["J3"].Style.WrapText = true;
-                worksheet.Cells["J3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["K3"].Value = "Cantidad Entregada en plazo";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["K3"].Value = "Monto Adjudicado (S/.)";
                 worksheet.Cells["K3"].Style.WrapText = true;
-                worksheet.Cells["K3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells["L3"].Value = "Monto Facturado (S/.)";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                
+                worksheet.Cells["L3"].Value = "Cantidad Entregada en plazo";
                 worksheet.Cells["L3"].Style.WrapText = true;
-                worksheet.Cells["L3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                worksheet.Cells["M3"].Value = "Monto Facturado (S/.)";
+                worksheet.Cells["M3"].Style.WrapText = true;
 
                 worksheet.View.FreezePanes(4, 1);
 
@@ -139,55 +119,60 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                         worksheet.Cells["C" + row].Style.WrapText = true;
                         worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                        worksheet.Cells["D" + row].Value = filaproceso.CodItem;
+                        worksheet.Cells["D" + row].Value = filaproceso.Agrupador;
                         worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["D" + row].Style.WrapText = true;
                         worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                        worksheet.Cells["E" + row].Value = filaproceso.DescripcionItem;
+                        worksheet.Cells["E" + row].Value = filaproceso.CodItem;
                         worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["E" + row].Style.WrapText = true;
-                        worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                        worksheet.Cells["F" + row].Value = filaproceso.NumeroEntrega;
+                        worksheet.Cells["F" + row].Value = filaproceso.DescripcionItem;
                         worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["F" + row].Style.WrapText = true;
-                        worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
+                        worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                        worksheet.Cells["G" + row].Value = filaproceso.FechaVencimiento.ToString("dd/MM/yyyy");
+                        worksheet.Cells["G" + row].Value = filaproceso.NumeroEntrega;
                         worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["G" + row].Style.WrapText = true;
-                        worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
 
-                        worksheet.Cells["H" + row].Value = filaproceso.CantidadEntregar;
-                        worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells["H" + row].Value = filaproceso.FechaVencimiento.ToString("dd/MM/yyyy");
                         worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["H" + row].Style.WrapText = true;
-                        worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                        worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                        worksheet.Cells["I" + row].Value = filaproceso.PrecioUnitario;
+                        worksheet.Cells["I" + row].Value = filaproceso.CantidadEntregar;
                         worksheet.Cells["I" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["I" + row].Style.WrapText = true;
                         worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["J" + row].Value = filaproceso.MontoCobrar;
+                        worksheet.Cells["J" + row].Value = filaproceso.PrecioUnitario;
                         worksheet.Cells["J" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["J" + row].Style.WrapText = true;
                         worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["K" + row].Value = filaproceso.CantidadEntregadaPlazo;
+                        worksheet.Cells["K" + row].Value = filaproceso.MontoCobrar;
                         worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["K" + row].Style.WrapText = true;
                         worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["L" + row].Value = filaproceso.MontoFacturado;
+                        worksheet.Cells["L" + row].Value = filaproceso.CantidadEntregadaPlazo;
                         worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["L" + row].Style.WrapText = true;
                         worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                        worksheet.Cells["M" + row].Value = filaproceso.MontoFacturado;
+                        worksheet.Cells["M" + row].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["M" + row].Style.WrapText = true;
+                        worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
 
                         cantidadAdjudicada = cantidadAdjudicada + filaproceso.CantidadEntregar;
@@ -199,38 +184,38 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
                     }
 
 
-                    worksheet.Cells["G" + row].Value = "TOTAL";
-                    worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["G" + row].Style.WrapText = true;
-                    worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-
-                    worksheet.Cells["H" + row].Value = cantidadAdjudicada;
+                    worksheet.Cells["H" + row].Value = "TOTAL";
                     worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["H" + row].Style.WrapText = true;
                     worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["J" + row].Value = montoAdjudicado;
-                    worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["J" + row].Style.Numberformat.Format = "#,##0.00";
-                    worksheet.Cells["J" + row].Style.WrapText = true;
-                    worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells["I" + row].Value = cantidadAdjudicada;
+                    worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["I" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["I" + row].Style.WrapText = true;
+                    worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["K" + row].Value = cantidadEntregadaPlazo;
+                    worksheet.Cells["K" + row].Value = montoAdjudicado;
                     worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["K" + row].Style.WrapText = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["L" + row].Value = montoFacturado;
+                    worksheet.Cells["L" + row].Value = cantidadEntregadaPlazo;
                     worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["L" + row].Style.WrapText = true;
                     worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["G" + row + ":L" + row].Style.Font.Bold = true;
-                    worksheet.Cells["G" + row + ":L" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#000000"));
-                    worksheet.Cells["G" + row + ":L" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+                    worksheet.Cells["M" + row].Value = montoFacturado;
+                    worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["M" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["M" + row].Style.WrapText = true;
+                    worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["H" + row + ":M" + row].Style.Font.Bold = true;
+                    worksheet.Cells["H" + row + ":M" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#000000"));
+                    worksheet.Cells["H" + row + ":M" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
 
                     row = row + 2;
                 }
@@ -254,15 +239,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
             worksheet.Column(2).Width = 20.29 + 2.71;
             worksheet.Column(3).Width = 61 + 2.71;
             worksheet.Column(4).Width = 14.86 + 2.71;
-            worksheet.Column(5).Width = 59.71 + 2.71;
-            worksheet.Column(6).Width = 10.29 + 2.71;
-            worksheet.Column(7).Width = 18.57 + 2.71;
+            worksheet.Column(5).Width = 14.86 + 2.71;
+            worksheet.Column(6).Width = 59.71 + 2.71;
+            worksheet.Column(7).Width = 8.71 + 2.71;
             worksheet.Column(8).Width = 14.29 + 2.71;
 
-            worksheet.Column(9).Width = 10.71 + 2.71;
-            worksheet.Column(10).Width = 14.57 + 2.71;
+            worksheet.Column(9).Width = 12.71 + 2.71;
+            worksheet.Column(10).Width = 11.57 + 2.71;
             worksheet.Column(11).Width = 17.00 + 2.71;
             worksheet.Column(12).Width = 14.00 + 2.71;
+            worksheet.Column(13).Width = 14.00 + 2.71;
         }
 
         private static void UnirCeldas(ExcelWorksheet worksheet)
@@ -270,10 +256,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Dashboard
             worksheet.Cells["A1:L1"].Merge = true;
         }
 
-        private static void pintarCabecera(ExcelWorksheet worksheet)
+        private static void PintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A3:L3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#000000"));
-            worksheet.Cells["A3:L3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+            worksheet.Cells["A3:M3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#000000"));
+            worksheet.Cells["A3:M3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
         }
 
     }
