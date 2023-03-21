@@ -341,7 +341,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> result = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
 
-            string sql = "SELECT Proveedor, Clasificacion, Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera, DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida FROM TBMTempCompra";
+            string sql = "SELECT Proveedor, Clasificacion, Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera, DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida FROM TBMTempCompra WHERE Estado='PE'";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -400,6 +400,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
             int secuencia = 1;
             int result = 0;
 
+            string sql = "UPDATE SatelliteCore..TBMTempCompra SET Estado='GE' WHERE Proveedor = @persona AND  Clasificacion='DROGUERIA'";
+
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal }, commandType: CommandType.StoredProcedure);
@@ -409,6 +411,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                     await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
                     secuencia++;
                 }
+                await context.ExecuteAsync(sql, new { dato.persona });
             }
             return result;
         }
