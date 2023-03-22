@@ -47,6 +47,8 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoInformacionResultadoProtocolo>> ImprimirControlProceso(string NumeroLote);
         public Task<IEnumerable<DatosFormatoProtocoloPruebaModel>> ImprimirDocumentoProtocolo(string NumeroLote, string Idioma);
         public Task<ParametroMastEntity> ProtocoloRevisionTerminado();
+        public Task<string> VersionProtocolo();
 
     }
+
 }

@@ -21,7 +21,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 {
     public class FormatoPruebaProtocolo
     {
-        public string ReporteFormatoPruebaProtocoloEspaniol(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina)
+        public string ReporteFormatoPruebaProtocoloEspaniol(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina, string versionProtocolo)
         {
 
             string reporte = null;
@@ -44,7 +44,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             bool BuscarFabricacion = Cabecera.ORDENFABRICACION.Contains("PE");
 
-            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new Header(versionProtocolo));
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -682,7 +682,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
         }
 
 
-        public string ReporteFormatoPruebaProtocoloIngles(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina)
+        public string ReporteFormatoPruebaProtocoloIngles(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina, string versionProtocolo)
         {
             string reporte = null;
             MemoryStream ms = new MemoryStream();
@@ -696,8 +696,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
-
-            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo());
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new Header(versionProtocolo));
 
             Paragraph saltoLinea = new Paragraph(new Text("\n"));
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
@@ -1393,16 +1392,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
     }
 
-    public class FooterRevisionProtocolo : IEventHandler
+    public class Header : IEventHandler
     {
-        /*
-        protected Document doc;
-        
-        public  TextFooterEventHandler (Document doc)
+
+        String header;
+
+        public Header(String header)
         {
-            this.doc = doc;
+            this.header = header;
         }
-        */
+       
 
         public void HandleEvent(Event @event)
         {
@@ -1423,7 +1422,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
 
-            Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045;Rev.11").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+            Cell footer = new Cell(1, 1).Add(new Paragraph(this.header).AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
 
             tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
 

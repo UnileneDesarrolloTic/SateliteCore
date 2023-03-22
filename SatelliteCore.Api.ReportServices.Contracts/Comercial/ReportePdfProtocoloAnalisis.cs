@@ -1,9 +1,11 @@
 ﻿using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
+using iText.Kernel.Events;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
@@ -21,7 +23,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
         private Image imgFirmaLiliaHurtado;
         private Image imgFirmaMilagrosMunoz;
-        private Image imgFooter;
+        //private Image imgFooter;
         private Image imglogoUnilene;
         private Image imgConclusion;
 
@@ -34,10 +36,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
         private Style estiloNegritaDetalleProtocolo;
 
         private Color bgColorfondo;
+        string versionProtocolo = "";
 
-        public ReportePdfProtocoloAnalisis(List<ProtocoloReportModel> protocolos)
+        public ReportePdfProtocoloAnalisis(List<ProtocoloReportModel> protocolos, string versionProtocolo)
         {
             this.protocolos = protocolos;
+            this.versionProtocolo = versionProtocolo;
             InicializarObjetosComunes();
         }
 
@@ -55,6 +59,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
             Document document = new Document(pdf, PageSize.A4);
             document.SetMargins(5, 15, 30, 15);
+
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo(this.versionProtocolo));
 
             foreach (ProtocoloReportModel protocolo in protocolos)
             {
@@ -80,14 +86,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
         private void AgregarReporteProtocolo(Document document, ProtocoloReportModel protocolo )
         {
-            Table PiePagina = new Table(2).UseAllAvailableWidth().SetFixedLayout();
+            /*Table PiePagina = new Table(2).UseAllAvailableWidth().SetFixedLayout();
 
             Cell cellFPiePagina = new Cell(1, 1).Add(imgFooter)
                 .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
                 .SetBorder(Border.NO_BORDER);
 
             PiePagina.AddCell(cellFPiePagina);
-            document.Add(PiePagina);
+            document.Add(PiePagina);*/
 
             Table tablaDatosTitulo = new Table(3).UseAllAvailableWidth();
             tablaDatosTitulo.SetFixedLayout();
@@ -525,7 +531,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             string rutaFirmaLiliaHurtado = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
             string rutaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
-            string rutaImagenFooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");
+            //string rutaImagenFooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");
             string rutaLogoUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
             string conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocolo.png");
 
@@ -545,14 +551,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
              .SetPadding(0)
              .SetTextAlignment(TextAlignment.CENTER);
 
-            imgFooter = new Image(ImageDataFactory
+            /*imgFooter = new Image(ImageDataFactory
              .Create(rutaImagenFooter))
              .SetWidth(400)
              .SetHeight(15)
              .SetMarginBottom(0)
              .SetPadding(0)
              .ScaleAbsolute(50f, 50f)
-             .SetTextAlignment(TextAlignment.CENTER);
+             .SetTextAlignment(TextAlignment.CENTER);*/
 
             imglogoUnilene = new Image(ImageDataFactory
                .Create(rutaLogoUnilene))
@@ -610,6 +616,43 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
                 .SetFontSize(7)
                 .SetFont(fuenteNegrita)
                 .SetFontColor(ColorConstants.BLACK);
+        }
+    }
+
+    public class FooterRevisionProtocolo : IEventHandler
+    {
+        String header;
+
+        public FooterRevisionProtocolo(String header)
+        {
+            this.header = header;
+        }
+
+        public void HandleEvent(Event @event)
+        {
+            PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+            PdfDocument pdf = documentoEvento.GetDocument();
+            PdfPage pagina = documentoEvento.GetPage();
+            PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamAfter(), pagina.GetResources(), pdf);
+
+            PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+            Style estiloFooter = new Style().SetFontSize(8)
+                    .SetFont(fuenteNegrita)
+                    .SetFontColor(ColorConstants.BLACK)
+                    .SetMargin(0)
+                    .SetPadding(0)
+                    .SetFontSize(8);
+
+            Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
+
+            Cell footer = new Cell(1, 1).Add(new Paragraph(this.header).AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
+
+            tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
+
+            Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 50);
+
+            new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
+
         }
     }
 }
