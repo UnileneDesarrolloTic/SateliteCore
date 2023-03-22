@@ -61,10 +61,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             document.SetMargins(5, 15, 30, 15);
 
             pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterRevisionProtocolo(this.versionProtocolo));
-
+            int contarpagina = 0;
             foreach (ProtocoloReportModel protocolo in protocolos)
             {
+                contarpagina++;
                 AgregarReporteProtocolo(document, protocolo);
+
+                if (protocolos.Count != contarpagina) 
+                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             }
 
             document.Close();
