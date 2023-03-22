@@ -18,10 +18,12 @@ namespace SatelliteCore.Api.Services
     public class ComercialServices : IComercialServices
     {
         private readonly IComercialRepository _comercialRepository;
+        private readonly IControlCalidadRepository _controlCalidadRepository;
 
-        public ComercialServices(IComercialRepository comercialRepository)
+        public ComercialServices(IComercialRepository comercialRepository, IControlCalidadRepository controlCalidadRepository)
         {
             _comercialRepository = comercialRepository;
+            _controlCalidadRepository = controlCalidadRepository;
         }
         public async Task<(List<CotizacionEntity>, int)> ListarCotizaciones(DatosListarCotizacionesPaginado datos)
         {
@@ -113,6 +115,7 @@ namespace SatelliteCore.Api.Services
 
             (List<ProtocoloCabeceraModel> cabecerasPro, List<ProtocoloDetalleModel> detallesPro) 
                 = await _comercialRepository.ObtenerDatosReporteProtocolo(cadenaOrdenFabricación);
+            string versionProtocolo = await _controlCalidadRepository.VersionProtocolo();
 
             if (cabecerasPro.Count < 1)
             {
@@ -141,7 +144,7 @@ namespace SatelliteCore.Api.Services
                 listaProtocolo.Add(datoProtocolo);
             }
 
-            ReportePdfProtocoloAnalisis protocolo = new ReportePdfProtocoloAnalisis(listaProtocolo);
+            ReportePdfProtocoloAnalisis protocolo = new ReportePdfProtocoloAnalisis(listaProtocolo, versionProtocolo);
             string reporte = protocolo.GenerarReporte();
 
             return new ResponseModel<string>(true, mensajeReturn, reporte);
@@ -169,6 +172,7 @@ namespace SatelliteCore.Api.Services
 
             FormatoReporteGuiaRemisionesModel respuesta = await _comercialRepository.NumerodeGuiaLicitacion(final);
             IEnumerable<FormatoReporteProtocoloModel> ListarProtocolo = await _comercialRepository.NumerodeGuiaProtocolo(final);
+            string versionProtocolo = await _controlCalidadRepository.VersionProtocolo();
 
             if (respuesta.CabeceraReporteGuiaRemision.Count == 0)
                 return new ResponseModel<string>(false, "Falta Completar Datos de la cabecera", "");
@@ -196,8 +200,10 @@ namespace SatelliteCore.Api.Services
             }
 
 
+
+
             ActaVerificacioncc actaverificacion = new ActaVerificacioncc();
-            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato);
+            string reporte = actaverificacion.GenerarReporteActaVerificacion(respuesta.CabeceraReporteGuiaRemision,dato, versionProtocolo);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }

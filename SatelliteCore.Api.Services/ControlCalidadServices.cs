@@ -376,7 +376,6 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> ImprimirDocumentoProtocolo(string NumeroLote, bool Opcion, string Idioma,string UsuarioSesion)
         {
-            string reporte ="";
             DatosFormatoNumeroLoteProtocoloModel Cabecera = new DatosFormatoNumeroLoteProtocoloModel();
             ParametroMastEntity datosPiePagina = new ParametroMastEntity();
             LogTrazaEvento evento = new LogTrazaEvento();
@@ -390,16 +389,19 @@ namespace SatelliteCore.Api.Services
             if (listado.Count() == 0)
                 return new ResponseModel<string>(false, Constante.MESSAGE_SUCCESS, "No hay Pruebas Efectuadas para ese lote");
 
+            string reporte = "";
+            string versionProtocolo = "";
 
             Cabecera = await _controlCalidadRepository.BuscarNumeroLoteProtocolo(NumeroLote, Idioma);
             datosPiePagina = await _controlCalidadRepository.ProtocoloRevisionTerminado();
+            versionProtocolo = await _controlCalidadRepository.VersionProtocolo();
 
             FormatoPruebaProtocolo ExporteFormatoPrueba = new FormatoPruebaProtocolo();
             
             if (Idioma=="1")
-                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloEspaniol(listado, Cabecera, Opcion , datosPiePagina);
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloEspaniol(listado, Cabecera, Opcion , datosPiePagina , versionProtocolo);
             else
-                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloIngles(listado, Cabecera, Opcion, datosPiePagina);
+                reporte = ExporteFormatoPrueba.ReporteFormatoPruebaProtocoloIngles(listado, Cabecera, Opcion, datosPiePagina , versionProtocolo);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
             return Respuesta;

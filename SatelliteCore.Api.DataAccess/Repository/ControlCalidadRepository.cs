@@ -708,6 +708,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<string> VersionProtocolo()
+        {
+            string versionprotocolo = "";
+            string sql = "SELECT Explicacion FROM ParametrosMast WHERE ParametroClave = 'FORMISOPT' AND AplicacionCodigo = 'WH' AND CompaniaCodigo = '010000'";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                versionprotocolo = await connection.QueryFirstOrDefaultAsync<string>(sql);
+            }
+
+            return versionprotocolo;
+        }
+
 
 
 

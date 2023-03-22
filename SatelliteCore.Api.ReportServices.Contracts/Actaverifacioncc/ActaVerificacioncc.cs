@@ -24,7 +24,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
         public string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
 
-        public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias, ListarOpcionesImprimir dato)
+        public string GenerarReporteActaVerificacion(List<CReporteGuiaRemisionModel> NumeroGuias, ListarOpcionesImprimir dato, string versionProtocolo)
         {
             //DOCUMENTO QUE TIENE TRUE 
             bool documentoActaCC = dato.Acta;
@@ -670,7 +670,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
                   .SetBorder(Border.NO_BORDER);
             tablaDatosConforme.AddCell(cellConforme);
             document.Add(tablaDatosConforme);
-            document.Add(saltoLinea);
 
             //FIRMA
             Table tablaDatosFirma = new Table(3).UseAllAvailableWidth();
@@ -1470,27 +1469,27 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
 
             Color bgColorfondo = new DeviceRgb(217, 217, 217);
 
-            string imagenFlooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");
-            Image imagenFlooterss = new Image(ImageDataFactory
-             .Create(imagenFlooter))
-             .SetWidth(400)
-             .SetHeight(15)
-             .SetMarginBottom(0)
-             .SetPadding(0)
-             .ScaleAbsolute(50f, 50f)
-             .SetTextAlignment(TextAlignment.CENTER);
+             string imagenFlooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\protocoloVersion12.png");
+             Image imagenFlooterss = new Image(ImageDataFactory
+              .Create(imagenFlooter))
+              .SetWidth(725)
+              .SetHeight(15)
+              .SetMarginBottom(0)
+              .SetPadding(0)
+              .ScaleAbsolute(50f, 50f)
+              .SetTextAlignment(TextAlignment.CENTER);
+            
+                Table PiePagina = new Table(2).UseAllAvailableWidth();
+                PiePagina.SetFixedLayout();
 
-            Table PiePagina = new Table(2).UseAllAvailableWidth();
-            PiePagina.SetFixedLayout();
 
+                Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
+                .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
+                .SetBorder(Border.NO_BORDER);
 
-            Cell cellFPiePagina = new Cell(1, 1).Add(imagenFlooterss)
-            .SetFixedPosition(0f, document.GetBottomMargin() - 2, 0f)
-            .SetBorder(Border.NO_BORDER);
+                PiePagina.AddCell(cellFPiePagina);
 
-            PiePagina.AddCell(cellFPiePagina);
-
-            document.Add(PiePagina);
+                document.Add(PiePagina);
 
             Image img = new Image(ImageDataFactory
                .Create(rutaUnilene))
@@ -2062,39 +2061,36 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Actaverifacioncc
             document.Add(tablaManufacturaP2);
         }
 
-        //public class FooterProtocolos : IEventHandler
-        //{
-        //    public void HandleEvent(Event @event)
-        //    {
-        //        PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
-        //        PdfDocument pdf = documentoEvento.GetDocument();
-        //        PdfPage pagina = documentoEvento.GetPage();
-        //        PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamBefore(), pagina.GetResources(), pdf);
 
+        public class FooterRevisionProtocolo : IEventHandler
+        {
+            public void HandleEvent(Event @event)
+            {
+                PdfDocumentEvent documentoEvento = (PdfDocumentEvent)@event;
+                PdfDocument pdf = documentoEvento.GetDocument();
+                PdfPage pagina = documentoEvento.GetPage();
+                PdfCanvas pdfCanvas = new PdfCanvas(pagina.NewContentStreamAfter(), pagina.GetResources(), pdf);
 
-        //        PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-        //        Style estiloFooter = new Style().SetFontSize(8)
-        //                .SetFont(fuenteNegrita)
-        //                .SetFontColor(ColorConstants.BLACK)
-        //                .SetMargin(0)
-        //                .SetPadding(0)
-        //                .SetFontSize(8);
+                PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                Style estiloFooter = new Style().SetFontSize(8)
+                        .SetFont(fuenteNegrita)
+                        .SetFontColor(ColorConstants.BLACK)
+                        .SetMargin(0)
+                        .SetPadding(0)
+                        .SetFontSize(8);
 
+                Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
 
-        //        Table tablaResult = new Table(1).SetWidth(UnitValue.CreatePercentValue(100)).SetMargin(0).SetPadding(0);
+                Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045; Versión 12").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
 
-        //        Cell footer = new Cell(1, 1).Add(new Paragraph("F/CDC-045;Rev.11").AddStyle(estiloFooter)).SetBorder(Border.NO_BORDER).SetMargin(0).SetPadding(0);
-        //        tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
+                tablaResult.AddCell(footer).SetMargin(0).SetPadding(0);
 
+                Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 50);
 
-        //        Rectangle rectangulo = new Rectangle(15, -20, pagina.GetPageSize().GetWidth() - 70, 200);
+                new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
 
-
-        //        new Canvas(pdfCanvas, rectangulo).Add(tablaResult);
-
-        //    }
-        //}
-
+            }
+        }
 
 
     }
