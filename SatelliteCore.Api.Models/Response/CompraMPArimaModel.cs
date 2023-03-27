@@ -26,6 +26,7 @@ namespace SatelliteCore.Api.Models.Response
         public decimal StockReal { get; set; }
         public decimal Alerta { get; set; }
         public decimal Duracion { get; set; }
+        public string CondicionColor { get; set; }
         public List<DCompraMPArimaModel> DetalleCompra { get; set; }
             
         public List<CompraMPArimaDetalleControlCalidad> DetalleCalidad { get; set; }

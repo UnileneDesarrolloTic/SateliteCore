@@ -27,12 +27,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 UnirCeldas(worksheet);
                 pintarCabecera(worksheet);
                 TextoNegrita(worksheet);
+                worksheet.View.FreezePanes(4, 5);
 
-                worksheet.Cells["A1:O1"].Merge = true;
-                worksheet.Cells["A1:O1"].Value = "Generacion de Excel Agujas " + DateTime.Now ;
-                worksheet.Cells["A1:O1"].Style.Font.Size = 10;
-                worksheet.Cells["A1:O1"].Style.WrapText = true;
-                worksheet.Cells["A1:O1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1:O2"].Merge = true;
+                worksheet.Cells["A1:O2"].Value = "Generación de Excel Agujas " + DateTime.Now ;
+                worksheet.Cells["A1:O2"].Style.Font.Size = 24;
+                worksheet.Cells["A1:O2"].Style.WrapText = true;
+                worksheet.Cells["A1:O2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
                 worksheet.Cells["A3"].Value = "#";
