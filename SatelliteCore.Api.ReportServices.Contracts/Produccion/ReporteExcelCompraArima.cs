@@ -29,6 +29,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 UnirCeldas(worksheet);
                 pintarCabecera(worksheet);
                 TextoNegrita(worksheet);
+                worksheet.View.FreezePanes(4, 6);
+
+                worksheet.Cells["A1:O2"].Merge = true;
+                worksheet.Cells["A1:O2"].Value = "Generación de Excel Compra arima " + DateTime.Now;
+                worksheet.Cells["A1:O2"].Style.Font.Size = 24;
+                worksheet.Cells["A1:O2"].Style.WrapText = true;
+                worksheet.Cells["A1:O2"].Style.Font.Bold = true;
+                worksheet.Cells["A1:O2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 worksheet.Cells["A3"].Value = "Item";
                 worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -152,6 +160,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["A" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["A" + row].Style.Font.Size = 10;
                     worksheet.Cells["A" + row].Style.WrapText = true;
+                    worksheet.Cells["A" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.CondicionColor));
                     worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                     worksheet.Cells["B" + row].Value = rowitem.Descripcion;
@@ -160,6 +169,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["B" + row].Style.Font.Size = 10;
                     worksheet.Cells["B" + row].Style.WrapText = true;
                     worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells["B" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.CondicionColor));
 
 
                     worksheet.Cells["C" + row].Value = rowitem.Promedioanual;
