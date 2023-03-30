@@ -55,7 +55,7 @@ namespace SatelliteCore.Api.Services
             listar= await _pronosticoRepository.ExportarAgujasMateriaPrima(regla);
 
             ReportExcelMateriaPrima ExcelMateriaP = new ReportExcelMateriaPrima();
-            string excel = ExcelMateriaP.ReporteExcel(listar,regla);
+            string excel = ExcelMateriaP.ReporteExcel(listar);
 
             return  new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, excel);
         }
