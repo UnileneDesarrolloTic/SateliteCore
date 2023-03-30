@@ -337,6 +337,13 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<DatosClienteDTO>(true, Constante.MESSAGE_SUCCESS, datosCliente); ;
         }
 
+        public async Task<ResponseModel<IEnumerable<TransportistaEntity>>> Transportista()
+        {
+            IEnumerable<TransportistaEntity> lista = new List<TransportistaEntity>();
+            lista = await _commonRepository.Transportista();
+            return new ResponseModel<IEnumerable<TransportistaEntity>>(true, Constante.MESSAGE_SUCCESS, lista);
+        }
+
 
     }
 }

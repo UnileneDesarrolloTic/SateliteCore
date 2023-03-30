@@ -39,6 +39,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<AlmacenamientoSsomaEntity>>> AlmacenamientoSsoma();
         public Task<ResponseModel<IEnumerable<ResponsableSsomaEntity>>> ResponsableSsoma();
         public Task<ResponseModel<DatosClienteDTO>> ObtenerDatosCliente(int codigoCliente);
+        public Task<ResponseModel<IEnumerable<TransportistaEntity>>> Transportista();
 
     }
 }

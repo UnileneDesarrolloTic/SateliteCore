@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Logistica;
 using SatelliteCore.Api.ReportServices.Contracts.Logistica;
@@ -8,6 +9,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -19,28 +21,60 @@ namespace SatelliteCore.Api.Services
         {
             _logisticaRepository = logisticaRepository;
         }
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
+        public async Task<ResponseModel<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
         {
-            return await _logisticaRepository.ObtenerNumeroGuias(numeroguia);
+            if (string.IsNullOrEmpty(numeroguia))
+                throw new ValidationModelException("Debe ingresar información completa");
+
+            DatosFormatoPlanOrdenServicosD respuesta = new DatosFormatoPlanOrdenServicosD();
+            respuesta = await _logisticaRepository.ObtenerNumeroGuias(numeroguia);
+
+            if(respuesta.NumeroGuia == null)
+                return new ResponseModel<DatosFormatoPlanOrdenServicosD>(false, "No hay información de esa guia" , respuesta);
+            return new ResponseModel<DatosFormatoPlanOrdenServicosD>(true, Constante.MESSAGE_SUCCESS, respuesta);
         }
 
-        public async Task<ResponseModel<string>> ExportarExcelRetornoGuia()
+        public async Task<ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>> ListarRetornoGuia(DatosFormatoGestionGuiasClienteModel dato)
         {
             IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
-            result = await _logisticaRepository.ExportarExcelRetornoGuia();
-            if(result.Count()==0)
-               return new ResponseModel<string>(false, "No hay datos para exportar", "");
 
-            ReporteRetornoGuias_Excel ExporteReporteRetornoGuiaExcel = new ReporteRetornoGuias_Excel();
-            string reporte = ExporteReporteRetornoGuiaExcel.GenerarReporte(result);
-            return new ResponseModel<string> (true, Constante.MESSAGE_SUCCESS, reporte);
+            if (string.IsNullOrEmpty(dato.cliente) && string.IsNullOrEmpty(dato.destino) && dato.transportista == 0 && dato.activarFecha == false)
+                return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>(false, "Debe ingresar un valor para lograr la busqueda", result);
+
+            if (dato.activarFecha)
+                if (string.IsNullOrEmpty(dato.fechaInicio.ToString()) || string.IsNullOrEmpty(dato.fechaFin.ToString()))
+                    return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>(false, "Debe ingresar las dos fechas: inicio y fin", result);
+            
+            result = await _logisticaRepository.ListarRetornoGuia(dato);
+
+            if(result.Count() == 0)
+               return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>(false,"No hay datos para mostrar", result);
+
+            return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>> (true, Constante.MESSAGE_SUCCESS, result);
         }
 
-        public async Task<ResponseModel<string>> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
+
+        public async Task<ResponseModel<string>> ExportarExcelRetornoGuia(DatosFormatoGestionGuiasClienteModel dato)
+        {
+            IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
+            result = await _logisticaRepository.ListarRetornoGuia(dato);
+
+            if (result.Count() == 0)
+                return new ResponseModel<string>(false, "No hay datos para mostrar", "");
+
+            string reporte = "";
+            ReporteRetornoGuias_Excel guiareporte = new ReporteRetornoGuias_Excel();
+            reporte = guiareporte.GenerarReporte(result);
+           
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        }
+
+
+        public async Task<ResponseModel<string>> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato)
         {
             await _logisticaRepository.RegistrarRetornoGuia(dato);
 
-            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo los datos");
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo con éxito");
         }
 
         public async Task<IEnumerable<DatosFormatoItemVentas>> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato)

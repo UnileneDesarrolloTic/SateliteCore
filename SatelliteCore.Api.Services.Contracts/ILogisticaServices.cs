@@ -1,7 +1,9 @@
 ﻿using SatelliteCore.Api.Models.Dto.AnalisisAgujas;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Logistica;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,9 +11,10 @@ namespace SatelliteCore.Api.Services.Contracts
 {
     public interface ILogisticaServices
     {
-        public Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia);
-        public Task<ResponseModel<string>> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato);
-        public Task<ResponseModel<string>> ExportarExcelRetornoGuia();
+        public Task<ResponseModel<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia);
+        public Task<ResponseModel<string>> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato);
+        public Task<ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>> ListarRetornoGuia(DatosFormatoGestionGuiasClienteModel dato);
+        public Task<ResponseModel<string>> ExportarExcelRetornoGuia(DatosFormatoGestionGuiasClienteModel dato);
         public Task<IEnumerable<DatosFormatoItemVentas>> ListarItemVentas(FormatoDatosBusquedaItemsVentas dato);
         public Task<IEnumerable<DatosFormatoItemLoteAlmacen>> BuscarItemVentas(string Item);
         public Task<ResponseModel<string>> ListarItemVentasExportar(FormatoDatosBusquedaItemsVentas dato);

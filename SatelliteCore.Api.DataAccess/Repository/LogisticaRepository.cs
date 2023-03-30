@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Logistica;
 using System.Collections.Generic;
@@ -20,21 +21,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
             _appConfig = appConfig;
         }
 
-        public async Task<IEnumerable<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
+        public async Task<DatosFormatoPlanOrdenServicosD> ObtenerNumeroGuias(string numeroguia)
         {
-            IEnumerable<DatosFormatoPlanOrdenServicosD> result = new List<DatosFormatoPlanOrdenServicosD>();
+            DatosFormatoPlanOrdenServicosD result = new DatosFormatoPlanOrdenServicosD();
 
             using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                result = await context.QueryAsync<DatosFormatoPlanOrdenServicosD>("usp_informacion_retorno_guia_satelite", new { numeroguia}, commandType: CommandType.StoredProcedure);
+                result = await context.QueryFirstOrDefaultAsync<DatosFormatoPlanOrdenServicosD>("usp_informacion_retorno_guia_satelite", new { numeroguia }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
         }
 
-        public async Task<int> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
+        public async Task<int> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato)
         {
-            string script = "UPDATE TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=@fechaRetorno  WHERE " +
+            string script = "UPDATE TLOG_PLAN_ORDEN_SERVICIO_D SET FECHA_RETORNO=GETDATE()  WHERE " +
                             "CONCAT(RTRIM(SERIE),'-',RTRIM(NUMERO_DOCUMENTO))=@numeroGuia AND Estado='A'";
 
             using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
@@ -45,13 +46,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return 1;
         }
 
-        public async Task<IEnumerable<DatosFormatosReporteRetornoGuia>> ExportarExcelRetornoGuia()
+        public async Task<IEnumerable<DatosFormatosReporteRetornoGuia>> ListarRetornoGuia(DatosFormatoGestionGuiasClienteModel dato)
         {
             IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatosReporteRetornoGuia>("usp_reporte_retornoguia_excel", commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatosReporteRetornoGuia>("usp_reporte_retornoguia_excel", new { dato.idCliente, dato.destino, dato.transportista, dato.fechaInicio, dato.fechaFin } ,commandType: CommandType.StoredProcedure);
             }
 
             return result;
