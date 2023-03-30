@@ -50,34 +50,34 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                 worksheet.Cells["B3"].Value = "Número";
                 worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["C3"].Value = "Cliente";
+                worksheet.Cells["C3"].Value = "Fecha Documento";
                 worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["D3"].Value = "Fecha Documento";
+                worksheet.Cells["D3"].Value = "Número Orden";
                 worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["E3"].Value = "Número Orden";
+                worksheet.Cells["E3"].Value = "Licitación Proceso";
                 worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["F3"].Value = "Licitación Proceso";
+                worksheet.Cells["F3"].Value = "Reprogramación Punto Partida";
                 worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["G3"].Value = "Reprogramación Punto Partida";
+                worksheet.Cells["G3"].Value = "Retorno Almacen";
                 worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["H3"].Value = "Retorno Almacen";
+                worksheet.Cells["H3"].Value = "Retorno Comercial";
                 worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["I3"].Value = "Retorno Comercial";
+                worksheet.Cells["I3"].Value = "Fecha Recepción";
                 worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["J3"].Value = "Fecha Recepción";
+                worksheet.Cells["J3"].Value = "Fecha Retorno Comercial";
                 worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["K3"].Value = "Fecha Retorno Comercial";
+                worksheet.Cells["K3"].Value = "Fecha Retorno Almacen";
                 worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["L3"].Value = "Fecha Retorno Almacen";
+                worksheet.Cells["L3"].Value = "Cliente";
                 worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 worksheet.Cells["M3"].Value = "Dias Atraso Almacen";
@@ -109,32 +109,32 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
 
                     worksheet.Cells["B" + row].Value = rowitem.GuiaNumero;
                     
-                    worksheet.Cells["C" + row].Value = rowitem.Cliente;
+                    worksheet.Cells["C" + row].Value = rowitem.FechaDocumento.ToString("dd/MM/yyyy");
                     
-                    worksheet.Cells["D" + row].Value = rowitem.FechaDocumento.ToString("dd/MM/yyyy");
+                    worksheet.Cells["D" + row].Value = rowitem.NumeroOrden;
                     
-                    worksheet.Cells["E" + row].Value = rowitem.NumeroOrden;
+                    worksheet.Cells["E" + row].Value = rowitem.LicitacionNumeroProceso;
                     
-                    worksheet.Cells["F" + row].Value = rowitem.LicitacionNumeroProceso;
+                    worksheet.Cells["F" + row].Value = rowitem.ReprogramacionPuntoPartida;
                     
-                    worksheet.Cells["G" + row].Value = rowitem.ReprogramacionPuntoPartida;
+                    worksheet.Cells["G" + row].Value = rowitem.RetornoAlmacen;
                     
-                    worksheet.Cells["H" + row].Value = rowitem.RetornoAlmacen;
+                    worksheet.Cells["H" + row].Value = rowitem.RetornoComercial;
                     
-                    worksheet.Cells["I" + row].Value = rowitem.RetornoComercial;
+                    worksheet.Cells["I" + row].Value = rowitem.FechaRecepcion?.ToString("dd/MM/yyyy");
 
-                    worksheet.Cells["J" + row].Value = rowitem.FechaRecepcion?.ToString("dd/MM/yyyy");
+                    worksheet.Cells["J" + row].Value = rowitem.FechaRetornoComercial?.ToString("dd/MM/yyyy");
 
-                    
-                    worksheet.Cells["K" + row].Value = rowitem.FechaRetornoComercial?.ToString("dd/MM/yyyy");
-                    
-                    worksheet.Cells["L" + row].Value = rowitem.FechaRetornoAlmacen?.ToString("dd/MM/yyyy");
-                    
-                    worksheet.Cells["M" + row].Value = rowitem.DiasAtrasoAlmacen;
-                    worksheet.Cells["M" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoAlmacen >= 0 ? "#120A0A" : "#EA281F"));
 
-                    worksheet.Cells["N" + row].Value = rowitem.DiasAtrasoComercial;
-                    worksheet.Cells["N" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoComercial >= 0 ? "#120A0A" : "#EA281F"));
+                    worksheet.Cells["K" + row].Value = rowitem.FechaRetornoAlmacen?.ToString("dd/MM/yyyy");
+
+                    worksheet.Cells["L" + row].Value = rowitem.DiasAtrasoAlmacen;
+                    worksheet.Cells["L" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoAlmacen >= 0 ? "#120A0A" : "#EA281F"));
+
+                    worksheet.Cells["M" + row].Value = rowitem.DiasAtrasoComercial;
+                    worksheet.Cells["M" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoComercial >= 0 ? "#120A0A" : "#EA281F"));
+
+                    worksheet.Cells["N" + row].Value = rowitem.Cliente;
 
                     worksheet.Cells["O" + row].Value = rowitem.Destino;                   
                     
@@ -164,18 +164,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
 
             worksheet.Column(1).Width = 10.86 + 2.71;
             worksheet.Column(2).Width = 10.43 + 2.71;
-            worksheet.Column(3).Width = 88.86 + 2.71;
-            worksheet.Column(4).Width = 20.00 + 2.71;
-            worksheet.Column(5).Width = 15.43 + 2.71;
-            worksheet.Column(6).Width = 15.00 + 2.71;
-            worksheet.Column(7).Width = 18.29 + 2.71;
-            worksheet.Column(8).Width = 16.71 + 2.71;
-            worksheet.Column(9).Width = 18.43 + 2.71;
-            worksheet.Column(10).Width = 15.86 + 2.71;
-            worksheet.Column(11).Width = 18.29 + 2.71;
-            worksheet.Column(12).Width = 20.71 + 2.71;
-            worksheet.Column(13).Width = 13.14 + 2.71;
-            worksheet.Column(14).Width = 11 + 2.71;
+            worksheet.Column(3).Width = 20.00 + 2.71;
+            worksheet.Column(4).Width = 15.43 + 2.71;
+            worksheet.Column(5).Width = 15.00 + 2.71;
+            worksheet.Column(6).Width = 18.29 + 2.71;
+            worksheet.Column(7).Width = 16.71 + 2.71;
+            worksheet.Column(8).Width = 18.43 + 2.71;
+            worksheet.Column(9).Width = 15.86 + 2.71;
+            worksheet.Column(10).Width = 18.29 + 2.71;
+            worksheet.Column(11).Width = 20.71 + 2.71;
+            worksheet.Column(12).Width = 13.14 + 2.71;
+            worksheet.Column(13).Width = 11 + 2.71;
+            worksheet.Column(14).Width = 88.86 + 2.71;
             worksheet.Column(15).Width = 25.86 + 2.71;
             worksheet.Column(16).Width = 38.57 + 2.71;
             worksheet.Column(17).Width = 15.29 + 2.71;

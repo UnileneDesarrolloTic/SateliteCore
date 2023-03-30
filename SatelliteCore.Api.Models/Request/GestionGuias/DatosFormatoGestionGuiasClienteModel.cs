@@ -6,7 +6,7 @@ namespace SatelliteCore.Api.Models.Request.GestionGuias
 {
     public struct DatosFormatoGestionGuiasClienteModel
     {   
-        public int idCliente { get; set; }
+        public string idCliente { get; set; }
         public string cliente { get; set; }
         public string destino { get; set; }
         public int transportista { get; set; }
