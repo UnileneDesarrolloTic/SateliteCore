@@ -38,8 +38,8 @@ namespace SatelliteCore.Api.Services
         {
             IEnumerable<DatosFormatosReporteRetornoGuia> result = new List<DatosFormatosReporteRetornoGuia>();
 
-            if (string.IsNullOrEmpty(dato.cliente) && string.IsNullOrEmpty(dato.destino) && dato.transportista == 0 && dato.activarFecha == false)
-                return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>(false, "Debe ingresar un valor para lograr la busqueda", result);
+            /*if (string.IsNullOrEmpty(dato.cliente) && string.IsNullOrEmpty(dato.destino) && dato.transportista == 0 && dato.activarFecha == false)
+                return new ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>>(false, "Debe ingresar un valor para lograr la busqueda", result);*/
 
             if (dato.activarFecha)
                 if (string.IsNullOrEmpty(dato.fechaInicio.ToString()) || string.IsNullOrEmpty(dato.fechaFin.ToString()))
@@ -64,7 +64,7 @@ namespace SatelliteCore.Api.Services
 
             string reporte = "";
             ReporteRetornoGuias_Excel guiareporte = new ReporteRetornoGuias_Excel();
-            reporte = guiareporte.GenerarReporte(result);
+            reporte = guiareporte.GenerarReporte(result, dato);
            
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }

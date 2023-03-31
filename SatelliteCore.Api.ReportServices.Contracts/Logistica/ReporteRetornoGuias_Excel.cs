@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Logistica;
 using System;
@@ -12,7 +13,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
     public class ReporteRetornoGuias_Excel
     {
 
-        public string GenerarReporte(IEnumerable<DatosFormatosReporteRetornoGuia> datos)
+        public string GenerarReporte(IEnumerable<DatosFormatosReporteRetornoGuia> datos, DatosFormatoGestionGuiasClienteModel parametro)
         {
             byte[] file;
             string reporte = null;
@@ -62,28 +63,28 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                 worksheet.Cells["F3"].Value = "Reprogramación Punto Partida";
                 worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["G3"].Value = "Retorno Almacen";
+                worksheet.Cells["G3"].Value = "Fecha Recepción";
                 worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["H3"].Value = "Retorno Comercial";
+                worksheet.Cells["H3"].Value = "Retorno Almacen";
                 worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["I3"].Value = "Fecha Recepción";
+                worksheet.Cells["I3"].Value = "Fecha Retorno Almacen";
                 worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["J3"].Value = "Fecha Retorno Comercial";
+                worksheet.Cells["J3"].Value = "Dias Atraso Almacen";
                 worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["K3"].Value = "Fecha Retorno Almacen";
+                worksheet.Cells["K3"].Value = "Retorno Comercial";
                 worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["L3"].Value = "Cliente";
+                worksheet.Cells["L3"].Value = "Fecha Retorno Comercial";
                 worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["M3"].Value = "Dias Atraso Almacen";
+                worksheet.Cells["M3"].Value = "Dias Atraso Comercial";
                 worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["N3"].Value = "Dias Atraso Comercial";
+                worksheet.Cells["N3"].Value = "Cliente";
                 worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 worksheet.Cells["O3"].Value = "Destino";
@@ -117,19 +118,18 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                     
                     worksheet.Cells["F" + row].Value = rowitem.ReprogramacionPuntoPartida;
                     
-                    worksheet.Cells["G" + row].Value = rowitem.RetornoAlmacen;
+                    worksheet.Cells["G" + row].Value = rowitem.FechaRecepcion?.ToString("dd/MM/yyyy");
                     
-                    worksheet.Cells["H" + row].Value = rowitem.RetornoComercial;
+                    worksheet.Cells["H" + row].Value = rowitem.RetornoAlmacen;
                     
-                    worksheet.Cells["I" + row].Value = rowitem.FechaRecepcion?.ToString("dd/MM/yyyy");
+                    worksheet.Cells["I" + row].Value = rowitem.FechaRetornoAlmacen?.ToString("dd/MM/yyyy");
 
-                    worksheet.Cells["J" + row].Value = rowitem.FechaRetornoComercial?.ToString("dd/MM/yyyy");
+                    worksheet.Cells["J" + row].Value = rowitem.DiasAtrasoAlmacen;
+                    worksheet.Cells["J" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoAlmacen >= 0 ? "#120A0A" : "#EA281F"));
 
+                    worksheet.Cells["K" + row].Value = rowitem.RetornoComercial;
 
-                    worksheet.Cells["K" + row].Value = rowitem.FechaRetornoAlmacen?.ToString("dd/MM/yyyy");
-
-                    worksheet.Cells["L" + row].Value = rowitem.DiasAtrasoAlmacen;
-                    worksheet.Cells["L" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoAlmacen >= 0 ? "#120A0A" : "#EA281F"));
+                    worksheet.Cells["L" + row].Value = rowitem.FechaRetornoComercial?.ToString("dd/MM/yyyy");
 
                     worksheet.Cells["M" + row].Value = rowitem.DiasAtrasoComercial;
                     worksheet.Cells["M" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.DiasAtrasoComercial >= 0 ? "#120A0A" : "#EA281F"));
@@ -148,6 +148,25 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                     row++;
                 }
 
+                if (parametro.exportar == "resumen")
+                {
+                    worksheet.Column(4).Hidden = true;
+                    worksheet.Column(5).Hidden = true;
+                    worksheet.Column(6).Hidden = true;
+                    worksheet.Column(12).Hidden = true;
+                    worksheet.Column(13).Hidden = true;
+                    worksheet.Column(17).Hidden = true;
+                }
+                else
+                {
+                    worksheet.Column(4).Hidden = false;
+                    worksheet.Column(5).Hidden = false;
+                    worksheet.Column(6).Hidden = false;
+                    worksheet.Column(12).Hidden = false;
+                    worksheet.Column(13).Hidden = false;
+                    worksheet.Column(17).Hidden = false;
+                }
+
                 file = excelPackage.GetAsByteArray();
 
                 if (file == null || file.Length == 0)
@@ -164,20 +183,20 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
 
             worksheet.Column(1).Width = 10.86 + 2.71;
             worksheet.Column(2).Width = 10.43 + 2.71;
-            worksheet.Column(3).Width = 20.00 + 2.71;
+            worksheet.Column(3).Width = 12.57 + 2.71;
             worksheet.Column(4).Width = 15.43 + 2.71;
             worksheet.Column(5).Width = 15.00 + 2.71;
             worksheet.Column(6).Width = 18.29 + 2.71;
             worksheet.Column(7).Width = 16.71 + 2.71;
-            worksheet.Column(8).Width = 18.43 + 2.71;
+            worksheet.Column(8).Width = 16.00 + 2.71;
             worksheet.Column(9).Width = 15.86 + 2.71;
-            worksheet.Column(10).Width = 18.29 + 2.71;
+            worksheet.Column(10).Width = 14.29 + 2.71;
             worksheet.Column(11).Width = 20.71 + 2.71;
-            worksheet.Column(12).Width = 13.14 + 2.71;
-            worksheet.Column(13).Width = 11 + 2.71;
-            worksheet.Column(14).Width = 88.86 + 2.71;
-            worksheet.Column(15).Width = 25.86 + 2.71;
-            worksheet.Column(16).Width = 38.57 + 2.71;
+            worksheet.Column(12).Width = 13.86 + 2.71;
+            worksheet.Column(13).Width = 16.43 + 2.71;
+            worksheet.Column(14).Width = 64.14 + 2.71;
+            worksheet.Column(15).Width = 20.86 + 2.71;
+            worksheet.Column(16).Width = 35.57 + 2.71;
             worksheet.Column(17).Width = 15.29 + 2.71;
         }
 
