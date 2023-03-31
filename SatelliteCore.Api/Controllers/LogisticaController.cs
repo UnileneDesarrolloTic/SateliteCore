@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Logistica;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,16 +27,12 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ObtenerNumeroGuias")]
         public async Task<IActionResult> ObtenerNumeroGuias(string numeroguia)
         {
-            if (string.IsNullOrEmpty(numeroguia))
-                throw new ValidationModelException("Debe ingresar información completa");
-
-            IEnumerable<DatosFormatoPlanOrdenServicosD> listaAnalisis = await _logisticaServices.ObtenerNumeroGuias(numeroguia);
-
-            return Ok(listaAnalisis);
+            ResponseModel<DatosFormatoPlanOrdenServicosD> respuesta = await _logisticaServices.ObtenerNumeroGuias(numeroguia);
+            return Ok(respuesta);
         }
 
         [HttpPost("RegistrarRetornoGuia")]
-        public async Task<IActionResult> RegistrarRetornoGuia(List<DatosFormatoRetornoGuiaRequest> dato)
+        public async Task<IActionResult> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato)
         {
             if (!ModelState.IsValid)
                 throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
@@ -44,13 +42,20 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("ExportarExcelRetornoGuia")]
-        public async Task<IActionResult> ExportarExcelRetornoGuia()
+        [HttpPost("ListarRetornoGuia")]
+        public async Task<IActionResult> ListarRetornoGuia(DatosFormatoGestionGuiasClienteModel dato)
         {
-            ResponseModel<string> response = await _logisticaServices.ExportarExcelRetornoGuia();
+            ResponseModel<IEnumerable<DatosFormatosReporteRetornoGuia>> response = await _logisticaServices.ListarRetornoGuia(dato);
             return Ok(response);
         }
 
+
+        [HttpPost("ExportarExcelRetornoGuia")]
+        public async Task<IActionResult> ExportarExcelRetornoGuia(DatosFormatoGestionGuiasClienteModel dato)
+        {
+            ResponseModel<string> response = await _logisticaServices.ExportarExcelRetornoGuia(dato);
+            return Ok(response);
+        }
 
 
         [HttpPost("ListarItemVentas")]
