@@ -42,6 +42,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<AlmacenamientoSsomaEntity>> AlmacenamientoSsoma();
         public Task<IEnumerable<ResponsableSsomaEntity>> ResponsableSsoma();
         public Task RegistroLogEvento(LogTrazaEvento Evento);
+        public Task<IEnumerable<TransportistaEntity>> Transportista();
 
     }
 }

@@ -252,5 +252,11 @@ namespace SatelliteCore.Api.Controllers
             return Ok(cliente);
         }
 
+        [HttpGet("Transportista")]
+        public async Task<IActionResult> Transportista()
+        {   
+            ResponseModel<IEnumerable<TransportistaEntity>> transportista = await _commonService.Transportista();
+            return Ok(transportista);
+        }
     }
 }

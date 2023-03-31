@@ -501,5 +501,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 connection.Dispose();
             }
         }
+
+
+        public async Task<IEnumerable<TransportistaEntity>> Transportista()
+        {
+            IEnumerable<TransportistaEntity> lista = new List<TransportistaEntity>();
+
+            string query = "SELECT ID Id, DESCRIPCION Descripcion, DIRECCION Direccion, TELEFONO_1 PrimerTelefono, TELEFONO_2 SegundoTelefono, ESTADO Estado FROM TLO_TRANSPORTISTA WHERE ESTADO ='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.ContextUReporteador))
+            {
+                lista = await connection.QueryAsync<TransportistaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
     }
 }
