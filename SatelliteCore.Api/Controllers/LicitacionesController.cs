@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 using System.Security.Claims;
 using System.Linq;
+using SatelliteCore.Api.Models.Response.Licitaciones;
+using SatelliteCore.Api.Models.Request.Licitaciones;
 
 namespace SatelliteCore.Api.Controllers
 {
@@ -153,11 +155,28 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("DashboardLicitacionesExportar")]
-        public  async Task<IActionResult> DashboardLicitacionesExportar(string opcion, int anio)
+        public  async Task<IActionResult> DashboardLicitacionesExportar(string opcion)
         {
-            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar(opcion, anio);
+            ResponseModel<string> result =  await _licitacionesServices.DashboardLicitacionesExportar(opcion);
             return Ok(result);
         }
+
+        [HttpGet("BuscarFacturaProceso")]
+        public async Task<IActionResult> BuscarFacturaProceso(string factura)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<DatosFormatoInformacionFacturaExpediente> result = await _licitacionesServices.BuscarFacturaProceso(factura, usuario);
+            return Ok(result);
+        }
+
+        [HttpPost("RegistrarExpedienteLI")]
+        public async Task<IActionResult> RegistrarExpedienteLI(DatosFormatoRegistrarExpedienteLi dato)
+            {
+            ResponseModel<string> result = await _licitacionesServices.RegistrarExpedienteLI(dato);
+            return Ok(result);
+        }
+
+
 
     }
 }

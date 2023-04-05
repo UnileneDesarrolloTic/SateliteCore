@@ -12,6 +12,9 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.ReportServices.Contracts.Dashboard;
 using SatelliteCore.Api.Models.Response.Dashboard;
 using SystemsIntegration.Api.Models.Exceptions;
+using SatelliteCore.Api.Models.Response.Licitaciones;
+using System.Linq;
+using SatelliteCore.Api.Models.Request.Licitaciones;
 
 namespace SatelliteCore.Api.Services
 {
@@ -114,7 +117,7 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado Con Existo");
         }
 
-       public async Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion, int anio)
+       public async Task<ResponseModel<string>> DashboardLicitacionesExportar(string opcion)
         {
            
             if (string.IsNullOrEmpty(opcion))
@@ -124,16 +127,10 @@ namespace SatelliteCore.Api.Services
 
             if (opcion == "facturacion") 
             {
-                if (anio > 2017)
-                {
-                    IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar(anio);
-                    ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
-                    reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
-                }
-                else
-                {
-                    return new ResponseModel<string>(false, "Debe ser apartir del 2018", null);
-                }
+                IEnumerable<DatosFormatodashboardLicitaciones> documento = await _licitacionesRepository.DashboardLicitacionesExportar();
+                ReporteLicitaciones ExporteDashboard = new ReporteLicitaciones();
+                reporte = ExporteDashboard.GenerarReporteDashboardLicitaciones(documento);
+               
                 
             }
             else 
@@ -146,6 +143,30 @@ namespace SatelliteCore.Api.Services
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 
             return Respuesta;
+        }
+
+
+        public async Task<ResponseModel<DatosFormatoInformacionFacturaExpediente>> BuscarFacturaProceso(string factura, string usuario)
+        {
+            if (string.IsNullOrEmpty(factura))
+                throw new ValidationModelException("La información recibida no es válido");
+
+            DatosFormatoInformacionFacturaExpediente resultado = new DatosFormatoInformacionFacturaExpediente();
+            resultado = await _licitacionesRepository.BuscarFacturaProceso(factura, usuario);
+
+            if (resultado.InformacionFactura.NumeroDocumento == null)
+                return new ResponseModel<DatosFormatoInformacionFacturaExpediente>(false,"No hay información con esa factura", resultado);
+     
+            return new ResponseModel<DatosFormatoInformacionFacturaExpediente>(true, Constante.MESSAGE_SUCCESS, resultado);
+        }
+
+        public async Task<ResponseModel<string>> RegistrarExpedienteLI(DatosFormatoRegistrarExpedienteLi dato)
+        {   
+            if(string.IsNullOrEmpty(dato.ordencompra) && string.IsNullOrEmpty(dato.expediente))
+                return new ResponseModel<string>(false, "La información recibida no es válido", "");
+
+            await _licitacionesRepository.RegistrarExpedienteLI(dato);
+            return new ResponseModel<string>(true, "Registro Exitoso", "");
         }
     }
 }

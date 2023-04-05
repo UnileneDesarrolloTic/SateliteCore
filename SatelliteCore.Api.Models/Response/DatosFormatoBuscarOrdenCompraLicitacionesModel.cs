@@ -8,5 +8,6 @@ namespace SatelliteCore.Api.Models.Response
     {
         public string NumeroOC { get; set; }
         public int CantidadOC { get; set; }
+        public string Factura { get; set; }
     }
 }
