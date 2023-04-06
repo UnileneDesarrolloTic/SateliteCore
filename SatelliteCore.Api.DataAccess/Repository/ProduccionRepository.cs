@@ -283,7 +283,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 0;
             
-            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden=@NumeroOrden  AND Item=@Item AND estado<>'CO' ";
+            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item=@Item AND estado<>'CO' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
