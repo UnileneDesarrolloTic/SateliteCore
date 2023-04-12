@@ -22,6 +22,7 @@ namespace SatelliteCore.Api.Models.Response.Logistica
         public int DiasAtrasoComercial { get; set; }
         public string Destino { get; set; }
         public string Transportista { get; set; }
+        public string Provincia { get; set; }
         public decimal Monto { get; set; }
 
 

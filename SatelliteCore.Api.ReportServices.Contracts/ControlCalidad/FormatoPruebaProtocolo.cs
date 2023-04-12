@@ -712,7 +712,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
-            string Conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocolo.png");
+            string Conclusion = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\ConclusionProtocoloIngles.png");
             /*string imagenFlooter = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Protocolo.png");*/
             string FirmaLiliaHurtado = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
             string FirmaFirmaMilagrosMunoz = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaMilagrosMunozTafur.jpg");
@@ -1354,12 +1354,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
                   .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);
 
-                cellFirma = new Cell(1, 1).Add(new Paragraph("Jefe de Control de Calidad"))
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Head of Quality Control"))
                      .SetTextAlignment(TextAlignment.CENTER)
                      .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);
 
-                cellFirma = new Cell(1, 1).Add(new Paragraph("Gerente Técnico"))
+                cellFirma = new Cell(1, 1).Add(new Paragraph("Technical Manager"))
                  .SetTextAlignment(TextAlignment.CENTER)
                  .SetBorder(Border.NO_BORDER);
                 tablaFirmaResponsables.AddCell(cellFirma);

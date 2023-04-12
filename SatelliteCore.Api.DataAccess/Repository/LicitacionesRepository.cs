@@ -3,11 +3,14 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.Licitaciones;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Dashboard;
+using SatelliteCore.Api.Models.Response.Licitaciones;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -95,7 +98,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             DatosFormatoBuscarOrdenCompraLicitacionesModel result = new DatosFormatoBuscarOrdenCompraLicitacionesModel() ;
 
-            string sql1 = "SELECT TOP 1 NumeroOrden numeroOC, CantidadOrden cantidadOC FROM TBDLIOrdenCompra WHERE IdProceso= @NumeroProceso AND NumeroEntrega=@NumeroEntrega AND NumeroItem=@Item AND TipoUsuario=@TipoUsuario AND ESTADO=1 ";
+            string sql1 = "SELECT TOP 1 ISNULL(NumeroOrden,'') numeroOC, ISNULL(CantidadOrden,'') cantidadOC , ISNULL(NumeroDocumento,'') Factura FROM TBDLIOrdenCompra WHERE IdProceso= @NumeroProceso AND NumeroEntrega=@NumeroEntrega AND NumeroItem=@Item AND TipoUsuario=@TipoUsuario AND ESTADO=1 ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
@@ -222,13 +225,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar(int anio)
+        public async Task<IEnumerable<DatosFormatodashboardLicitaciones>> DashboardLicitacionesExportar()
         {
             IEnumerable<DatosFormatodashboardLicitaciones> result = new List<DatosFormatodashboardLicitaciones>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result= await context.QueryAsync<DatosFormatodashboardLicitaciones>("usp_Listar_Informacion_DashboardLicitaciones", new { anio }, commandType: CommandType.StoredProcedure);
+                result= await context.QueryAsync<DatosFormatodashboardLicitaciones>("usp_Listar_Informacion_DashboardLicitaciones", commandType: CommandType.StoredProcedure);
                 
             }
             return result;
@@ -244,6 +247,34 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             }
             return result;
+        }
+
+
+        public async Task<DatosFormatoInformacionFacturaExpediente> BuscarFacturaProceso(string factura, string usuario)
+        {
+            DatosFormatoInformacionFacturaExpediente result = new DatosFormatoInformacionFacturaExpediente();
+
+            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Informacion_Entrega_Expediente", new { factura, usuario }, commandType: CommandType.StoredProcedure);
+                result.InformacionFactura = multi.ReadFirstOrDefault<DatosFormatoFacturaProceso>();
+                result.DetalleExpediente = multi.Read<DatosFormatoInformacionEntregaExpediente>().ToList();
+                result.InformacionExpendiente = multi.ReadFirstOrDefault<DatosFormatoExpediente>();
+            }
+            return result;
+        }
+
+        public async Task<int> RegistrarExpedienteLI(DatosFormatoRegistrarExpedienteLi dato)
+        {
+            int id = 0;
+            string queryDetalle = "INSERT INTO TBLicInformacionEntrega (IdOrdencompra, DestinoCodigo, Destino, FechaEntrega, FechaAprobacion, Usuario) VALUES(@id, @codigo, @destino, @fechaEntrega, @fechaAprobacion, @usuario)";
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                id = await context.QueryFirstOrDefaultAsync<int>("usp_registrar_expediente_licitaciones", new { dato.idProceso, dato.entrega, dato.item, dato.usuario, dato.ordencompra, dato.factura, dato.expediente }, commandType: CommandType.StoredProcedure);
+                foreach (DatosFormatoDetalleExpediente valor in dato.detalleExpediente)
+                    await context.ExecuteAsync(queryDetalle, new { id, valor.codigo, valor.destino, valor.fechaEntrega, valor.fechaAprobacion, valor.usuario });
+            }
+            return id;
         }
 
     }
