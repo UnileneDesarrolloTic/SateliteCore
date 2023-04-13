@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.CompraAguja;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Data;
@@ -362,6 +363,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 result = await context.QueryAsync<DatosFormatoGestionItemDrogueriaColor>(query);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja()
+        {
+            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoListadoSeguimientoCompraAguja>("usp_Seguimiento_OCdrogueria", commandType: CommandType.StoredProcedure);
             }
             return result;
         }

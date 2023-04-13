@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.CompraAguja;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -245,7 +246,15 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<string> respuesta = await _pronosticoServices.GuardarOrdenCompraVencida(dato, usuario);
             return Ok(respuesta);
         }
-       
+
+
+        [HttpPost("InformacionSeguimientoAguja")]
+        public async Task<ActionResult> InformacionSeguimientoAguja()
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> respuesta = await _pronosticoServices.InformacionSeguimientoAguja();
+            return Ok(respuesta);
+        }
 
     }
 }

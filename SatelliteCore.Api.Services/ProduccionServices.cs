@@ -4,6 +4,7 @@ using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.CompraAguja;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
@@ -253,6 +254,12 @@ namespace SatelliteCore.Api.Services
             await _pronosticoRepository.GuardarOrdenCompraVencida(dato, usuario);
             return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
-        
+
+        public async Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja()
+        {
+            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+            result = await _pronosticoRepository.InformacionSeguimientoAguja();
+            return result;
+        }
     }
 }
