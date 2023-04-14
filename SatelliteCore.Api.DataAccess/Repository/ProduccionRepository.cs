@@ -373,7 +373,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoListadoSeguimientoCompraAguja>("usp_Seguimiento_OCdrogueria", commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoListadoSeguimientoCompraAguja>("usp_Informacion_CompraAguja", commandType: CommandType.StoredProcedure);
             }
             return result;
         }

@@ -248,11 +248,21 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
-        [HttpPost("InformacionSeguimientoAguja")]
+        [HttpGet("InformacionSeguimientoAguja")]
         public async Task<ActionResult> InformacionSeguimientoAguja()
         {
-            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> respuesta = await _pronosticoServices.InformacionSeguimientoAguja();
+            return Ok(respuesta);
+        }
+
+        [HttpGet("InformacionSeguimientoAgujaExcel")]
+        public async Task<ActionResult> InformacionSeguimientoAgujaExcel(string mostrarColumna)
+        {
+            if (string.IsNullOrEmpty(mostrarColumna))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+
+            ResponseModel<string> respuesta = await _pronosticoServices.InformacionSeguimientoAgujaExcel(mostrarColumna);
             return Ok(respuesta);
         }
 

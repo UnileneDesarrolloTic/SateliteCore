@@ -34,6 +34,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor,bool mostrarcolumna);
         public Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario);
         public Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja();
+        public Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna);
 
 
     }

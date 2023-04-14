@@ -261,5 +261,16 @@ namespace SatelliteCore.Api.Services
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
             return result;
         }
+
+        public async Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna)
+        {
+            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+            result = await _pronosticoRepository.InformacionSeguimientoAguja();
+
+            ReporteCompraAguja_Excel ExporteCompraAguja = new ReporteCompraAguja_Excel();
+            string reporte = ExporteCompraAguja.GenerarReporte(result, mostrarColumna);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        }
     }
 }

@@ -27,11 +27,11 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public decimal ControlCalidad { get; set; }
         public decimal Aduanas { get; set; }
         public decimal Almacen { get; set; }
-        public decimal StockTotal { get; set; }
+        public decimal Disponible { get; set; }
         public int DiasPotencial { get; set; }
         public int PuntoCorte { get; set; }
-        public int MaximaStock { get; set; }
-        public int DiasEsperar { get; set; }
+        public int MaximoStock { get; set; }
+        public int DiasEspera { get; set; }
         public decimal CantidadComprar { get; set; }
 
     }
