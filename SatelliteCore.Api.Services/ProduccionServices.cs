@@ -11,6 +11,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -271,6 +272,20 @@ namespace SatelliteCore.Api.Services
             string reporte = ExporteCompraAguja.GenerarReporte(result, mostrarColumna);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+        }
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item)
+        {
+            if (string.IsNullOrEmpty(Item))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+            IEnumerable<DatosFormatoTransitoPendienteOC> result = new List<DatosFormatoTransitoPendienteOC>();
+            result = await _pronosticoRepository.MostrarOrdenCompraArima(Item);
+            
+            if(result.Count() == 0)
+                new ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>(false, "No hay elemento", result);
+
+            return new ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>(true, Constante.MESSAGE_SUCCESS, result);
         }
     }
 }

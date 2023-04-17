@@ -261,11 +261,17 @@ namespace SatelliteCore.Api.Controllers
             if (string.IsNullOrEmpty(mostrarColumna))
                 throw new ValidationModelException("verificar los parametros enviados");
 
-
             ResponseModel<string> respuesta = await _pronosticoServices.InformacionSeguimientoAgujaExcel(mostrarColumna);
             return Ok(respuesta);
         }
 
+        [HttpGet("MostrarOrdenCompraArima")]
+         public async Task<ActionResult> MostrarOrdenCompraArima (string Item)
+        {
+            
+            ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>> respuesta = await _pronosticoServices.MostrarOrdenCompraArima(Item);
+            return Ok(respuesta);
+        }
     }
 }
 

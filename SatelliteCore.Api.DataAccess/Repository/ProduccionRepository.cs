@@ -378,5 +378,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima( string Item)
+        {
+            IEnumerable<DatosFormatoTransitoPendienteOC> result = new List<DatosFormatoTransitoPendienteOC>();
+            string sql = "SELECT  RTRIM(b.Item) Item, RTRIM(c.NumeroOrden) NumeroOrden, RTRIM(d.NombreCompleto) Proveedor, b.CantidadPedida Cantidad, b.CantidadRecibida, (b.CantidadPedida - b.CantidadRecibida) PendienteOC, b.FechaPrometida Fecha, DATEDIFF(DAY, c.FechaPrometida, GETDATE()) DiferenciaFecha " +
+                " FROM [SatelliteCore].dbo.[TBDSeguimientoArima] a INNER JOIN WH_OrdenCompraDetalle b WITH(NOLOCK) ON a.ItemFinal = b.Item AND a.Material='AGUJAS'" +
+                " INNER JOIN WH_OrdenCompra c WITH(NOLOCK) ON b.CompaniaSocio = c.CompaniaSocio AND c.NumeroOrden = b.NumeroOrden " +
+                " INNER JOIN PersonaMast d WITH(NOLOCK) ON c.Proveedor = d.Persona " +
+                " WHERE c.AlmacenCodigo IN('TRANSITO') AND b.Estado = 'PE' AND c.Estado = 'AP' AND LEFT(c.NumeroOrden,3) = 'FOR' AND LEN(c.NumeroOrden) = 9 AND b.Item = @Item";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoTransitoPendienteOC>(sql, new { Item });
+            }
+            return result;
+        }
+
     }
 }

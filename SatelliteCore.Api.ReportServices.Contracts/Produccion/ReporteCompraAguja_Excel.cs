@@ -24,7 +24,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             using (var excelPackage = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Compra Drogueria");
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Compra Aguja");
                 worksheet.Cells.Style.Font.Name = "Arial";
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
@@ -68,7 +68,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["C" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["C" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["D" + fila].Value = "FamiliaLarga";
+                worksheet.Cells["D" + fila].Value = "Familia Larga";
                 worksheet.Cells["D" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["D" + fila].Style.WrapText = true;
                 worksheet.Cells["D" + fila].Style.Font.Bold = true;
@@ -270,6 +270,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["AB" + fila].Style.Font.Size = 9;
 
 
+                worksheet.View.FreezePanes(fila + 1, 1);
 
                 int row = fila + 1;
 
@@ -517,7 +518,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(13).Width = 6.71 + 2.71;
             worksheet.Column(14).Width = 7.71 + 2.71;
             worksheet.Column(15).Width = 7.71 + 2.71;
-            worksheet.Column(16).Width = 11.29 + 2.71;
+            worksheet.Column(16).Width = 10.29 + 2.71;
             worksheet.Column(17).Width = 7.71 + 2.71;
             worksheet.Column(18).Width = 7.71 + 2.71;
             worksheet.Column(19).Width = 7.71 + 2.71;
