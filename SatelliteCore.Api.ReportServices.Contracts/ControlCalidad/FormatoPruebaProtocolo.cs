@@ -1216,53 +1216,32 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             {
                 cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph(item.DESCRIPCION_PRUEBA)
                .AddStyle(estiloTextoDetalleProtocolo))
-               .SetTextAlignment(TextAlignment.JUSTIFIED)
                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                .SetVerticalAlignment(VerticalAlignment.TOP)
-               .SetPaddingBottom(3)
-               .SetBorderLeft(Border.NO_BORDER)
-               .SetBorderBottom(Border.NO_BORDER)
-               .SetBorderTop(Border.NO_BORDER)
-               .SetBorderRight(Border.NO_BORDER)
-               .SetPaddingRight(10);
+               .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION + " " + item.VALOR + item.UNIDAD_MEDIDA)
+                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION.Trim() + " " + item.VALOR.Trim() + item.UNIDAD_MEDIDA.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
-                .SetTextAlignment(TextAlignment.JUSTIFIED)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER)
-                .SetPaddingRight(10); ;
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.RESULTADO)
+                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.RESULTADO.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER)
-                .SetPaddingRight(10);
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 2).Add(new Paragraph(item.DESCRIPCION_METODOLOGIA)
+                cellDetalleProtocolo = new Cell(1, 2).Add(new Paragraph(item.DESCRIPCION_METODOLOGIA.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER);
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
             }
 
