@@ -355,7 +355,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             (object cabecera, object detalle) informacionOrdenCompra;
 
-            string script = "SELECT Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera , DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida  FROM TBMTempCompra WHERE Proveedor = @proveedor " +
+            string script = "SELECT Proveedor, DescripcionProveedor, Procedencia, MonedaCodigo, FechaPreparacion, MontoTotal, Estado, IdGestionarColor, DiasEspera , DATEADD(DAY,DiasEspera,FechaPreparacion) FechaPrometida, ViaEnvio, Incoterms, PaisOrigen, PuertoSalida  FROM TBMTempCompra WHERE Proveedor = @proveedor " +
                             "SELECT Proveedor, Secuencia, Item, Descripcion, Presentacion, CantidadPedida, PrecioUnitario, MontoTotal, Moneda, Estado, FechaPrometida, ColorVariacion, IdGestionarColor FROM TBDTempCompra WHERE Proveedor = @proveedor ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))

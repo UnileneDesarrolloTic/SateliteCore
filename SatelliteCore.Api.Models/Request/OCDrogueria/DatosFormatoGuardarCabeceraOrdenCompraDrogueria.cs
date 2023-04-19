@@ -16,6 +16,10 @@ namespace SatelliteCore.Api.Models.Request.OCDrogueria
         public string procedencia { get; set; }  
         public DateTime fechaPrometida { get; set; }
         public decimal diasespera { get; set; }
+        public string viaEnvio { get; set; }
+        public string incoterms { get; set; }
+        public string paisOrigen { get; set; }
+        public string puertoSalida { get; set; }
         public List<DatosFormatoGuardarDetalleOrdenCompra> detalle { get; set; }
     }
 }
