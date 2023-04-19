@@ -245,7 +245,10 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("VisualizarOrdenCompraSimulada")]
         public async Task<ActionResult> VisualizarOrdenCompraSimulada(string proveedor)
         {
-            (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompraSimulada(proveedor);
+
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompraSimulada(proveedor, usuario);
             object response = new { cabecera, detalle };
 
             return Ok(response);

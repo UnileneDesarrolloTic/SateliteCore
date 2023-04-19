@@ -394,11 +394,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<int> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
+        public async Task<string> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
         {
             string numeroOrden = "";
             int secuencia = 1;
-            int result = 0;
 
             string sql = "UPDATE SatelliteCore..TBMTempCompra SET Estado='GE' WHERE Proveedor = @persona AND  Clasificacion='DROGUERIA'";
 
@@ -413,7 +412,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 }
                 await context.ExecuteAsync(sql, new { dato.persona });
             }
-            return result;
+            return numeroOrden;
         }
         
         public async Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor()
