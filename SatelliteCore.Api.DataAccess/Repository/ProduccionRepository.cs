@@ -403,7 +403,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal }, commandType: CommandType.StoredProcedure);
+                numeroOrden = await context.QueryFirstOrDefaultAsync<string>("usp_guardar_orden_compra_drogueria_cabecera", new { dato.persona, dato.fecha, dato.fechaPrometida, idusuario, strusuario, dato.diasespera, dato.montoTotal, dato.viaEnvio, dato.incoterms, dato.paisOrigen, dato.puertoSalida }, commandType: CommandType.StoredProcedure);
 
                 foreach (DatosFormatoGuardarDetalleOrdenCompra producto in dato.detalle)
                 {
