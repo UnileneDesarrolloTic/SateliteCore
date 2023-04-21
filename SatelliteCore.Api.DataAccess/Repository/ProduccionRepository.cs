@@ -216,13 +216,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Anio)
         {
             DatosFormatoInformacionCalendarioSeguimientoOC result = new DatosFormatoInformacionCalendarioSeguimientoOC();
 
             using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Origen, Anio, Regla }, commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new {  Anio }, commandType: CommandType.StoredProcedure);
                 result.Calendario = multi.Read<DatosFormatoCalentarioSeguimientoOC>().ToList();
                 result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
 
@@ -237,7 +237,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Buscar_Item_Orden_Compra", new { Item, Anio }, commandType: CommandType.StoredProcedure);
-                result.informacionItem = multi.Read<FormatoDatoInformacionItem>().ToList();
                 result.ListaOrdenCompra = multi.Read<FormatoDatosOrdenCompraItem>().ToList();
                 result.Detalle = multi.Read<object>().ToList();
 
@@ -249,9 +248,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
         {
             int result=0;
-            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
+            string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 await context.ExecuteAsync(script, new { dato.fechaPrometida, dato.item , dato.numeroOrden});
             }
@@ -264,12 +263,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
             (object cabecera, object detalle) datosOrdenCompra;
 
             string script = "SELECT RTRIM(a.NumeroOrden) NumeroOrden,RTRIM(b.Busqueda) Proveedor,FechaPreparacion, FechaPrometida, FechaEnvioProveedor ,a.Estado " +
-                            "FROM PROD_UNILENE2..WH_OrdenCompra a INNER JOIN PROD_UNILENE2..PersonaMast b ON a.Proveedor = b.Persona " +
+                            "FROM WH_OrdenCompra a INNER JOIN PersonaMast b ON a.Proveedor = b.Persona " +
                             "WHERE NumeroOrden = @OrdenCompra  " +
                             "SELECT RTRIM(NumeroOrden) NumeroOrden,RTRIM(Item) Item, RTRIM(Descripcion) Descripcion, RTRIM(UnidadCodigo) UnidadCodigo, CantidadPedida , CantidadRecibida , Estado , FechaPrometida , CAST(0 AS BIT) isSelected   " +
-                            "FROM PROD_UNILENE2..WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
+                            "FROM WH_OrdenCompradetalle WHERE NumeroOrden = @OrdenCompra ";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 using var result =  await context.QueryMultipleAsync(script, new { OrdenCompra });
                 datosOrdenCompra.cabecera = result.Read().FirstOrDefault();
@@ -283,9 +282,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 0;
             
-            string script = "UPDATE PROD_UNILENE2..WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item=@Item AND estado<>'CO' ";
+            string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item=@Item AND estado<>'CO' ";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                
                foreach(DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)

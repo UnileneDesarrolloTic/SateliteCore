@@ -6,7 +6,6 @@ namespace SatelliteCore.Api.Models.Response
 {
     public struct DatosFormatoInformacionItemOrdenCompra
     {
-        public List<FormatoDatoInformacionItem> informacionItem { get; set; }
         public List<FormatoDatosOrdenCompraItem> ListaOrdenCompra { get; set; }
         public List<object> Detalle { get; set; }
     }

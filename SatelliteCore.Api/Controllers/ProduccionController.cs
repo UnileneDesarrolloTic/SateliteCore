@@ -161,9 +161,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ListarItemOrdenCompra")]
-        public async Task<ActionResult> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        public async Task<ActionResult> ListarItemOrdenCompra(string Anio)
         {
-            DatosFormatoInformacionCalendarioSeguimientoOC response = await _pronosticoServices.ListarItemOrdenCompra(Origen, Anio, Regla);
+            DatosFormatoInformacionCalendarioSeguimientoOC response = await _pronosticoServices.ListarItemOrdenCompra(Anio);
             return Ok(response);
         }
 
