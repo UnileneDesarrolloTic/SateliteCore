@@ -406,7 +406,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
                 foreach (DatosFormatoGuardarDetalleOrdenCompra producto in dato.detalle)
                 {
-                    await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
+                    await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { dato.persona , numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
                     secuencia++;
                 }
                 await context.ExecuteAsync(sql, new { dato.persona });
