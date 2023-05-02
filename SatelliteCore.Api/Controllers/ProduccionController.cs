@@ -307,7 +307,6 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("MostrarOrdenCompraArima")]
          public async Task<ActionResult> MostrarOrdenCompraArima (string Item)
         {
-            
             ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>> respuesta = await _pronosticoServices.MostrarOrdenCompraArima(Item);
             return Ok(respuesta);
         }
