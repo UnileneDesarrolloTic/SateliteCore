@@ -18,10 +18,12 @@ namespace SatelliteCore.Api.Services
     public class ProduccionServices : IProduccionServices
     {
         private readonly IProduccionRepository _pronosticoRepository;
+        private readonly ICommonRepository _commonRepository;
 
-        public ProduccionServices(IProduccionRepository pronosticoRepository)
+        public ProduccionServices(IProduccionRepository pronosticoRepository, ICommonRepository commonRepository)
         {
             _pronosticoRepository = pronosticoRepository;
+            _commonRepository = commonRepository;
         }
 
         public async Task<List<ProductoArimaModel>> SeguimientoProductosArima(string periodo)
@@ -182,9 +184,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Modificación con exito");
         }
 
-        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        public async Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Anio)
         {
-            return await _pronosticoRepository.ListarItemOrdenCompra(Origen, Anio, Regla);
+            return await _pronosticoRepository.ListarItemOrdenCompra(Anio);
         }
 
         public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
@@ -249,7 +251,29 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
-        
+
+        public async Task<ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>> MostrarOrdenCompraPrevios()
+        {
+            IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio> resultado = new List<FormatoDatosCabeceraOrdenCompraPrevio>();
+            resultado = await _pronosticoRepository.MostrarOrdenCompraPrevios();
+            return new ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>(true, Constante.MESSAGE_SUCCESS, resultado);
+        }
+
+        public async Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor, string usuario)
+        {
+            if (string.IsNullOrEmpty(proveedor))
+                throw new ValidationModelException("El proveedor es obligatorio");
+
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.CD_INGRESAR_FORMULARIO_COMPRA_DROGUERIA;
+            evento.Usuario = usuario;
+            evento.Opcional = "idProveedor: " + proveedor;
+            await _commonRepository.RegistroLogEvento(evento);
+
+            (object cabecera, object detalle) response = await _pronosticoRepository.VisualizarOrdenCompraSimulada(proveedor);
+            return response;
+        }
+
         public async Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
         {
             await _pronosticoRepository.GuardarOrdenCompraVencida(dato, usuario);
@@ -287,5 +311,30 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>(true, Constante.MESSAGE_SUCCESS, result);
         }
+        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria()
+        {   
+
+            await _pronosticoRepository.GenerarOrdenCompraDrogueria();
+            return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
+        }
+
+        public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
+        {
+            string ordencompra = "";
+            if (dato.detalle.Count == 0)
+                return new ResponseModel<string>(false, "Debe conter aunque sea un item en la orden de compra", "");
+
+            ordencompra = await _pronosticoRepository.RegistrarOrdenCompraDrogueria(dato, strusuario, idusuario);
+
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.CD_GUARDAR_ORDEN_COMPRA_DROGUERIA;
+            evento.Usuario = strusuario;
+            evento.Opcional = "CantidadItems: " + dato.detalle.Count.ToString() + "| OrdenCompra: " + ordencompra;
+            await _commonRepository.RegistroLogEvento(evento);
+
+            
+            return new ResponseModel<string>(true, "Se registro la orden de compra", "");
+        }
+
     }
 }

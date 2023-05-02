@@ -41,9 +41,9 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                 worksheet.Cells["A1:Q2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["A1:Q2"].Style.VerticalAlignment = ExcelVerticalAlignment.Bottom;
 
-                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3"].Style.WrapText = true;
-                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3,T3"].Style.WrapText = true;
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3,T3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["A3,B3,C3,D3,E3,F3,G3,H3,I3,J3,K3,L3,M3,N3,O3,P3,Q3,R3,S3,T3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
           
 
                 worksheet.Cells["A3"].Value = "Serie";
@@ -100,9 +100,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                 worksheet.Cells["R3"].Value = "Transportista";
                 worksheet.Cells["R3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                worksheet.Cells["S3"].Value = "Monto";
+                worksheet.Cells["S3"].Value = "Monto (S/.)";
                 worksheet.Cells["S3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
+                worksheet.Cells["T3"].Value = "Orden Compra Monto (S/.)";
+                worksheet.Cells["T3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 int row = 4;
 
@@ -156,9 +158,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
                     worksheet.Cells["R" + row].Value = rowitem.Transportista;
 
                     worksheet.Cells["S" + row].Value = rowitem.Monto;
-                    worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0.0000";
+                    worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["S" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
+                    worksheet.Cells["T" + row].Value = rowitem.MontoOrdenCompra;
+                    worksheet.Cells["T" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["T" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     row++;
                 }
@@ -217,12 +222,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Logistica
             worksheet.Column(17).Width = 11.86 + 2.71;
             worksheet.Column(18).Width = 15.71 + 2.71;
             worksheet.Column(19).Width = 15.71 + 2.71;
+            worksheet.Column(20).Width = 15.71 + 2.71;
         }
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A3:S3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#120A0A"));
-            worksheet.Cells["A3:S3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#4AD537"));
+            worksheet.Cells["A3:T3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#120A0A"));
+            worksheet.Cells["A3:T3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#4AD537"));
         }
 
         private static string PeriodoMes(int mes)

@@ -23,5 +23,9 @@ namespace SatelliteCore.Api.CrossCutting.Config
         public const int AP_ACTUALIZAR_LEYENDA = 15;
         public const int AP_ELIMINAR_LEYENDA = 16;
         public const int AP_BUSCAR_PRUEBAS = 17;
+
+        public const int CD_INFORMACION_COMPRA_DROGUERIA = 18;
+        public const int CD_INGRESAR_FORMULARIO_COMPRA_DROGUERIA = 19;
+        public const int CD_GUARDAR_ORDEN_COMPRA_DROGUERIA = 20;
     }
 }

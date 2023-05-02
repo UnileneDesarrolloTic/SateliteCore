@@ -9,7 +9,7 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public string Material { get; set; }
         public string ItemFinal { get; set; }
         public string DescripcionLocal { get; set; }
-        public string LongAguja { get; set; }
+        public decimal LongAgujas { get; set; }
         public string FamiliaLarga { get; set; }
         public decimal TiempoCompra { get; set; }
         public decimal TiempoPago { get; set; }
@@ -28,6 +28,7 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public decimal Aduanas { get; set; }
         public decimal Almacen { get; set; }
         public decimal Disponible { get; set; }
+        public decimal Planta { get; set; }
         public int DiasPotencial { get; set; }
         public int PuntoCorte { get; set; }
         public int MaximoStock { get; set; }

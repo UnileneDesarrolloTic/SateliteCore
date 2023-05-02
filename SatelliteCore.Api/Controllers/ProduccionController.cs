@@ -162,9 +162,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("ListarItemOrdenCompra")]
-        public async Task<ActionResult> ListarItemOrdenCompra(string Origen, string Anio, string Regla)
+        public async Task<ActionResult> ListarItemOrdenCompra(string Anio)
         {
-            DatosFormatoInformacionCalendarioSeguimientoOC response = await _pronosticoServices.ListarItemOrdenCompra(Origen, Anio, Regla);
+            DatosFormatoInformacionCalendarioSeguimientoOC response = await _pronosticoServices.ListarItemOrdenCompra(Anio);
             return Ok(response);
         }
 
@@ -236,6 +236,25 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("MostrarOrdenCompraPrevios")]
+        public async Task<ActionResult> MostrarOrdenCompraPrevios()
+        {
+            ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>> response = await _pronosticoServices.MostrarOrdenCompraPrevios();
+            return Ok(response);
+        }
+
+        [HttpGet("VisualizarOrdenCompraSimulada")]
+        public async Task<ActionResult> VisualizarOrdenCompraSimulada(string proveedor)
+        {
+
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+
+            (object cabecera, object detalle) = await _pronosticoServices.VisualizarOrdenCompraSimulada(proveedor, usuario);
+            object response = new { cabecera, detalle };
+
+            return Ok(response);
+        }
+
         [HttpPost("GuardarOrdenCompraVencida")]
         public async Task<ActionResult> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato)
         {   
@@ -247,6 +266,26 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
+        [HttpGet("GenerarOrdenCompraDrogueria")]
+        public async Task<ActionResult> GenerarOrdenCompraDrogueria()
+        {
+            ResponseModel<string> respuesta = await _pronosticoServices.GenerarOrdenCompraDrogueria();
+            return Ok(respuesta);
+        }
+
+        [HttpPost("RegistrarOrdenCompraDrogueria")]
+        public async Task<ActionResult> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato)
+        {
+            int encontrarPendiente = dato.detalle.FindIndex(x => x.estado == "PE"); 
+            if(encontrarPendiente != -1)
+                throw new ValidationModelException("verificar los parametros enviados");
+           
+            string strusuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            int idusuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+
+            ResponseModel<string> respuesta = await _pronosticoServices.RegistrarOrdenCompraDrogueria(dato, strusuario, idusuario);
+            return Ok(respuesta);
+        }
 
         [HttpGet("InformacionSeguimientoAguja")]
         public async Task<ActionResult> InformacionSeguimientoAguja()

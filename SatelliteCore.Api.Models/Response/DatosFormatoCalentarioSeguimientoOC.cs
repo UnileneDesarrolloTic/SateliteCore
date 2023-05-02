@@ -7,7 +7,7 @@ namespace SatelliteCore.Api.Models.Response
     public struct DatosFormatoCalentarioSeguimientoOC
     {
         public string Item { get; set; }
-        public string DescripcionLocal { get; set; }
+        public string Descripcion { get; set; }
         public string UnidadCodigo { get; set; }
         public int Pronostico { get; set; }
         public decimal CoeficienteVariacion { get; set; }

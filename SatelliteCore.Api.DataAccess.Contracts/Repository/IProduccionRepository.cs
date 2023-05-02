@@ -22,7 +22,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<int> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato, int idUsuario);
         public Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado();
         public Task<int> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato);
-        public Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen,string Anio, string Regla);
+        public Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Anio);
         public Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio);
         public Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato);
         public Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra);
@@ -30,7 +30,11 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria(int idproveedor);
         public Task<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> MostrarOrdenCompraDrogueria(string Item);
         public Task<IEnumerable<DatosFormatoMostrarProveedorDrogueria>> MostrarProveedorDrogueria();
+        public Task<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>> MostrarOrdenCompraPrevios();
+        public Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor);
         public Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario);
+        public Task<int> GenerarOrdenCompraDrogueria();
+        public Task<string> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario);
         public Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor();
         public Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja();
         public Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima(string Item);

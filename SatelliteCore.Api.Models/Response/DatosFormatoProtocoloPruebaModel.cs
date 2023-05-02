@@ -17,7 +17,7 @@ namespace SatelliteCore.Api.Models.Response
         public string MARCA { get; set; }
         public string Presentacion { get; set; }
         public DateTime FECHAANALISIS { get; set; }
-        public string TECNICO { get; set; }
+        public string TECNICA { get; set; }
         public string METODO { get; set; }
         public string DETALLE { get; set; }
         public int ID_DETALLE { get; set; }

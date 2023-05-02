@@ -76,7 +76,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["F3"].Style.Font.Bold = true;
                 worksheet.Cells["F3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["G3"].Value = "S.Disponible";
+                worksheet.Cells["G3"].Value = "Disp - Planta";
                 worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["G3"].Style.Font.Size = 10;
                 worksheet.Cells["G3"].Style.WrapText = true;
@@ -111,7 +111,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["K3"].Style.Font.Bold = true;
                 worksheet.Cells["K3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["L3"].Value = "Pronostico";
+                worksheet.Cells["L3"].Value = "ConsumoMensual";
                 worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["L3"].Style.Font.Size = 10;
                 worksheet.Cells["L3"].Style.WrapText = true;

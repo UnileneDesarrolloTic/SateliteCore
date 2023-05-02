@@ -24,6 +24,34 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
         public string ReporteFormatoPruebaProtocoloEspaniol(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina, string versionProtocolo)
         {
 
+            int contador = 0;
+            DatosFormatoProtocoloPruebaModel cabeceraprotocoloEspanol = new DatosFormatoProtocoloPruebaModel();
+
+            foreach (DatosFormatoProtocoloPruebaModel protocoloFila in ListadoProtocolo)
+            {
+                if (contador == 0)
+                {
+
+                    cabeceraprotocoloEspanol.ITEMDESCRIPCION = protocoloFila.ITEMDESCRIPCION;
+                    cabeceraprotocoloEspanol.Presentacion = protocoloFila.Presentacion;
+                    cabeceraprotocoloEspanol.LOTE = protocoloFila.LOTE;
+                    cabeceraprotocoloEspanol.MARCA = protocoloFila.MARCA;
+                    cabeceraprotocoloEspanol.CANTIDADPRODUCIDA = protocoloFila.CANTIDADPRODUCIDA;
+                    cabeceraprotocoloEspanol.FECHAPRODUCCION = protocoloFila.FECHAPRODUCCION;
+                    cabeceraprotocoloEspanol.FECHAEXPIRACION = protocoloFila.FECHAEXPIRACION;
+                    cabeceraprotocoloEspanol.FECHAANALISIS = protocoloFila.FECHAANALISIS;
+                    cabeceraprotocoloEspanol.ORDENFABRICACION = protocoloFila.ORDENFABRICACION;
+                    cabeceraprotocoloEspanol.NUMERODEPARTE = protocoloFila.NUMERODEPARTE;
+                    cabeceraprotocoloEspanol.DETALLE = protocoloFila.DETALLE;
+                    cabeceraprotocoloEspanol.METODO = protocoloFila.METODO;
+                    cabeceraprotocoloEspanol.TECNICA = protocoloFila.TECNICA;
+
+                    break;
+                }
+                contador++;
+            }
+
+
             string reporte = null;
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
@@ -36,13 +64,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
-            DateTime dateExpiracion = new DateTime(Cabecera.FECHAEXPIRACION.Year, Cabecera.FECHAEXPIRACION.Month, Cabecera.FECHAEXPIRACION.Day);
+            DateTime dateExpiracion = new DateTime(cabeceraprotocoloEspanol.FECHAEXPIRACION.Year, cabeceraprotocoloEspanol.FECHAEXPIRACION.Month, cabeceraprotocoloEspanol.FECHAEXPIRACION.Day);
             string FeExpiracion = dateExpiracion.ToString("MM-yyyy");
 
-            DateTime dateProduccion = new DateTime(Cabecera.FECHAPRODUCCION.Year, Cabecera.FECHAPRODUCCION.Month, Cabecera.FECHAPRODUCCION.Day);
+            DateTime dateProduccion = new DateTime(cabeceraprotocoloEspanol.FECHAPRODUCCION.Year, cabeceraprotocoloEspanol.FECHAPRODUCCION.Month, cabeceraprotocoloEspanol.FECHAPRODUCCION.Day);
             string FeProduccion = dateProduccion.ToString("MM-yyyy");
 
-            bool BuscarFabricacion = Cabecera.ORDENFABRICACION.Contains("PE");
+            bool BuscarFabricacion = cabeceraprotocoloEspanol.ORDENFABRICACION.Contains("PE");
 
             pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new Header(versionProtocolo));
 
@@ -160,7 +188,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetVerticalAlignment(VerticalAlignment.MIDDLE);
             tablaDatosTitulo.AddCell(cellTitulo);
 
-            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + Cabecera.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + cabeceraprotocoloEspanol.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
@@ -194,7 +222,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
            .SetBorderBottom(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 18).Add(new Paragraph(Cabecera.ITEMDESCRIPCION)
+            cellDatosCabecera = new Cell(1, 18).Add(new Paragraph(cabeceraprotocoloEspanol.ITEMDESCRIPCION)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -225,7 +253,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(Cabecera.Presentacion)
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabeceraprotocoloEspanol.Presentacion)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -252,7 +280,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : cabeceraprotocoloEspanol.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
@@ -283,7 +311,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 2).Add(new Paragraph(Cabecera.REFERENCIANUMERO)
+            cellDatosCabecera = new Cell(1, 2).Add(new Paragraph(cabeceraprotocoloEspanol.LOTE)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -300,7 +328,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(Cabecera.CANTIDADPRODUCIDA.ToString("#,##0"))
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabeceraprotocoloEspanol.CANTIDADPRODUCIDA.ToString("#,##0"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -318,7 +346,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorder(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : cabeceraprotocoloEspanol.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -352,7 +380,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(Cabecera.MARCA)
+            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(cabeceraprotocoloEspanol.MARCA)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -381,7 +409,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAANALISIS.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(cabeceraprotocoloEspanol.FECHAANALISIS.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -516,7 +544,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaTecnicaPropia.AddCell(cellTecnicaPropia);
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.TECNICA)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocoloEspanol.TECNICA)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -538,7 +566,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
 
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.METODO)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocoloEspanol.METODO)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -558,7 +586,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             tablaTecnicaPropia.AddCell(cellTecnicaPropia);
 
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.DETALLE)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocoloEspanol.DETALLE)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -684,6 +712,33 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
         public string ReporteFormatoPruebaProtocoloIngles(IEnumerable<DatosFormatoProtocoloPruebaModel> ListadoProtocolo, DatosFormatoNumeroLoteProtocoloModel Cabecera, bool Opcion, ParametroMastEntity datosPiePagina, string versionProtocolo)
         {
+            int contador = 0;
+            DatosFormatoProtocoloPruebaModel cabeceraprotocolo = new DatosFormatoProtocoloPruebaModel();
+
+            foreach (DatosFormatoProtocoloPruebaModel protocoloFila in ListadoProtocolo)
+            {
+                if (contador == 0)
+                {
+                    
+                    cabeceraprotocolo.ITEMDESCRIPCION = protocoloFila.ITEMDESCRIPCION;
+                    cabeceraprotocolo.Presentacion = protocoloFila.Presentacion;
+                    cabeceraprotocolo.LOTE = protocoloFila.LOTE;
+                    cabeceraprotocolo.MARCA = protocoloFila.MARCA;
+                    cabeceraprotocolo.CANTIDADPRODUCIDA = protocoloFila.CANTIDADPRODUCIDA;
+                    cabeceraprotocolo.FECHAPRODUCCION = protocoloFila.FECHAPRODUCCION;
+                    cabeceraprotocolo.FECHAEXPIRACION = protocoloFila.FECHAEXPIRACION;
+                    cabeceraprotocolo.FECHAANALISIS = protocoloFila.FECHAANALISIS;
+                    cabeceraprotocolo.ORDENFABRICACION = protocoloFila.ORDENFABRICACION;
+                    cabeceraprotocolo.NUMERODEPARTE = protocoloFila.NUMERODEPARTE;
+                    cabeceraprotocolo.DETALLE = protocoloFila.DETALLE;
+                    cabeceraprotocolo.METODO = protocoloFila.METODO;
+                    cabeceraprotocolo.TECNICA = protocoloFila.TECNICA;
+
+                    break;
+                }
+                contador++;
+            }
+
             string reporte = null;
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = new PdfWriter(ms);
@@ -702,13 +757,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             LineSeparator lineaSeparadora = new LineSeparator(new SolidLine());
 
 
-            DateTime dateExpiracion = new DateTime(Cabecera.FECHAEXPIRACION.Year, Cabecera.FECHAEXPIRACION.Month, Cabecera.FECHAEXPIRACION.Day);
+            DateTime dateExpiracion = new DateTime(cabeceraprotocolo.FECHAEXPIRACION.Year, cabeceraprotocolo.FECHAEXPIRACION.Month, cabeceraprotocolo.FECHAEXPIRACION.Day);
             string FeExpiracion = dateExpiracion.ToString("MM-yyyy");
 
-            DateTime dateProduccion = new DateTime(Cabecera.FECHAPRODUCCION.Year, Cabecera.FECHAPRODUCCION.Month, Cabecera.FECHAPRODUCCION.Day);
+            DateTime dateProduccion = new DateTime(cabeceraprotocolo.FECHAPRODUCCION.Year, cabeceraprotocolo.FECHAPRODUCCION.Month, cabeceraprotocolo.FECHAPRODUCCION.Day);
             string FeProduccion = dateProduccion.ToString("MM-yyyy");
 
-            bool BuscarFabricacion = Cabecera.ORDENFABRICACION.Contains("PE");
+            bool BuscarFabricacion = cabeceraprotocolo.ORDENFABRICACION.Contains("PE");
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -834,7 +889,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetVerticalAlignment(VerticalAlignment.MIDDLE);
             tablaDatosTitulo.AddCell(cellTitulo);
 
-            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + Cabecera.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
+            cellTitulo = new Cell(1, 1).Add(new Paragraph("N°:" + cabeceraprotocolo.ORDENFABRICACION + " \n").AddStyle(estiloCabeceraSubtituloLote)).Add(new Paragraph(Cabecera.NUMERODEPARTE + " \n").AddStyle(estiloCabeceraSubtituloCodsut))
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
             .SetBorder(Border.NO_BORDER)
@@ -868,7 +923,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
            .SetBorderBottom(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 18).Add(new Paragraph(Cabecera.ITEMDESCRIPCION)
+            cellDatosCabecera = new Cell(1, 18).Add(new Paragraph(cabeceraprotocolo.ITEMDESCRIPCION)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -905,7 +960,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(Cabecera.Presentacion == null ? "" : Cabecera.Presentacion)
+            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(cabeceraprotocolo.Presentacion == null ? "" : cabeceraprotocolo.Presentacion)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -941,7 +996,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : Cabecera.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeProduccion : cabeceraprotocolo.FECHAPRODUCCION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -975,7 +1030,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 2).Add(new Paragraph(Cabecera.REFERENCIANUMERO)
+            cellDatosCabecera = new Cell(1, 2).Add(new Paragraph(cabeceraprotocolo.LOTE)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -998,7 +1053,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(Cabecera.CANTIDADPRODUCIDA.ToString("#,##0"))
+            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(cabeceraprotocolo.CANTIDADPRODUCIDA.ToString("#,##0"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -1023,7 +1078,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : Cabecera.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(BuscarFabricacion ? FeExpiracion : cabeceraprotocolo.FECHAEXPIRACION.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1058,7 +1113,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.MARCA)
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(cabeceraprotocolo.MARCA)
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1087,7 +1142,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderBottom(new SolidBorder(0.50f));
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(Cabecera.FECHAANALISIS.ToString("dd/MM/yyyy"))
+            cellDatosCabecera = new Cell(1, 4).Add(new Paragraph(cabeceraprotocolo.FECHAANALISIS.ToString("dd/MM/yyyy"))
             .AddStyle(estiloTexto))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)
@@ -1161,53 +1216,32 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             {
                 cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph(item.DESCRIPCION_PRUEBA)
                .AddStyle(estiloTextoDetalleProtocolo))
-               .SetTextAlignment(TextAlignment.JUSTIFIED)
                .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                .SetVerticalAlignment(VerticalAlignment.TOP)
-               .SetPaddingBottom(3)
-               .SetBorderLeft(Border.NO_BORDER)
-               .SetBorderBottom(Border.NO_BORDER)
-               .SetBorderTop(Border.NO_BORDER)
-               .SetBorderRight(Border.NO_BORDER)
-               .SetPaddingRight(10);
+               .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION + " " + item.VALOR + item.UNIDAD_MEDIDA)
+                cellDetalleProtocolo = new Cell(1, 6).Add(new Paragraph(item.ESPECIFICACION.Trim() + " " + item.VALOR.Trim() + item.UNIDAD_MEDIDA.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
-                .SetTextAlignment(TextAlignment.JUSTIFIED)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER)
-                .SetPaddingRight(10); ;
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.RESULTADO)
+                cellDetalleProtocolo = new Cell(1, 1).Add(new Paragraph(item.RESULTADO.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER)
-                .SetPaddingRight(10);
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
 
-                cellDetalleProtocolo = new Cell(1, 2).Add(new Paragraph(item.DESCRIPCION_METODOLOGIA)
+                cellDetalleProtocolo = new Cell(1, 2).Add(new Paragraph(item.DESCRIPCION_METODOLOGIA.Trim())
                 .AddStyle(estiloTextoDetalleProtocolo))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.TOP)
-                .SetPaddingBottom(3)
-                .SetBorderLeft(Border.NO_BORDER)
-                .SetBorderBottom(Border.NO_BORDER)
-                .SetBorderTop(Border.NO_BORDER)
-                .SetBorderRight(Border.NO_BORDER);
+                .SetBorder(Border.NO_BORDER);
                 tablaDetalleProtocolo.AddCell(cellDetalleProtocolo);
             }
 
@@ -1223,7 +1257,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             .SetBorderRight(Border.NO_BORDER);
             tablaTecnicaPropia.AddCell(cellTecnicaPropia);
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.TECNICA)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocolo.TECNICA)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -1245,7 +1279,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
 
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.METODO)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocolo.METODO)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)
@@ -1265,7 +1299,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             tablaTecnicaPropia.AddCell(cellTecnicaPropia);
 
 
-            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(Cabecera.DETALLE)
+            cellTecnicaPropia = new Cell(1, 5).Add(new Paragraph(cabeceraprotocolo.DETALLE)
             .AddStyle(estiloTextoDetalleProtocolo))
             .SetTextAlignment(TextAlignment.LEFT)
             .SetHorizontalAlignment(HorizontalAlignment.LEFT)

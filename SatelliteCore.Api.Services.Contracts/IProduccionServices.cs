@@ -23,7 +23,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> RegistrarLoteFabricacionEtiquetas(List<DatosEstructuraLoteEtiquetasModel> dato,int idUsuario);
         public Task<IEnumerable<DatoFormatoLoteEstado>> ListarLoteEstado();
         public Task<ResponseModel<string>> ModificarLoteEstado(DatosFormatoRequestLoteEstado dato);
-        public Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Origen, string Anio, string Regla);
+        public Task<DatosFormatoInformacionCalendarioSeguimientoOC> ListarItemOrdenCompra(string Anio);
         public Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio);
         public Task<ResponseModel<string>> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato);
         public Task<(object cabecera, object detalle)> VisualizarOrdenCompra(string OrdenCompra);
@@ -32,10 +32,13 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>>> MostrarOrdenCompraDrogueria(string Item);
         public Task<ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>> MostrarProveedorDrogueria();
         public Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor,bool mostrarcolumna);
+        public Task<ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>> MostrarOrdenCompraPrevios();
+        public Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor, string usuario);
         public Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario);
         public Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja();
         public Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna);
         public Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item);
-
+        public Task<ResponseModel<string>> GenerarOrdenCompraDrogueria();
+        public Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario);
     }
 }
