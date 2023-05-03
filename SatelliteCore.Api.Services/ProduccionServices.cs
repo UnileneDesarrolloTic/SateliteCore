@@ -234,7 +234,7 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>(true, Constante.MESSAGE_SUCCESS, resultado);
         }
 
-        public async Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna)
+        public async Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna, string agrupador)
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             IEnumerable<DatosFormatoGestionItemDrogueriaColor> condicionesgestion = new List<DatosFormatoGestionItemDrogueriaColor>();
@@ -246,7 +246,7 @@ namespace SatelliteCore.Api.Services
 
             condicionesgestion = await _pronosticoRepository.GestionItemDrogueriaColor();
             ReporteExcelCompraDrogueria ExporteCompraDrogueria = new ReporteExcelCompraDrogueria();
-            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion);
+            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }

@@ -30,7 +30,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>>> SeguimientoOCDrogueria(int idproveedor);
         public Task<ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>>> MostrarOrdenCompraDrogueria(string Item);
         public Task<ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>> MostrarProveedorDrogueria();
-        public Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor,bool mostrarcolumna);
+        public Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor,bool mostrarcolumna, string agrupador);
         public Task<ResponseModel<IEnumerable<FormatoDatosCabeceraOrdenCompraPrevio>>> MostrarOrdenCompraPrevios();
         public Task<(object cabecera, object detalle)> VisualizarOrdenCompraSimulada(string proveedor, string usuario);
         public Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario);

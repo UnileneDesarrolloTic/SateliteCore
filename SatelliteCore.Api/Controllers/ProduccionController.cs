@@ -226,12 +226,12 @@ namespace SatelliteCore.Api.Controllers
 
 
         [HttpGet("ExcelCompraDrogueria")]
-        public async Task<ActionResult> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna)
+        public async Task<ActionResult> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna, string agrupador)
         {
             if (string.IsNullOrEmpty(idproveedor.ToString()))
                 throw new ValidationModelException("El proveedor es obligatorio");
 
-            ResponseModel<string> response = await _pronosticoServices.ExcelCompraDrogueria(idproveedor,mostrarcolumna);
+            ResponseModel<string> response = await _pronosticoServices.ExcelCompraDrogueria(idproveedor,mostrarcolumna, agrupador);
             return Ok(response);
         }
 
