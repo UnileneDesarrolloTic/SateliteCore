@@ -37,6 +37,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<string> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario);
         public Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor();
         public Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja();
-        public Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima(string Item);
+        public Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima(string Item, string Tipo);
     }
 }

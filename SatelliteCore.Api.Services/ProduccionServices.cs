@@ -298,13 +298,13 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
-        public async Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item)
+        public async Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item, string Tipo)
         {
             if (string.IsNullOrEmpty(Item))
                 throw new ValidationModelException("verificar los parametros enviados");
 
             IEnumerable<DatosFormatoTransitoPendienteOC> result = new List<DatosFormatoTransitoPendienteOC>();
-            result = await _pronosticoRepository.MostrarOrdenCompraArima(Item);
+            result = await _pronosticoRepository.MostrarOrdenCompraArima(Item, Tipo);
             
             if(result.Count() == 0)
                 new ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>(false, "No hay elemento", result);

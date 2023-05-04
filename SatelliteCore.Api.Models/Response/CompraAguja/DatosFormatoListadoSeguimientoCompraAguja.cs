@@ -24,6 +24,7 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public decimal ConsumoDia { get; set; }
         public decimal DesviacionCompra { get; set; }
         public decimal PendienteOC { get; set; }
+        public decimal PreparacionOC { get; set; }
         public decimal ControlCalidad { get; set; }
         public decimal Aduanas { get; set; }
         public decimal Almacen { get; set; }
