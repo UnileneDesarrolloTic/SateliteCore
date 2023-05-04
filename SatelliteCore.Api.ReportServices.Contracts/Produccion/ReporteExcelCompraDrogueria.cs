@@ -32,24 +32,30 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 TextoNegrita(worksheet);
 
                 int fila = 1;
-                foreach (DatosFormatoGestionItemDrogueriaColor gestion in condicionesgestion)
+
+                if (agrupador == "conGrupo")
                 {
-                    worksheet.Cells["A" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(gestion.Color));
-                    worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["B" + fila].Value = gestion.Descripcion;
-                    worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["B" + fila].Style.Font.Bold=true;
-                    fila++;
+                    foreach (DatosFormatoGestionItemDrogueriaColor gestion in condicionesgestion)
+                    {
+                        worksheet.Cells["A" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(gestion.Color));
+                        worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["B" + fila].Value = gestion.Descripcion;
+                        worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["B" + fila].Style.Font.Bold = true;
+                        fila++;
+                    }
+
+                    worksheet.View.FreezePanes(fila + 1, 4);
+
+                    worksheet.Cells["D1:AA1"].Merge = true;
+                    worksheet.Cells["D1:AA1"].Value = "Generación de Excel Drogueria " + DateTime.Now;
+                    worksheet.Cells["D1:AA1"].Style.Font.Size = 15;
+                    worksheet.Cells["D1:AA1"].Style.WrapText = true;
+                    worksheet.Cells["D1:AA1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells["D1:AA1"].Style.VerticalAlignment = ExcelVerticalAlignment.Bottom;
+
                 }
-
-                worksheet.View.FreezePanes(fila + 1, 4);
-
-                worksheet.Cells["D1:AA1"].Merge = true;
-                worksheet.Cells["D1:AA1"].Value = "Generación de Excel Drogueria " + DateTime.Now;
-                worksheet.Cells["D1:AA1"].Style.Font.Size = 15;
-                worksheet.Cells["D1:AA1"].Style.WrapText = true;
-                worksheet.Cells["D1:AA1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                worksheet.Cells["D1:AA1"].Style.VerticalAlignment = ExcelVerticalAlignment.Bottom;
+               
 
                 pintarCabecera(worksheet,fila);
                 worksheet.Cells["A" + fila].Value = "Item";
