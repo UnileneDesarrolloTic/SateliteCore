@@ -28,7 +28,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells.Style.Font.Name = "Arial";
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
-                worksheet.View.ZoomScale = 96;
+                worksheet.View.ZoomScale = 90;
 
                 ConfigurarTamanioDeCeldas(worksheet);
                 UnirCeldas(worksheet);
@@ -159,7 +159,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["O" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["O" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["P" + fila].Value = "stock fisico DISPONIBLE descontar lo de planta";
+                worksheet.Cells["P" + fila].Value = "stock fisico DISPONIBLE  \n(+)";
                 worksheet.Cells["P" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["P" + fila].Style.WrapText = true;
                 worksheet.Cells["P" + fila].Style.Font.Bold = true;
@@ -167,7 +167,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["P" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["P" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["Q" + fila].Value = "Planta Requerida";
+                worksheet.Cells["Q" + fila].Value = "Planta Requerida \n(-)";
                 worksheet.Cells["Q" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["Q" + fila].Style.WrapText = true;
                 worksheet.Cells["Q" + fila].Style.Font.Bold = true;
@@ -175,7 +175,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["Q" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["Q" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["R" + fila].Value = "Orden Compra (Preparación)";
+                worksheet.Cells["R" + fila].Value = "Orden Compra Preparación \n(+)";
                 worksheet.Cells["R" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["R" + fila].Style.WrapText = true;
                 worksheet.Cells["R" + fila].Style.Font.Bold = true;
@@ -183,7 +183,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["R" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["R" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["S" + fila].Value = "producto comprado en transito y/o Aprobado";
+                worksheet.Cells["S" + fila].Value = "producto comprado en transito y/o Aprobado \n(+)";
                 worksheet.Cells["S" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["S" + fila].Style.WrapText = true;
                 worksheet.Cells["S" + fila].Style.Font.Bold = true;
@@ -191,7 +191,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["S" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["S" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["T" + fila].Value = "Producto Aduana ";
+                worksheet.Cells["T" + fila].Value = "Producto Aduana \n(+)";
                 worksheet.Cells["T" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["T" + fila].Style.WrapText = true;
                 worksheet.Cells["T" + fila].Style.Font.Bold = true;
@@ -199,7 +199,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["T" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["T" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["U" + fila].Value = "Producto control calidad";
+                worksheet.Cells["U" + fila].Value = "Producto control calidad \n(+)";
                 worksheet.Cells["U" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["U" + fila].Style.WrapText = true;
                 worksheet.Cells["U" + fila].Style.Font.Bold = true;
@@ -376,45 +376,45 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
                     worksheet.Cells["P" + row].Value = rowitem.Almacen;
                     worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["P" + row].Style.WrapText = true;
                     worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     worksheet.Cells["Q" + row].Value = rowitem.Planta;
                     worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["Q" + row].Style.WrapText = true;
                     worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     //
                     worksheet.Cells["R" + row].Value = rowitem.PreparacionOC;
                     worksheet.Cells["R" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["R" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["R" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["R" + row].Style.WrapText = true;
                     worksheet.Cells["R" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
 
                     worksheet.Cells["S" + row].Value = rowitem.PendienteOC;
                     worksheet.Cells["S" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["S" + row].Style.WrapText = true;
                     worksheet.Cells["S" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     worksheet.Cells["T" + row].Value = rowitem.Aduanas;
                     worksheet.Cells["T" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["T" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["T" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["T" + row].Style.WrapText = true;
                     worksheet.Cells["T" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     worksheet.Cells["U" + row].Value = rowitem.ControlCalidad;
                     worksheet.Cells["U" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["U" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["U" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["U" + row].Style.WrapText = true;
                     worksheet.Cells["U" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     worksheet.Cells["V" + row].Value = rowitem.Disponible;
                     worksheet.Cells["V" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["V" + row].Style.WrapText = true;
                     worksheet.Cells["V" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
@@ -483,10 +483,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Column(11).Hidden = false;
                     worksheet.Column(12).Hidden = false;
                     worksheet.Column(13).Hidden = false;
-                    worksheet.Column(22).Hidden = false;
                     worksheet.Column(23).Hidden = false;
                     worksheet.Column(24).Hidden = false;
                     worksheet.Column(25).Hidden = false;
+                    worksheet.Column(26).Hidden = false;
                     
                 }
                 else
@@ -500,10 +500,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Column(11).Hidden = true;
                     worksheet.Column(12).Hidden = true;
                     worksheet.Column(13).Hidden = true;
-                    worksheet.Column(22).Hidden = true;
                     worksheet.Column(23).Hidden = true;
                     worksheet.Column(24).Hidden = true;
                     worksheet.Column(25).Hidden = true;
+                    worksheet.Column(26).Hidden = true;
                 }
 
            
@@ -546,10 +546,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(16).Width = 10.29 + 2.71;
             worksheet.Column(17).Width = 7.71 + 2.71;
             worksheet.Column(18).Width = 9.71 + 2.71;
-            worksheet.Column(19).Width = 7.71 + 2.71;
+            worksheet.Column(19).Width = 9.71 + 2.71;
             worksheet.Column(20).Width = 9.71 + 2.71;
             worksheet.Column(21).Width = 9.71 + 2.71;
-            worksheet.Column(22).Width = 7.71 + 2.71;
+            worksheet.Column(22).Width = 9.71 + 2.71;
             worksheet.Column(23).Width = 7.71 + 2.71;
             worksheet.Column(24).Width = 7.71 + 2.71;
             worksheet.Column(25).Width = 7.71 + 2.71;
