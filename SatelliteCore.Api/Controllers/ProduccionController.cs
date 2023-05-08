@@ -268,7 +268,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("GenerarOrdenCompraDrogueria")]
         public async Task<ActionResult> GenerarOrdenCompraDrogueria()
         {
-            ResponseModel<string> respuesta = await _pronosticoServices.GenerarOrdenCompraDrogueria();
+            int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
+            ResponseModel<string> respuesta = await _pronosticoServices.GenerarOrdenCompraDrogueria(idUsuario);
             return Ok(respuesta);
         }
 

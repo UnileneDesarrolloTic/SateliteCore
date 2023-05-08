@@ -279,12 +279,21 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
 
-        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria()
-        {   
+        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria(int idUsuario)
+        {
+            bool permitir=true;
 
-            await _pronosticoRepository.GenerarOrdenCompraDrogueria();
-            return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
+            permitir = await _commonRepository.ValidacionPermisoAccesso("FR0013", idUsuario);
+
+            if (!permitir)
+            {
+                await _pronosticoRepository.GenerarOrdenCompraDrogueria();
+                return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
+            }
+                return new ResponseModel<string>(false, "No cuenta con permiso para actualizar ordenes de compra", "");
         }
+           
+          
 
         public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
         {
