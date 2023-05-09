@@ -235,7 +235,7 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<IEnumerable<DatosFormatoMostrarProveedorDrogueria>>(true, Constante.MESSAGE_SUCCESS, resultado);
         }
 
-        public async Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna)
+        public async Task<ResponseModel<string>> ExcelCompraDrogueria(int idproveedor, bool mostrarcolumna, string agrupador)
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             IEnumerable<DatosFormatoGestionItemDrogueriaColor> condicionesgestion = new List<DatosFormatoGestionItemDrogueriaColor>();
@@ -247,7 +247,7 @@ namespace SatelliteCore.Api.Services
 
             condicionesgestion = await _pronosticoRepository.GestionItemDrogueriaColor();
             ReporteExcelCompraDrogueria ExporteCompraDrogueria = new ReporteExcelCompraDrogueria();
-            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion);
+            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
@@ -311,12 +311,22 @@ namespace SatelliteCore.Api.Services
 
             return new ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>(true, Constante.MESSAGE_SUCCESS, result);
         }
-        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria()
-        {   
 
-            await _pronosticoRepository.GenerarOrdenCompraDrogueria();
-            return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
+        public async Task<ResponseModel<string>> GenerarOrdenCompraDrogueria(int idUsuario)
+        {
+            bool permitir=true;
+
+            permitir = await _commonRepository.ValidacionPermisoAccesso("FR0013", idUsuario);
+
+            if (!permitir)
+            {
+                await _pronosticoRepository.GenerarOrdenCompraDrogueria();
+                return new ResponseModel<string>(true, "Actualizo las ordenes de compra", "");
+            }
+                return new ResponseModel<string>(false, "No cuenta con permiso para actualizar ordenes de compra", "");
         }
+           
+          
 
         public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
         {
