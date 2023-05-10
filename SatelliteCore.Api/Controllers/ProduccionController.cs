@@ -291,7 +291,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("InformacionSeguimientoAguja")]
         public async Task<ActionResult> InformacionSeguimientoAguja()
         {
-            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> respuesta = await _pronosticoServices.InformacionSeguimientoAguja();
+            DatosInformacionGeneralReporteCompraArimaAgujas respuesta = await _pronosticoServices.InformacionSeguimientoAguja();
             return Ok(respuesta);
         }
 

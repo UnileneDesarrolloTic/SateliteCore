@@ -14,7 +14,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 {
     public class ReporteCompraAguja_Excel
     {
-        public string GenerarReporte(IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> dato, string mostrarColumna)
+        public string GenerarReporte(IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> dato, string mostrarColumna, IEnumerable<DatosFormatoCantidadTotalAgujas>  cantidadTotal )
         {
             byte[] file;
             string reporte = null;
@@ -432,7 +432,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
                     worksheet.Cells["Y" + row].Value = rowitem.ConsumoDia;
                     worksheet.Cells["Y" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0";
+                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["Y" + row].Style.WrapText = true;
                     worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
@@ -466,10 +466,34 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["AD" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["AD" + row].Style.WrapText = true;
                     worksheet.Cells["AD" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    row++;
+                }
+
+
+               
+                row = row + 2;
+                foreach (DatosFormatoCantidadTotalAgujas tipoBanner in cantidadTotal)
+                {   
+                    worksheet.Cells["A" + row + ":B" + row].Merge = true;
+                    worksheet.Cells["A" + row + ":B" + row].Value = tipoBanner.TipoBanner;
+                    worksheet.Cells["A" + row + ":B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["A" + row + ":B" + row].Style.Font.Bold=true;
+                    worksheet.Cells["A" + row + ":B" + row].Style.Font.Size = 14;
+                    worksheet.Cells["A" + row + ":B" + row].Style.WrapText = true;
+                    worksheet.Cells["A" + row + ":B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["C" + row + ":D" + row].Merge = true;
+                    worksheet.Cells["C" + row + ":D" + row].Value = tipoBanner.Cantidad;
+                    worksheet.Cells["C" + row + ":D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["C" + row + ":D" + row].Style.Numberformat.Format = "#,##0";
+                    worksheet.Cells["C" + row + ":D" + row].Style.Font.Bold = true;
+                    worksheet.Cells["C" + row + ":D" + row].Style.Font.Size = 14;
+                    worksheet.Cells["C" + row + ":D" + row].Style.WrapText = true;
+                    worksheet.Cells["C" + row + ":D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     row++;
-
                 }
+
 
 
                 if (mostrarColumna == "true")

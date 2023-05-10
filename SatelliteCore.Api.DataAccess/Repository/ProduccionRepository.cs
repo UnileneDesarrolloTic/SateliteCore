@@ -428,14 +428,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja()
+        public async Task<DatosInformacionGeneralReporteCompraArimaAgujas> InformacionSeguimientoAguja()
         {
-            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+            DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection DMVentasContext = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoListadoSeguimientoCompraAguja>("usp_Informacion_CompraAguja", commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Informacion_CompraAguja", commandType: CommandType.StoredProcedure);
+                result.DetalleInformacionAguja = multi.Read<DatosFormatoListadoSeguimientoCompraAguja>().ToList();
+                result.Total = multi.Read<DatosFormatoCantidadTotalAgujas>().ToList();
+
             }
+
             return result;
         }
 

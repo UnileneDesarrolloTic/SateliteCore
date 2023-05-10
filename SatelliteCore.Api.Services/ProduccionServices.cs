@@ -280,20 +280,20 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, "La " + dato.numeroOrden + " con el Item " + dato.item + " ha sido excluida tránsito", "");
         }
 
-        public async Task<IEnumerable<DatosFormatoListadoSeguimientoCompraAguja>> InformacionSeguimientoAguja()
+        public async Task<DatosInformacionGeneralReporteCompraArimaAgujas> InformacionSeguimientoAguja()
         {
-            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+            DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
             return result;
         }
 
         public async Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna)
         {
-            IEnumerable<DatosFormatoListadoSeguimientoCompraAguja> result = new List<DatosFormatoListadoSeguimientoCompraAguja>();
+            DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
 
             ReporteCompraAguja_Excel ExporteCompraAguja = new ReporteCompraAguja_Excel();
-            string reporte = ExporteCompraAguja.GenerarReporte(result, mostrarColumna);
+            string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
