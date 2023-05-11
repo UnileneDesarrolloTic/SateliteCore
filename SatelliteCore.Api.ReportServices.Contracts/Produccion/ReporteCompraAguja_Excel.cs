@@ -298,6 +298,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["B" + row].Style.WrapText = true;
                     worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
+                    worksheet.Cells["B" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(rowitem.GestionColor));
 
                     worksheet.Cells["C" + row].Value = rowitem.LongAgujas;
                     worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -554,8 +555,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
         {
             worksheet.Column(1).Width = 3.71 + 2.71;
             worksheet.Column(2).Width = 25.43 + 2.71;
-            worksheet.Column(3).Width = 7.71 + 2.71;
-            worksheet.Column(4).Width = 16.00 + 2.71;
+            worksheet.Column(3).Width = 5.71 + 2.71;
+            worksheet.Column(4).Width = 18.00 + 2.71;
             worksheet.Column(5).Width = 7.71 + 2.71;
             worksheet.Column(6).Width = 7 + 2.71;
             worksheet.Column(7).Width = 7.71 + 2.71;

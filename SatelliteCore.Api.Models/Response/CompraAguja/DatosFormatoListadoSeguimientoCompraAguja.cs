@@ -35,6 +35,8 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public int MaximoStock { get; set; }
         public int DiasEspera { get; set; }
         public decimal CantidadComprar { get; set; }
+        public string GestionColor { get; set; }
+        public int IdGestion { get; set; }
 
     }
 }
