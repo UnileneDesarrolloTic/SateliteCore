@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.Models.Dto.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,5 +18,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<string> ReporteHorasExtrasGeneradas(string periodo);
         public Task<string> FormatoAutorizacionSobretiempo(int id);
         public Task<ResponseModel<string>> AutorizacionSobretiempoPorPersona(string periodo);
+        public Task<IEnumerable<DatosFormatoReporteComisionVendedor>> ReporteComisionVendedor(string periodo);
+        public Task<ResponseModel<string>> ReporteComisionVendedorExcel(string periodo);
     }
 }

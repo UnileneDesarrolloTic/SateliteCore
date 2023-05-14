@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Report.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.RRHH;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -162,5 +163,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+
+        public async Task<IEnumerable<DatosFormatoReporteComisionVendedor>> ReporteComisionVendedor(string periodo)
+        {
+            IEnumerable<DatosFormatoReporteComisionVendedor> result = new List<DatosFormatoReporteComisionVendedor>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryAsync<DatosFormatoReporteComisionVendedor>("usp_reporte_comisiones_vendedor_satelite", new { periodo }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
     }
 }

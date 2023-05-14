@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Dto.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH;
 using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -119,6 +120,20 @@ namespace SatelliteCore.Api.Controllers
         public async Task<IActionResult> AutorizacionSobretiempoPorPersona(string periodo)
         {
             ResponseModel<string> reporte = await _rrhhServices.AutorizacionSobretiempoPorPersona(periodo);
+            return Ok(reporte);
+        }
+
+        [HttpGet("ReporteComisionVendedor")]
+        public async Task<IActionResult> ReporteComisionVendedor(string periodo)
+        {
+            IEnumerable<DatosFormatoReporteComisionVendedor> listado = await _rrhhServices.ReporteComisionVendedor(periodo);
+            return Ok(listado);
+        }
+
+        [HttpGet("ReporteComisionVendedorExcel")]
+        public async Task<IActionResult> ReporteComisionVendedorExcel(string periodo)
+        {
+            ResponseModel<string> reporte  = await _rrhhServices.ReporteComisionVendedorExcel(periodo);
             return Ok(reporte);
         }
 

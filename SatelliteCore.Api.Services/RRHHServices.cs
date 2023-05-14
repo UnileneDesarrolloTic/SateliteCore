@@ -5,10 +5,12 @@ using SatelliteCore.Api.Models.Report.RRHH;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.RRHH;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH;
 using SatelliteCore.Api.ReportServices.Contracts.RRHH;
 using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -110,6 +112,31 @@ namespace SatelliteCore.Api.Services
 
             AutorizacionSobretiempoPorPersona_PDF reporte = new AutorizacionSobretiempoPorPersona_PDF(datos);
             string rpt = reporte.Exportar();
+
+            return new ResponseModel<string>(true, Constante.MESSSGE_SUCCESS_REPORT, rpt);
+        }
+
+        public async Task<IEnumerable<DatosFormatoReporteComisionVendedor>> ReporteComisionVendedor(string periodo)
+        {
+            if (string.IsNullOrEmpty(periodo) || periodo.Length != 8)
+                throw new ValidationModelException("Error en los datos enviados !!");
+
+            IEnumerable<DatosFormatoReporteComisionVendedor> response = await _rrhhRepository.ReporteComisionVendedor(periodo);
+            return response;
+        }
+
+        public async Task<ResponseModel<string>> ReporteComisionVendedorExcel(string periodo)
+        {
+            if (string.IsNullOrEmpty(periodo) || periodo.Length != 8)
+                throw new ValidationModelException("Error en los datos enviados !!");
+
+            IEnumerable<DatosFormatoReporteComisionVendedor> listado = await _rrhhRepository.ReporteComisionVendedor(periodo);
+
+            if(listado.Count() == 0)
+                return new ResponseModel<string>(false, "No se encontro comisión con este periodo", null);
+
+            ReporteComisionVendedor_excel reporte = new ReporteComisionVendedor_excel();
+            string rpt = reporte.GenerarReporte(listado);
 
             return new ResponseModel<string>(true, Constante.MESSSGE_SUCCESS_REPORT, rpt);
         }
