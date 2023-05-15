@@ -136,7 +136,7 @@ namespace SatelliteCore.Api.Services
                 return new ResponseModel<string>(false, "No se encontro comisión con este periodo", null);
 
             ReporteComisionVendedor_excel reporte = new ReporteComisionVendedor_excel();
-            string rpt = reporte.GenerarReporte(listado);
+            string rpt = reporte.GenerarReporte(listado,periodo);
 
             return new ResponseModel<string>(true, Constante.MESSSGE_SUCCESS_REPORT, rpt);
         }
