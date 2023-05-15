@@ -4,6 +4,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Report.Comercial;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.Comercial;
 using SatelliteCore.Api.Models.Response;
 using System;
 using System.Collections.Generic;
@@ -440,22 +441,44 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return (cabeceras, detalles);
         }
 
-        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
+        public async Task<RegistroRecepcionGuiaResponseDTO> RegistrarAdministracionGuia(string serie, string documento, int idUsuario, string tipoRegistro)
         {
+            RegistroRecepcionGuiaResponseDTO datosGuia = new RegistroRecepcionGuiaResponseDTO();
 
-            string script;
-            if (dato.comentariosEntrega)
-               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='1' , AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE()  WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
-            else
-               script = "UPDATE PROD_UNILENE2..WH_GuiaRemision SET ComentariosEntrega='0', AgenciaTransporte=@idUsuario , FechaReprogramacion1=GETDATE() WHERE Destinatario=@destinatario AND SerieNumero=@serieNumero AND GuiaNumero=@guiaNumero";
-                  
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            string query = null;
+
+            if (tipoRegistro == "I")
             {
-                await context.ExecuteAsync(script, new { dato.destinatario, dato.serieNumero, dato.guiaNumero, dato.comentariosEntrega, idUsuario });
+                query = "UPDATE WH_GuiaRemision SET ComentariosEntrega = '1', AgenciaTransporte=@idUsuario, FechaReprogramacion1 = GETDATE() WHERE CompaniaSocio = '01000000' AND SerieNumero=@serie AND GuiaNumero=@documento";
             }
+            if (tipoRegistro == "O")
+            {
+                query = "UPDATE WH_GuiaRemision SET FechaReprogramacion2 = GETDATE() WHERE CompaniaSocio = '01000000' AND SerieNumero=@serie AND GuiaNumero=@documento";
+            }
+
+            string consulta = "SELECT RTRIM(SerieNumero) + '-' + RTRIM(GuiaNumero) GuiaNumero, DestinatarioNombre Destinatario, FacturaNumero Factura, FechaDocumento FROM WH_GuiaRemision WHERE CompaniaSocio = '01000000' AND SerieNumero=@serie AND GuiaNumero=@documento";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                await context.ExecuteAsync(query, new { serie, documento, idUsuario });
+                datosGuia = await context.QueryFirstOrDefaultAsync<RegistroRecepcionGuiaResponseDTO>(consulta, new { serie, documento });
+            }
+
+            return datosGuia;
         }
 
+        public async Task<(string guiaNumero, string comentariosEntrega, DateTime? FechaEnvioAlmacen)> ObtenerGuiaRegistrada (string serie, string documento)
+        {
+            (string guiaNumero, string comentariosEntrega, DateTime? FechaEnvioAlmacen) response;
+            string query = "SELECT GuiaNumero, RTRIM(ComentariosEntrega) EstadoEntrega, FechaReprogramacion2 FechaEnvioAlmacen FROM WH_GuiaRemision WHERE CompaniaSocio = '01000000' AND SerieNumero=@serie AND GuiaNumero=@documento";
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                response = await context.QueryFirstOrDefaultAsync<(string guiaNumero, string comentariosEntrega, DateTime? FechaEnvioAlmacen)>(query, new { serie, documento });
+            }
+
+            return response;
+        }
 
     }
 }
