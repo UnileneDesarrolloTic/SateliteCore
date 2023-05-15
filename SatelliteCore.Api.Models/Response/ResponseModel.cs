@@ -14,5 +14,12 @@ namespace SatelliteCore.Api.Models.Response
             Content = content;
         }
 
+        public ResponseModel(T content)
+        {
+            Success = true;
+            Message = "Ok";
+            Content = content;
+        }
+
     }
 }

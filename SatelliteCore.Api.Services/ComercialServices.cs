@@ -12,6 +12,9 @@ using SatelliteCore.Api.ReportServices.Contracts.Comercial;
 using System.Linq;
 using SystemsIntegration.Api.Models.Exceptions;
 using SatelliteCore.Api.Models.Report.Comercial;
+using SatelliteCore.Api.Models.Request.Comercial;
+using System;
+using System.Globalization;
 
 namespace SatelliteCore.Api.Services
 {
@@ -225,9 +228,40 @@ namespace SatelliteCore.Api.Services
             return await _comercialRepository.ListarGuiaporFacturar(dato);
         }
 
-        public async Task RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato, int idUsuario)
+        public async Task<ResponseModel<RegistroRecepcionGuiaResponseDTO?>> RegistrarAdministracionGuia(string numeroDocumento, int idUsuario, string tipoRegistro)
         {
-            await _comercialRepository.RegistrarGuiaporFacturar(dato, idUsuario);
+            if(string.IsNullOrWhiteSpace(numeroDocumento) || string.IsNullOrWhiteSpace(tipoRegistro))
+                throw new ValidationModelException();
+
+            if(numeroDocumento.IndexOf("-") == -1 || !numeroDocumento.StartsWith("T", true, new CultureInfo("en-US")) || idUsuario < 1 || (tipoRegistro != "I" && tipoRegistro != "O"))
+                throw new ValidationModelException();
+
+            int separador = numeroDocumento.IndexOf("-");
+            string serieNumero = numeroDocumento.Substring(0, separador);
+            string documentoNumero = numeroDocumento.Substring(separador + 1).PadLeft(10, '0');
+
+            (string guiaNumero, string comentariosEntrega, DateTime? FechaEnvioAlmacen) datosValidacion = await _comercialRepository.ObtenerGuiaRegistrada(serieNumero, documentoNumero);
+
+            if (string.IsNullOrWhiteSpace(datosValidacion.guiaNumero))
+                return new ResponseModel<RegistroRecepcionGuiaResponseDTO?>(false, $"No se pudo encontrar la guía ({serieNumero.ToUpper() + "-" + documentoNumero}).", null);
+
+            if (tipoRegistro == "I")
+            {
+                if (datosValidacion.FechaEnvioAlmacen is null)
+                    return new ResponseModel<RegistroRecepcionGuiaResponseDTO?>(false, $"La guía ({serieNumero.ToUpper() + "-" + documentoNumero}) no tiene fecha de envío a almacen.", null);
+
+                if (datosValidacion.comentariosEntrega == "1")
+                    return new ResponseModel<RegistroRecepcionGuiaResponseDTO?>(false, $"La guía ({serieNumero.ToUpper() + "-" + documentoNumero}) ya se encuentra registrada como recepcionada.", null);
+            }
+            else
+            {
+                if (datosValidacion.FechaEnvioAlmacen != null)
+                    return new ResponseModel<RegistroRecepcionGuiaResponseDTO?>(false, $"Ya se registro el envío de la guía ({serieNumero.ToUpper() + "-" + documentoNumero}).", null);
+            }
+
+            RegistroRecepcionGuiaResponseDTO datosGuia = await _comercialRepository.RegistrarAdministracionGuia(serieNumero, documentoNumero, idUsuario, tipoRegistro);
+
+            return new ResponseModel<RegistroRecepcionGuiaResponseDTO?>(datosGuia);
         }
 
         public async Task<string> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)

@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.Comercial;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
 using System;
@@ -177,15 +178,15 @@ namespace SatelliteCore.Api.Controllers
 
         [HttpPost("ListarDocumentoLicitacion")]
         public async Task<ActionResult> ListarDocumentoLicitacion(DatosFormatoDocumentoLicitacion datos)
-        {   
+        {
 
             IEnumerable<FormatoLicitaciones> response = await _comercialServices.ListarDocumentoLicitacion(datos);
             return Ok(response);
         }
 
-       [HttpPost("NumerodeGuiaLicitacion")]
-       public async Task<ActionResult> NumerodeGuiaLicitacion(ListarOpcionesImprimir datos)
-       {
+        [HttpPost("NumerodeGuiaLicitacion")]
+        public async Task<ActionResult> NumerodeGuiaLicitacion(ListarOpcionesImprimir datos)
+        {
             if (datos.ListaGuias.Count == 0)
             {
                 throw new ValidationModelException("Debe Seleccionar una o varias guias");
@@ -195,16 +196,17 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
-       [HttpGet("NumeroPedido")]
+        [HttpGet("NumeroPedido")]
         public async Task<IActionResult> NumeroPedido(string pedido)
         {
-            if(string.IsNullOrEmpty(pedido))
+            if (string.IsNullOrEmpty(pedido))
                 throw new ValidationModelException("Los datos enviados no son válidos");
-            
 
-            DatoPedidoDocumentoModel  NumeroPedido = await _comercialServices.NumeroPedido(pedido);
 
-            if (NumeroPedido.NumeroDocumento == null) {
+            DatoPedidoDocumentoModel NumeroPedido = await _comercialServices.NumeroPedido(pedido);
+
+            if (NumeroPedido.NumeroDocumento == null)
+            {
                 ResponseModel<DatoPedidoDocumentoModel> response = new ResponseModel<DatoPedidoDocumentoModel>(false, "No Existe ese Numero Pedido", NumeroPedido);
                 return Ok(response);
             }
@@ -213,7 +215,7 @@ namespace SatelliteCore.Api.Controllers
                 ResponseModel<DatoPedidoDocumentoModel> response = new ResponseModel<DatoPedidoDocumentoModel>(true, Constante.MESSAGE_SUCCESS, NumeroPedido);
                 return Ok(response);
             }
-            
+
         }
 
         [HttpPost("RegistrarRotuladosPedido")]
@@ -233,20 +235,19 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listar);
         }
 
-
-        [HttpPost("RegistrarGuiaporFacturar")]
-        public async Task<ActionResult> RegistrarGuiaporFacturar(DatoFormatoEstructuraGuiaFacturada dato)
+        [HttpGet("RegistrarAdministracionGuia")]
+        public async Task<IActionResult> RegistrarAdministracionGuia(string numeroDocumento, string tipoRegistro)
         {
             int idUsuario = Shared.ObtenerUsuarioSesion(HttpContext.User.Identity);
 
-            await _comercialServices.RegistrarGuiaporFacturar(dato, idUsuario);
+            ResponseModel<RegistroRecepcionGuiaResponseDTO?> datosGuia = await _comercialServices.RegistrarAdministracionGuia(numeroDocumento, idUsuario, tipoRegistro);
 
-            return Ok();
+            return Ok(datosGuia);
         }
 
         [HttpPost("ListarGuiaporFacturarExportar")]
         public async Task<ActionResult> ListarGuiaporFacturarExportar(DatosEstructuraGuiaPorFacturarModel dato)
-        {   
+        {
 
             string listar = await _comercialServices.ListarGuiaporFacturarExportar(dato);
             return Ok(listar);
