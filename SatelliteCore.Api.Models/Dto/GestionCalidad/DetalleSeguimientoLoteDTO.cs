@@ -50,6 +50,7 @@ namespace SatelliteCore.Api.Models.Dto.GestionCalidad
     {
         public string NumeroDocumento { get; set; }
         public string TipoDocumento { get; set; }
+        public string ReferenciaDocumentoNC { get; set; }
         public string FormaFacturacion { get; set; }
         public string TipoVenta { get; set; }
         public DateTime FechaDocumento { get; set; }

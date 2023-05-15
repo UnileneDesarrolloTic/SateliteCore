@@ -101,7 +101,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DocumentosPedidosDTO> listaMateriaPrima = new List<DocumentosPedidosDTO>();
 
-            string query = "SELECT RTRIM(b.NumeroDocumento) NumeroDocumento,a.TipoDocumento,FormaFacturacion,TipoVenta,FechaDocumento,RTRIM(ClienteRUC)Ruc,RTRIM(ClienteNombre) ClienteNombre," +
+            string query = "SELECT RTRIM(b.NumeroDocumento) NumeroDocumento, isnull(a.NotaCreditoDocumento,'') ReferenciaDocumentoNC, a.TipoDocumento,FormaFacturacion,TipoVenta,FechaDocumento,RTRIM(ClienteRUC)Ruc,RTRIM(ClienteNombre) ClienteNombre," +
                 "Clientedireccion,RTRIM(b.ItemSerie) Lote,RTRIM(b.lote) OrdenFabricacion,RTRIM(b.AlmacenCodigo) AlmacenCodigo,RTRIM(ItemCodigo) Item,Descripcion,RTRIM(UnidadCodigo) Unidad," +
                 "CantidadEntregada,PrecioUnitario,Monto,MontoTotal FROM CO_Documento a WITH(NOLOCK) INNER JOIN CO_DocumentoDetalle b WITH(NOLOCK) ON a.CompaniaSocio = b.CompaniaSocio AND a.TipoDocumento = b.TipoDocumento " +
                 "AND a.NumeroDocumento = b.numerodocumento WHERE b.Lote IN @lotes AND a.Estado <> 'AN'";
