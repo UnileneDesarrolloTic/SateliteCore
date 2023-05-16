@@ -11,11 +11,9 @@ namespace SatelliteCore.Api.Models.Response.RRHH
         public decimal TotalFacturado { get; set; }
         public decimal SinIGV { get; set; }
         public decimal VentaGeneral { get; set; }
-        public decimal VentaRestriccion { get; set; }
         public decimal VentaGuantes { get; set; }
         public decimal VentaEmodialisis { get; set; }
         public decimal ComisionGeneral { get; set; }
-        public decimal ComisionRestriccion { get; set; }
         public decimal ComisionGuantes { get; set; }
         public decimal ComisionEmodialisis { get; set; }
         public decimal ComisionTotal { get; set; }
