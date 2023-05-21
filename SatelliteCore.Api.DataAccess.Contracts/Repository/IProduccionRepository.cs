@@ -3,6 +3,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
+using SatelliteCore.Api.Models.Response.CompraImportacion;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,5 +39,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor();
         public Task<DatosInformacionGeneralReporteCompraArimaAgujas> InformacionSeguimientoAguja();
         public Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima(string Item, string Tipo);
+        public Task<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> InformacionSeguimientoCompraImportacion();
+        public Task<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material);
     }
 }

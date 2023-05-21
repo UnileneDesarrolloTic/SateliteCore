@@ -3,6 +3,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
+using SatelliteCore.Api.Models.Response.CompraImportacion;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -40,5 +41,8 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item, string Tipo);
         public Task<ResponseModel<string>> GenerarOrdenCompraDrogueria(int idUsuario);
         public Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario);
+        public Task<ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>> InformacionSeguimientoCompraImportacion();
+        public Task<ResponseModel<string>> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna);
+        public Task<ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material);
     }
 }

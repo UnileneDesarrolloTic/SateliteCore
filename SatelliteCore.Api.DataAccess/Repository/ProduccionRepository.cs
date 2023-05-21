@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
+using SatelliteCore.Api.Models.Response.CompraImportacion;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Data;
@@ -450,6 +451,29 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 result = await context.QueryAsync<DatosFormatoTransitoPendienteOC>("usp_Satelite_MostrarOrdenCompraArima_agujas", new { Item, Tipo }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> InformacionSeguimientoCompraImportacion()
+        {
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> result = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoLitadoSeguimientoCompraImportada>("usp_Satelite_CompaArima_Nacional_Importada", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material)
+        {
+            IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion> result = new List<DatosFormatoMostrarOrdenCompraNacionalImportacion>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraNacionalImportacion>("usp_Satelite_MostrarOrdenCompra_Nacional_Importada", new { item, tipo, material }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }

@@ -7,6 +7,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
+using SatelliteCore.Api.Models.Response.CompraImportacion;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
@@ -309,6 +310,27 @@ namespace SatelliteCore.Api.Controllers
          public async Task<ActionResult> MostrarOrdenCompraArima (string Item, string Tipo)
         {
             ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>> respuesta = await _pronosticoServices.MostrarOrdenCompraArima(Item, Tipo);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("InformacionSeguimientoCompraImportacion")]
+        public async Task<ActionResult> InformacionSeguimientoCompraImportacion()
+        {
+            ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> respuesta = await _pronosticoServices.InformacionSeguimientoCompraImportacion();
+            return Ok(respuesta);
+        }
+
+        [HttpGet("ReporteSeguimientoCompraImportacionExcel")]
+        public async Task<ActionResult> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna)
+        {
+            ResponseModel<string> respuesta = await _pronosticoServices.ReporteSeguimientoCompraImportacionExcel(mostrarColumna);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("MostrarOrdenCompraNacionalImportacion")]
+        public async Task<ActionResult> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material)
+        {
+            ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>> respuesta = await _pronosticoServices.MostrarOrdenCompraNacionalImportacion(item, tipo, material);
             return Ok(respuesta);
         }
     }

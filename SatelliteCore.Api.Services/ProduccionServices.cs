@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
+using SatelliteCore.Api.Models.Response.CompraImportacion;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
@@ -325,8 +326,6 @@ namespace SatelliteCore.Api.Services
             }
                 return new ResponseModel<string>(false, "No cuenta con permiso para actualizar ordenes de compra", "");
         }
-           
-          
 
         public async Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario)
         {
@@ -345,6 +344,43 @@ namespace SatelliteCore.Api.Services
             
             return new ResponseModel<string>(true, "Se registro la orden de compra", "");
         }
+
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>> InformacionSeguimientoCompraImportacion()
+        {
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+            listado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion();
+
+            return new ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>(true, Constante.MESSAGE_SUCCESS, listado);
+        }
+
+        public async Task<ResponseModel<string>> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna)
+        {
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+            listado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion();
+
+            ReporteCompraImportada_Excel ExporteCompraAguja = new ReporteCompraImportada_Excel();
+            string reporte = ExporteCompraAguja.GenerarReporte(listado, mostrarColumna);
+
+            return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
+
+        }
+
+        public async Task<ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material)
+        {
+            if (string.IsNullOrEmpty(item))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+            IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion> result = new List<DatosFormatoMostrarOrdenCompraNacionalImportacion>();
+            result = await _pronosticoRepository.MostrarOrdenCompraNacionalImportacion(item, tipo, material);
+
+            if (result.Count() == 0)
+                new ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>>(false, "No hay elemento", result);
+
+            return new ResponseModel<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>>(true, Constante.MESSAGE_SUCCESS, result);
+        }
+
+
 
     }
 }
