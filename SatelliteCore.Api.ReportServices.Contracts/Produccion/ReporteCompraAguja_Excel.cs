@@ -216,7 +216,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["V" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["V" + fila].Style.Font.Size = 9;
 
-                worksheet.Cells["W" + fila].Value = "Total de stock disponible";
+                worksheet.Cells["W" + fila].Value = "Stock Calculado";
                 worksheet.Cells["W" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["W" + fila].Style.WrapText = true;
                 worksheet.Cells["W" + fila].Style.Font.Bold = true;
@@ -608,8 +608,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
         private static void pintarCabecera(ExcelWorksheet worksheet, int fila)
         {
             worksheet.Cells["A" + fila + ":F" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
-            worksheet.Cells["G" + fila + ":I" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
-            worksheet.Cells["J" + fila + ":M" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d1d1d1"));
+            worksheet.Cells["G" + fila + ":L" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
+            worksheet.Cells["M" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d1d1d1"));
             worksheet.Cells["N" + fila + ":O" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
             worksheet.Cells["P" + fila + ":Q" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
             worksheet.Cells["S" + fila + ":W" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
