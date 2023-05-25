@@ -159,7 +159,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoPersonaAsignacionExportModel> result = new List<DatosFormatoPersonaAsignacionExportModel>();
 
-            string query = "SELECT a.IdAsignacion, RTRIM(b.Busqueda) NombreCompleto ,c.Descripcion NombreArea,a.FechaAsignacion ,a.FechaReAsignacion , IIF(a.Estado='A','Activo','Inactivo') Estado " +
+            string query = "SELECT b.Persona, a.IdAsignacion, RTRIM(b.Busqueda) NombreCompleto ,c.Descripcion NombreArea,a.FechaAsignacion ,a.FechaReAsignacion , IIF(a.Estado='A','Activo','Inactivo') Estado " +
                           "FROM TBMAsignacionArea a " +
                           "INNER JOIN PROD_UNILENE2..PersonaMast b on b.Persona = a.IdEmpleado " +
                           "INNER JOIN TBMAreasProduccion c ON a.IdArea = c.IdArea " +

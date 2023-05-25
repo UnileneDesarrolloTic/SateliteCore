@@ -5,7 +5,8 @@ using System.Text;
 namespace SatelliteCore.Api.Models.Response
 {
     public struct DatosFormatoPersonaAsignacionExportModel
-    {
+    {   
+        public int Persona { get; set; }
         public int IdAsignacion { get; set;  }
         public string NombreCompleto { get; set; }
         public string NombreArea { get; set; }
