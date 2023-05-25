@@ -314,16 +314,23 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("InformacionSeguimientoCompraImportacion")]
-        public async Task<ActionResult> InformacionSeguimientoCompraImportacion()
+        public async Task<ActionResult> InformacionSeguimientoCompraImportacion(int material)
         {
-            ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> respuesta = await _pronosticoServices.InformacionSeguimientoCompraImportacion();
+            ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> respuesta = await _pronosticoServices.InformacionSeguimientoCompraImportacion(material);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("InformacionSeguimientoCompraCommodity")]
+        public async Task<ActionResult> InformacionSeguimientoCompraCommodity()
+        {
+            ResponseModel<IEnumerable<DatosFormatoListadoCommodity>> respuesta = await _pronosticoServices.InformacionSeguimientoCompraCommodity();
             return Ok(respuesta);
         }
 
         [HttpGet("ReporteSeguimientoCompraImportacionExcel")]
-        public async Task<ActionResult> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna)
+        public async Task<ActionResult> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna, string reporteArima)
         {
-            ResponseModel<string> respuesta = await _pronosticoServices.ReporteSeguimientoCompraImportacionExcel(mostrarColumna);
+            ResponseModel<string> respuesta = await _pronosticoServices.ReporteSeguimientoCompraImportacionExcel(mostrarColumna, reporteArima);
             return Ok(respuesta);
         }
 

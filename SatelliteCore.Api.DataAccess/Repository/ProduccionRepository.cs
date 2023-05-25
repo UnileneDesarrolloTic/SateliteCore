@@ -61,7 +61,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (var satelliteContext = new SqlConnection(_appConfig.contextSpring))
             {
                 result = await satelliteContext.QueryAsync<SeguimientoCandMPAModel>("usp_pro_SeguimientoCandidatoMPA", new { regla }, commandType: CommandType.StoredProcedure);
-              
+
             }
 
             return result;
@@ -77,7 +77,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 using (var result_db = await satelliteContext.QueryMultipleAsync("usp_pro_DetalleControlCalidadMP", new { Item }, commandType: CommandType.StoredProcedure))
                 {
                     result = result_db.Read<DetalleControlCalidadItemMP>().ToList();
-                } 
+                }
                 satelliteContext.Dispose();
             }
 
@@ -90,12 +90,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var satelliteContext = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                 using (var result_db = await satelliteContext.QueryMultipleAsync("usp_pro_MostrarColumnaPorUsuarioMP", new { Usuario }, commandType: CommandType.StoredProcedure))
-                 {
-                     result = result_db.Read<bool>().First();
-                 }
-                 satelliteContext.Dispose();
-                
+                using (var result_db = await satelliteContext.QueryMultipleAsync("usp_pro_MostrarColumnaPorUsuarioMP", new { Usuario }, commandType: CommandType.StoredProcedure))
+                {
+                    result = result_db.Read<bool>().First();
+                }
+                satelliteContext.Dispose();
+
             }
 
             return result;
@@ -208,9 +208,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                
-                    await connection.ExecuteAsync(sql, new { dato.id, dato.lote });
-              
+
+                await connection.ExecuteAsync(sql, new { dato.id, dato.lote });
+
                 connection.Dispose();
             }
 
@@ -224,7 +224,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new {  Anio }, commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Listar_item_Seguimiento_Compra", new { Anio }, commandType: CommandType.StoredProcedure);
                 result.Calendario = multi.Read<DatosFormatoCalentarioSeguimientoOC>().ToList();
                 result.DetalleCalendario = multi.Read<DatosFormatoDetalleCalendarioSeguimientoOC>().ToList();
 
@@ -232,7 +232,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item,string Anio)
+        public async Task<DatosFormatoInformacionItemOrdenCompra> BuscarItemOrdenCompra(string Item, string Anio)
         {
             DatosFormatoInformacionItemOrdenCompra result = new DatosFormatoInformacionItemOrdenCompra();
 
@@ -249,12 +249,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<int> ActualizarFechaPrometida(DatosFormatoItemActualizarItemOrdenCompra dato)
         {
-            int result=0;
+            int result = 0;
             string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida=@fechaPrometida WHERE NumeroOrden=@numeroOrden  AND Item=@item ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                await context.ExecuteAsync(script, new { dato.fechaPrometida, dato.item , dato.numeroOrden});
+                await context.ExecuteAsync(script, new { dato.fechaPrometida, dato.item, dato.numeroOrden });
             }
 
             return result;
@@ -272,7 +272,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                using var result =  await context.QueryMultipleAsync(script, new { OrdenCompra });
+                using var result = await context.QueryMultipleAsync(script, new { OrdenCompra });
                 datosOrdenCompra.cabecera = result.Read().FirstOrDefault();
                 datosOrdenCompra.detalle = result.Read().ToList();
             }
@@ -283,17 +283,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<int> ActualizarFechaComprometidaMasiva(DatosFormatoCabeceraOrdenCompraModel dato)
         {
             int result = 0;
-            
+
             string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item=@Item AND estado<>'CO' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-               
-               foreach(DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)
+
+                foreach (DatosFormatoDetalleOrdenCompraMasivo item in dato.Detalle)
                 {
                     await context.ExecuteAsync(script, new { item.NumeroOrden, item.Item, dato.FechaLlegada });
                 }
-               
+
             }
 
             return result;
@@ -303,10 +303,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<IEnumerable<DatosFormatoReporteSeguimientoDrogueria>> SeguimientoOCDrogueria(int idproveedor)
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
-            
+
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-               result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria",new { idproveedor }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoReporteSeguimientoDrogueria>("usp_Seguimiento_OCdrogueria", new { idproveedor }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
@@ -315,10 +315,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> result = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
 
-          
+
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>("usp_MostrarOdenCompraDrogueria  ", new {Item } , commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>("usp_MostrarOdenCompraDrogueria  ", new { Item }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
@@ -368,28 +368,28 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return informacionOrdenCompra;
         }
-        public async Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato , string usuario)
+        public async Task<int> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario)
         {
             int respuesta = 0;
             string sql = "";
-            
-             sql = "INSERT INTO SatelliteCore..TBOrdenCompraVencidas (NumeroOrden, Item, CantidadPedida, CantidadRecibida, Comentario, Excluir, Estado, UsuarioCreacion, FechaCreacion) " +
-                    "SELECT RTRIM(@numeroOrden), RTRIM(@item), CantidadPedida, CantidadRecibida, @comentario, 'N', 'A', @usuario, GETDATE() FROM WH_OrdenCompraDetalle " +
-                    "WHERE NumeroOrden = RTRIM(@numeroOrden) AND Item = RTRIM(@item) AND COMPANIASOCIO='01000000'";
+
+            sql = "INSERT INTO SatelliteCore..TBOrdenCompraVencidas (NumeroOrden, Item, CantidadPedida, CantidadRecibida, Comentario, Excluir, Estado, UsuarioCreacion, FechaCreacion) " +
+                   "SELECT RTRIM(@numeroOrden), RTRIM(@item), CantidadPedida, CantidadRecibida, @comentario, 'N', 'A', @usuario, GETDATE() FROM WH_OrdenCompraDetalle " +
+                   "WHERE NumeroOrden = RTRIM(@numeroOrden) AND Item = RTRIM(@item) AND COMPANIASOCIO='01000000'";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                await context.ExecuteAsync(sql, new { dato.item, dato.numeroOrden, dato.comentario,usuario });
+                await context.ExecuteAsync(sql, new { dato.item, dato.numeroOrden, dato.comentario, usuario });
             }
             return respuesta;
         }
 
         public async Task<int> GenerarOrdenCompraDrogueria()
         {
-            int result = 0 ;
+            int result = 0;
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
-            {   
+            {
                 result = await context.ExecuteAsync("usp_generar_orden_compra", commandType: CommandType.StoredProcedure);
             }
             return result;
@@ -408,14 +408,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
                 foreach (DatosFormatoGuardarDetalleOrdenCompra producto in dato.detalle)
                 {
-                    await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { dato.persona , numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
+                    await context.ExecuteAsync("usp_guardar_orden_compra_drogueria_detalle", new { dato.persona, numeroOrden, producto.item, producto.descripcion, secuencia, producto.presentacion, producto.cantidadpedida, producto.preciounitario, producto.montototal, producto.fechaPrometida, strusuario }, commandType: CommandType.StoredProcedure);
                     secuencia++;
                 }
                 await context.ExecuteAsync(sql, new { dato.persona });
             }
             return numeroOrden;
         }
-        
+
         public async Task<IEnumerable<DatosFormatoGestionItemDrogueriaColor>> GestionItemDrogueriaColor()
         {
             IEnumerable<DatosFormatoGestionItemDrogueriaColor> result = new List<DatosFormatoGestionItemDrogueriaColor>();
@@ -444,10 +444,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima( string Item, string Tipo)
+        public async Task<IEnumerable<DatosFormatoTransitoPendienteOC>> MostrarOrdenCompraArima(string Item, string Tipo)
         {
             IEnumerable<DatosFormatoTransitoPendienteOC> result = new List<DatosFormatoTransitoPendienteOC>();
-            
+
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
                 result = await context.QueryAsync<DatosFormatoTransitoPendienteOC>("usp_Satelite_MostrarOrdenCompraArima_agujas", new { Item, Tipo }, commandType: CommandType.StoredProcedure);
@@ -456,16 +456,29 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> InformacionSeguimientoCompraImportacion()
+        public async Task<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> InformacionSeguimientoCompraImportacion(int material)
         {
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> result = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoLitadoSeguimientoCompraImportada>("usp_Satelite_CompaArima_Nacional_Importada", commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoLitadoSeguimientoCompraImportada>("usp_Satelite_CompaArima_Nacional_Importada", new { material }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
+
+        public async Task<IEnumerable<DatosFormatoListadoCommodity>> InformacionSeguimientoCompraCommodity()
+        {
+            IEnumerable<DatosFormatoListadoCommodity> result = new List<DatosFormatoListadoCommodity>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoListadoCommodity>("usp_Satelite_CompraArima_Commodity", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+
 
         public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material)
         {
@@ -473,10 +486,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraNacionalImportacion>("usp_Satelite_MostrarOrdenCompra_Nacional_Importada", new { item, tipo, material }, commandType: CommandType.StoredProcedure);
+                {
+                    result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraNacionalImportacion>("usp_Satelite_MostrarOrdenCompra_Nacional_Importada", new { item, tipo, material }, commandType: CommandType.StoredProcedure);
+                }
+                return result;
             }
-            return result;
-        }
 
+        }
     }
 }

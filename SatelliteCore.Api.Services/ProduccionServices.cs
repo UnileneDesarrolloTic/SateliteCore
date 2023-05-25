@@ -346,21 +346,48 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>> InformacionSeguimientoCompraImportacion()
+        public async Task<ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>> InformacionSeguimientoCompraImportacion(int material)
         {
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
-            listado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion();
+            listado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(material);
 
             return new ResponseModel<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>>(true, Constante.MESSAGE_SUCCESS, listado);
         }
 
-        public async Task<ResponseModel<string>> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna)
+        public async Task<ResponseModel<IEnumerable<DatosFormatoListadoCommodity>>> InformacionSeguimientoCompraCommodity()
         {
-            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
-            listado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion();
+            IEnumerable<DatosFormatoListadoCommodity> listado = new List<DatosFormatoListadoCommodity>();
+            listado = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
 
+            return new ResponseModel<IEnumerable<DatosFormatoListadoCommodity>>(true, Constante.MESSAGE_SUCCESS, listado);
+        }
+
+        public async Task<ResponseModel<string>> ReporteSeguimientoCompraImportacionExcel(string mostrarColumna,string reporteArima)
+        {
+             if(string.IsNullOrEmpty(reporteArima))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+            IEnumerable<DatosFormatoListadoCommodity> listadoCommodity = new List<DatosFormatoListadoCommodity>();
+
+            if (reporteArima == "importacion")
+            { 
+                listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1);
+            }
+            else if (reporteArima == "nacional")
+            { 
+                listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
+                listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
+            }
+            else
+            {
+                listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1);
+                listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
+                listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
+            }
             ReporteCompraImportada_Excel ExporteCompraAguja = new ReporteCompraImportada_Excel();
-            string reporte = ExporteCompraAguja.GenerarReporte(listado, mostrarColumna);
+            string reporte = ExporteCompraAguja.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, reporteArima, listadoCommodity);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 
