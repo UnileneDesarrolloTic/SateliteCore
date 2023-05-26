@@ -551,229 +551,236 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
             worksheet.View.ZoomScale = 90;
 
-            ConfigurarTamanioDeCeldas(worksheet);
+            ConfigurarTamanioDeCeldasCommodity(worksheet);
 
             int fila = 1;
 
             pintarCabeceraCommodity(worksheet, fila);
 
+
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.WrapText = true;
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.Font.Bold = true;
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila}"].Style.Font.Size = 9;
+
             worksheet.Cells["A" + fila].Value = "ITEMFINAL";
-            worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["A" + fila].Style.WrapText = true;
             worksheet.Cells["A" + fila].Style.Font.Bold = true;
             worksheet.Cells["A" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["A" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["A" + fila].Style.Font.Size = 9;
+            worksheet.Cells["A" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["B" + fila].Value = "DESCRIPCION";
-            worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["B" + fila].Style.WrapText = true;
             worksheet.Cells["B" + fila].Style.Font.Bold = true;
             worksheet.Cells["B" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells["B" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["B" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["B" + fila].Style.Font.Size = 9;
+            worksheet.Cells["B" + fila].Style.Font.Size = 9;*/
 
 
             worksheet.Cells["C" + fila].Value = "Clasificacion General";
-            worksheet.Cells["C" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["C" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["C" + fila].Style.WrapText = true;
             worksheet.Cells["C" + fila].Style.Font.Bold = true;
             worksheet.Cells["C" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["C" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["C" + fila].Style.Font.Size = 9;
+            worksheet.Cells["C" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["D" + fila].Value = "Familia Larga";
-            worksheet.Cells["D" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["D" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["D" + fila].Style.WrapText = true;
             worksheet.Cells["D" + fila].Style.Font.Bold = true;
             worksheet.Cells["D" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["D" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["D" + fila].Style.Font.Size = 9;
+            worksheet.Cells["D" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["E" + fila].Value = "Puerto";
-            worksheet.Cells["E" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["E" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["E" + fila].Style.WrapText = true;
             worksheet.Cells["E" + fila].Style.Font.Bold = true;
             worksheet.Cells["E" + fila].Style.Font.Size = 9;
             worksheet.Cells["E" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells["E" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["E" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;*/
 
             worksheet.Cells["F" + fila].Value = "Proveedor";
-            worksheet.Cells["F" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["F" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["F" + fila].Style.WrapText = true;
             worksheet.Cells["F" + fila].Style.Font.Bold = true;
             worksheet.Cells["F" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["F" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["F" + fila].Style.Font.Size = 9;
+            worksheet.Cells["F" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["G" + fila].Value = "tiempo en la gestión de compras  (cotización y aceptación)";
-            worksheet.Cells["G" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["G" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["G" + fila].Style.WrapText = true;
             worksheet.Cells["G" + fila].Style.Font.Bold = true;
             worksheet.Cells["G" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["G" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["G" + fila].Style.Font.Size = 9;
+            worksheet.Cells["G" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["H" + fila].Value = "tiempo en gestión pago contable al proveedor";
-            worksheet.Cells["H" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["H" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["H" + fila].Style.WrapText = true;
             worksheet.Cells["H" + fila].Style.Font.Bold = true;
             worksheet.Cells["H" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["H" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["H" + fila].Style.Font.Size = 9;
+            worksheet.Cells["H" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["I" + fila].Value = "tiempo en aprobación de artes Calidad";
-            worksheet.Cells["I" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["I" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["I" + fila].Style.WrapText = true;
             worksheet.Cells["I" + fila].Style.Font.Bold = true;
             worksheet.Cells["I" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["I" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["I" + fila].Style.Font.Size = 9;
+            worksheet.Cells["I" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["J" + fila].Value = "tiempo de fabricación del proveedor";
-            worksheet.Cells["J" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["J" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["J" + fila].Style.WrapText = true;
             worksheet.Cells["J" + fila].Style.Font.Bold = true;
             worksheet.Cells["J" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["J" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["J" + fila].Style.Font.Size = 9;
+            worksheet.Cells["J" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["K" + fila].Value = "tiempo de transporte";
-            worksheet.Cells["K" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["K" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["K" + fila].Style.WrapText = true;
             worksheet.Cells["K" + fila].Style.Font.Bold = true;
             worksheet.Cells["K" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["K" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["K" + fila].Style.Font.Size = 9;
+            worksheet.Cells["K" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["L" + fila].Value = "tiempo de nacionalizar aduanas";
-            worksheet.Cells["L" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["L" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["L" + fila].Style.WrapText = true;
             worksheet.Cells["L" + fila].Style.Font.Bold = true;
             worksheet.Cells["L" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["L" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["L" + fila].Style.Font.Size = 9;
+            worksheet.Cells["L" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["M" + fila].Value = "Cantidad Minima";
-            worksheet.Cells["M" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["M" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["M" + fila].Style.WrapText = true;
             worksheet.Cells["M" + fila].Style.Font.Bold = true;
             worksheet.Cells["M" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["M" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["M" + fila].Style.Font.Size = 9;
+            worksheet.Cells["M" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["N" + fila].Value = "qty maxima deberia haber en stock linea";
-            worksheet.Cells["N" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["N" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["N" + fila].Style.WrapText = true;
             worksheet.Cells["N" + fila].Style.Font.Bold = true;
             worksheet.Cells["N" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["N" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["N" + fila].Style.Font.Size = 9;
+            worksheet.Cells["N" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["O" + fila].Value = "punto de corte de stock donde se debe comprar";
-            worksheet.Cells["O" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["O" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["O" + fila].Style.WrapText = true;
             worksheet.Cells["O" + fila].Style.Font.Bold = true;
             worksheet.Cells["O" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["O" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["O" + fila].Style.Font.Size = 9;
+            worksheet.Cells["O" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["P" + fila].Value = "stock fisico DISPONIBLE  \n(+)";
-            worksheet.Cells["P" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["P" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["P" + fila].Style.WrapText = true;
             worksheet.Cells["P" + fila].Style.Font.Bold = true;
             worksheet.Cells["P" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["P" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["P" + fila].Style.Font.Size = 9;
+            worksheet.Cells["P" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["Q" + fila].Value = "Orden Compra Preparación \n(+)";
-            worksheet.Cells["Q" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["Q" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Q" + fila].Style.WrapText = true;
             worksheet.Cells["Q" + fila].Style.Font.Bold = true;
             worksheet.Cells["Q" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["Q" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["Q" + fila].Style.Font.Size = 9;
+            worksheet.Cells["Q" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["R" + fila].Value = "producto comprado en transito y/o Aprobado \n(+)";
-            worksheet.Cells["R" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["R" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["R" + fila].Style.WrapText = true;
             worksheet.Cells["R" + fila].Style.Font.Bold = true;
             worksheet.Cells["R" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["R" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["R" + fila].Style.Font.Size = 9;
+            worksheet.Cells["R" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["S" + fila].Value = "Stock calculado";
-            worksheet.Cells["S" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["S" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["S" + fila].Style.WrapText = true;
             worksheet.Cells["S" + fila].Style.Font.Bold = true;
             worksheet.Cells["S" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["S" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["S" + fila].Style.Font.Size = 9;
+            worksheet.Cells["S" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["T" + fila].Value = "Dias potenciales con stock futuro";
-            worksheet.Cells["T" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["T" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["T" + fila].Style.WrapText = true;
             worksheet.Cells["T" + fila].Style.Font.Bold = true;
             worksheet.Cells["T" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["T" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["T" + fila].Style.Font.Size = 9;
+            worksheet.Cells["T" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["U" + fila].Value = "promedio de consumo mensual que da el arima ";
-            worksheet.Cells["U" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["U" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["U" + fila].Style.WrapText = true;
             worksheet.Cells["U" + fila].Style.Font.Bold = true;
             worksheet.Cells["U" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["U" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["U" + fila].Style.Font.Size = 9;
+            worksheet.Cells["U" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["V" + fila].Value = "promedio de consumo x dia";
-            worksheet.Cells["V" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["V" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["V" + fila].Style.WrapText = true;
             worksheet.Cells["V" + fila].Style.Font.Bold = true;
             worksheet.Cells["V" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["V" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["V" + fila].Style.Font.Size = 9;
+            worksheet.Cells["V" + fila].Style.Font.Size = 9;*/
             
             worksheet.Cells["W" + fila].Value = "dias de demora en llegada de producto";
-            worksheet.Cells["W" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["W" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["W" + fila].Style.WrapText = true;
             worksheet.Cells["W" + fila].Style.Font.Bold = true;
             worksheet.Cells["W" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["W" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["W" + fila].Style.Font.Size = 9;
+            worksheet.Cells["W" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["X" + fila].Value = "dias de stock de precaucion x desviacion sobrecompra";
-            worksheet.Cells["X" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["X" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["X" + fila].Style.WrapText = true;
             worksheet.Cells["X" + fila].Style.Font.Bold = true;
             worksheet.Cells["X" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["X" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["X" + fila].Style.Font.Size = 9;
+            worksheet.Cells["X" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["Y" + fila].Value = "dias que puedo esperar para comprar";
-            worksheet.Cells["Y" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["Y" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Y" + fila].Style.Font.Bold = true;
             worksheet.Cells["Y" + fila].Style.WrapText = true;
             worksheet.Cells["Y" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["Y" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["Y" + fila].Style.Font.Size = 9;
+            worksheet.Cells["Y" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["Z" + fila].Value = "coeficiente de variación";
-            worksheet.Cells["Z" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["Z" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Z" + fila].Style.Font.Bold = true;
             worksheet.Cells["Z" + fila].Style.WrapText = true;
             worksheet.Cells["Z" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["Z" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["Z" + fila].Style.Font.Size = 9;
+            worksheet.Cells["Z" + fila].Style.Font.Size = 9;*/
 
             worksheet.Cells["AA" + fila].Value = "Cantidad Comprar";
-            worksheet.Cells["AA" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            /*worksheet.Cells["AA" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["AA" + fila].Style.Font.Bold = true;
             worksheet.Cells["AA" + fila].Style.WrapText = true;
             worksheet.Cells["AA" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["AA" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells["AA" + fila].Style.Font.Size = 9;
+            worksheet.Cells["AA" + fila].Style.Font.Size = 9;*/
 
 
             worksheet.View.FreezePanes(fila + 1, 1);
@@ -1004,6 +1011,38 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(19).Width = 9.71 + 2.71;
             worksheet.Column(20).Width = 9.71 + 2.71;
             worksheet.Column(22).Width = 9.71 + 2.71;
+            worksheet.Column(23).Width = 7.71 + 2.71;
+            worksheet.Column(24).Width = 7.71 + 2.71;
+            worksheet.Column(25).Width = 7.71 + 2.71;
+            worksheet.Column(26).Width = 7.71 + 2.71;
+            worksheet.Column(27).Width = 7.71 + 2.71;
+            worksheet.Column(28).Width = 7.71 + 2.71;
+
+        }
+
+        private static void ConfigurarTamanioDeCeldasCommodity(ExcelWorksheet worksheet)
+        {
+            worksheet.Column(1).Width = 3.71 + 2.71;
+            worksheet.Column(2).Width = 32.43 + 2.71;
+            worksheet.Column(3).Width = 5.71 + 2.71;
+            worksheet.Column(4).Width = 18.00 + 2.71;
+            worksheet.Column(5).Width = 7.71 + 2.71;
+            worksheet.Column(6).Width = 7 + 2.71;
+            worksheet.Column(7).Width = 7.71 + 2.71;
+            worksheet.Column(8).Width = 7.71 + 2.71;
+            worksheet.Column(9).Width = 7.71 + 2.71;
+            worksheet.Column(10).Width = 7.71 + 2.71;
+            worksheet.Column(11).Width = 7.71 + 2.71;
+            worksheet.Column(12).Width = 7.71 + 2.71;
+            worksheet.Column(13).Width = 6.71 + 2.71;
+            worksheet.Column(14).Width = 11.43 + 2.71;
+            worksheet.Column(15).Width = 10.71 + 2.71;
+            worksheet.Column(16).Width = 9.29 + 2.71;
+            worksheet.Column(17).Width = 9.86 + 2.71;
+            worksheet.Column(18).Width = 9.71 + 2.71;
+            worksheet.Column(19).Width = 7.71 + 2.71;
+            worksheet.Column(20).Width = 11.71 + 2.71;
+            worksheet.Column(22).Width = 10.71 + 2.71;
             worksheet.Column(23).Width = 7.71 + 2.71;
             worksheet.Column(24).Width = 7.71 + 2.71;
             worksheet.Column(25).Width = 7.71 + 2.71;
