@@ -52,7 +52,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatosReporteRetornoGuia>("usp_reporte_retornoguia_excel", new { dato.idCliente, dato.destino, dato.transportista, dato.fechaInicio, dato.fechaFin } ,commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatosReporteRetornoGuia>("usp_reporte_retornoguia_excel", new { dato.idCliente, dato.destino, dato.transportista, dato.fechaInicio, dato.fechaFin }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -64,7 +64,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             IEnumerable<DatosFormatoItemVentas> result = new List<DatosFormatoItemVentas>();
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<DatosFormatoItemVentas>("usp_Lista_Item_Ventas", new { dato.Item, dato.Codsut, dato.Descripcion, dato.Origen, dato.idmarca, dato.idAgrupador,dato.idSubAgrupador,dato.idLinea,dato.idfamilia,dato.idSubFamilia }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoItemVentas>("usp_Lista_Item_Ventas", new { dato.Item, dato.Codsut, dato.Descripcion, dato.Origen, dato.idmarca, dato.idAgrupador, dato.idSubAgrupador, dato.idLinea, dato.idfamilia, dato.idSubFamilia }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
@@ -129,10 +129,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<IEnumerable<DatosFormatoMateriaPrimaItemLogistica>> BuscarNumeroPedido(string NumeroDocumento, string Tipo)
         {
             IEnumerable<DatosFormatoMateriaPrimaItemLogistica> result = new List<DatosFormatoMateriaPrimaItemLogistica>();
-       
+
             using (SqlConnection context = new SqlConnection(_appConfig.ContextUReporteador))
             {
-                result = await context.QueryAsync<DatosFormatoMateriaPrimaItemLogistica>("SP_UNILENE_CO_LISTAR_DETALLE_COTIZACION", new { NumeroDocumento , Tipo }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoMateriaPrimaItemLogistica>("SP_UNILENE_CO_LISTAR_DETALLE_COTIZACION", new { NumeroDocumento, Tipo }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
