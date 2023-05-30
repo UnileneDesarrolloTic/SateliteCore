@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Services.Contracts;
-using SatelliteCore.Api.CrossCutting.Config;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-//using SatelliteCore.Api.Filters;
 
 namespace SatelliteCore.Api.Controllers.Auth
 {
@@ -16,11 +15,11 @@ namespace SatelliteCore.Api.Controllers.Auth
     [Authorize]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class ValidacionAccesosController: ControllerBase
+    public class ValidacionAccesosController : ControllerBase
     {
         private readonly IValidacionesServices _validacionesServices;
 
-        public ValidacionAccesosController (IValidacionesServices validacionesServices)
+        public ValidacionAccesosController(IValidacionesServices validacionesServices)
         {
             _validacionesServices = validacionesServices;
         }
@@ -41,11 +40,11 @@ namespace SatelliteCore.Api.Controllers.Auth
 
             (int codigo, string mensaje) = await _validacionesServices.ValidarAccesoRuta(model);
 
-            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new{ codigo, mensaje });
+            ResponseModel<object> responseSuccesss = new ResponseModel<object>(true, Constante.MESSAGE_SUCCESS, new { codigo, mensaje });
             return Ok(responseSuccesss);
         }
 
-        //[PermitCode("MN0002")]
+        //[PermitCode("FR0013")]
         [HttpGet("validarToken")]
         public ActionResult ValidarToken()
         {

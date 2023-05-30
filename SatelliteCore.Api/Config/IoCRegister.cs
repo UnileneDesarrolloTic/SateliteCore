@@ -32,6 +32,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IRRHHRepository, RRHHRepository>();
             service.AddScoped<IGestionCalidadRepository, GestionCalidadRepository>();
             service.AddScoped<IExportacionesRepository, ExportacionesRepository>();
+            service.AddScoped<IOrdenServicioRepository, OrdenServicioRepository>();
 
             return service;
         }
@@ -52,6 +53,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IRRHHServices, RRHHServices>();
             service.AddScoped<IGestionCalidadServices, GestionCalidadServices>();
             service.AddScoped<IExportacionesServices, ExportacionesServices>();
+            service.AddScoped<IOrdenServicioServices, OrdenServicioServices>();
 
             return service;
         }
