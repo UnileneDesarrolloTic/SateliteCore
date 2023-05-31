@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
 using SatelliteCore.Api.Models.Response.CompraImportacion;
+using SatelliteCore.Api.Models.Response.HistorialPeriodo;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using SatelliteCore.Api.ReportServices.Contracts.Produccion;
 using SatelliteCore.Api.Services.Contracts;
@@ -291,10 +292,12 @@ namespace SatelliteCore.Api.Services
         public async Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna)
         {
             DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
+            DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
+            informacion = await _pronosticoRepository.ReportePeriodoHistoricoAgujas();
 
             ReporteCompraAguja_Excel ExporteCompraAguja = new ReporteCompraAguja_Excel();
-            string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total);
+            string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total, informacion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
@@ -370,6 +373,7 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoListadoCommodity> listadoCommodity = new List<DatosFormatoListadoCommodity>();
+            
 
             if (reporteArima == "importacion")
             { 
@@ -386,8 +390,13 @@ namespace SatelliteCore.Api.Services
                 listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
                 listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
             }
-            ReporteCompraImportada_Excel ExporteCompraAguja = new ReporteCompraImportada_Excel();
-            string reporte = ExporteCompraAguja.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, reporteArima, listadoCommodity);
+
+            DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
+            informacion = await _pronosticoRepository.ReportePeriodoHistoricoAgujas();
+
+
+            ReporteCompraImportada_Excel ExporteCompra = new ReporteCompraImportada_Excel();
+            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, reporteArima, listadoCommodity, informacion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 
