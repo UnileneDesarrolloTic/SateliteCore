@@ -7,6 +7,7 @@ using SatelliteCore.Api.Models.Request.OCDrogueria;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.CompraAguja;
 using SatelliteCore.Api.Models.Response.CompraImportacion;
+using SatelliteCore.Api.Models.Response.HistorialPeriodo;
 using SatelliteCore.Api.Models.Response.OCDrogueria;
 using System.Collections.Generic;
 using System.Data;
@@ -493,5 +494,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
 
         }
+
+        public async Task<DatosFormatoSeguimientoHistorioPeriodo> ReportePeriodoHistoricoAgujas()
+        {
+            DatosFormatoSeguimientoHistorioPeriodo result = new DatosFormatoSeguimientoHistorioPeriodo();
+
+            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_periodo", commandType: CommandType.StoredProcedure);
+                result.Periodo = multi.Read<DatosFormatoPeriodo>().ToList();
+                result.PeriodoHistorico = multi.Read<DatosFormatoReporteHistorialPeriodoArima>().ToList();
+            }
+
+            return result;
+        }
+
     }
 }
