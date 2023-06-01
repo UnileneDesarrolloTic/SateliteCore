@@ -37,5 +37,8 @@ namespace SatelliteCore.Api.Models.Response.CompraImportacion
         public decimal CantidadComprar { get; set; }
         public string GestionColor { get; set; }
         public int IdGestion { get; set; }
+        public decimal Duracion { get; set; }
+        public int AlmacenMenosPlanta { get; set; }
+        public decimal MesesPotencialesFuturo { get; set; }
     }
 }
