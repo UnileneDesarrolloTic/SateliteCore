@@ -47,7 +47,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             {
                 string sql = "SELECT a.CodUsuario, a.Usuario, RTRIM(b.Nombres) Nombres, RTRIM(b.ApellidoPaterno) ApellidoPaterno, a.Correo FROM TBMUsuario a " +
                     " INNER JOIN PROD_UNILENE2.dbo.PersonaMast b ON a.CodUsuario = b.Persona " +
-                    "WHERE a.Estado = 'A' AND b.Estado = 'A' AND Usuario = @Usuario AND Clave = @Clave";
+                    "WHERE a.Estado = 'A' AND b.Estado = 'A' AND Usuario = @Usuario AND Clave = @Clave AND FlagSatelite = 1";
                 usuario = await connection.QueryFirstOrDefaultAsync<AuthResponse>(sql, datosUsuario);
             }
             return usuario;
