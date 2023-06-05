@@ -763,7 +763,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["N" + row].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                worksheet.Cells["O" + row].Formula = "=Sum(" + worksheet.Cells[row,3].Address + ":" + worksheet.Cells[row,12].Address + ")"; ;
+                worksheet.Cells["O" + row].Formula = "=Sum(" + worksheet.Cells[row,3].Address + ":" + worksheet.Cells[row,14].Address + ")"; ;
                 worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["O" + row].Style.WrapText = true;
                 worksheet.Cells["O" + row].Style.Font.Bold = true;
