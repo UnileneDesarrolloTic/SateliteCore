@@ -343,6 +343,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["A" + row].Style.WrapText = true;
                 worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
+                worksheet.Cells["A" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.GestionLetras));
 
 
                 worksheet.Cells["B" + row].Value = rowitem.DescripcionLocal;
@@ -350,6 +351,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["B" + row].Style.WrapText = true;
                 worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
                 worksheet.Cells["B" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(rowitem.GestionColor));
+                worksheet.Cells["B" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.GestionLetras));
 
                 worksheet.Cells["C" + row].Value = rowitem.Clasificacion;
                 worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -675,13 +677,15 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["A" + row].Style.WrapText = true;
                 worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
-
+                worksheet.Cells["A" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.GestionLetras));
 
                 worksheet.Cells["B" + row].Value = rowitem.DescripcionLocal;
                 worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B" + row].Style.WrapText = true;
                 worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
                 worksheet.Cells["B" + row].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(rowitem.GestionColor));
+                worksheet.Cells["B" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml(rowitem.GestionLetras));
+
 
                 worksheet.Cells["C" + row].Value = rowitem.Clasificacion;
                 worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
