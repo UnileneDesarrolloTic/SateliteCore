@@ -364,7 +364,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AE" + fila].Style.Font.Size = 9;
 
 
-            worksheet.View.FreezePanes(fila + 1, 1);
+            worksheet.View.FreezePanes(fila + 1, 3);
 
             int row = fila + 1;
 
