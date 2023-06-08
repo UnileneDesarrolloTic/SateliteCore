@@ -30,7 +30,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
 
             using (var excelPackage = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Compra Aguja");
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Reporte de vendedor");
                 worksheet.Cells.Style.Font.Name = "Arial";
                 worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells.Style.Font.Size = 12;
@@ -42,7 +42,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                ConfigurarTamanioDeCeldas(worksheet);
 
                 worksheet.Cells["A" + fila + ":M" + fila].Merge = true;
-                worksheet.Cells["A" + fila + ":M" + fila].Value = "Reporte de comision " + fecha1.ToString("dd/MM/yyyy") + " al " + fecha2.ToString("dd/MM/yyyy");
+                worksheet.Cells["A" + fila + ":M" + fila].Value = "Reporte de comisión " + fecha1.ToString("dd/MM/yyyy") + " al " + fecha2.ToString("dd/MM/yyyy");
                 worksheet.Cells["A" + fila + ":M" + fila].Style.Font.Size = 15;
                 worksheet.Cells["A" + fila + ":M" + fila].Style.WrapText = true;
                 worksheet.Cells["A" + fila + ":M" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -59,14 +59,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                 worksheet.Cells["A" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
 
-                worksheet.Cells["B" + fila].Value = "Nombre Completo";
+                worksheet.Cells["B" + fila].Value = "Vendedor";
                 worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B" + fila].Style.WrapText = true;
                 worksheet.Cells["B" + fila].Style.Font.Bold = true;
                 worksheet.Cells["B" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["B" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["C" + fila].Value = "Total Facturado";
+                worksheet.Cells["C" + fila].Value = "Total Cobranza";
                 worksheet.Cells["C" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["C" + fila].Style.WrapText = true;
                 worksheet.Cells["C" + fila].Style.Font.Bold = true;
@@ -74,49 +74,49 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                 worksheet.Cells["C" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["C" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["D" + fila].Value = "Sin Igv";
+                worksheet.Cells["D" + fila].Value = "Cobranza sin igv";
                 worksheet.Cells["D" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["D" + fila].Style.WrapText = true;
                 worksheet.Cells["D" + fila].Style.Font.Bold = true;
                 worksheet.Cells["D" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["D" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["E" + fila].Value = "Venta General";
+                worksheet.Cells["E" + fila].Value = "Cobranza Otros";
                 worksheet.Cells["E" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["E" + fila].Style.WrapText = true;
                 worksheet.Cells["E" + fila].Style.Font.Bold = true;
                 worksheet.Cells["E" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["E" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["F" + fila].Value = "Venta Guantes";
+                worksheet.Cells["F" + fila].Value = "Cobranza Guantes";
                 worksheet.Cells["F" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["F" + fila].Style.WrapText = true;
                 worksheet.Cells["F" + fila].Style.Font.Bold = true;
                 worksheet.Cells["F" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["F" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["G" + fila].Value = "Venta Emodialisis";
+                worksheet.Cells["G" + fila].Value = "Cobranza hemodiálisis";
                 worksheet.Cells["G" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["G" + fila].Style.WrapText = true;
                 worksheet.Cells["G" + fila].Style.Font.Bold = true;
                 worksheet.Cells["G" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["G" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["H" + fila].Value = "Comisión General";
+                worksheet.Cells["H" + fila].Value = "Comisión Otros (2%)";
                 worksheet.Cells["H" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["H" + fila].Style.WrapText = true;
                 worksheet.Cells["H" + fila].Style.Font.Bold = true;
                 worksheet.Cells["H" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["H" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["I" + fila].Value = "Comisión Guantes";
+                worksheet.Cells["I" + fila].Value = "Comisión Guantes (2%)";
                 worksheet.Cells["I" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["I" + fila].Style.WrapText = true;
                 worksheet.Cells["I" + fila].Style.Font.Bold = true;
                 worksheet.Cells["I" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["I" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["J" + fila].Value = "Comisión Emodialisis";
+                worksheet.Cells["J" + fila].Value = "Comisión hemodiálisis (2%)";
                 worksheet.Cells["J" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["J" + fila].Style.WrapText = true;
                 worksheet.Cells["J" + fila].Style.Font.Bold = true;
