@@ -560,7 +560,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 row++;
             }
 
-
+            worksheet.View.FreezePanes(fila + 1, 3);
 
             row = row + 2;
             foreach (DatosFormatoCantidadTotalAgujas tipoBanner in cantidadTotal)
