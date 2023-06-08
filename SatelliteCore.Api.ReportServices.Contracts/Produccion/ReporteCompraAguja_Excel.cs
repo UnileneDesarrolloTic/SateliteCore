@@ -107,10 +107,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             ConfigurarTamanioDeCeldas(worksheet);
             UnirCeldas(worksheet);
+            
 
             int fila = 1;
-
             pintarCabecera(worksheet, fila);
+
+     
 
             worksheet.Cells["A" + fila].Value = "ITEMFINAL";
             worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -364,8 +366,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AE" + fila].Style.Font.Size = 9;
 
 
-            worksheet.View.FreezePanes(fila + 1, 1);
-
             int row = fila + 1;
 
             foreach (DatosFormatoListadoSeguimientoCompraAguja rowitem in dato)
@@ -561,6 +561,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             }
 
 
+            worksheet.View.FreezePanes(1, 3);
 
             row = row + 2;
             foreach (DatosFormatoCantidadTotalAgujas tipoBanner in cantidadTotal)
