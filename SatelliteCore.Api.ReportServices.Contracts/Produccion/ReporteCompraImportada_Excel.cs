@@ -832,7 +832,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
                 worksheet.Cells["AA" + row].Value = rowitem.Variacion;
                 worksheet.Cells["AA" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["AA" + row].Style.Numberformat.Format = "#,##0.0";
+                worksheet.Cells["AA" + row].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells["AA" + row].Style.WrapText = true;
                 worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 

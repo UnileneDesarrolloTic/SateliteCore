@@ -365,6 +365,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AE" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["AE" + fila].Style.Font.Size = 9;
 
+            worksheet.View.FreezePanes(fila + 1, 3);
 
             int row = fila + 1;
 
@@ -548,7 +549,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
                 worksheet.Cells["AD" + row].Value = rowitem.Variacion;
                 worksheet.Cells["AD" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells["AD" + row].Style.Numberformat.Format = "#,##0.0";
+                worksheet.Cells["AD" + row].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells["AD" + row].Style.WrapText = true;
                 worksheet.Cells["AD" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
@@ -561,7 +562,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             }
 
 
-            worksheet.View.FreezePanes(1, 3);
+            worksheet.View.FreezePanes(fila + 1, 3);
 
             row = row + 2;
             foreach (DatosFormatoCantidadTotalAgujas tipoBanner in cantidadTotal)
