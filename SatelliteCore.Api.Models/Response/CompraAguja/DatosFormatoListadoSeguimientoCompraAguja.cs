@@ -38,6 +38,9 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
         public string GestionColor { get; set; }
         public int IdGestion { get; set; }
         public decimal Duracion { get; set; }
+        public int AlmacenMenosPlanta { get; set; }
+        public decimal MesesPotencialesFuturo { get; set; }
+        public string GestionLetras { get; set; }
 
     }
 }

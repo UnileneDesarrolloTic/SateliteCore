@@ -202,7 +202,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["P" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["P" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["Q" + fila].Value = "Stock \n Disponible \n - \n Planta";
+            worksheet.Cells["Q" + fila].Value = "Stock \n Disponible \n (-) \n Planta";
             worksheet.Cells["Q" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Q" + fila].Style.WrapText = true;
             worksheet.Cells["Q" + fila].Style.Font.Bold = true;
