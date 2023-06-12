@@ -109,14 +109,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.RRHH
                 worksheet.Cells["H" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["H" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["I" + fila].Value = "Comisión Guantes (2%)";
+                worksheet.Cells["I" + fila].Value = "Comisión Guantes (1%)";
                 worksheet.Cells["I" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["I" + fila].Style.WrapText = true;
                 worksheet.Cells["I" + fila].Style.Font.Bold = true;
                 worksheet.Cells["I" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells["I" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                worksheet.Cells["J" + fila].Value = "Comisión hemodiálisis (2%)";
+                worksheet.Cells["J" + fila].Value = "Comisión hemodiálisis (1%)";
                 worksheet.Cells["J" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["J" + fila].Style.WrapText = true;
                 worksheet.Cells["J" + fila].Style.Font.Bold = true;

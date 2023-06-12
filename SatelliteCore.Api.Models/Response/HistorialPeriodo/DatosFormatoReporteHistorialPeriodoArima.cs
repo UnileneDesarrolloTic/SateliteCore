@@ -20,6 +20,10 @@ namespace SatelliteCore.Api.Models.Response.HistorialPeriodo
         public decimal Meses10 { get; set; }
         public decimal Meses11 { get; set; }
         public decimal Meses12 { get; set; }
+        public decimal Desviacion { get; set; }
+        public decimal Promedio { get; set; }
+        public decimal Variacion { get; set; }
+
 
     }
 }
