@@ -7,7 +7,7 @@ namespace SatelliteCore.Api.Models.Response.HistorialPeriodo
     public class DatosFormatoReporteHistorialPeriodoArima
     {
         public string  Item { get; set; }
-        public string DescripcionItem { get; set; }
+        public string DescripcionLocal { get; set; }
         public decimal Meses1 { get; set; }
         public decimal Meses2 { get; set; }
         public decimal Meses3 { get; set; }

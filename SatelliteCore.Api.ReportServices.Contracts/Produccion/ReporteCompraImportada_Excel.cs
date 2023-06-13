@@ -1056,7 +1056,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["A" + row].Style.WrapText = true;
                 worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                worksheet.Cells["B" + row].Value = itemFilas.DescripcionItem;
+                worksheet.Cells["B" + row].Value = itemFilas.DescripcionLocal;
                 worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B" + row].Style.WrapText = true;
                 worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;

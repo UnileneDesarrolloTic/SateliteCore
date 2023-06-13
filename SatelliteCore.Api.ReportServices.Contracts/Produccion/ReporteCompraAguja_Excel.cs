@@ -699,6 +699,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["O1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["O1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
+            worksheet.Cells["P1"].Value = "CONSUMO MENSUAL";
+            worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["P1"].Style.WrapText = true;
+            worksheet.Cells["P1"].Style.Font.Bold = true;
+            worksheet.Cells["P1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["P1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["P1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["Q1"].Value = "VARIACION";
+            worksheet.Cells["Q1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["Q1"].Style.WrapText = true;
+            worksheet.Cells["Q1"].Style.Font.Bold = true;
+            worksheet.Cells["Q1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["Q1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["Q1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
             int row = 2;
             foreach (DatosFormatoReporteHistorialPeriodoArima itemFilas in informacion.PeriodoHistorico)
             {
@@ -709,7 +725,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["A" + row].Style.WrapText = true;
                 worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                worksheet.Cells["B" + row].Value = itemFilas.DescripcionItem;
+                worksheet.Cells["B" + row].Value = itemFilas.DescripcionLocal;
                 worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["B" + row].Style.WrapText = true;   
                 worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -793,6 +809,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["O" + row].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
+
+                worksheet.Cells["P" + row].Value = itemFilas.Promedio;
+                worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["P" + row].Style.WrapText = true;
+                worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["Q" + row].Value = itemFilas.Variacion;
+                worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["Q" + row].Style.WrapText = true;
+                worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
                 row++;
             }
         }
@@ -815,12 +844,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(14).Width = 10 + 2.71;
             worksheet.Column(15).Width = 10 + 2.71;
             worksheet.Column(16).Width = 15 + 2.71;
+            worksheet.Column(17).Width = 16 + 2.71;
         }
 
         private static void pintarCabeceraHistorico(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A1:O1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
-            worksheet.Cells["A1:O1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+            worksheet.Cells["A1:Q1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
+            worksheet.Cells["A1:Q1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
         }
     }
 }
