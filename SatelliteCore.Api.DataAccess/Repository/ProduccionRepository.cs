@@ -436,7 +436,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection DMVentasContext = new SqlConnection(_appConfig.contextSpring))
             {
-                using SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Informacion_CompraAguja", commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await DMVentasContext.QueryMultipleAsync("usp_Informacion_CompraAguja",new { mostrar= -1 }, commandType: CommandType.StoredProcedure);
                 result.DetalleInformacionAguja = multi.Read<DatosFormatoListadoSeguimientoCompraAguja>().ToList();
                 result.Total = multi.Read<DatosFormatoCantidadTotalAgujas>().ToList();
 

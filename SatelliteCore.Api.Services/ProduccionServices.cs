@@ -372,6 +372,7 @@ namespace SatelliteCore.Api.Services
 
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportado = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
+            IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoListadoCommodity> listadoCommodity = new List<DatosFormatoListadoCommodity>();
             
 
@@ -383,12 +384,14 @@ namespace SatelliteCore.Api.Services
             { 
                 listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
                 listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
+                listadoMaquinas = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(4);
             }
             else
             {
                 listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1);
                 listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
                 listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
+                listadoMaquinas = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(4);
             }
 
             DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
@@ -396,7 +399,7 @@ namespace SatelliteCore.Api.Services
 
 
             ReporteCompraImportada_Excel ExporteCompra = new ReporteCompraImportada_Excel();
-            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, reporteArima, listadoCommodity, informacion);
+            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, listadoMaquinas, reporteArima, listadoCommodity, informacion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 

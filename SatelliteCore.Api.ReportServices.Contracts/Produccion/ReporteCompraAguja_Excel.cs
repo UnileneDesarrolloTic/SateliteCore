@@ -621,8 +621,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(13).Hidden = false;
                 worksheet.Column(25).Hidden = false;
                 worksheet.Column(26).Hidden = false;
-                worksheet.Column(27).Hidden = false;
                 worksheet.Column(28).Hidden = false;
+                worksheet.Column(30).Hidden = false;
                 worksheet.Column(31).Hidden = false;
                 worksheet.Column(32).Hidden = false;
             }
@@ -639,8 +639,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(13).Hidden = true;
                 worksheet.Column(25).Hidden = true;
                 worksheet.Column(26).Hidden = true;
-                worksheet.Column(27).Hidden = true;
                 worksheet.Column(28).Hidden = true;
+                worksheet.Column(30).Hidden = true;
                 worksheet.Column(31).Hidden = true;
                 worksheet.Column(32).Hidden = true;
             }
