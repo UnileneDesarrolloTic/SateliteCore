@@ -1156,12 +1156,10 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
             document.Add(tablaDatosdeCabecera);
 
-
-
             Table tablaDetalleProtocolo = new Table(12).UseAllAvailableWidth();
             tablaDetalleProtocolo.SetFixedLayout();
 
-            Cell cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph("Tests carried ou")
+            Cell cellDetalleProtocolo = new Cell(1, 3).Add(new Paragraph("Tests performed")
             .AddStyle(estiloNegritaDetalleProtocolo))
             .SetTextAlignment(TextAlignment.CENTER)
             .SetHorizontalAlignment(HorizontalAlignment.CENTER)

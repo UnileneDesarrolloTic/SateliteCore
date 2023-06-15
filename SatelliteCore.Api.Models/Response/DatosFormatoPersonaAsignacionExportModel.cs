@@ -13,5 +13,7 @@ namespace SatelliteCore.Api.Models.Response
         public DateTime FechaAsignacion { get; set; }
         public DateTime FechaReAsignacion { get; set; }
         public string Estado { get; set; }
+        public string Asistencia { get; set; }
+        public DateTime HoraIngreso { get; set; }
     }
 }
