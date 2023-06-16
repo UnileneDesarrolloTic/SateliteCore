@@ -159,15 +159,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoPersonaAsignacionExportModel> result = new List<DatosFormatoPersonaAsignacionExportModel>();
 
-            string query = "SELECT b.Persona, a.IdAsignacion, RTRIM(b.Busqueda) NombreCompleto ,c.Descripcion NombreArea,a.FechaAsignacion ,a.FechaReAsignacion , IIF(a.Estado='A','Activo','Inactivo') Estado " +
-                          "FROM TBMAsignacionArea a " +
-                          "INNER JOIN PROD_UNILENE2..PersonaMast b on b.Persona = a.IdEmpleado " +
-                          "INNER JOIN TBMAreasProduccion c ON a.IdArea = c.IdArea " +
-                          "WHERE(CONVERT(varchar, a.FechaAsignacion, 23) >= @FechaInicio AND CONVERT(varchar, a.FechaAsignacion, 23) <= @FechaFinal)";
-
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatoPersonaAsignacionExportModel>(query, new { FechaInicio, FechaFinal });
+                result = await connection.QueryAsync<DatosFormatoPersonaAsignacionExportModel>("usp_Reporte_Asistencias", new { FechaInicio, FechaFinal }, commandType: CommandType.StoredProcedure);
             }
 
             return result;

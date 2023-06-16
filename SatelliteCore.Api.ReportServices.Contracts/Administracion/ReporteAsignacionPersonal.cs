@@ -57,10 +57,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
                 worksheet.Cells["D3"].Value = "FECHA ASIGNACION ";
                 worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["D3"].Style.Font.Size = 10;
+                worksheet.Cells["D3"].Style.Font.Bold = true;
                 worksheet.Cells["D3"].Style.WrapText = true;
                 worksheet.Cells["D3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                worksheet.Cells["E3"].Value = "FECHA REASIGNACION";
+                worksheet.Cells["E3"].Value = "HORA DE INGRESO";
                 worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["E3"].Style.Font.Size = 10;
                 worksheet.Cells["E3"].Style.WrapText = true;
@@ -73,6 +74,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
                 worksheet.Cells["F3"].Style.WrapText = true;
                 worksheet.Cells["F3"].Style.Font.Bold = true;
                 worksheet.Cells["F3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                worksheet.Cells["G3"].Value = "ASISTENCIA";
+                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["G3"].Style.Font.Size = 10;
+                worksheet.Cells["G3"].Style.WrapText = true;
+                worksheet.Cells["G3"].Style.Font.Bold = true;
+                worksheet.Cells["G3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 int row = 4;
 
@@ -99,20 +107,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
                     worksheet.Cells["C" + row].Style.Font.Name = "Calibri";
                     worksheet.Cells["C" + row].Style.Font.Size = 10;
                     worksheet.Cells["C" + row].Style.WrapText = true;
-                    worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
-                    worksheet.Cells["D" + row].Value = rowitem.FechaAsignacion.ToString("dd/MM/yyyy HH:mm:ss");
+                    worksheet.Cells["D" + row].Value = rowitem.FechaAsignacion.ToString("dd/MM/yyyy");
                     worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["D" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["D" + row].Style.Numberformat.Format = "yyyy-mm-dd";
                     worksheet.Cells["D" + row].Style.Font.Size = 10;
                     worksheet.Cells["D" + row].Style.WrapText = true;
                     worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
 
-                    worksheet.Cells["E" + row].Value = rowitem.FechaReAsignacion.ToString("dd/MM/yyyy HH:mm:ss");
+                    worksheet.Cells["E" + row].Value = rowitem.HoraIngreso.ToString("HH:mm");
                     worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["E" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["E" + row].Style.Numberformat.Format = "HH:mm";
                     worksheet.Cells["E" + row].Style.Font.Size = 10;
                     worksheet.Cells["E" + row].Style.WrapText = true;
                     worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -125,10 +135,23 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
                     worksheet.Cells["F" + row].Style.Font.Bold = true;
                     worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                    worksheet.Cells["G" + row].Value = rowitem.Asistencia;
+                    worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["G" + row].Style.Font.Name = "Calibri";
+                    worksheet.Cells["G" + row].Style.Font.Size = 10;
+                    worksheet.Cells["G" + row].Style.WrapText = true;
+                    worksheet.Cells["G" + row].Style.Font.Bold = true;
+                    worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                     if (rowitem.Estado == "Activo")
                         worksheet.Cells["F" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#4b971c"));
                     else
                         worksheet.Cells["F" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#8d0d43"));
+
+                    if (rowitem.Asistencia == "FALTO")
+                        worksheet.Cells["G" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ff0000"));
+                    else
+                        worksheet.Cells["G" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#2174d4"));
 
 
                     row++;
@@ -159,6 +182,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
             worksheet.Column(4).Width = 20.71 + 2.71;
             worksheet.Column(5).Width = 20.14 + 2.71;
             worksheet.Column(6).Width = 10.14 + 2.71;
+            worksheet.Column(7).Width = 10.14 + 2.71;
 
 
             //worksheet.Row(4).Height = 14.25;
@@ -171,8 +195,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
 
         private static void pintarCabecera(ExcelWorksheet worksheet)
         {
-            worksheet.Cells["A3:F3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
-            worksheet.Cells["A3:F3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#07438d"));
+            worksheet.Cells["A3:G3"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+            worksheet.Cells["A3:G3"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#07438d"));
 
         }
 
