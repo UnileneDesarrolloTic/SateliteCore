@@ -495,7 +495,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         }
 
-        public async Task<DatosFormatoSeguimientoHistorioPeriodo> ReportePeriodoHistoricoAgujas()
+        public async Task<DatosFormatoSeguimientoHistorioPeriodo> ReportePeriodoHistoricoArima()
         {
             DatosFormatoSeguimientoHistorioPeriodo result = new DatosFormatoSeguimientoHistorioPeriodo();
 
@@ -504,6 +504,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_periodo", commandType: CommandType.StoredProcedure);
                 result.Periodo = multi.Read<DatosFormatoPeriodo>().ToList();
                 result.PeriodoHistorico = multi.Read<DatosFormatoReporteHistorialPeriodoArima>().ToList();
+            }
+
+            return result;
+        }
+
+        public async Task<DatosFormatoSeguimientoPeriodoHistoricoCommodity> ReportePeriodoHistoricoCommodity()
+        {
+            DatosFormatoSeguimientoPeriodoHistoricoCommodity result = new DatosFormatoSeguimientoPeriodoHistoricoCommodity();
+
+            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_Periodo_Commodity", commandType: CommandType.StoredProcedure);
+                result.PeriodoHistoricoComodity = multi.Read<DatosFormatoReporteHistoricoConsumoCommodity>().ToList();
+                result.Periodo = multi.Read<DatosFormatoPeriodoCommodity>().ToList();
             }
 
             return result;

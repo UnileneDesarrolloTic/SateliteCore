@@ -294,7 +294,7 @@ namespace SatelliteCore.Api.Services
             DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
             DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
-            informacion = await _pronosticoRepository.ReportePeriodoHistoricoAgujas();
+            informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
 
             ReporteCompraAguja_Excel ExporteCompraAguja = new ReporteCompraAguja_Excel();
             string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total, informacion);
@@ -374,32 +374,40 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoListadoCommodity> listadoCommodity = new List<DatosFormatoListadoCommodity>();
-            
+
+            DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
+            DatosFormatoSeguimientoPeriodoHistoricoCommodity informacionCommodity = new DatosFormatoSeguimientoPeriodoHistoricoCommodity();
 
             if (reporteArima == "importacion")
             { 
-                listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1);
+                listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1); // importada
+                informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
             }
             else if (reporteArima == "nacional")
             { 
-                listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
+                listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2); //nacional
+                informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
+            }
+            else if (reporteArima == "maquinas")
+            {
+                listadoMaquinas = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(4); //maquinas
+                informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
+            }
+            else if (reporteArima == "commodity")
+            {
                 listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
-                listadoMaquinas = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(4);
+                informacionCommodity = await _pronosticoRepository.ReportePeriodoHistoricoCommodity();
             }
             else
             {
                 listadoImportado = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(1);
                 listadoNacional = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(2);
-                listadoCommodity = await _pronosticoRepository.InformacionSeguimientoCompraCommodity();
                 listadoMaquinas = await _pronosticoRepository.InformacionSeguimientoCompraImportacion(4);
+                informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
             }
 
-            DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
-            informacion = await _pronosticoRepository.ReportePeriodoHistoricoAgujas();
-
-
             ReporteCompraImportada_Excel ExporteCompra = new ReporteCompraImportada_Excel();
-            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, listadoMaquinas, reporteArima, listadoCommodity, informacion);
+            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, listadoMaquinas, reporteArima, listadoCommodity, informacion, informacionCommodity);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 

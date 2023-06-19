@@ -15,7 +15,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 {
     public class ReporteCompraImportada_Excel
     {
-        public string GenerarReporte(IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportada, string mostrarColumna , IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas, string reporteArima, IEnumerable<DatosFormatoListadoCommodity> listadoCommodity,  DatosFormatoSeguimientoHistorioPeriodo informacion)
+        public string GenerarReporte(IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportada, string mostrarColumna, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas, string reporteArima, IEnumerable<DatosFormatoListadoCommodity> listadoCommodity, DatosFormatoSeguimientoHistorioPeriodo informacion, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacionCommodity)
         {
 
             byte[] file;
@@ -28,31 +28,37 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 if (reporteArima == "importacion")
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoImportada, mostrarColumna, "Importación");
+                    cuerpoPeriodoHistorico(excelPackage, informacion);
                 }
                 else if (reporteArima == "nacional")
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoNacional, mostrarColumna, "Nacional");
+                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                }
+                else if (reporteArima == "maquinas")
+                {
                     CuerpoExcelMaquinas(excelPackage, listadoMaquinas, mostrarColumna);
+                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                }
+                else if (reporteArima == "commodity")
+                {
                     CuerpoExcelCommodity(excelPackage, listadoCommodity, mostrarColumna);
-                    
+                    cuerpoPeriodoHistoricoCommodity(excelPackage, informacionCommodity);
                 }
                 else
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoImportada, mostrarColumna, "Importación");
                     CuerpoExcelImportadaNacional(excelPackage, listadoNacional, mostrarColumna, "Nacional");
                     CuerpoExcelMaquinas(excelPackage, listadoMaquinas, mostrarColumna);
-                    CuerpoExcelCommodity(excelPackage, listadoCommodity, mostrarColumna);
+                    cuerpoPeriodoHistorico(excelPackage, informacion);
                 }
-
-
-                cuerpoPeriodoHistorico(excelPackage, informacion);
 
                 file = excelPackage.GetAsByteArray();
 
                 if (file == null || file.Length == 0)
                     return reporte;
 
-                reporte = Convert.ToBase64String(file, 0, file.Length); 
+                reporte = Convert.ToBase64String(file, 0, file.Length);
 
                 return reporte;
             }
@@ -62,7 +68,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
         private static void CuerpoExcelImportadaNacional(ExcelPackage excelPackage, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado, string mostrarColumna, string tipo)
         {
 
-       
+
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(tipo);
             worksheet.Cells.Style.Font.Name = "Arial";
             worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -539,13 +545,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 row++;
             }
 
-            if(tipo == "Nacional")
+            if (tipo == "Nacional")
             {
                 worksheet.Column(3).Hidden = true;
                 worksheet.Column(4).Hidden = true;
             }
 
-               
+
             if (mostrarColumna == "true")
             {
                 worksheet.Column(5).Hidden = false;
@@ -585,7 +591,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(32).Hidden = true;
             }
         }
-
         private static void CuerpoExcelCommodity(ExcelPackage excelPackage, IEnumerable<DatosFormatoListadoCommodity> listado, string mostrarColumna)
         {
 
@@ -611,29 +616,29 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells[$"A{fila},B{fila},C{fila},D{fila},E{fila},F{fila},G{fila},H{fila},I{fila},J{fila},K{fila},L{fila},M{fila},N{fila},O{fila},P{fila},Q{fila},R{fila},S{fila},T{fila},U{fila},V{fila},W{fila},X{fila},Y{fila},Z{fila},AA{fila},AB{fila}"].Style.Font.Size = 9;
 
             worksheet.Cells["A" + fila].Value = "ITEMFINAL";
-            
+
             worksheet.Cells["B" + fila].Value = "DESCRIPCION";
 
             worksheet.Cells["C" + fila].Value = "Clasificacion General";
-            
+
             worksheet.Cells["D" + fila].Value = "Familia Larga";
-            
+
             worksheet.Cells["E" + fila].Value = "Puerto";
-            
+
             worksheet.Cells["F" + fila].Value = "Proveedor";
-            
+
             worksheet.Cells["G" + fila].Value = "tiempo en la gestión de compras  (cotización y aceptación)";
-            
+
             worksheet.Cells["H" + fila].Value = "tiempo en gestión pago contable al proveedor";
-        
+
             worksheet.Cells["I" + fila].Value = "tiempo en aprobación de artes Calidad";
-            
+
             worksheet.Cells["J" + fila].Value = "tiempo de fabricación del proveedor";
-            
+
             worksheet.Cells["K" + fila].Value = "tiempo de transporte";
-            
+
             worksheet.Cells["L" + fila].Value = "tiempo de nacionalizar aduanas";
-            
+
             worksheet.Cells["M" + fila].Value = "Cantidad Minima";
 
             worksheet.Cells["N" + fila].Value = "qty maxima deberia haber en stock linea";
@@ -645,7 +650,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["Q" + fila].Value = "stock fisico DISPONIBLE  \n(+)";
 
             worksheet.Cells["R" + fila].Value = "Orden Compra Preparación \n(+)";
-            
+
             worksheet.Cells["S" + fila].Value = "producto comprado en transito y/o Aprobado \n(+)";
 
             worksheet.Cells["T" + fila].Value = "Stock calculado";
@@ -655,12 +660,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["V" + fila].Value = "promedio de consumo mensual que da el arima ";
 
             worksheet.Cells["W" + fila].Value = "promedio de consumo x dia";
-            
+
             worksheet.Cells["X" + fila].Value = "dias de demora en llegada de producto";
 
-            worksheet.Cells["Y" + fila].Value = "dias de stock de precaucion x desviacion sobrecompra";           
+            worksheet.Cells["Y" + fila].Value = "dias de stock de precaucion x desviacion sobrecompra";
 
-            worksheet.Cells["Z" + fila].Value = "dias que puedo esperar para comprar";         
+            worksheet.Cells["Z" + fila].Value = "dias que puedo esperar para comprar";
 
             worksheet.Cells["AA" + fila].Value = "coeficiente de variación";
 
@@ -868,13 +873,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             }
             else
-            {   
+            {
 
                 worksheet.Column(3).Hidden = true;
                 worksheet.Column(4).Hidden = true;
                 worksheet.Column(5).Hidden = true;
                 worksheet.Column(6).Hidden = true;
-                worksheet.Column(7).Hidden  = true;
+                worksheet.Column(7).Hidden = true;
                 worksheet.Column(8).Hidden = true;
                 worksheet.Column(9).Hidden = true;
                 worksheet.Column(10).Hidden = true;
@@ -889,7 +894,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             }
         }
-
         private static void CuerpoExcelMaquinas(ExcelPackage excelPackage, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listado, string mostrarColumna)
         {
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Maquinas");
@@ -1389,7 +1393,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(30).Hidden = false;
                 worksheet.Column(31).Hidden = false;
                 worksheet.Column(32).Hidden = false;
-               
+
 
             }
             else
@@ -1415,7 +1419,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
 
         }
-
         private static void ConfigurarTamanioDeCeldas(ExcelWorksheet worksheet)
         {
             worksheet.Column(1).Width = 3.71 + 2.71;
@@ -1449,7 +1452,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(30).Width = 7.71 + 2.71;
 
         }
-
         private static void ConfigurarTamanioDeCeldasCommodity(ExcelWorksheet worksheet)
         {
             worksheet.Column(1).Width = 3.71 + 2.71;
@@ -1481,7 +1483,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(28).Width = 7.71 + 2.71;
 
         }
-
         private static void PintarCabeceraCommodity(ExcelWorksheet worksheet, int fila)
         {
             worksheet.Cells["A" + fila + ":F" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
@@ -1492,14 +1493,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["U" + fila + ":Z" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
             worksheet.Cells["AB" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
         }
-
         private static void PintarCabecera(ExcelWorksheet worksheet, int fila)
         {
             worksheet.Cells["A" + fila + ":F" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
             worksheet.Cells["G" + fila + ":L" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFC000"));
             worksheet.Cells["M" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d1d1d1"));
-            worksheet.Cells["N"+ fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
-            worksheet.Cells["P" + fila ].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#EA987B"));
+            worksheet.Cells["N" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
+            worksheet.Cells["P" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#EA987B"));
             worksheet.Cells["Q" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ACF0D1"));
             worksheet.Cells["R" + fila + ":W" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFDA9E"));
             worksheet.Cells["X" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#96BCE5"));
@@ -1507,7 +1507,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AC" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
             worksheet.Cells["AE" + fila + ":AF" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
         }
-
         private static void PintarCabeceraMaquinas(ExcelWorksheet worksheet, int fila)
         {
             worksheet.Cells["A" + fila + ":F" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
@@ -1522,8 +1521,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AC" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
             worksheet.Cells["AE" + fila + ":AF" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
         }
-
-
         private static void cuerpoPeriodoHistorico(ExcelPackage excelPackage, DatosFormatoSeguimientoHistorioPeriodo informacion)
         {
 
@@ -1701,7 +1698,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             }
         }
-
         private static void ConfigurarTamanioDeCeldasHistorico(ExcelWorksheet worksheet)
         {
             worksheet.Column(1).Width = 4.43 + 2.71;
@@ -1722,8 +1718,215 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(16).Width = 15 + 2.71;
             worksheet.Column(17).Width = 16 + 2.71;
         }
-
         private static void PintarCabeceraHistorico(ExcelWorksheet worksheet)
+        {
+            worksheet.Cells["A1:Q1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
+            worksheet.Cells["A1:Q1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+        }
+
+        //COMMODITY
+        private static void cuerpoPeriodoHistoricoCommodity(ExcelPackage excelPackage, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacioncommodity)
+        {
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Consumo historico commodity");
+            worksheet.Cells.Style.Font.Name = "Arial";
+            worksheet.Cells.Style.Font.Size = 10;
+            worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
+            worksheet.View.ZoomScale = 90;
+
+            ConfigurarTamanioDeCeldasHistoricoCommodity(worksheet);
+            PintarCabeceraHistoricoCommodity(worksheet);
+            worksheet.View.FreezePanes(1, 3);
+
+            worksheet.Cells["A1"].Value = "COMMODITY";
+            worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["A1"].Style.WrapText = true;
+            worksheet.Cells["A1"].Style.Font.Bold = true;
+            worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["A1"].Style.Font.Size = 9;
+
+            worksheet.Cells["B1"].Value = "DESCRIPCION";
+            worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["B1"].Style.WrapText = true;
+            worksheet.Cells["B1"].Style.Font.Bold = true;
+            worksheet.Cells["B1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["B1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["B1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+
+            int columna = 3;
+            foreach (DatosFormatoPeriodoCommodity bloquecolumna in informacioncommodity.Periodo)
+            {
+                worksheet.Cells[1, columna].Value = bloquecolumna.Periodo;
+                worksheet.Cells[1, columna].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells[1, columna].Style.WrapText = true;
+                worksheet.Cells[1, columna].Style.Font.Bold = true;
+                worksheet.Cells[1, columna].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[1, columna].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                columna++;
+            }
+
+            worksheet.Cells["O1"].Value = "TOTAL GENERAL";
+            worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["O1"].Style.WrapText = true;
+            worksheet.Cells["O1"].Style.Font.Bold = true;
+            worksheet.Cells["O1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["O1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["O1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["P1"].Value = "CONSUMO MENSUAL";
+            worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["P1"].Style.WrapText = true;
+            worksheet.Cells["P1"].Style.Font.Bold = true;
+            worksheet.Cells["P1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["P1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["P1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["Q1"].Value = "VARIACION";
+            worksheet.Cells["Q1"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["Q1"].Style.WrapText = true;
+            worksheet.Cells["Q1"].Style.Font.Bold = true;
+            worksheet.Cells["Q1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["Q1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["Q1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            int row = 2;
+            foreach (DatosFormatoReporteHistoricoConsumoCommodity itemFilas in informacioncommodity.PeriodoHistoricoComodity)
+            {
+                worksheet.Row(row).Height = 14.25;
+
+                worksheet.Cells["A" + row].Value = itemFilas.Commodity;
+                worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["A" + row].Style.WrapText = true;
+                worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["B" + row].Value = itemFilas.DescripcionLocal;
+                worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["B" + row].Style.WrapText = true;
+                worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells["C" + row].Value = itemFilas.Meses1;
+                worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["C" + row].Style.WrapText = true;
+                worksheet.Cells["C" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["D" + row].Value = itemFilas.Meses2;
+                worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["D" + row].Style.WrapText = true;
+                worksheet.Cells["D" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["E" + row].Value = itemFilas.Meses3;
+                worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["E" + row].Style.WrapText = true;
+                worksheet.Cells["E" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["F" + row].Value = itemFilas.Meses4;
+                worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["F" + row].Style.WrapText = true;
+                worksheet.Cells["F" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["G" + row].Value = itemFilas.Meses5;
+                worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["G" + row].Style.WrapText = true;
+                worksheet.Cells["G" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["H" + row].Value = itemFilas.Meses6;
+                worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["H" + row].Style.WrapText = true;
+                worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["I" + row].Value = itemFilas.Meses7;
+                worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["I" + row].Style.WrapText = true;
+                worksheet.Cells["I" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["J" + row].Value = itemFilas.Meses8;
+                worksheet.Cells["J" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["J" + row].Style.WrapText = true;
+                worksheet.Cells["J" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["K" + row].Value = itemFilas.Meses9;
+                worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["K" + row].Style.WrapText = true;
+                worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["L" + row].Value = itemFilas.Meses10;
+                worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["L" + row].Style.WrapText = true;
+                worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["M" + row].Value = itemFilas.Meses11;
+                worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["M" + row].Style.WrapText = true;
+                worksheet.Cells["M" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["N" + row].Value = itemFilas.Meses12;
+                worksheet.Cells["N" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["N" + row].Style.WrapText = true;
+                worksheet.Cells["N" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["O" + row].Formula = "=Sum(" + worksheet.Cells[row, 3].Address + ":" + worksheet.Cells[row, 14].Address + ")"; ;
+                worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["O" + row].Style.WrapText = true;
+                worksheet.Cells["O" + row].Style.Font.Bold = true;
+                worksheet.Cells["O" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["P" + row].Value = itemFilas.Promedio;
+                worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["P" + row].Style.WrapText = true;
+                worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["Q" + row].Value = itemFilas.Variacion;
+                worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["Q" + row].Style.WrapText = true;
+                worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                row++;
+
+
+            }
+
+
+        }
+
+        private static void ConfigurarTamanioDeCeldasHistoricoCommodity(ExcelWorksheet worksheet)
+        {
+            worksheet.Column(1).Width = 4.43 + 2.71;
+            worksheet.Column(2).Width = 70.71 + 2.71;
+            worksheet.Column(3).Width = 10 + 2.71;
+            worksheet.Column(4).Width = 10 + 2.71;
+            worksheet.Column(5).Width = 10 + 2.71;
+            worksheet.Column(6).Width = 10 + 2.71;
+            worksheet.Column(7).Width = 10 + 2.71;
+            worksheet.Column(8).Width = 10 + 2.71;
+            worksheet.Column(9).Width = 10 + 2.71;
+            worksheet.Column(10).Width = 10 + 2.71;
+            worksheet.Column(11).Width = 10 + 2.71;
+            worksheet.Column(12).Width = 10 + 2.71;
+            worksheet.Column(13).Width = 10 + 2.71;
+            worksheet.Column(14).Width = 10 + 2.71;
+            worksheet.Column(15).Width = 10 + 2.71;
+            worksheet.Column(16).Width = 15 + 2.71;
+            worksheet.Column(17).Width = 16 + 2.71;
+    }
+
+        private static void PintarCabeceraHistoricoCommodity(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A1:Q1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
             worksheet.Cells["A1:Q1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
