@@ -2,6 +2,7 @@
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> EliminarAreaProduccion(int IdArea);
         public Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico();
         public Task<IEnumerable<DatosFormatosPersonaPorAreaModel>> ListarPersonaPorArea(int IdArea);
+        public Task<IEnumerable<DatosFormatoPersonasAsistencia>> MostrarPersonasAsistencias(string idArea);
 
     }
 }

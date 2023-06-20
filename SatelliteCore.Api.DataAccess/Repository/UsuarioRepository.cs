@@ -10,6 +10,7 @@ using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 
 namespace SatelliteCore.Api.DataAccess.Repository
 {
@@ -230,6 +231,19 @@ namespace SatelliteCore.Api.DataAccess.Repository
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 result = await connection.QueryAsync<DatosFormatosPersonaPorAreaModel>(sql, new { IdArea  });
+            }
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoPersonasAsistencia>> MostrarPersonasAsistencias(string idArea)
+        {
+            IEnumerable<DatosFormatoPersonasAsistencia> result = new List<DatosFormatoPersonasAsistencia>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryAsync<DatosFormatoPersonasAsistencia>("usp_satelite_listado_persona_faltantes", new { idArea  } , commandType: CommandType.StoredProcedure);
             }
 
             return result;

@@ -258,5 +258,12 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<IEnumerable<TransportistaEntity>> transportista = await _commonService.Transportista();
             return Ok(transportista);
         }
+
+        [HttpGet("ClasificacionArea")]
+        public async Task<IActionResult> ClasificacionArea()
+        {
+            ResponseModel<IEnumerable<ClasificacionAreaEntity>> clasificacionArea = await _commonService.ClasificacionArea();
+            return Ok(clasificacionArea);
+        }
     }
 }

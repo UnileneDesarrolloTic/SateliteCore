@@ -344,6 +344,13 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<IEnumerable<TransportistaEntity>>(true, Constante.MESSAGE_SUCCESS, lista);
         }
 
+        public async Task<ResponseModel<IEnumerable<ClasificacionAreaEntity>>> ClasificacionArea()
+        {
+            IEnumerable<ClasificacionAreaEntity> lista = new List<ClasificacionAreaEntity>();
+            lista = await _commonRepository.ClasificacionArea();
+            return new ResponseModel<IEnumerable<ClasificacionAreaEntity>>(true, Constante.MESSAGE_SUCCESS, lista);
+        }
+
 
     }
 }

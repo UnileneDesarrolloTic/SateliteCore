@@ -6,6 +6,7 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -164,6 +165,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("MostrarPersonasAsistencias")]
+        public async Task<ActionResult> MostrarPersonasAsistencias(string idArea)
+        {
+            IEnumerable<DatosFormatoPersonasAsistencia> response = await _usuarioService.MostrarPersonasAsistencias(idArea);
+            return Ok(response);
+        }
+        
 
 
 

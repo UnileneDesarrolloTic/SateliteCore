@@ -517,5 +517,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return lista;
         }
+
+        public async Task<IEnumerable<ClasificacionAreaEntity>> ClasificacionArea()
+        {
+            IEnumerable<ClasificacionAreaEntity> lista = new List<ClasificacionAreaEntity>();
+
+            string query = "SELECT IdClasificacionArea, Descripcion, Estado FROM TBMClasificacionArea WHERE Estado ='A'; ";
+
+            using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await connection.QueryAsync<ClasificacionAreaEntity>(query);
+                connection.Dispose();
+            }
+
+            return lista;
+        }
     }
 }

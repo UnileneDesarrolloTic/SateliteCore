@@ -5,10 +5,12 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using SatelliteCore.Api.ReportServices.Contracts.Administracion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SystemsIntegration.Api.Models.Exceptions;
 
 namespace SatelliteCore.Api.Services
 {
@@ -124,6 +126,15 @@ namespace SatelliteCore.Api.Services
         {
             IEnumerable<DatosFormatosPersonaPorAreaModel> response = await _usuarioRepository.ListarPersonaPorArea(IdArea);
 
+            return response;
+        }
+
+        public async Task<IEnumerable<DatosFormatoPersonasAsistencia>> MostrarPersonasAsistencias(string idArea)
+        {
+            if (string.IsNullOrEmpty(idArea))
+                throw new ValidationModelException("Debe Ingresar el Area");
+
+            IEnumerable<DatosFormatoPersonasAsistencia> response = await _usuarioRepository.MostrarPersonasAsistencias(idArea);
             return response;
         }
 

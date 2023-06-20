@@ -5,7 +5,8 @@ using System.Text;
 namespace SatelliteCore.Api.Models.Response
 {
     public struct DatosFormatoContarAreaModel
-    {
+    {   
+        public int IdClasificacionArea { get; set; }
         public int IdArea { get; set; }
         public string Descripcion { get; set; }
         public int Total { get; set; }
