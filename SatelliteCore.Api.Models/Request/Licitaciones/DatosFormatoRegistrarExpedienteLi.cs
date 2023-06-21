@@ -13,6 +13,8 @@ namespace SatelliteCore.Api.Models.Request.Licitaciones
         public string ordencompra { get; set; }
         public string factura { get; set; }
         public string expediente { get; set; }
+        public string estadoSeguimiento { get; set; }
+        public string comentario { get; set; }
         public List<DatosFormatoDetalleExpediente> detalleExpediente { get; set; }
     }
 }

@@ -270,7 +270,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
             string queryDetalle = "INSERT INTO TBLicInformacionEntrega (IdOrdencompra, DestinoCodigo, Destino, FechaEntrega, FechaAprobacion, Usuario) VALUES(@id, @codigo, @destino, @fechaEntrega, @fechaAprobacion, @usuario)";
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                id = await context.QueryFirstOrDefaultAsync<int>("usp_registrar_expediente_licitaciones", new { dato.idProceso, dato.entrega, dato.item, dato.usuario, dato.ordencompra, dato.factura, dato.expediente }, commandType: CommandType.StoredProcedure);
+                id = await context.QueryFirstOrDefaultAsync<int>("usp_registrar_expediente_licitaciones", new { dato.idProceso, dato.entrega, dato.item, dato.usuario, dato.ordencompra, dato.factura, dato.expediente, dato.estadoSeguimiento, dato.comentario }, commandType: CommandType.StoredProcedure);
                 foreach (DatosFormatoDetalleExpediente valor in dato.detalleExpediente)
                     await context.ExecuteAsync(queryDetalle, new { id, valor.codigo, valor.destino, valor.fechaEntrega, valor.fechaAprobacion, valor.usuario });
             }

@@ -162,7 +162,7 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> RegistrarExpedienteLI(DatosFormatoRegistrarExpedienteLi dato)
         {   
-            if(string.IsNullOrEmpty(dato.ordencompra) && string.IsNullOrEmpty(dato.expediente))
+            if(string.IsNullOrEmpty(dato.ordencompra) && string.IsNullOrEmpty(dato.expediente) && string.IsNullOrEmpty(dato.expediente))
                 return new ResponseModel<string>(false, "La información recibida no es válido", "");
 
             await _licitacionesRepository.RegistrarExpedienteLI(dato);

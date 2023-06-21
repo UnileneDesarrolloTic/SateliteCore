@@ -8,5 +8,7 @@ namespace SatelliteCore.Api.Models.Response.Licitaciones
     {
         public int IdOrdenCompra { get; set; }
         public string NumeroExpediente { get; set; }
+        public string EstadoSeguimiento { get; set; }
+        public string Comentario { get; set; }
     }
 }
