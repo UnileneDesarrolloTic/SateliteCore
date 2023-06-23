@@ -242,14 +242,17 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             IEnumerable<DatosFormatoGestionItemDrogueriaColor> condicionesgestion = new List<DatosFormatoGestionItemDrogueriaColor>();
 
+            DatosFormatoSeguimientoHistoricoPeriodoDrogueria informacionDrogueria = new DatosFormatoSeguimientoHistoricoPeriodoDrogueria();
+
             result = await _pronosticoRepository.SeguimientoOCDrogueria(idproveedor);
             if (result.Count() == 0)
                 return new ResponseModel<string>(false, "No hay informacion para exportar a excel", "");
 
 
             condicionesgestion = await _pronosticoRepository.GestionItemDrogueriaColor();
+            informacionDrogueria = await _pronosticoRepository.ReportePeriodoHistoricoPeriodoDrogueria();
             ReporteExcelCompraDrogueria ExporteCompraDrogueria = new ReporteExcelCompraDrogueria();
-            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador);
+            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador, informacionDrogueria);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }

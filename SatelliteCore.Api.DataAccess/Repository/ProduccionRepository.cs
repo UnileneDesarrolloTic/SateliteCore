@@ -312,6 +312,20 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
+        public async Task<DatosFormatoSeguimientoHistoricoPeriodoDrogueria> ReportePeriodoHistoricoPeriodoDrogueria()
+        {
+            DatosFormatoSeguimientoHistoricoPeriodoDrogueria result = new DatosFormatoSeguimientoHistoricoPeriodoDrogueria();
+
+            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
+            {
+                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_periodo_drogueria", commandType: CommandType.StoredProcedure);
+                result.PeriodoPlantilla = multi.Read<DatosFormatoPeriodoDrogueria>().ToList();
+                result.HistoricoPeriodo = multi.Read<DatosFormatoPeriodoHistoricoDrogueria>().ToList();
+            }
+
+            return result;
+        }
+
         public async Task<IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria>> MostrarOrdenCompraDrogueria(string Item)
         {
             IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> result = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
