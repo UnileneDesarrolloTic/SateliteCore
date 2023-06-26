@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
@@ -27,7 +28,8 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("ObtenerNumeroGuias")]
         public async Task<IActionResult> ObtenerNumeroGuias(string numeroguia)
         {
-            ResponseModel<DatosFormatoPlanOrdenServicosD> respuesta = await _logisticaServices.ObtenerNumeroGuias(numeroguia);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<DatosFormatoPlanOrdenServicosD> respuesta = await _logisticaServices.ObtenerNumeroGuias(numeroguia, Usuario);
             return Ok(respuesta);
         }
 
@@ -37,7 +39,8 @@ namespace SatelliteCore.Api.Controllers
             if (!ModelState.IsValid)
                 throw new ValidationModelException("Los datos de prueba de flexion no son válidos !!");
 
-            ResponseModel<string> response = await _logisticaServices.RegistrarRetornoGuia(dato);
+            string Usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> response = await _logisticaServices.RegistrarRetornoGuia(dato, Usuario);
 
             return Ok(response);
         }

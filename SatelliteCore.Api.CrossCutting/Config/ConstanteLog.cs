@@ -27,5 +27,8 @@ namespace SatelliteCore.Api.CrossCutting.Config
         public const int CD_INFORMACION_COMPRA_DROGUERIA = 18;
         public const int CD_INGRESAR_FORMULARIO_COMPRA_DROGUERIA = 19;
         public const int CD_GUARDAR_ORDEN_COMPRA_DROGUERIA = 20;
+
+        public const int LO_GESTION_GUIA_BUSCAR = 21;
+        public const int LO_GESTION_GUIA_REGISTRAR = 22;
     }
 }

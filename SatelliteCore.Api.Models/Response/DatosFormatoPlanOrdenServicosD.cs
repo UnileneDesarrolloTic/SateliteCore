@@ -11,5 +11,6 @@ namespace SatelliteCore.Api.Models.Response
         public DateTime FechaRetorno { get; set; }
         public DateTime FechaOrdenServicio { get; set; }
         public string OrdenServicio { get; set; }
+        public string NombreTransportista { get; set; }
     }
 }

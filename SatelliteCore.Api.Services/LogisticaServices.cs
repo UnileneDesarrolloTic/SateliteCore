@@ -1,5 +1,6 @@
 ﻿using SatelliteCore.Api.CrossCutting.Config;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
+using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.GestionGuias;
 using SatelliteCore.Api.Models.Response;
@@ -16,12 +17,14 @@ namespace SatelliteCore.Api.Services
     public class LogisticaServices : ILogisticaServices
     {
         private readonly ILogisticaRepository _logisticaRepository;
+        private readonly ICommonRepository _commonRepository;
 
-        public LogisticaServices(ILogisticaRepository logisticaRepository)
+        public LogisticaServices(ILogisticaRepository logisticaRepository, ICommonRepository commonRepository)
         {
             _logisticaRepository = logisticaRepository;
+            _commonRepository = commonRepository;
         }
-        public async Task<ResponseModel<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia)
+        public async Task<ResponseModel<DatosFormatoPlanOrdenServicosD>> ObtenerNumeroGuias(string numeroguia, string Usuario)
         {
             if (string.IsNullOrEmpty(numeroguia))
                 throw new ValidationModelException("Debe ingresar información completa");
@@ -29,7 +32,14 @@ namespace SatelliteCore.Api.Services
             DatosFormatoPlanOrdenServicosD respuesta = new DatosFormatoPlanOrdenServicosD();
             respuesta = await _logisticaRepository.ObtenerNumeroGuias(numeroguia);
 
-            if(respuesta.NumeroGuia == null)
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.LO_GESTION_GUIA_BUSCAR;
+            evento.Usuario = Usuario;
+            evento.Opcional = numeroguia;
+            await _commonRepository.RegistroLogEvento(evento);
+
+
+            if (respuesta.NumeroGuia == null)
                 return new ResponseModel<DatosFormatoPlanOrdenServicosD>(false, "No hay información de esa guia" , respuesta);
             return new ResponseModel<DatosFormatoPlanOrdenServicosD>(true, Constante.MESSAGE_SUCCESS, respuesta);
         }
@@ -70,9 +80,15 @@ namespace SatelliteCore.Api.Services
         }
 
 
-        public async Task<ResponseModel<string>> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato)
+        public async Task<ResponseModel<string>> RegistrarRetornoGuia(DatosFormatoRetornoGuiaRequest dato, string Usuario)
         {
             await _logisticaRepository.RegistrarRetornoGuia(dato);
+
+            LogTrazaEvento evento = new LogTrazaEvento();
+            evento.IdEvento = ConstanteLog.LO_GESTION_GUIA_REGISTRAR;
+            evento.Usuario = Usuario;
+            evento.Opcional = dato.numeroGuia;
+            await _commonRepository.RegistroLogEvento(evento);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Se guardo con éxito");
         }
