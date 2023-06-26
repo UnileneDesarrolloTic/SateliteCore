@@ -9,5 +9,7 @@ namespace SatelliteCore.Api.Models.Response
         public string Cliente { get; set; }
         public string OrdenServicios { get; set; }
         public DateTime FechaRetorno { get; set; }
+        public DateTime FechaOrdenServicio { get; set; }
+        public string OrdenServicio { get; set; }
     }
 }
