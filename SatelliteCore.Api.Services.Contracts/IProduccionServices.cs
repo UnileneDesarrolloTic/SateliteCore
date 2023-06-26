@@ -38,6 +38,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> GuardarOrdenCompraVencida(DatosFormatoCambiarEstadoOCVencida dato, string usuario);
         public Task<DatosInformacionGeneralReporteCompraArimaAgujas> InformacionSeguimientoAguja();
         public Task<ResponseModel<string>> InformacionSeguimientoAgujaExcel(string mostrarColumna);
+        public Task<IEnumerable<DatosFormatoListarPedidoAgujas>> InformacionPedidoAguja(string item);
         public Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item, string Tipo);
         public Task<ResponseModel<string>> GenerarOrdenCompraDrogueria(int idUsuario);
         public Task<ResponseModel<string>> RegistrarOrdenCompraDrogueria(DatosFormatoGuardarCabeceraOrdenCompraDrogueria dato, string strusuario, int idusuario);

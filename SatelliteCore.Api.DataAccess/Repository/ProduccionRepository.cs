@@ -469,6 +469,27 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
             return result;
         }
+        public async Task<IEnumerable<DatosFormatoListarPedidoAgujas>> InformacionPedidoAguja(string item)
+        {
+            IEnumerable<DatosFormatoListarPedidoAgujas> result = new List<DatosFormatoListarPedidoAgujas>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoListarPedidoAgujas>("usp_satelite_informacion_pedidoAguja", new { item }, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoProyeccionDrogueria>> InformacionProyeccionDrogueria()
+        {
+            IEnumerable<DatosFormatoProyeccionDrogueria> result = new List<DatosFormatoProyeccionDrogueria>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoProyeccionDrogueria>("usp_informacion_proyeccion_drogueria", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
 
 
         public async Task<IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada>> InformacionSeguimientoCompraImportacion(int material)

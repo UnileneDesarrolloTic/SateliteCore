@@ -306,6 +306,18 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
+
+        [HttpGet("InformacionPedidoAguja")]
+        public async Task<ActionResult> InformacionPedidoAguja(string item)
+        {
+            if (string.IsNullOrEmpty(item))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+           IEnumerable<DatosFormatoListarPedidoAgujas> respuesta = await _pronosticoServices.InformacionPedidoAguja(item);
+            return Ok(respuesta);
+        }
+
+
         [HttpGet("MostrarOrdenCompraArima")]
          public async Task<ActionResult> MostrarOrdenCompraArima (string Item, string Tipo)
         {

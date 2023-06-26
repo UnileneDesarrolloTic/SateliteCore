@@ -241,6 +241,7 @@ namespace SatelliteCore.Api.Services
         {
             IEnumerable<DatosFormatoReporteSeguimientoDrogueria> result = new List<DatosFormatoReporteSeguimientoDrogueria>();
             IEnumerable<DatosFormatoGestionItemDrogueriaColor> condicionesgestion = new List<DatosFormatoGestionItemDrogueriaColor>();
+            IEnumerable<DatosFormatoProyeccionDrogueria> proyeccion = new List<DatosFormatoProyeccionDrogueria>();
 
             DatosFormatoSeguimientoHistoricoPeriodoDrogueria informacionDrogueria = new DatosFormatoSeguimientoHistoricoPeriodoDrogueria();
 
@@ -251,8 +252,10 @@ namespace SatelliteCore.Api.Services
 
             condicionesgestion = await _pronosticoRepository.GestionItemDrogueriaColor();
             informacionDrogueria = await _pronosticoRepository.ReportePeriodoHistoricoPeriodoDrogueria();
+            proyeccion = await _pronosticoRepository.InformacionProyeccionDrogueria();
+
             ReporteExcelCompraDrogueria ExporteCompraDrogueria = new ReporteExcelCompraDrogueria();
-            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador, informacionDrogueria);
+            string reporte = ExporteCompraDrogueria.GenerarReporte(result, mostrarcolumna, condicionesgestion, agrupador, informacionDrogueria, proyeccion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
@@ -296,6 +299,7 @@ namespace SatelliteCore.Api.Services
         {
             DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
             DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
+ 
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
             informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
 
@@ -305,7 +309,19 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
-        public async Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item, string Tipo)
+        public async Task<IEnumerable<DatosFormatoListarPedidoAgujas>> InformacionPedidoAguja(string item)
+        {
+            if (string.IsNullOrEmpty(item))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+            IEnumerable<DatosFormatoListarPedidoAgujas> listando = new List<DatosFormatoListarPedidoAgujas>();
+            listando = await _pronosticoRepository.InformacionPedidoAguja(item);
+
+            return listando; 
+
+        }
+
+            public async Task<ResponseModel<IEnumerable<DatosFormatoTransitoPendienteOC>>> MostrarOrdenCompraArima(string Item, string Tipo)
         {
             if (string.IsNullOrEmpty(Item))
                 throw new ValidationModelException("verificar los parametros enviados");
