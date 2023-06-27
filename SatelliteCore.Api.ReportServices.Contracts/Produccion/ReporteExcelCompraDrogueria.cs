@@ -975,28 +975,28 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["B" + row].Style.WrapText = true;
                 worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                worksheet.Cells["C" + row].Value = proy.DiasEspera;
+                worksheet.Cells["C" + row].Value = proy.MaximoStock;
                 worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["C" + row].Style.WrapText = true;
-                worksheet.Cells["C" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["C" + row].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                 worksheet.Cells["D" + row].Value = proy.PuntoCorteDebePagar;
                 worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["D" + row].Style.WrapText = true;
-                worksheet.Cells["D" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["D" + row].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                 worksheet.Cells["E" + row].Value = proy.Pronostico;
                 worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["E" + row].Style.WrapText = true;
-                worksheet.Cells["E" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["E" + row].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                worksheet.Cells["F" + row].Value = proy.MaximoStock;
+                worksheet.Cells["F" + row].Value = proy.DiasEspera;
                 worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["F" + row].Style.WrapText = true;
-                worksheet.Cells["F" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["F" + row].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                 worksheet.Cells["G" + row].Value = proy.FechaProxima;
@@ -1008,7 +1008,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Cells["H" + row].Value = proy.CantidadComprarAprox;
                 worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 worksheet.Cells["H" + row].Style.WrapText = true;
-                worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0.00";
+                worksheet.Cells["H" + row].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                 row++;
