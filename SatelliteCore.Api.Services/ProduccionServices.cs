@@ -299,12 +299,14 @@ namespace SatelliteCore.Api.Services
         {
             DatosInformacionGeneralReporteCompraArimaAgujas result = new DatosInformacionGeneralReporteCompraArimaAgujas();
             DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
- 
+            IEnumerable<DatosFormatoProyeccionAgujas> proyeccion = new List<DatosFormatoProyeccionAgujas>();
+
             result = await _pronosticoRepository.InformacionSeguimientoAguja();
             informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
+            proyeccion = await _pronosticoRepository.InformacionProyeccionAguja();
 
             ReporteCompraAguja_Excel ExporteCompraAguja = new ReporteCompraAguja_Excel();
-            string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total, informacion);
+            string reporte = ExporteCompraAguja.GenerarReporte(result.DetalleInformacionAguja, mostrarColumna, result.Total, informacion, proyeccion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
@@ -393,6 +395,8 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas = new List<DatosFormatoLitadoSeguimientoCompraImportada>();
             IEnumerable<DatosFormatoListadoCommodity> listadoCommodity = new List<DatosFormatoListadoCommodity>();
+            IEnumerable<DatosFormatoArimaNacionalImportada> proyeccion = new List<DatosFormatoArimaNacionalImportada>();
+
 
             DatosFormatoSeguimientoHistorioPeriodo informacion = new DatosFormatoSeguimientoHistorioPeriodo();
             DatosFormatoSeguimientoPeriodoHistoricoCommodity informacionCommodity = new DatosFormatoSeguimientoPeriodoHistoricoCommodity();
@@ -425,8 +429,12 @@ namespace SatelliteCore.Api.Services
                 informacion = await _pronosticoRepository.ReportePeriodoHistoricoArima();
             }
 
+
+            proyeccion = await _pronosticoRepository.InformacionProyeccionArima();
+
+
             ReporteCompraImportada_Excel ExporteCompra = new ReporteCompraImportada_Excel();
-            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, listadoMaquinas, reporteArima, listadoCommodity, informacion, informacionCommodity);
+            string reporte = ExporteCompra.GenerarReporte(listadoImportado, mostrarColumna, listadoNacional, listadoMaquinas, reporteArima, listadoCommodity, informacion, informacionCommodity, proyeccion);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 

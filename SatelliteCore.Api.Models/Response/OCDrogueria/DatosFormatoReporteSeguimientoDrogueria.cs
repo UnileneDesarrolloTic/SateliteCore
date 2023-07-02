@@ -30,6 +30,7 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public int MesesAdicional { get; set; }
         public int StockAlmacenDRO { get; set; }
         public int CantidadOC { get; set; }
+        public int Aduanas { get; set; }
         public int TotalStock { get; set; }
         public int FuturoStock { get; set; }
         public int DiasEspera { get; set; }
@@ -41,6 +42,8 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public decimal PrecioFOBTotalFinal { get; set; }
         public string ColorVariacion { get; set; }
         public int IdGestionarColor { get; set; }
+        public decimal Duracion { get; set; }
+        public decimal MesesPotencialesFuturo { get; set; }
 
     }
 }

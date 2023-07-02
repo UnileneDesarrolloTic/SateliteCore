@@ -285,7 +285,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 0;
 
-            string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida=@FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item=@Item AND estado<>'CO' ";
+            string script = "UPDATE WH_OrdenCompradetalle SET FechaPrometida = @FechaLlegada WHERE NumeroOrden = @NumeroOrden  AND Item = @Item AND estado <> 'CO' ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
@@ -316,13 +316,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             DatosFormatoSeguimientoHistoricoPeriodoDrogueria result = new DatosFormatoSeguimientoHistoricoPeriodoDrogueria();
 
-            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
-            {
-                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_periodo_drogueria", commandType: CommandType.StoredProcedure);
-                result.PeriodoPlantilla = multi.Read<DatosFormatoPeriodoDrogueria>().ToList();
-                result.HistoricoPeriodo = multi.Read<DatosFormatoPeriodoHistoricoDrogueria>().ToList();
-            }
+            string sql = ";WITH Temp_periodo AS ( SELECT  1  keyper, CONVERT(CHAR(6), DATEADD(MONTH, -12, GETDATE()), 112) AS Periodo ) " +
+                         ",Temp_Plantilla(indice, keyper, Periodo) AS ( SELECT 1 AS indice, 1 AS keyper, Periodo FROM Temp_periodo " +
+                         "UNION ALL SELECT(indice + 1) AS indice, keyper, CONVERT(CHAR(6), DATEADD(MONTH, -indice, GETDATE()), 112) AS Periodo FROM Temp_Plantilla WHERE indice < 12 ) " +
+                         "SELECT Periodo, CONCAT ('Meses', ROW_NUMBER() OVER(ORDER BY Periodo)) Fila FROM Temp_Plantilla " +
+                         "ORDER BY Periodo";
 
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result.PeriodoPlantilla = await context.QueryAsync<DatosFormatoPeriodoDrogueria>(sql);
+                result.HistoricoPeriodo = await context.QueryAsync<DatosFormatoPeriodoHistoricoDrogueria>("usp_Satelite_Historial_periodo_drogueria", commandType: CommandType.StoredProcedure);
+            }
             return result;
         }
 
@@ -330,10 +334,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMostrarOrdenCompraDrogueria> result = new List<DatosFormatoMostrarOrdenCompraDrogueria>();
 
-
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>("usp_MostrarOdenCompraDrogueria  ", new { Item }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoMostrarOrdenCompraDrogueria>("usp_MostrarOdenCompraDrogueria", new { Item }, commandType: CommandType.StoredProcedure);
             }
             return result;
         }
@@ -534,11 +537,16 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             DatosFormatoSeguimientoHistorioPeriodo result = new DatosFormatoSeguimientoHistorioPeriodo();
 
-            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
+            string sql = ";WITH Temp_periodo AS ( SELECT  1  keyper, CONVERT(CHAR(6), DATEADD(MONTH, -12, GETDATE()), 112) AS Periodo ) " +
+                         ",Temp_Plantilla(indice, keyper, Periodo) AS ( SELECT 1 AS indice, 1 AS keyper, Periodo FROM Temp_periodo " +
+                         "UNION ALL SELECT(indice + 1) AS indice, keyper, CONVERT(CHAR(6), DATEADD(MONTH, -indice, GETDATE()), 112) AS Periodo FROM Temp_Plantilla WHERE indice < 12 ) " +
+                         "SELECT Periodo, CONCAT ('Meses', ROW_NUMBER() OVER(ORDER BY Periodo)) Fila FROM Temp_Plantilla " +
+                         "ORDER BY Periodo";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_periodo", commandType: CommandType.StoredProcedure);
-                result.Periodo = multi.Read<DatosFormatoPeriodo>().ToList();
-                result.PeriodoHistorico = multi.Read<DatosFormatoReporteHistorialPeriodoArima>().ToList();
+                result.Periodo = await context.QueryAsync<DatosFormatoPeriodo>(sql);
+                result.PeriodoHistorico = await context.QueryAsync<DatosFormatoReporteHistorialPeriodoArima>("usp_Satelite_Historial_periodo", commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -546,17 +554,45 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
         public async Task<DatosFormatoSeguimientoPeriodoHistoricoCommodity> ReportePeriodoHistoricoCommodity()
         {
+            string sql = ";WITH Temp_periodo AS ( SELECT  1  keyper, CONVERT(CHAR(6), DATEADD(MONTH, -12, GETDATE()), 112) AS Periodo ) " +
+                         ",Temp_Plantilla(indice, keyper, Periodo) AS ( SELECT 1 AS indice, 1 AS keyper, Periodo FROM Temp_periodo " +
+                         "UNION ALL SELECT(indice + 1) AS indice, keyper, CONVERT(CHAR(6), DATEADD(MONTH, -indice, GETDATE()), 112) AS Periodo FROM Temp_Plantilla WHERE indice < 12 ) " +
+                         "SELECT Periodo, CONCAT ('Meses', ROW_NUMBER() OVER(ORDER BY Periodo)) Fila FROM Temp_Plantilla " +
+                         "ORDER BY Periodo";
+
             DatosFormatoSeguimientoPeriodoHistoricoCommodity result = new DatosFormatoSeguimientoPeriodoHistoricoCommodity();
 
-            using (SqlConnection springContext = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                using SqlMapper.GridReader multi = await springContext.QueryMultipleAsync("usp_Satelite_Historial_Periodo_Commodity", commandType: CommandType.StoredProcedure);
-                result.PeriodoHistoricoComodity = multi.Read<DatosFormatoReporteHistoricoConsumoCommodity>().ToList();
-                result.Periodo = multi.Read<DatosFormatoPeriodoCommodity>().ToList();
+                result.Periodo = await context.QueryAsync<DatosFormatoPeriodoCommodity>(sql);
+                result.PeriodoHistoricoComodity = await context.QueryAsync<DatosFormatoReporteHistoricoConsumoCommodity>("usp_Satelite_Historial_Periodo_Commodity", commandType: CommandType.StoredProcedure);
             }
 
             return result;
         }
 
+        public async Task<IEnumerable<DatosFormatoProyeccionAgujas>> InformacionProyeccionAguja()
+        {
+            IEnumerable<DatosFormatoProyeccionAgujas> result = new List<DatosFormatoProyeccionAgujas>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoProyeccionAgujas>("usp_informacion_proyeccion_agujas", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+
+        }
+
+        public async Task<IEnumerable<DatosFormatoArimaNacionalImportada>> InformacionProyeccionArima()
+        {
+            IEnumerable<DatosFormatoArimaNacionalImportada> result = new List<DatosFormatoArimaNacionalImportada>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await context.QueryAsync<DatosFormatoArimaNacionalImportada>("usp_informacion_proyeccion_arima", commandType: CommandType.StoredProcedure);
+            }
+            return result;
+
+        }
     }
 }

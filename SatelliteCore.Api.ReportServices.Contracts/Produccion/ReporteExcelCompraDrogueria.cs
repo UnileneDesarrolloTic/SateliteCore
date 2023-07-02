@@ -20,8 +20,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
             using (var excelPackage = new ExcelPackage())
             {
-
-
                 ReporteCantidadComprar(excelPackage, dato, mostrarcolumna, condicionesgestion, agrupador);
                 reportePeriodoHistorico(excelPackage, informacionDrogueria);
                 reporteProyeccion(excelPackage, proyeccion);
@@ -160,7 +158,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["J" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["J" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["K" + fila].Value = "qty maxima deberia haber en stock linea";
+            worksheet.Cells["K" + fila].Value = "Promedio de consumo mensual que da el arima";
             worksheet.Cells["K" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["K" + fila].Style.WrapText = true;
             worksheet.Cells["K" + fila].Style.Font.Bold = true;
@@ -168,7 +166,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["K" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["K" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["L" + fila].Value = "punto de corte de stock donde se debe comprar";
+            worksheet.Cells["L" + fila].Value = "Meses de duración del stock de la materia prima";
             worksheet.Cells["L" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["L" + fila].Style.WrapText = true;
             worksheet.Cells["L" + fila].Style.Font.Bold = true;
@@ -176,7 +174,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["L" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["L" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["M" + fila].Value = "stock fisico actual";
+            worksheet.Cells["M" + fila].Value = "Cantidad comprar";
             worksheet.Cells["M" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["M" + fila].Style.WrapText = true;
             worksheet.Cells["M" + fila].Style.Font.Bold = true;
@@ -184,7 +182,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["M" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["M" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["N" + fila].Value = "producto comprado en transito y/o aduana";
+            worksheet.Cells["N" + fila].Value = "Stock disponible";
             worksheet.Cells["N" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["N" + fila].Style.WrapText = true;
             worksheet.Cells["N" + fila].Style.Font.Bold = true;
@@ -192,7 +190,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["N" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["N" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["O" + fila].Value = "total producto en transito mas stock actual";
+            worksheet.Cells["O" + fila].Value = "producto comprado en transito y/o Aprobado";
             worksheet.Cells["O" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["O" + fila].Style.WrapText = true;
             worksheet.Cells["O" + fila].Style.Font.Bold = true;
@@ -200,7 +198,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["O" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["O" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["P" + fila].Value = "dias potenciales con stock futuro";
+            worksheet.Cells["P" + fila].Value = "Producto Aduana";
             worksheet.Cells["P" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["P" + fila].Style.WrapText = true;
             worksheet.Cells["P" + fila].Style.Font.Bold = true;
@@ -208,7 +206,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["P" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["P" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["Q" + fila].Value = "promedio de consumo mensual que da el arima (Unidades)";
+            worksheet.Cells["Q" + fila].Value = "Stock Calculado";
             worksheet.Cells["Q" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Q" + fila].Style.WrapText = true;
             worksheet.Cells["Q" + fila].Style.Font.Bold = true;
@@ -216,7 +214,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["Q" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["Q" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["R" + fila].Value = "promedio de consumo x dia";
+            worksheet.Cells["R" + fila].Value = "Meses potenciales con stock futuro";
             worksheet.Cells["R" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["R" + fila].Style.WrapText = true;
             worksheet.Cells["R" + fila].Style.Font.Bold = true;
@@ -224,7 +222,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["R" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["R" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["S" + fila].Value = "dias de demora en llegada de producto";
+            worksheet.Cells["S" + fila].Value = "dias potenciales con stock futuro";
             worksheet.Cells["S" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["S" + fila].Style.WrapText = true;
             worksheet.Cells["S" + fila].Style.Font.Bold = true;
@@ -232,7 +230,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["S" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["S" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["T" + fila].Value = "dias de stock de precaución x desviación sobrecompra";
+            worksheet.Cells["T" + fila].Value = "Promedio de consumo x dia";
             worksheet.Cells["T" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["T" + fila].Style.WrapText = true;
             worksheet.Cells["T" + fila].Style.Font.Bold = true;
@@ -240,7 +238,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["T" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["T" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["U" + fila].Value = "dias que puedo esperar para comprar";
+            worksheet.Cells["U" + fila].Value = "dias de demora en llegada de producto";
             worksheet.Cells["U" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["U" + fila].Style.WrapText = true;
             worksheet.Cells["U" + fila].Style.Font.Bold = true;
@@ -248,7 +246,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["U" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["U" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["V" + fila].Value = "coeficiente de variacion";
+            worksheet.Cells["V" + fila].Value = "dias de stock de precaución x desviación sobrecompra";
             worksheet.Cells["V" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["V" + fila].Style.WrapText = true;
             worksheet.Cells["V" + fila].Style.Font.Bold = true;
@@ -256,8 +254,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["V" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["V" + fila].Style.Font.Size = 9;
 
-
-            worksheet.Cells["W" + fila].Value = "COMPRAR";
+            worksheet.Cells["W" + fila].Value = "dias que puedo esperar para comprar";
             worksheet.Cells["W" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["W" + fila].Style.WrapText = true;
             worksheet.Cells["W" + fila].Style.Font.Bold = true;
@@ -265,7 +262,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["W" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["W" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["X" + fila].Value = "Volumen caja m3";
+            worksheet.Cells["X" + fila].Value = "coeficiente de variacion";
             worksheet.Cells["X" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["X" + fila].Style.WrapText = true;
             worksheet.Cells["X" + fila].Style.Font.Bold = true;
@@ -273,7 +270,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["X" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["X" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["Y" + fila].Value = "Total m3 Comprar";
+            worksheet.Cells["Y" + fila].Value = "qty maxima deberia haber en stock linea";
             worksheet.Cells["Y" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Y" + fila].Style.WrapText = true;
             worksheet.Cells["Y" + fila].Style.Font.Bold = true;
@@ -281,7 +278,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["Y" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["Y" + fila].Style.Font.Size = 9;
 
-            worksheet.Cells["Z" + fila].Value = "PrecioFOB";
+            worksheet.Cells["Z" + fila].Value = "Punto de corte de stock donde se debe comprar";
             worksheet.Cells["Z" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             worksheet.Cells["Z" + fila].Style.WrapText = true;
             worksheet.Cells["Z" + fila].Style.Font.Bold = true;
@@ -289,14 +286,39 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["Z" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["Z" + fila].Style.Font.Size = 9;
 
-
-            worksheet.Cells["AA" + fila].Value = "PrecioFOB Total";
+            worksheet.Cells["AA" + fila].Value = "Volumen caja m3";
             worksheet.Cells["AA" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-            worksheet.Cells["AA" + fila].Style.Font.Bold = true;
             worksheet.Cells["AA" + fila].Style.WrapText = true;
+            worksheet.Cells["AA" + fila].Style.Font.Bold = true;
             worksheet.Cells["AA" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             worksheet.Cells["AA" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             worksheet.Cells["AA" + fila].Style.Font.Size = 9;
+
+            worksheet.Cells["AB" + fila].Value = "Total m3 Comprar";
+            worksheet.Cells["AB" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["AB" + fila].Style.WrapText = true;
+            worksheet.Cells["AB" + fila].Style.Font.Bold = true;
+            worksheet.Cells["AB" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["AB" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["AB" + fila].Style.Font.Size = 9;
+
+            worksheet.Cells["AC" + fila].Value = "PrecioFOB";
+            worksheet.Cells["AC" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["AC" + fila].Style.Font.Bold = true;
+            worksheet.Cells["AC" + fila].Style.WrapText = true;
+            worksheet.Cells["AC" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["AC" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["AC" + fila].Style.Font.Size = 9;
+
+            worksheet.Cells["AD" + fila].Value = "PrecioFOB Total";
+            worksheet.Cells["AD" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["AD" + fila].Style.Font.Bold = true;
+            worksheet.Cells["AD" + fila].Style.WrapText = true;
+            worksheet.Cells["AD" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["AD" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["AD" + fila].Style.Font.Size = 9;
+
+
 
             //Listar los agrupadores
             int row = fila + 1;
@@ -375,109 +397,128 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                         worksheet.Cells["J" + row].Style.WrapText = true;
                         worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["K" + row].Value = rowitem.MaximoStock;
+                        worksheet.Cells["K" + row].Value = rowitem.Pronostico;
                         worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["K" + row].Style.WrapText = true;
                         worksheet.Cells["K" + row].Style.Font.Bold = true;
                         worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["L" + row].Value = rowitem.PuntoCorteDebePagar;
+                        worksheet.Cells["L" + row].Value = rowitem.Duracion;
                         worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0";
+                        worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["L" + row].Style.WrapText = true;
                         worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["M" + row].Value = rowitem.StockAlmacenDRO;
+                        worksheet.Cells["M" + row].Value = rowitem.CantidadComprar;
                         worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["M" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["M" + row].Style.WrapText = true;
                         worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["N" + row].Value = rowitem.CantidadOC;
+                        worksheet.Cells["N" + row].Value = rowitem.StockAlmacenDRO;
                         worksheet.Cells["N" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["N" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["N" + row].Style.WrapText = true;
                         worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["O" + row].Value = rowitem.TotalStock;
+                        worksheet.Cells["O" + row].Value = rowitem.CantidadOC;
                         worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["O" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["O" + row].Style.WrapText = true;
                         worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["P" + row].Value = rowitem.FuturoStock;
+                        worksheet.Cells["P" + row].Value = rowitem.Aduanas;
                         worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["P" + row].Style.WrapText = true;
                         worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["Q" + row].Value = rowitem.Pronostico;
+                        worksheet.Cells["Q" + row].Value = rowitem.TotalStock;
                         worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["Q" + row].Style.WrapText = true;
                         worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["R" + row].Value = rowitem.ConsumoDiario;
+                        worksheet.Cells["R" + row].Value = rowitem.MesesPotencialesFuturo;
                         worksheet.Cells["R" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["R" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["R" + row].Style.WrapText = true;
                         worksheet.Cells["R" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["S" + row].Value = rowitem.TiempoTotal;
+                        worksheet.Cells["S" + row].Value = rowitem.FuturoStock;
                         worksheet.Cells["S" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["S" + row].Style.WrapText = true;
                         worksheet.Cells["S" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["T" + row].Value = rowitem.DiasAdicionales;
+                        worksheet.Cells["T" + row].Value = rowitem.ConsumoDiario;
                         worksheet.Cells["T" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["T" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["T" + row].Style.WrapText = true;
                         worksheet.Cells["T" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["U" + row].Value = rowitem.DiasEspera;
+                        worksheet.Cells["U" + row].Value = rowitem.TiempoTotal;
                         worksheet.Cells["U" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["U" + row].Style.Numberformat.Format = "#,##0";
-                        worksheet.Cells["U" + row].Style.Font.Color.SetColor(rowitem.DiasEspera >= 0 ? Color.Black : Color.Red);
                         worksheet.Cells["U" + row].Style.WrapText = true;
                         worksheet.Cells["U" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["V" + row].Value = rowitem.Variacion;
+                        worksheet.Cells["V" + row].Value = rowitem.DiasAdicionales;
                         worksheet.Cells["V" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["V" + row].Style.WrapText = true;
                         worksheet.Cells["V" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["W" + row].Value = rowitem.CantidadComprar;
+                        worksheet.Cells["W" + row].Value = rowitem.DiasEspera;
                         worksheet.Cells["W" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                         worksheet.Cells["W" + row].Style.Numberformat.Format = "#,##0";
+                        worksheet.Cells["W" + row].Style.Font.Color.SetColor(rowitem.DiasEspera >= 0 ? Color.Black : Color.Red);
                         worksheet.Cells["W" + row].Style.WrapText = true;
                         worksheet.Cells["W" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["X" + row].Value = rowitem.VolumenCaja;
+                        worksheet.Cells["X" + row].Value = rowitem.Variacion;
                         worksheet.Cells["X" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.000";
+                        worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.00";
                         worksheet.Cells["X" + row].Style.WrapText = true;
                         worksheet.Cells["X" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["Y" + row].Value = rowitem.TotalComprar;
+                        worksheet.Cells["Y" + row].Value = rowitem.MaximoStock;
                         worksheet.Cells["Y" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["Y" + row].Style.WrapText = true;
                         worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["Z" + row].Value = rowitem.PrecioFOBFinal;
+                        worksheet.Cells["Z" + row].Value = rowitem.PuntoCorteDebePagar;
                         worksheet.Cells["Z" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["Z" + row].Style.Numberformat.Format = "$#,##0.0000";
+                        worksheet.Cells["Z" + row].Style.Numberformat.Format = "#,##0";
                         worksheet.Cells["Z" + row].Style.WrapText = true;
                         worksheet.Cells["Z" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                        worksheet.Cells["AA" + row].Value = rowitem.PrecioFOBTotalFinal;
+
+                        worksheet.Cells["AA" + row].Value = rowitem.VolumenCaja;
                         worksheet.Cells["AA" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                        worksheet.Cells["AA" + row].Style.Numberformat.Format = "$#,##0.00";
+                        worksheet.Cells["AA" + row].Style.Numberformat.Format = "#,##0.000";
                         worksheet.Cells["AA" + row].Style.WrapText = true;
                         worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                        worksheet.Cells["AB" + row].Value = rowitem.TotalComprar;
+                        worksheet.Cells["AB" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["AB" + row].Style.Numberformat.Format = "#,##0.00";
+                        worksheet.Cells["AB" + row].Style.WrapText = true;
+                        worksheet.Cells["AB" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                        worksheet.Cells["AC" + row].Value = rowitem.PrecioFOBFinal;
+                        worksheet.Cells["AC" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["AC" + row].Style.Numberformat.Format = "$#,##0.0000";
+                        worksheet.Cells["AC" + row].Style.WrapText = true;
+                        worksheet.Cells["AC" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                        worksheet.Cells["AD" + row].Value = rowitem.PrecioFOBTotalFinal;
+                        worksheet.Cells["AD" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells["AD" + row].Style.Numberformat.Format = "$#,##0.00";
+                        worksheet.Cells["AD" + row].Style.WrapText = true;
+                        worksheet.Cells["AD" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                         totalCompra = totalCompra + rowitem.TotalComprar;
                         costoTotalFOB = costoTotalFOB + rowitem.PrecioFOBTotalFinal;
@@ -485,22 +526,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                         row++;
                     }
 
-                    worksheet.Cells["W" + row].Value = "TOTAL";
-                    worksheet.Cells["W" + row].Style.WrapText = true;
-                    worksheet.Cells["W" + row].Style.Font.Bold = true;
-                    worksheet.Cells["W" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-
-                    worksheet.Cells["Y" + row].Value = totalCompra;
-                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
-                    worksheet.Cells["Y" + row].Style.Font.Bold = true;
-                    worksheet.Cells["Y" + row].Style.WrapText = true;
-                    worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-
-                    worksheet.Cells["AA" + row].Value = costoTotalFOB;
-                    worksheet.Cells["AA" + row].Style.Numberformat.Format = "$#,##0.00";
-                    worksheet.Cells["AA" + row].Style.Font.Bold = true;
+                    worksheet.Cells["AA" + row].Value = "TOTAL";
                     worksheet.Cells["AA" + row].Style.WrapText = true;
+                    worksheet.Cells["AA" + row].Style.Font.Bold = true;
                     worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["AB" + row].Value = totalCompra;
+                    worksheet.Cells["AB" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["AB" + row].Style.Font.Bold = true;
+                    worksheet.Cells["AB" + row].Style.WrapText = true;
+                    worksheet.Cells["AB" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["AD" + row].Value = costoTotalFOB;
+                    worksheet.Cells["AD" + row].Style.Numberformat.Format = "$#,##0.00";
+                    worksheet.Cells["AD" + row].Style.Font.Bold = true;
+                    worksheet.Cells["AD" + row].Style.WrapText = true;
+                    worksheet.Cells["AD" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
                     row = row + 2;
                 }
@@ -571,109 +612,126 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                     worksheet.Cells["J" + row].Style.WrapText = true;
                     worksheet.Cells["J" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["K" + row].Value = rowitem.MaximoStock;
+                    worksheet.Cells["K" + row].Value = rowitem.Pronostico;
                     worksheet.Cells["K" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0";
+                    worksheet.Cells["K" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["K" + row].Style.WrapText = true;
-                    worksheet.Cells["K" + row].Style.Font.Bold = true;
                     worksheet.Cells["K" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["L" + row].Value = rowitem.PuntoCorteDebePagar;
+                    worksheet.Cells["L" + row].Value = rowitem.Duracion;
                     worksheet.Cells["L" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0";
+                    worksheet.Cells["L" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["L" + row].Style.WrapText = true;
                     worksheet.Cells["L" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["M" + row].Value = rowitem.StockAlmacenDRO;
+                    worksheet.Cells["M" + row].Value = rowitem.CantidadComprar;
                     worksheet.Cells["M" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["M" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["M" + row].Style.WrapText = true;
                     worksheet.Cells["M" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["N" + row].Value = rowitem.CantidadOC;
+                    worksheet.Cells["N" + row].Value = rowitem.StockAlmacenDRO;
                     worksheet.Cells["N" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["N" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["N" + row].Style.WrapText = true;
                     worksheet.Cells["N" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["O" + row].Value = rowitem.TotalStock;
+                    worksheet.Cells["O" + row].Value = rowitem.CantidadOC;
                     worksheet.Cells["O" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["O" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["O" + row].Style.WrapText = true;
                     worksheet.Cells["O" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["P" + row].Value = rowitem.FuturoStock;
+                    worksheet.Cells["P" + row].Value = rowitem.Aduanas;
                     worksheet.Cells["P" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["P" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["P" + row].Style.WrapText = true;
                     worksheet.Cells["P" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["Q" + row].Value = rowitem.Pronostico;
+                    worksheet.Cells["Q" + row].Value = rowitem.TotalStock;
                     worksheet.Cells["Q" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["Q" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["Q" + row].Style.WrapText = true;
                     worksheet.Cells["Q" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["R" + row].Value = rowitem.ConsumoDiario;
+                    worksheet.Cells["R" + row].Value = rowitem.MesesPotencialesFuturo;
                     worksheet.Cells["R" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["R" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["R" + row].Style.WrapText = true;
                     worksheet.Cells["R" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["S" + row].Value = rowitem.TiempoTotal;
+                    worksheet.Cells["S" + row].Value = rowitem.FuturoStock;
                     worksheet.Cells["S" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["S" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["S" + row].Style.WrapText = true;
                     worksheet.Cells["S" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["T" + row].Value = rowitem.DiasAdicionales;
+                    worksheet.Cells["T" + row].Value = rowitem.ConsumoDiario;
                     worksheet.Cells["T" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["T" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["T" + row].Style.WrapText = true;
                     worksheet.Cells["T" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["U" + row].Value = rowitem.DiasEspera;
+                    worksheet.Cells["U" + row].Value = rowitem.TiempoTotal;
                     worksheet.Cells["U" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["U" + row].Style.Numberformat.Format = "#,##0";
-                    worksheet.Cells["U" + row].Style.Font.Color.SetColor(rowitem.DiasEspera >= 0 ? Color.Black : Color.Red);
                     worksheet.Cells["U" + row].Style.WrapText = true;
                     worksheet.Cells["U" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["V" + row].Value = rowitem.Variacion;
+                    worksheet.Cells["V" + row].Value = rowitem.DiasAdicionales;
                     worksheet.Cells["V" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["V" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["V" + row].Style.WrapText = true;
                     worksheet.Cells["V" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["W" + row].Value = rowitem.CantidadComprar;
+                    worksheet.Cells["W" + row].Value = rowitem.DiasEspera;
                     worksheet.Cells["W" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells["W" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["W" + row].Style.WrapText = true;
+                    worksheet.Cells["W" + row].Style.Font.Color.SetColor(rowitem.DiasEspera >= 0 ? Color.Black : Color.Red);
                     worksheet.Cells["W" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["X" + row].Value = rowitem.VolumenCaja;
+                    worksheet.Cells["X" + row].Value = rowitem.Variacion;
                     worksheet.Cells["X" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.000";
+                    worksheet.Cells["X" + row].Style.Numberformat.Format = "#,##0.00";
                     worksheet.Cells["X" + row].Style.WrapText = true;
                     worksheet.Cells["X" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["Y" + row].Value = rowitem.TotalComprar;
+                    worksheet.Cells["Y" + row].Value = rowitem.MaximoStock;
                     worksheet.Cells["Y" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["Y" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["Y" + row].Style.WrapText = true;
                     worksheet.Cells["Y" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["Z" + row].Value = rowitem.PrecioFOBFinal;
+                    worksheet.Cells["Z" + row].Value = rowitem.PuntoCorteDebePagar;
                     worksheet.Cells["Z" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["Z" + row].Style.Numberformat.Format = "$#,##0.0000";
+                    worksheet.Cells["Z" + row].Style.Numberformat.Format = "#,##0";
                     worksheet.Cells["Z" + row].Style.WrapText = true;
                     worksheet.Cells["Z" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
-                    worksheet.Cells["AA" + row].Value = rowitem.PrecioFOBTotalFinal;
+                    worksheet.Cells["AA" + row].Value = rowitem.VolumenCaja;
                     worksheet.Cells["AA" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheet.Cells["AA" + row].Style.Numberformat.Format = "$#,##0.00";
+                    worksheet.Cells["AA" + row].Style.Numberformat.Format = "#,##0.000";
                     worksheet.Cells["AA" + row].Style.WrapText = true;
                     worksheet.Cells["AA" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["AB" + row].Value = rowitem.TotalComprar;
+                    worksheet.Cells["AB" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["AB" + row].Style.Numberformat.Format = "#,##0.00";
+                    worksheet.Cells["AB" + row].Style.WrapText = true;
+                    worksheet.Cells["AB" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["AC" + row].Value = rowitem.PrecioFOBFinal;
+                    worksheet.Cells["AC" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["AC" + row].Style.Numberformat.Format = "$#,##0.000";
+                    worksheet.Cells["AC" + row].Style.WrapText = true;
+                    worksheet.Cells["AC" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells["AD" + row].Value = rowitem.PrecioFOBTotalFinal;
+                    worksheet.Cells["AD" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells["AD" + row].Style.Numberformat.Format = "$#,##0.00";
+                    worksheet.Cells["AD" + row].Style.WrapText = true;
+                    worksheet.Cells["AD" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     row++;
                 }
 
@@ -690,12 +748,13 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(7).Hidden = false;
                 worksheet.Column(8).Hidden = false;
                 worksheet.Column(9).Hidden = false;
-                worksheet.Column(10).Hidden = false;
-                worksheet.Column(16).Hidden = false;
-                worksheet.Column(18).Hidden = false;
+                worksheet.Column(10).Hidden = false;     
                 worksheet.Column(19).Hidden = false;
                 worksheet.Column(20).Hidden = false;
                 worksheet.Column(22).Hidden = false;
+                worksheet.Column(24).Hidden = false;
+                worksheet.Column(25).Hidden = false;
+                worksheet.Column(26).Hidden = false;
             }
             else
             {
@@ -706,11 +765,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 worksheet.Column(8).Hidden = true;
                 worksheet.Column(9).Hidden = true;
                 worksheet.Column(10).Hidden = true;
-                worksheet.Column(16).Hidden = true;
-                worksheet.Column(18).Hidden = true;
                 worksheet.Column(19).Hidden = true;
                 worksheet.Column(20).Hidden = true;
                 worksheet.Column(22).Hidden = true;
+                worksheet.Column(24).Hidden = true;
+                worksheet.Column(25).Hidden = true;
+                worksheet.Column(26).Hidden = true;
             }
         } 
 
@@ -1049,20 +1109,24 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(25).Width = 7.71 + 2.71;
             worksheet.Column(26).Width = 8.71 + 2.71;
             worksheet.Column(27).Width = 10.71 + 2.71;
+            worksheet.Column(28).Width = 10.71 + 2.71;
+            worksheet.Column(29).Width = 10.71 + 2.71;
+            worksheet.Column(30).Width = 10.71 + 2.71;
         }
 
         private static void pintarCabecera(ExcelWorksheet worksheet, int fila)
         {
             worksheet.Cells["A" + fila + ":D" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
             worksheet.Cells["E" + fila + ":J" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffe180"));
-            worksheet.Cells["K" + fila + ":Q" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
-            worksheet.Cells["M" + fila + ":O" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
-            worksheet.Cells["R" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF"));
-            worksheet.Cells["S" + fila + ":U" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
-            worksheet.Cells["V" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF"));
-            worksheet.Cells["W" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#EA987B"));
-            worksheet.Cells["X" + fila + ":AA"+ fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
-            
+            worksheet.Cells["K" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
+            worksheet.Cells["M" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#EA987B"));
+            worksheet.Cells["N" + fila + ":Q" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
+            worksheet.Cells["R" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#96BCE5"));
+            worksheet.Cells["S" + fila + ":V" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
+            worksheet.Cells["W" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
+            worksheet.Cells["Y" + fila + ":Z"+ fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
+            worksheet.Cells["AA" + fila + ":AD" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#ffda9e"));
+
         }
 
         private static void ConfigurarTamanioDeCeldasHistorico(ExcelWorksheet worksheet)

@@ -48,5 +48,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoMostrarOrdenCompraNacionalImportacion>> MostrarOrdenCompraNacionalImportacion(string item, string tipo, int material);
         public Task<DatosFormatoSeguimientoHistorioPeriodo> ReportePeriodoHistoricoArima();
         public Task<DatosFormatoSeguimientoPeriodoHistoricoCommodity> ReportePeriodoHistoricoCommodity();
+        public Task<IEnumerable<DatosFormatoProyeccionAgujas>> InformacionProyeccionAguja();
+        public Task<IEnumerable<DatosFormatoArimaNacionalImportada>> InformacionProyeccionArima();
     }
 }

@@ -15,7 +15,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 {
     public class ReporteCompraImportada_Excel
     {
-        public string GenerarReporte(IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportada, string mostrarColumna, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas, string reporteArima, IEnumerable<DatosFormatoListadoCommodity> listadoCommodity, DatosFormatoSeguimientoHistorioPeriodo informacion, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacionCommodity)
+        public string GenerarReporte(IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoImportada, string mostrarColumna, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoNacional, IEnumerable<DatosFormatoLitadoSeguimientoCompraImportada> listadoMaquinas, string reporteArima, IEnumerable<DatosFormatoListadoCommodity> listadoCommodity, DatosFormatoSeguimientoHistorioPeriodo informacion, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacionCommodity, IEnumerable<DatosFormatoArimaNacionalImportada> proyeccion)
         {
 
             byte[] file;
@@ -28,30 +28,32 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
                 if (reporteArima == "importacion")
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoImportada, mostrarColumna, "Importación");
-                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                    CuerpoPeriodoHistorico(excelPackage, informacion);
                 }
                 else if (reporteArima == "nacional")
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoNacional, mostrarColumna, "Nacional");
-                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                    CuerpoPeriodoHistorico(excelPackage, informacion);
                 }
                 else if (reporteArima == "maquinas")
                 {
                     CuerpoExcelMaquinas(excelPackage, listadoMaquinas, mostrarColumna);
-                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                    CuerpoPeriodoHistorico(excelPackage, informacion);
                 }
                 else if (reporteArima == "commodity")
                 {
                     CuerpoExcelCommodity(excelPackage, listadoCommodity, mostrarColumna);
-                    cuerpoPeriodoHistoricoCommodity(excelPackage, informacionCommodity);
+                    CuerpoPeriodoHistoricoCommodity(excelPackage, informacionCommodity);
                 }
                 else
                 {
                     CuerpoExcelImportadaNacional(excelPackage, listadoImportada, mostrarColumna, "Importación");
                     CuerpoExcelImportadaNacional(excelPackage, listadoNacional, mostrarColumna, "Nacional");
                     CuerpoExcelMaquinas(excelPackage, listadoMaquinas, mostrarColumna);
-                    cuerpoPeriodoHistorico(excelPackage, informacion);
+                    CuerpoPeriodoHistorico(excelPackage, informacion);
                 }
+
+                Proyeccion(excelPackage, proyeccion);
 
                 file = excelPackage.GetAsByteArray();
 
@@ -1521,7 +1523,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["AC" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
             worksheet.Cells["AE" + fila + ":AF" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
         }
-        private static void cuerpoPeriodoHistorico(ExcelPackage excelPackage, DatosFormatoSeguimientoHistorioPeriodo informacion)
+        private static void CuerpoPeriodoHistorico(ExcelPackage excelPackage, DatosFormatoSeguimientoHistorioPeriodo informacion)
         {
 
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Consumo Historico");
@@ -1723,9 +1725,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Cells["A1:Q1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
             worksheet.Cells["A1:Q1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
         }
-
         //COMMODITY
-        private static void cuerpoPeriodoHistoricoCommodity(ExcelPackage excelPackage, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacioncommodity)
+        private static void CuerpoPeriodoHistoricoCommodity(ExcelPackage excelPackage, DatosFormatoSeguimientoPeriodoHistoricoCommodity informacioncommodity)
         {
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Consumo historico commodity");
             worksheet.Cells.Style.Font.Name = "Arial";
@@ -1904,7 +1905,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
 
 
         }
-
         private static void ConfigurarTamanioDeCeldasHistoricoCommodity(ExcelWorksheet worksheet)
         {
             worksheet.Column(1).Width = 4.43 + 2.71;
@@ -1925,11 +1925,174 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Produccion
             worksheet.Column(16).Width = 15 + 2.71;
             worksheet.Column(17).Width = 16 + 2.71;
     }
-
         private static void PintarCabeceraHistoricoCommodity(ExcelWorksheet worksheet)
         {
             worksheet.Cells["A1:Q1"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#1F73B9"));
             worksheet.Cells["A1:Q1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
         }
+        private static void Proyeccion(ExcelPackage excelPackage, IEnumerable<DatosFormatoArimaNacionalImportada> proyeccion)
+        {
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Proyección Arima");
+            worksheet.Cells.Style.Font.Name = "Arial";
+            worksheet.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            worksheet.Cells.Style.Fill.BackgroundColor.SetColor(Color.White);
+            worksheet.Cells.Style.Font.Size = 9;
+            worksheet.View.ZoomScale = 100;
+
+            int fila = 1;
+            ConfiguracionTamanioCeldasProyeccion(worksheet);
+            PintarCabeceraProyeccion(worksheet, fila);
+
+            worksheet.Cells["A" + fila].Value = "Material";
+            worksheet.Cells["A" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["A" + fila].Style.WrapText = true;
+            worksheet.Cells["A" + fila].Style.Font.Bold = true;
+            worksheet.Cells["A" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["B" + fila].Value = "Item";
+            worksheet.Cells["B" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["B" + fila].Style.WrapText = true;
+            worksheet.Cells["B" + fila].Style.Font.Bold = true;
+            worksheet.Cells["B" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["B" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["C" + fila].Value = "Descripción";
+            worksheet.Cells["C" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["C" + fila].Style.WrapText = true;
+            worksheet.Cells["C" + fila].Style.Font.Bold = true;
+            worksheet.Cells["C" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["C" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["D" + fila].Value = "qty maxima deberia haber en stock linea";
+            worksheet.Cells["D" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["D" + fila].Style.WrapText = true;
+            worksheet.Cells["D" + fila].Style.Font.Bold = true;
+            worksheet.Cells["D" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["D" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["E" + fila].Value = "punto de corte de stock donde se debe comprar";
+            worksheet.Cells["E" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["E" + fila].Style.WrapText = true;
+            worksheet.Cells["E" + fila].Style.Font.Bold = true;
+            worksheet.Cells["E" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["E" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["F" + fila].Value = "promedio de consumo mensual que da el arima (Unidades)";
+            worksheet.Cells["F" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["F" + fila].Style.WrapText = true;
+            worksheet.Cells["F" + fila].Style.Font.Bold = true;
+            worksheet.Cells["F" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["F" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["G" + fila].Value = "Dias que puedo esperar para comprar";
+            worksheet.Cells["G" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["G" + fila].Style.WrapText = true;
+            worksheet.Cells["G" + fila].Style.Font.Bold = true;
+            worksheet.Cells["G" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["G" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["H" + fila].Value = "Fecha Proxima";
+            worksheet.Cells["H" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["H" + fila].Style.WrapText = true;
+            worksheet.Cells["H" + fila].Style.Font.Bold = true;
+            worksheet.Cells["H" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["H" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["I" + fila].Value = "Cantidad Proxima";
+            worksheet.Cells["I" + fila].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells["I" + fila].Style.WrapText = true;
+            worksheet.Cells["I" + fila].Style.Font.Bold = true;
+            worksheet.Cells["I" + fila].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["I" + fila].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+
+            worksheet.View.FreezePanes(fila + 1, 1);
+
+            int row = fila + 1;
+            foreach (DatosFormatoArimaNacionalImportada proy in proyeccion)
+            {
+                worksheet.Row(row).Height = 14.25;
+
+                worksheet.Cells["A" + row].Value = proy.Material;
+                worksheet.Cells["A" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["A" + row].Style.WrapText = true;
+                worksheet.Cells["A" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells["B" + row].Value = proy.Item;
+                worksheet.Cells["B" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["B" + row].Style.WrapText = true;
+                worksheet.Cells["B" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells["C" + row].Value = proy.DescripcionLocal;
+                worksheet.Cells["C" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["C" + row].Style.WrapText = true;
+                worksheet.Cells["C" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells["D" + row].Value = proy.MaximoStock;
+                worksheet.Cells["D" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["D" + row].Style.WrapText = true;
+                worksheet.Cells["D" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["D" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["E" + row].Value = proy.PuntoCorte;
+                worksheet.Cells["E" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["E" + row].Style.WrapText = true;
+                worksheet.Cells["E" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["E" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["F" + row].Value = proy.Pronostico;
+                worksheet.Cells["F" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["F" + row].Style.WrapText = true;
+                worksheet.Cells["F" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["F" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["G" + row].Value = proy.DiasEspera;
+                worksheet.Cells["G" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["G" + row].Style.WrapText = true;
+                worksheet.Cells["G" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["G" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                worksheet.Cells["H" + row].Value = proy.Fechaproxima;
+                worksheet.Cells["H" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["H" + row].Style.WrapText = true;
+                worksheet.Cells["H" + row].Style.Numberformat.Format = "dd/MM/YYYY";
+                worksheet.Cells["H" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                worksheet.Cells["I" + row].Value = proy.CantidadComprarAprox;
+                worksheet.Cells["I" + row].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells["I" + row].Style.WrapText = true;
+                worksheet.Cells["I" + row].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["I" + row].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                row++;
+            }
+
+
+
+        }
+
+        private static void PintarCabeceraProyeccion(ExcelWorksheet worksheet, int fila)
+        {
+            worksheet.Cells["A" + fila + ":E" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#77dd77"));
+            worksheet.Cells["F" + fila + ":G" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFF86E"));
+            worksheet.Cells["H" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFDA9E"));
+            worksheet.Cells["I" + fila].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#EA987B"));
+        }
+
+        private static void ConfiguracionTamanioCeldasProyeccion(ExcelWorksheet worksheet)
+        {
+            worksheet.Column(1).Width = 18.43 + 2.71;
+            worksheet.Column(2).Width = 9.43 + 2.71;
+            worksheet.Column(3).Width = 50.43 + 2.71;
+            worksheet.Column(4).Width = 11.57 + 2.71;
+            worksheet.Column(5).Width = 11.57 + 2.71;
+            worksheet.Column(6).Width = 10.00 + 2.71;
+            worksheet.Column(7).Width = 10.00 + 2.71;
+            worksheet.Column(8).Width = 10.00 + 2.71;
+            worksheet.Column(9).Width = 11.57 + 2.71;
+            
+        }
+
     }
 }
