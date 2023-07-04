@@ -6,7 +6,7 @@ namespace SatelliteCore.Api.Models.Response
 {
     public struct DatosFormatosListarControlLotes
     {
-        public DateTime FechaEntrega { get; set; }
+        public string FechaEntrega { get; set; }
         public string Aprobado { get; set; }
         public string CompaniaSocio { get; set; }
         public string OrdenFabricacion { get; set; }
@@ -39,6 +39,6 @@ namespace SatelliteCore.Api.Models.Response
         public string Busqueda  { get; set; }
         public DateTime FechaExpiracion  { get; set; }
         public int ProtocoloFlag { get; set; }
-        public string destruible { get; set;  }
+        public int destruible { get; set;  }
     }
 }

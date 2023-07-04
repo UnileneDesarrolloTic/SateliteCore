@@ -424,14 +424,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-        public async Task<(List<ProtocoloCabeceraModel> cabeceras, List<ProtocoloDetalleModel> detalles)> ObtenerDatosReporteProtocolo(string ordenFabricacion)
+        public async Task<(List<ProtocoloCabeceraModel> cabeceras, List<ProtocoloDetalleModel> detalles)> ObtenerDatosReporteProtocolo(int idioma, string ordenFabricacion)
         {
             List<ProtocoloCabeceraModel> cabeceras = new List<ProtocoloCabeceraModel>();
             List<ProtocoloDetalleModel> detalles = new List<ProtocoloDetalleModel>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                using (var result_db = await context.QueryMultipleAsync("usp_DatosReporteAnalisisProtocolo", new { ordenFabricacion }, commandType: CommandType.StoredProcedure))
+                using (var result_db = await context.QueryMultipleAsync("usp_DatosReporteAnalisisProtocolo", new { idioma ,ordenFabricacion }, commandType: CommandType.StoredProcedure))
                 {
                     cabeceras = result_db.Read<ProtocoloCabeceraModel>().ToList();
                     detalles = result_db.Read<ProtocoloDetalleModel>().ToList();

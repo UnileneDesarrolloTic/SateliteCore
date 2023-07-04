@@ -46,6 +46,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
             NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
             formato.CurrencyGroupSeparator = ".";
             formato.NumberDecimalSeparator = ",";
+            int decimaldeC_DMaximo = (int) Cabecera.DEC_DMinimo;
+            int decimaldeC_S_PromedioMinimo = (int)Cabecera.DEC_S_PromedioMinimo;
 
             document.SetMargins(5, 15, 30, 15);
             string rutaUnilene = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\Logo_unilene.jpg");
@@ -478,7 +480,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
                     tablaDatosMedicion.AddCell(cellDetalle);
 
-                    cellDetalle = new Cell(2, 2).Add(new Paragraph((listadoTablaA[i].SECUENCIA == 7) ? listadoTablaA[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaA[i].COL_2,2).ToString("#,##0.00", formato))
+                    cellDetalle = new Cell(2, 2).Add(new Paragraph((listadoTablaA[i].SECUENCIA == 7) ? listadoTablaA[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaA[i].COL_2, decimaldeC_DMaximo).ToString(formato))
                       .AddStyle(InputTablaTexto))
                       .SetTextAlignment(TextAlignment.CENTER)
                       .SetVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -503,14 +505,14 @@ namespace SatelliteCore.Api.ReportServices.Contracts.ControlCalidad
 
                 tablaDatosMedicion.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaB[i].SECUENCIA == 8) ? listadoTablaB[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaB[i].COL_1, 2).ToString("#,##0.0", formato))
+                cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaB[i].SECUENCIA == 8) ? listadoTablaB[i].COL_1.ToString("#,##0.0000", formato) : Math.Round(listadoTablaB[i].COL_1, decimaldeC_S_PromedioMinimo).ToString(formato))
                   .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
                 tablaDatosMedicion.AddCell(cellDetalle);
 
-                cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaB[i].SECUENCIA == 8) ? listadoTablaB[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaB[i].COL_2, 2).ToString("#,##0.0", formato))
+                cellDetalle = new Cell(2, 3).Add(new Paragraph((listadoTablaB[i].SECUENCIA == 8) ? listadoTablaB[i].COL_2.ToString("#,##0.0000", formato) : Math.Round(listadoTablaB[i].COL_2, decimaldeC_S_PromedioMinimo).ToString(formato))
                   .AddStyle(InputTablaTexto))
                   .SetTextAlignment(TextAlignment.CENTER)
                   .SetVerticalAlignment(VerticalAlignment.MIDDLE);

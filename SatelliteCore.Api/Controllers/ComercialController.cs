@@ -138,7 +138,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpPost("GenerarReporteProtocoloAnalisis")]
         public async Task<ActionResult> GenerarReporteProtocoloAnalisis(DatosReporteProtocoloAnalisis datos)
         {
-            ResponseModel<string> reporte = await _comercialServices.GenerarReporteProtocoloAnalisis(datos.OrdenesFabricacion);
+            ResponseModel<string> reporte = await _comercialServices.GenerarReporteProtocoloAnalisis(datos.idioma,datos.OrdenesFabricacion);
             return Ok(reporte);
         }
 

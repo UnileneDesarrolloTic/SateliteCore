@@ -100,10 +100,13 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
         }
 
-        public async Task<ResponseModel<string>> GenerarReporteProtocoloAnalisis(List<string> ordenesFabricacion)
+        public async Task<ResponseModel<string>> GenerarReporteProtocoloAnalisis(int idioma, List<string> ordenesFabricacion)
         {
             if (ordenesFabricacion == null)
                 throw new ValidationModelException("Las Ordenes de fabricación no válidos.");
+
+            if (idioma <= 0)
+                throw new ValidationModelException("El idioma no válido");
 
             string cadenaOrdenFabricación = null;
             string mensajeReturn = Constante.MESSAGE_SUCCESS;
@@ -117,7 +120,7 @@ namespace SatelliteCore.Api.Services
             });
 
             (List<ProtocoloCabeceraModel> cabecerasPro, List<ProtocoloDetalleModel> detallesPro) 
-                = await _comercialRepository.ObtenerDatosReporteProtocolo(cadenaOrdenFabricación);
+                = await _comercialRepository.ObtenerDatosReporteProtocolo(idioma, cadenaOrdenFabricación);
             string versionProtocolo = await _controlCalidadRepository.VersionProtocolo();
 
             if (cabecerasPro.Count < 1)

@@ -312,7 +312,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             int result = 1;
 
-            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega =@fechaEntrega , Proyecto =@destruible , COMENTARIOS=@comentarios   WHERE NUMEROLOTE=@ordenFabricacion AND REFERENCIANUMERO=@lote ";
+            string sql = "  UPDATE PROD_UNILENE2..EP_PROGRAMACIONLOTE SET FechaEntrega = @fechaEntrega , Proyecto = @destruible , COMENTARIOS=@comentarios   WHERE NUMEROLOTE = @ordenFabricacion AND REFERENCIANUMERO = @lote ";
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
