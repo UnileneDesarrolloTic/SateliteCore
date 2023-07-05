@@ -12,9 +12,9 @@ namespace SatelliteCore.Api.Models.Response
         public int tipoDocumento { get; set; }
         public int version { get; set; }
         public  int vigencia {get; set; }
-        public DateTime fechapublicacion { get; set; }
-        public DateTime fecharevision { get; set; }
-        public DateTime fechaAprobacion { get; set; }
+        public string fechapublicacion { get; set; }
+        public string fecharevision { get; set; }
+        public string fechaAprobacion { get; set; }
         public int estado { get; set; }
         public int Ubicacion { get; set; }
         public int Almacenamiento { get; set; }
