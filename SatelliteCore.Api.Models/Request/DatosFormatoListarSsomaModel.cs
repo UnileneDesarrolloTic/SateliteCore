@@ -15,14 +15,14 @@ namespace SatelliteCore.Api.Models.Request
         public string EstadoDescripcion { get; set; }
         public string CodigoDocumento { get; set; }
         public string NombreDocumento { get; set; }
-        public DateTime FechaPublicacion { get; set; }
+        public string FechaPublicacion { get; set; }
         public int VersionSsoma { get; set; }
         public int Vigencia { get; set; }
         public int IdSsomaAlmacenamiento { get; set; }
         public int ArchivoPasivo { get; set; }
         public string Responsable { get; set; }
-        public DateTime FechaAprobacion { get; set; }
-        public DateTime FechaRevision { get; set; }
+        public string FechaAprobacion { get; set; }
+        public string FechaRevision { get; set; }
         public string Comentario { get; set; }
         public int Dias { get; set; }
 
