@@ -34,6 +34,8 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IExportacionesRepository, ExportacionesRepository>();
             service.AddScoped<IOrdenServicioRepository, OrdenServicioRepository>();
 
+            service.AddScoped<IDispensacionRepository, DispensacionRepository>();
+
             return service;
         }
         private static IServiceCollection AddRegisterServices(this IServiceCollection service)
@@ -54,6 +56,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IGestionCalidadServices, GestionCalidadServices>();
             service.AddScoped<IExportacionesServices, ExportacionesServices>();
             service.AddScoped<IOrdenServicioServices, OrdenServicioServices>();
+            service.AddScoped<IDispensacionServices, DispensacionServices>();
 
             return service;
         }
