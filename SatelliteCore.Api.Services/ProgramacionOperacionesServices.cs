@@ -50,9 +50,41 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> ActualizarFechaProgramada(DatosFormatoRegistrarFechaProgramacion dato, string usuario)
         {
-           await _programacionOperacionesRepository.ActualizarFechaProgramada(dato, usuario);
+            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
+            listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(dato.ordenFabricacion, dato.tipoFechaInicio);
 
-            return new ResponseModel<string>(true, "Registro Exitoso", "");
+            /*
+            if (listado.Count() > 0)
+            {
+                if (string.IsNullOrEmpty(dato.comentario))
+                    return new ResponseModel<string>(false, "Debe ingresar un comentario", "");
+            }    */
+
+            if (dato.tipoFechaEntrega == "E") 
+            {
+                if (dato.fechaInicio > dato.fechaEntrega)
+                    return new ResponseModel<string>(false, "La fecha de Entrega es menor a la fecha de inicio", "");
+            }
+
+            if (dato.tipoFechaInicio == "I")
+            {
+                if (dato.fechaEntrega < dato.fechaInicio)
+                    return new ResponseModel<string>(false, "La fecha de Inicio es mayor a la fecha de entrega", "");
+            }
+
+
+            await _programacionOperacionesRepository.ActualizarFechaProgramada(dato, usuario);
+
+            return new ResponseModel<string>(true, "Registrado", "");
+        }
+
+        public async Task<IEnumerable<DatosFormatoListadoFechaProgramadas>> ObtenerTipoFechaOrdenFabricacion(string ordenFabricacion, string tipoFecha)
+        {   
+            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
+
+            listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(ordenFabricacion, tipoFecha);
+
+            return listado;
         }
     }
 }
