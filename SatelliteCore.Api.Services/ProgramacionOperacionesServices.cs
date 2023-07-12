@@ -9,6 +9,7 @@ using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -33,14 +34,24 @@ namespace SatelliteCore.Api.Services
         }
 
 
-            public async Task<ResponseModel<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato)
+        public async Task<ResponseModel<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato)
         {
             if (dato.estado == "PR")
                 if(dato.fechaInicio == null || dato.fechaFinal == null )
                     throw new ValidationModelException("Los datos enviados no son válidos !!");
+            if (dato.agrupador.Count == 0)
+                    throw new ValidationModelException("Los datos del agrupador no son válidos !!");
 
             IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion> listado = new List<DatosFormatoProgramacionOperacionesOrdenFabricacion>();
-            listado = await _programacionOperacionesRepository.ObtenerProgramacionOrdenFabricacion(dato);
+
+            StringBuilder unionAgrupador = new StringBuilder();
+
+            foreach (int valor in dato.agrupador)
+            {
+                unionAgrupador.Append($"{valor},");
+            }
+
+            listado = await _programacionOperacionesRepository.ObtenerProgramacionOrdenFabricacion(dato, unionAgrupador.ToString());
             
             if (listado.Count() == 0)
                 return new ResponseModel<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>>(false, "No hay información a mostrar", listado);
@@ -53,12 +64,8 @@ namespace SatelliteCore.Api.Services
             IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
             listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(dato.ordenFabricacion, dato.tipoFechaInicio);
 
-            /*
-            if (listado.Count() > 0)
-            {
-                if (string.IsNullOrEmpty(dato.comentario))
-                    return new ResponseModel<string>(false, "Debe ingresar un comentario", "");
-            }    */
+            if (dato.fechaInicio == null && dato.fechaEntrega == null)
+                return new ResponseModel<string>(false, "Debe ingresar la fecha de inicio o la fecha entrega", "");
 
             if (dato.tipoFechaEntrega == "E") 
             {

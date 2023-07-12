@@ -7,7 +7,7 @@ namespace SatelliteCore.Api.Models.Request.ProgramacionOperaciones
     public struct DatosFormatoProgramacionOperaciones
     {   
             public string gerencia { get; set; }
-            public string agrupador { get; set; }
+            public List<int> agrupador { get; set; }
             public DateTime? fechaInicio { get; set; }
             public DateTime? fechaFinal { get; set; }
             public string lote { get; set; }

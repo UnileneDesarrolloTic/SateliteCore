@@ -47,13 +47,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato)
+        public async Task<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato, string unionAgrupador)
         {
             IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion> result = new List<DatosFormatoProgramacionOperacionesOrdenFabricacion>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoProgramacionOperacionesOrdenFabricacion>("usp_satelite_lista_ProgramacionOperaciones_OrdenFabricacion", new { dato.gerencia, dato.agrupador, dato.fechaInicio, dato.fechaFinal, dato.lote, dato.ordenFabricacion, dato.venta, dato.estado }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoProgramacionOperacionesOrdenFabricacion>("usp_satelite_lista_ProgramacionOperaciones_OrdenFabricacion", new { dato.gerencia, agrupador= unionAgrupador, dato.fechaInicio, dato.fechaFinal, dato.lote, dato.ordenFabricacion, dato.venta, dato.estado }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
