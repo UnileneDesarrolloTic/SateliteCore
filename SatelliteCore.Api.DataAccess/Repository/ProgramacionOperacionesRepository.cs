@@ -93,7 +93,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 await context.ExecuteAsync(sql, new { dato.ordenFabricacion });
 
                 foreach (DatosFormatoDivisionProgramacion division in dato.divisionProgramacion)
-                    await context.ExecuteAsync("usp_Satelite_Registro_Dividir_Programacion", new { dato.ordenFabricacion, division.correlactivo, division.cantidad, usuario }, commandType: CommandType.StoredProcedure);
+                    await context.ExecuteAsync("usp_Satelite_Registro_Dividir_Programacion", new { dato.ordenFabricacion, dato.lote, division.correlactivo, division.cantidad, usuario }, commandType: CommandType.StoredProcedure);
             }
 
             return result;

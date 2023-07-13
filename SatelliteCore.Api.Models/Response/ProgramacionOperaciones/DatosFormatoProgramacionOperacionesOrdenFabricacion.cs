@@ -27,7 +27,6 @@ namespace SatelliteCore.Api.Models.Response.ProgramacionOperaciones
         public DateTime? FechaEntrega { get; set; }
         public DateTime? FechaRequerida { get; set; }
         public string PedidoNumero { get; set; }
-        public int Multipedido { get; set; }
         public string FechaEntregaString { get; set; }
         public int CodigoAgrupador { get; set; }
         public string Agrupador { get; set; }
