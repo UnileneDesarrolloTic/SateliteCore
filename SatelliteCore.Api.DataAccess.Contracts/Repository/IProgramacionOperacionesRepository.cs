@@ -13,5 +13,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato, string unionAgrupador);
         public Task<string> ActualizarFechaProgramada(DatosFormatoRegistrarFechaProgramacion dato, string usuario);
         public Task<IEnumerable<DatosFormatoListadoFechaProgramadas>> ObtenerTipoFechaOrdenFabricacion(string ordenFabricacion, string tipoFecha);
+        public Task<string> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario);
     }
 }

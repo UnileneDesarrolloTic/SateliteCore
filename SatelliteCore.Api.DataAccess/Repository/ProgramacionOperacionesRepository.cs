@@ -83,6 +83,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             return result;
         }
+        public async Task<string> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario)
+        {
+            string result = "";
+            string sql = "DELETE FROM SatelliteCore..TBDDividirProgramacion WHERE OrdenFabricacion = @ordenFabricacion";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                await context.ExecuteAsync(sql, new { dato.ordenFabricacion });
+
+                foreach (DatosFormatoDivisionProgramacion division in dato.divisionProgramacion)
+                    await context.ExecuteAsync("usp_Satelite_Registro_Dividir_Programacion", new { dato.ordenFabricacion, division.correlactivo, division.cantidad, usuario }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
 
     }
 }
