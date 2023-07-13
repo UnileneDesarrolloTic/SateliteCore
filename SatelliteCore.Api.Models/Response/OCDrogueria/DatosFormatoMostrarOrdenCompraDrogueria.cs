@@ -12,9 +12,11 @@ namespace SatelliteCore.Api.Models.Response.OCDrogueria
         public string Proveedor { get; set; }
         public decimal CantidadPedida { get; set; }
         public decimal CantidadRecibida { get; set; }
+        public decimal CantidadPendiente { get; set; }
         public DateTime FechaPreparacion { get; set; }
         public decimal TiempoGeneral { get; set; }
         public DateTime NuevoTiempoEntrega { get; set; }
+        public DateTime FechaPrometida { get; set; }
         public int DiasFalta { get; set; }
     }
 }

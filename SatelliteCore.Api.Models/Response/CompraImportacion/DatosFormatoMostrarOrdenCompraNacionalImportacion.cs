@@ -12,6 +12,7 @@ namespace SatelliteCore.Api.Models.Response.CompraImportacion
         public decimal Cantidad { get; set; }
         public decimal CantidadRecibida { get; set; }
         public decimal PendienteOC { get; set; }
+        public DateTime FechaPreparacion { get; set; }
         public DateTime Fecha { get; set; }
         public int DiferenciaFecha { get; set; }
         public DateTime FechaLlegada { get; set; }
