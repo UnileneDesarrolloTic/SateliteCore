@@ -71,18 +71,6 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoListadoFechaProgramadas>> ObtenerTipoFechaOrdenFabricacion(string ordenFabricacion, string tipoFecha)
-        {
-            IEnumerable<DatosFormatoListadoFechaProgramadas> result = new List<DatosFormatoListadoFechaProgramadas>();
-            string sql = "SELECT OrdenFabricacion, Tipo, Fecha, Comentario, UsuarioCreacion, FechaRegistro FROM TBDFechaProgramacionHistorica WHERE OrdenFabricacion = @ordenFabricacion  AND Tipo = @tipoFecha ORDER BY FechaRegistro DESC ";
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                result = await context.QueryAsync<DatosFormatoListadoFechaProgramadas>(sql, new { ordenFabricacion, tipoFecha });
-            }
-
-            return result;
-        }
         public async Task<string> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario)
         {
             string result = "";

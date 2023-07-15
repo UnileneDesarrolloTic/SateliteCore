@@ -48,13 +48,6 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
-        [HttpGet("ObtenerTipoFechaOrdenFabricacion")]
-        public async Task<IActionResult> ObtenerTipoFechaOrdenFabricacion(string ordenFabricacion, string tipoFecha)
-        {
-            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = await _programacionOperacionesServices.ObtenerTipoFechaOrdenFabricacion(ordenFabricacion, tipoFecha);
-            return Ok(listado);
-        }
-
         [HttpPost("RegistrarDivisionProgramacion")]
         public async Task<IActionResult> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato)
         {

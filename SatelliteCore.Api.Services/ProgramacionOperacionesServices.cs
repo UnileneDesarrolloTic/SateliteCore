@@ -69,15 +69,6 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, "Registrado", "");
         }
 
-        public async Task<IEnumerable<DatosFormatoListadoFechaProgramadas>> ObtenerTipoFechaOrdenFabricacion(string ordenFabricacion, string tipoFecha)
-        {   
-            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
-
-            listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(ordenFabricacion, tipoFecha);
-
-            return listado;
-        }
-
         public async Task<ResponseModel<string>> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario)
         {
             int suma = 0;
