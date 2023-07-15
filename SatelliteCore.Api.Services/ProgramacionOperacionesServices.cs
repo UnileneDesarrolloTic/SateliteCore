@@ -61,24 +61,8 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> ActualizarFechaProgramada(DatosFormatoRegistrarFechaProgramacion dato, string usuario)
         {
-            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
-            listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(dato.ordenFabricacion, dato.tipoFechaInicio);
-
             if (dato.fechaInicio == null && dato.fechaEntrega == null)
                 return new ResponseModel<string>(false, "Debe ingresar la fecha de inicio o la fecha entrega", "");
-
-            if (dato.tipoFechaEntrega == "E") 
-            {
-                if (dato.fechaInicio > dato.fechaEntrega)
-                    return new ResponseModel<string>(false, "La fecha de Entrega es menor a la fecha de inicio", "");
-            }
-
-            if (dato.tipoFechaInicio == "I")
-            {
-                if (dato.fechaEntrega < dato.fechaInicio)
-                    return new ResponseModel<string>(false, "La fecha de Inicio es mayor a la fecha de entrega", "");
-            }
-
 
             await _programacionOperacionesRepository.ActualizarFechaProgramada(dato, usuario);
 
@@ -92,6 +76,25 @@ namespace SatelliteCore.Api.Services
             listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(ordenFabricacion, tipoFecha);
 
             return listado;
+        }
+
+        public async Task<ResponseModel<string>> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario)
+        {
+            int suma = 0;
+
+            dato.divisionProgramacion.ForEach(x =>
+            {
+               if(x.cantidad < 1) throw new ValidationModelException("No puede ingresar cantidad menores a 1");
+                suma = suma + x.cantidad;
+            });
+
+            if (suma != dato.cantidadProgramada)
+                return new ResponseModel<string>(false, "La cantidad programada debe ser igual que la suma de la cantidad dividida", "");
+
+
+            await _programacionOperacionesRepository.RegistrarDivisionProgramacion(dato, usuario);
+
+            return new ResponseModel<string>(true, "Registrado", "");
         }
     }
 }

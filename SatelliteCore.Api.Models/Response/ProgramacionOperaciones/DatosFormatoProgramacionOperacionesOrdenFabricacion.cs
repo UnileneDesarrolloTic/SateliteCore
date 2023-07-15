@@ -6,6 +6,7 @@ namespace SatelliteCore.Api.Models.Response.ProgramacionOperaciones
 {
     public struct DatosFormatoProgramacionOperacionesOrdenFabricacion
     {   
+        public int Id { get; set; }
         public DateTime FechaRegistro { get; set; }
         public string OrdenFabricacion { get; set; }
         public string Lote { get; set; }
@@ -23,15 +24,12 @@ namespace SatelliteCore.Api.Models.Response.ProgramacionOperaciones
         public string ReferenciaTipo { get; set; }
         public int Cliente { get; set; }
         public string Comentarios { get; set; }
-        public DateTime? FechaProgramadaInicio { get; set; }
+        public DateTime? FechaInicio { get; set; }
         public DateTime? FechaEntrega { get; set; }
         public DateTime? FechaRequerida { get; set; }
         public string PedidoNumero { get; set; }
-        public int Multipedido { get; set; }
-        public string FechaEntregaString { get; set; }
         public int CodigoAgrupador { get; set; }
         public string Agrupador { get; set; }
         public string ClasificacionGerencia { get; set; }
-
     }
 }

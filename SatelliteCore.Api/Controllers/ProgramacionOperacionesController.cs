@@ -55,5 +55,13 @@ namespace SatelliteCore.Api.Controllers
             return Ok(listado);
         }
 
+        [HttpPost("RegistrarDivisionProgramacion")]
+        public async Task<IActionResult> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> respuesta  = await _programacionOperacionesServices.RegistrarDivisionProgramacion(dato, usuario);
+            return Ok(respuesta);
+        }
+
     }
 }
