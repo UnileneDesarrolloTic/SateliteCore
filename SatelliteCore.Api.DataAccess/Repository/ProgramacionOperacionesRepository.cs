@@ -63,9 +63,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             string result = "";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryFirstOrDefaultAsync<string>("sp_Satelite_Registro_FechaProgramacion", new { dato.ordenFabricacion, dato.fechaInicio, dato.fechaEntrega, dato.comentarioInicio, dato.comentarioEntrega, usuario }, commandType: CommandType.StoredProcedure);
+                await context.ExecuteAsync("sp_Satelite_Registro_Programacion", new { dato.id ,dato.ordenFabricacion, dato.lote, dato.cantidadProgramada, dato.fechaInicio, dato.fechaEntrega, usuario, dato.comentario }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -86,14 +86,12 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task<string> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario)
         {
             string result = "";
-            string sql = "DELETE FROM SatelliteCore..TBDDividirProgramacion WHERE OrdenFabricacion = @ordenFabricacion";
+            string registrarSql = "INSERT INTO TBDDividirProgramacion (OrdenFabricacion, lote, Secuencia, Cantidad, FechaInicio, FechaEntrega, Usuario, Estado, FechaRegistro) VALUES(@ordenFabricacion, @lote, @correlactivo, @cantidad, @fechaInicio, @fechaEntrega, @usuario, 'A', GETDATE()) ";
 
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync(sql, new { dato.ordenFabricacion });
-
                 foreach (DatosFormatoDivisionProgramacion division in dato.divisionProgramacion)
-                    await context.ExecuteAsync("usp_Satelite_Registro_Dividir_Programacion", new { dato.ordenFabricacion, dato.lote, division.correlactivo, division.cantidad, usuario }, commandType: CommandType.StoredProcedure);
+                    await context.ExecuteAsync(registrarSql, new { dato.ordenFabricacion, dato.lote, division.correlactivo, division.cantidad, usuario, division.fechaInicio, division.fechaEntrega });
             }
 
             return result;

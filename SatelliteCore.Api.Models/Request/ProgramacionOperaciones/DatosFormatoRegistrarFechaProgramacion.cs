@@ -5,15 +5,12 @@ using System.Text;
 namespace SatelliteCore.Api.Models.Request.ProgramacionOperaciones
 {
     public struct DatosFormatoRegistrarFechaProgramacion
-    {   
-        public DateTime? programacionInicio { get; set; }
-        public DateTime? programacionEntrega { get; set; }
+    {   public int id { get; set; }
+        public string lote { get; set; }
         public string ordenFabricacion { get; set; }
+        public int cantidadProgramada { get; set; }
         public DateTime? fechaEntrega { get; set; }
         public DateTime? fechaInicio { get; set; }
-        public string tipoFechaEntrega { get; set; }
-        public string tipoFechaInicio { get; set; }
-        public string comentarioEntrega { get; set; }
-        public string comentarioInicio { get; set; }
+        public string comentario { get; set; }
     }
 }

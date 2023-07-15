@@ -61,24 +61,8 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> ActualizarFechaProgramada(DatosFormatoRegistrarFechaProgramacion dato, string usuario)
         {
-            IEnumerable<DatosFormatoListadoFechaProgramadas> listado = new List<DatosFormatoListadoFechaProgramadas>();
-            listado = await _programacionOperacionesRepository.ObtenerTipoFechaOrdenFabricacion(dato.ordenFabricacion, dato.tipoFechaInicio);
-
             if (dato.fechaInicio == null && dato.fechaEntrega == null)
                 return new ResponseModel<string>(false, "Debe ingresar la fecha de inicio o la fecha entrega", "");
-
-            if (dato.tipoFechaEntrega == "E") 
-            {
-                if (dato.fechaInicio > dato.fechaEntrega)
-                    return new ResponseModel<string>(false, "La fecha de Entrega es menor a la fecha de inicio", "");
-            }
-
-            if (dato.tipoFechaInicio == "I")
-            {
-                if (dato.fechaEntrega < dato.fechaInicio)
-                    return new ResponseModel<string>(false, "La fecha de Inicio es mayor a la fecha de entrega", "");
-            }
-
 
             await _programacionOperacionesRepository.ActualizarFechaProgramada(dato, usuario);
 

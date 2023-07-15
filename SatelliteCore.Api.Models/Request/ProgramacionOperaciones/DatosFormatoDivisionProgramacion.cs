@@ -8,5 +8,7 @@ namespace SatelliteCore.Api.Models.Request.ProgramacionOperaciones
     {
         public int correlactivo { get; set; }
         public int cantidad { get; set; }
+        public DateTime? fechaInicio { get; set; }
+        public DateTime? fechaEntrega { get; set; }
     }
 }
