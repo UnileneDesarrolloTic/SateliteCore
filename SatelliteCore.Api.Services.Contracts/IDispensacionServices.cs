@@ -12,6 +12,6 @@ namespace SatelliteCore.Api.Services.Contracts
     {
         public Task<ResponseModel<IEnumerable<DatosFormatoObtenerOrdenFabricacion>>> ObtenerOrdenFabricacion(DatosFormatoFiltroOrdenFabricacion dato);
         public Task<IEnumerable<DatosFormatoListadoMateriaPrimaDispensacion>> RecetasOrdenFabricacion(string ordenFabricacion);
-        public Task<ResponseModel<string>> RegistrarDispensacionMP(List<DatosFormatoDispensacionDetalleMP> dato, string usuario);
+        public Task<ResponseModel<string>> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario);
     }
 }

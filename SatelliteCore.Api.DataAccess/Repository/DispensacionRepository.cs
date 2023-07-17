@@ -48,13 +48,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<string> RegistrarDispensacionMP(List<DatosFormatoDispensacionDetalleMP> dato, string usuario)
+        public async Task<string> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario)
         {
             string result = "";
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
-            {    foreach (DatosFormatoDispensacionDetalleMP item in dato)
+            {    foreach (DatosFormatoDispensacionDetalleMP item in dato.detalleDispensacion)
                 {
-                    await context.ExecuteAsync("usp_satelite_registrar_dispensacion_MP", new { item.secuencia, item.documento, item.itemInsumo, item.itemTipo, item.unidadCodigo, item.cantidadGeneral, item.cantidadSolicitada, item.cantidadDespachada, item.cantidadIngresada, item.tipoMP, item.lote, item.entregadoPor, item.recibidoPor, usuario }, commandType: CommandType.StoredProcedure);
+                    await context.ExecuteAsync("usp_satelite_registrar_dispensacion_MP", new { dato.ordenFabricacion, dato.itemTerminado ,item.secuencia, item.documento, item.itemInsumo, item.itemTipo, item.unidadCodigo, item.cantidadGeneral, item.cantidadSolicitada, item.cantidadDespachada, item.cantidadIngresada, item.tipoMP, item.lote, item.entregadoPor, item.recibidoPor, usuario }, commandType: CommandType.StoredProcedure);
                 }
             }
             return result;

@@ -41,7 +41,7 @@ namespace SatelliteCore.Api.Services
             return await _dispensacionRepository.RecetasOrdenFabricacion(ordenFabricacion);
         }
 
-        public async Task<ResponseModel<string>> RegistrarDispensacionMP(List<DatosFormatoDispensacionDetalleMP> dato, string usuario)
+        public async Task<ResponseModel<string>> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario)
         {
             string result = await _dispensacionRepository.RegistrarDispensacionMP(dato, usuario);
             return new ResponseModel<string>(true, "Registrado", "");

@@ -12,7 +12,7 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
     {
         public Task<IEnumerable<DatosFormatoObtenerOrdenFabricacion>> ObtenerOrdenFabricacion(DatosFormatoFiltroOrdenFabricacion dato);
         public Task<IEnumerable<DatosFormatoListadoMateriaPrimaDispensacion>> RecetasOrdenFabricacion(string ordenFabricacion);
-        public Task<string> RegistrarDispensacionMP(List<DatosFormatoDispensacionDetalleMP> dato, string usuario);
+        public Task<string> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario);
 
     }
 }

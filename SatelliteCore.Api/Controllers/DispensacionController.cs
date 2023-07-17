@@ -44,7 +44,7 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpPost("RegistrarDispensacionMP")]
-        public async Task<IActionResult> RegistrarDispensacionMP(List<DatosFormatoDispensacionDetalleMP> dato)
+        public async Task<IActionResult> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato)
         {
             string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> respuesta = await _dispensacionServices.RegistrarDispensacionMP(dato, usuario);
