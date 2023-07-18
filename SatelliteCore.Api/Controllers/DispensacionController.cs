@@ -51,5 +51,12 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
+        [HttpGet("HistorialDispensacionMP")]
+        public async Task<IActionResult> HistorialDispensacionMP(string ordenFabricacion, string lote)
+        {
+            IEnumerable<DatosFormatoHistorialDispensaccion> respuesta = await _dispensacionServices.HistorialDispensacionMP(ordenFabricacion, lote);
+            return Ok(respuesta);
+        }
+
     }
 }

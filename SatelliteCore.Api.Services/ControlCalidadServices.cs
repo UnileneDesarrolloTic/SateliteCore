@@ -291,7 +291,7 @@ namespace SatelliteCore.Api.Services
             await _controlCalidadRepository.RegistrarControlProcesoProtocolo(dato, Usuario);
             await _commonRepository.RegistroLogEvento(evento);
 
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
             return Respuesta;
         }
         public async Task<ResponseModel<string>> RegistrarControlPTProtocolo(DatosFormatoControlProductoTermino dato, string Usuario)
@@ -303,13 +303,13 @@ namespace SatelliteCore.Api.Services
 
             await _controlCalidadRepository.RegistrarControlPTProtocolo(dato, Usuario);
             await _commonRepository.RegistroLogEvento(evento);
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
             return Respuesta;
         }
         public async Task<ResponseModel<string>> RegistrarPruebasEfectuadasProtocolo(DatosFormatoPruebasEfectuasProtocolos dato, string idUsuario)
         {
             await _controlCalidadRepository.RegistrarPruebasEfectuadasProtocolo(dato, idUsuario);
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
             return Respuesta;
         }
 
@@ -328,7 +328,7 @@ namespace SatelliteCore.Api.Services
 
             await _controlCalidadRepository.InsertarCabeceraFormatoProtocolo(dato,UsuarioSesion);
             await _commonRepository.RegistroLogEvento(evento);
-            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con existo");
+            ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Registrado con éxito");
             return Respuesta;
         }
 

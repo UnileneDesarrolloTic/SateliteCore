@@ -2,6 +2,7 @@
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -41,6 +42,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<DatosClienteDTO>> ObtenerDatosCliente(int codigoCliente);
         public Task<ResponseModel<IEnumerable<TransportistaEntity>>> Transportista();
         public Task<ResponseModel<IEnumerable<ClasificacionAreaEntity>>> ClasificacionArea();
-
+        public Task<ResponseModel<DatosFormatoInformacionItem>> InformacionItem(string item);
     }
 }

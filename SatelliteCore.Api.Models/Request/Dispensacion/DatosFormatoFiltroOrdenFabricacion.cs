@@ -10,7 +10,5 @@ namespace SatelliteCore.Api.Models.Request.Dispensacion
         public DateTime? fechaFinal { get; set; }
         public string lote { get; set; }
         public string ordenFabricacion { get; set; }
-        public string estado { get; set; }
-
     }
 }

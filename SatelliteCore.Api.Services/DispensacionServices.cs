@@ -26,8 +26,6 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<IEnumerable<DatosFormatoObtenerOrdenFabricacion>>> ObtenerOrdenFabricacion(DatosFormatoFiltroOrdenFabricacion dato)
         {
-            if (string.IsNullOrEmpty(dato.estado))
-                throw new Exception("Error de parametro");
 
             IEnumerable<DatosFormatoObtenerOrdenFabricacion> listado = new List<DatosFormatoObtenerOrdenFabricacion>();
             listado = await _dispensacionRepository.ObtenerOrdenFabricacion(dato);
@@ -47,5 +45,11 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, "Registrado", "");
         }
 
+        public async Task<IEnumerable<DatosFormatoHistorialDispensaccion>> HistorialDispensacionMP(string ordenFabricacion, string lote)
+        {
+            IEnumerable<DatosFormatoHistorialDispensaccion> resultado = new List<DatosFormatoHistorialDispensaccion>();
+            resultado = await _dispensacionRepository.HistorialDispensacionMP(ordenFabricacion, lote);
+            return resultado;
+        }
     }
 }

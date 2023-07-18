@@ -31,7 +31,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                result = await context.QueryAsync<DatosFormatoObtenerOrdenFabricacion>("usp_listaOrdenFabricacion", new { dato.fechaInicio, dato.fechaFinal, dato.lote, dato.ordenFabricacion, dato.estado }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<DatosFormatoObtenerOrdenFabricacion>("usp_listaOrdenFabricacion", new { dato.fechaInicio, dato.fechaFinal, dato.lote, dato.ordenFabricacion }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
@@ -58,6 +58,21 @@ namespace SatelliteCore.Api.DataAccess.Repository
                 }
             }
             return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoHistorialDispensaccion>> HistorialDispensacionMP(string ordenFabricacion, string lote)
+        {
+            
+            IEnumerable<DatosFormatoHistorialDispensaccion> listado = new List<DatosFormatoHistorialDispensaccion>();
+            string sql = "SELECT Documento, Secuencia, Item, Lote, CantidadSolicitada, CantidadIngresada, UsuarioCreacion, FechaRegistro FROM TBDDispensacionHistorica WHERE OrdenFabricacion = IIF(@ordenFabricacion = '', OrdenFabricacion, @ordenFabricacion) " +
+                         " OR Lote = IIF(@lote = '', Lote, @lote) ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                listado = await context.QueryAsync<DatosFormatoHistorialDispensaccion>(sql, new { ordenFabricacion, lote });
+
+            }
+            return listado;
         }
 
     }

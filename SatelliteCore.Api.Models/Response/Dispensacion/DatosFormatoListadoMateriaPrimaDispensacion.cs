@@ -14,9 +14,9 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public string UnidadCodigo { get; set; }
         public int CantidadGeneral { get; set; }
         public string TipoMP { get; set; }
-        public int CantidadSolicitada { get; set; }
-        public int CantidadDespachada { get; set; }
-        public int CantidadIngresada { get; set; }
+        public decimal CantidadSolicitada { get; set; }
+        public decimal CantidadDespachada { get; set; }
+        public decimal CantidadIngresada { get; set; }
         public string Lote { get; set; }
         public int EntregadoPor { get; set; }
         public string RecibidoPor { get; set; }

@@ -2,6 +2,7 @@
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -44,6 +45,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task RegistroLogEvento(LogTrazaEvento Evento);
         public Task<IEnumerable<TransportistaEntity>> Transportista();
         public Task<IEnumerable<ClasificacionAreaEntity>> ClasificacionArea();
-
+        public Task<DatosFormatoInformacionItem> InformacionItem(string item);
     }
 }

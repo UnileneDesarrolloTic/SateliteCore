@@ -4,6 +4,7 @@ using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.Common;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -349,6 +350,13 @@ namespace SatelliteCore.Api.Services
             IEnumerable<ClasificacionAreaEntity> lista = new List<ClasificacionAreaEntity>();
             lista = await _commonRepository.ClasificacionArea();
             return new ResponseModel<IEnumerable<ClasificacionAreaEntity>>(true, Constante.MESSAGE_SUCCESS, lista);
+        }
+
+        public async Task<ResponseModel<DatosFormatoInformacionItem>> InformacionItem(string item)
+        {
+            DatosFormatoInformacionItem lista = new DatosFormatoInformacionItem();
+            lista = await _commonRepository.InformacionItem(item);
+            return new ResponseModel<DatosFormatoInformacionItem>(true, Constante.MESSAGE_SUCCESS, lista);
         }
 
 
