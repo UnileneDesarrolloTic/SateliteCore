@@ -64,7 +64,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             
             IEnumerable<DatosFormatoHistorialDispensaccion> listado = new List<DatosFormatoHistorialDispensaccion>();
-            string sql = "SELECT Documento, Secuencia, Item, Lote, CantidadSolicitada, CantidadIngresada, UsuarioCreacion, FechaRegistro FROM TBDDispensacionHistorica WHERE OrdenFabricacion = IIF(@ordenFabricacion = '', OrdenFabricacion, @ordenFabricacion) " +
+            string sql = "SELECT Documento, Secuencia, a.Item, RTRIM(b.DescripcionLocal) Descripcion,  Lote, CantidadSolicitada, CantidadIngresada, UsuarioCreacion, FechaRegistro FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ItemMast b ON a.Item = b.Item WHERE OrdenFabricacion = IIF(@ordenFabricacion = '', OrdenFabricacion, @ordenFabricacion) " +
                          " OR Lote = IIF(@lote = '', Lote, @lote) ";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))

@@ -9,6 +9,7 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public string Documento { get; set; }
         public int Secuencia { get; set; }
         public string Item { get; set; }
+        public string Descripcion { get; set; }
         public string Lote { get; set; }
         public decimal CantidadIngresada { get; set; }
         public decimal CantidadSolicitada { get; set; }
