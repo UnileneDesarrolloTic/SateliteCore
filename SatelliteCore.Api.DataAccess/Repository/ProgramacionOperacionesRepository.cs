@@ -65,7 +65,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                await context.ExecuteAsync("sp_Satelite_Registro_Programacion", new { dato.id ,dato.ordenFabricacion, dato.lote, dato.cantidadProgramada, dato.fechaInicio, dato.fechaEntrega, usuario, dato.comentario }, commandType: CommandType.StoredProcedure);
+                await context.ExecuteAsync("sp_Satelite_Registro_Programacion", new { dato.id ,dato.ordenFabricacion, dato.lote, dato.cantidadPedida, dato.fechaInicio, dato.fechaEntrega, usuario, dato.comentario }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
