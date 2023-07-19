@@ -28,7 +28,11 @@ namespace SatelliteCore.Api.CrossCutting.Helpers
             try
             {
                 DateTime myDT = DateTime.Parse(inValue.ToString());
-                bValid = true;
+
+                if(myDT.Year == 0001)
+                    bValid = false;
+                else
+                    bValid = true;
             }
             catch (Exception)
             {
