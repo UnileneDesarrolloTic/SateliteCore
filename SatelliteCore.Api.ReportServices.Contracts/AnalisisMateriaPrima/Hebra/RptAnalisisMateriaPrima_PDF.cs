@@ -536,6 +536,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
             #region firma
 
             string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
+            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaVanessaAstoquilca.jpg");
 
             Table firmaTable = new Table(new float[] { 50, 50 })
                 .SetWidth(UnitValue.CreatePercentValue(100))
@@ -550,8 +551,17 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
                .SetMarginLeft(60)
                .SetTextAlignment(TextAlignment.LEFT);
 
+            Image imgVanessa = new Image(ImageDataFactory
+               .Create(rutaFirmaVanessa))
+               .SetWidth(150)
+               .SetHeight(75)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetMarginLeft(60)
+               .SetTextAlignment(TextAlignment.LEFT);
 
-            Cell firmaCell = new Cell(1, 1).Add(img).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+
+            Cell firmaCell = new Cell(1, 1).Add(imgVanessa).SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetBorder(Border.NO_BORDER);
             firmaTable.AddCell(firmaCell);
 
