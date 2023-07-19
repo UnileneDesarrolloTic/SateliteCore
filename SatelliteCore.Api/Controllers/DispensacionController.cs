@@ -58,5 +58,11 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
+        [HttpGet("InformacionItem")]
+        public async Task<IActionResult> InformacionItem(string item, string ordenFabricacion, string secuencia)
+        {
+            ResponseModel<DatosFormatoInformacionDispensacionPT> clasificacionArea = await _dispensacionServices.InformacionItem(item, ordenFabricacion, secuencia);
+            return Ok(clasificacionArea);
+        }
     }
 }

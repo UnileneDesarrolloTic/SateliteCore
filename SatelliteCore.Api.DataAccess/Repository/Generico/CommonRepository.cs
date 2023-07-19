@@ -534,20 +534,5 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return lista;
         }
 
-
-        public async Task<DatosFormatoInformacionItem> InformacionItem(string item)
-        {
-            DatosFormatoInformacionItem resultItem = new DatosFormatoInformacionItem();
-
-            string query = "SELECT RTRIM(item) Item, RTRIM(ItemTipo) ItemTipo, RTRIM(Linea) Linea, RTRIM(Familia) Familia, RTRIM(SubFamilia) SubFamilia, RTRIM(DescripcionLocal) DescripcionLocal , RTRIM(DescripcionIngles) DescripcionIngles, RTRIM(NumeroDeParte) NumeroDeParte, RTRIM(UnidadCodigo) UnidadCodigo FROM WH_ItemMast WHERE Item = @item";
-
-            using (var connection = new SqlConnection(_appConfig.contextSpring))
-            {
-                resultItem = await connection.QueryFirstOrDefaultAsync<DatosFormatoInformacionItem>(query, new { item });
-                connection.Dispose();
-            }
-
-            return resultItem;
-        }
     }
 }

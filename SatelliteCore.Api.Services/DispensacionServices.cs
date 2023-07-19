@@ -51,5 +51,12 @@ namespace SatelliteCore.Api.Services
             resultado = await _dispensacionRepository.HistorialDispensacionMP(ordenFabricacion, lote);
             return resultado;
         }
+        public async Task<ResponseModel<DatosFormatoInformacionDispensacionPT>> InformacionItem(string item, string ordenFabricacion, string secuencia)
+        {
+            DatosFormatoInformacionDispensacionPT lista = new DatosFormatoInformacionDispensacionPT();
+            lista = await _dispensacionRepository.InformacionItem(item, ordenFabricacion, secuencia);
+            return new ResponseModel<DatosFormatoInformacionDispensacionPT>(true, Constante.MESSAGE_SUCCESS, lista);
+        }
+
     }
 }

@@ -352,13 +352,5 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<IEnumerable<ClasificacionAreaEntity>>(true, Constante.MESSAGE_SUCCESS, lista);
         }
 
-        public async Task<ResponseModel<DatosFormatoInformacionItem>> InformacionItem(string item)
-        {
-            DatosFormatoInformacionItem lista = new DatosFormatoInformacionItem();
-            lista = await _commonRepository.InformacionItem(item);
-            return new ResponseModel<DatosFormatoInformacionItem>(true, Constante.MESSAGE_SUCCESS, lista);
-        }
-
-
     }
 }

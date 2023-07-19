@@ -75,5 +75,24 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return listado;
         }
 
+        public async Task<DatosFormatoInformacionDispensacionPT> InformacionItem(string item, string ordenFabricacion, string secuencia)
+        {
+            DatosFormatoInformacionDispensacionPT resultItem = new DatosFormatoInformacionDispensacionPT();
+
+            string query = "SELECT a.NUMEROLOTE OrdenFabricacion, RTRIM( a.Item) Item, RTRIM(b.descripcionLocal) Descripcion, (a.CANTIDADPROGRAMADA +  ISNULL(a.CANTIDADMUESTRA,0)) CantidadTotal, dp.Cantidad CantidadParcial " +
+                           "FROM EP_PROGRAMACIONLOTE a " +
+                           "INNER JOIN WH_ITEMMAST b ON a.ITEM = b.ITEM " +
+                           "INNER join SatelliteCore..TBDDividirProgramacion dp ON a.NUMEROLOTE = dp.ordenfabricacion and a.REFERENCIANUMERO = dp.lote and dp.Estado = 'A' " +
+                           "WHERE a.ITEM = @item AND a.NUMEROLOTE = @ordenFabricacion AND dp.Secuencia = @secuencia AND dp.Estado = 'A'";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                resultItem = await connection.QueryFirstOrDefaultAsync<DatosFormatoInformacionDispensacionPT>(query, new { item, ordenFabricacion, secuencia });
+                connection.Dispose();
+            }
+
+            return resultItem;
+        }
+
     }
 }

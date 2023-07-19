@@ -28,5 +28,6 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public string PedidoNumero { get; set; }
         public int Multipedido { get; set; }
         public DateTime? FechaProgramadaInicio { get; set; }
+        public int Secuencia { get; set; }
     }
 }
