@@ -150,7 +150,7 @@ namespace SatelliteCore.Api.Services
                 listaProtocolo.Add(datoProtocolo);
             }
 
-            ReportePdfProtocoloAnalisis protocolo = new ReportePdfProtocoloAnalisis(listaProtocolo, versionProtocolo);
+            ReportePdfProtocoloAnalisis protocolo = new ReportePdfProtocoloAnalisis(idioma, listaProtocolo, versionProtocolo);
             string reporte = protocolo.GenerarReporte();
 
             return new ResponseModel<string>(true, mensajeReturn, reporte);
