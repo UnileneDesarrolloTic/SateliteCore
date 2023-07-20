@@ -138,8 +138,5 @@ namespace SatelliteCore.Api.Services
             return response;
         }
 
-
-
-
     }
 }

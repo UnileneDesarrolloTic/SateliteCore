@@ -44,6 +44,5 @@ namespace SatelliteCore.Api.Controllers.Auth
             return Ok(responseSuccesss);
         }
 
-
     }
 }
