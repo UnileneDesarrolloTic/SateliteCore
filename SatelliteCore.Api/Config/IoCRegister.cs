@@ -35,6 +35,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IOrdenServicioRepository, OrdenServicioRepository>();
             service.AddScoped<IDispensacionRepository, DispensacionRepository>();
             service.AddScoped<IProgramacionOperacionesRepository, ProgramacionOperacionesRepository>();
+            service.AddScoped<IRegistroAsistenciaRepository, RegistroAsistenciaRepository>();
 
             return service;
         }
@@ -58,6 +59,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IOrdenServicioServices, OrdenServicioServices>();
             service.AddScoped<IDispensacionServices, DispensacionServices>();
             service.AddScoped<IProgramacionOperacionesServices, ProgramacionOperacionesServices>();
+            service.AddScoped<IRegistroAsistenciaServices, RegistroAsistenciaServices>();
 
             return service;
         }

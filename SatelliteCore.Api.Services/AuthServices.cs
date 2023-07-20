@@ -15,6 +15,8 @@ namespace SatelliteCore.Api.Services
     {
         private readonly IUsuarioService _usuarioService;
         private readonly IAppConfig _appConfig;
+       
+
         public AuthServices(IUsuarioService usuarioService, IAppConfig appConfig) {
             _usuarioService = usuarioService;
             _appConfig = appConfig;
@@ -57,5 +59,6 @@ namespace SatelliteCore.Api.Services
             JwtSecurityToken token = new JwtSecurityToken(header, payload);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

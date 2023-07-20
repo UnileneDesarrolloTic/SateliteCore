@@ -7,5 +7,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
     {
         public Task<(int codigo, string mensaje)> ValidarAccesoRuta(ValidacionRutaDataModel datos);
         public Task<bool> ValidarPermisoAcceso(int usuario, string permiso);
+        
     }
 }
