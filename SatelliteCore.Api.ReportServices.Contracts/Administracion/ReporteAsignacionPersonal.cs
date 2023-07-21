@@ -148,12 +148,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Administracion
                     else
                         worksheet.Cells["F" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#8d0d43"));
 
-                    if (rowitem.Asistencia == "FALTO")
-                        worksheet.Cells["G" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ff0000"));
-                    else
-                        worksheet.Cells["G" + row].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#2174d4"));
-
-
                     row++;
                 }
 

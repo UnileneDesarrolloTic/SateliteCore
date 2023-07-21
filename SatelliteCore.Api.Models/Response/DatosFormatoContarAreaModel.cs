@@ -11,6 +11,9 @@ namespace SatelliteCore.Api.Models.Response
         public string Descripcion { get; set; }
         public int Total { get; set; }
         public int Asistio { get; set; }
-        public int falto { get; set; }
+        public int Falto { get; set; }
+        public int Permisos { get; set; }
+        public int Vacaciones { get; set; }
+        public int Injustificados { get; set; }
     }
 }
