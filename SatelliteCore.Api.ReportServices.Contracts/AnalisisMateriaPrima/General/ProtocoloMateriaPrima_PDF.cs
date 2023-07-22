@@ -102,7 +102,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Lote:")).AddStyle(estiloCabeceraTitulo);
             cabeceraTable.AddCell(cabeceraCelda);
 
-            cabeceraCelda = new Cell(1, 1).Add(new Paragraph("230506")).AddStyle(estiloCabeceraTexto);
+            cabeceraCelda = new Cell(1, 1).Add(new Paragraph(datosReporte.Cabecera.Lote)).AddStyle(estiloCabeceraTexto);
             cabeceraTable.AddCell(cabeceraCelda);
 
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Cantidad:").SetMarginLeft(6)).AddStyle(estiloCabeceraTitulo);
@@ -184,7 +184,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             Paragraph seccionObservacion = new Paragraph("OBSERVACIONES:").SetFontSize(10).SetMarginTop(10).SetFont(fuenteNegrita);
             document.Add(seccionObservacion);
 
-            string observaciones = datosReporte.Detalle[0].Comentarios;
+            string observaciones = datosReporte.Detalle[0].Comentarios ?? "";
 
             seccionObservacion = new Paragraph(observaciones).SetFontSize(9).SetMarginTop(2).SetBorder(Border.NO_BORDER)
                 .SetBorderBottom(new SolidBorder(0.5f)).SetMinHeight(13);
@@ -198,7 +198,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             Table conclusionTable = new Table(new float[] { 20, 28, 4, 28, 4, 16 }).SetWidth(UnitValue.CreatePercentValue(100))
                .SetFixedLayout().SetMarginTop(13).SetBorder(new SolidBorder(0.5f));
 
-            string conclusion = datosReporte.Detalle[0].ConclusionFlag;
+            string conclusion = datosReporte.Detalle[0].ConclusionFlag ?? "";
 
             Cell conclusionCell = new Cell(1, 6).Add(new Paragraph("")).SetFontSize(9).SetBorder(Border.NO_BORDER).SetHeight(2);
             conclusionTable.AddCell(conclusionCell);

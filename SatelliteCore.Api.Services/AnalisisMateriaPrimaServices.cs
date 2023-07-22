@@ -53,6 +53,14 @@ namespace SatelliteCore.Api.Services
 
             bool existeAnalisis = await _analisisMateriaPrimaRepository.ValidarSiExisteAnalisisHebra(analisis.Cabecera.OrdenCompra, analisis.Cabecera.NumeroAnalisis);
 
+            //logica eddie
+            string stringLongitud = analisis.Longitud.ToString("0.##");
+            string stringDiametro = analisis.Diametro.ToString("0.####");
+            string stringTension = analisis.Tension.ToString("0.##");
+
+            await _analisisMateriaPrimaRepository.ActualizarDatosCalculadosProtocolo(analisis.Item, analisis.NumeroLote, analisis.NumeroDeParte,
+                stringLongitud, stringDiametro, stringTension);
+
             if (existeAnalisis)
                 await _analisisMateriaPrimaRepository.ActualizarAnalisisHebra(analisis);
             else

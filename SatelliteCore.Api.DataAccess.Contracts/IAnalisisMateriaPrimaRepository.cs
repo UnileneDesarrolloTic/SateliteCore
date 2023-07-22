@@ -15,5 +15,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts
         public Task GuardarDatosProtocoloMateriPrima(List<GuardarProtocoloMateriaPrimaDTO> protocolo);
         public Task<bool> ValidarRegistroAnalisisHebra(string ordenCompra, string numeroAnalisis);
         public Task<PlantillaProtocoloDTO> DatosReporteProtocolo(string ordenCompra, string numeroAnalisis);
+        public Task ActualizarDatosCalculadosProtocolo(string item, string numeroLote, string numeroDeParte, string longitud, string diametro, string tension);
     }
 }

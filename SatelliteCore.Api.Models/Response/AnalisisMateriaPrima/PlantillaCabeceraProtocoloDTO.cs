@@ -10,6 +10,7 @@ namespace SatelliteCore.Api.Models.Response.AnalisisMateriaPrima
         public decimal Cantidad { get; set; }
         public string Unidad { get; set; }
         public string NroIngreso { get; set; }
+        public string Lote { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public DateTime FechaReAnalisis { get; set; }
         public DateTime FechaAnalisis { get; set; }
