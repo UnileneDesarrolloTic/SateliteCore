@@ -121,18 +121,18 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             GuardarProtocoloMateriaPrimaDTO datos = protocolo.FirstOrDefault();
 
-            string queryDelete = "DELETE WH_ItemProtocolo WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @itemNumeroParte";
+            string queryDelete = "DELETE WH_ItemProtocolo WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @itemNumeroDeParte";
 
             string query = "DECLARE @fechaAnalisis DATETIME " +
                 "SELECT @fechaAnalisis = ISNULL(FechaAnalisis, GETDATE()) FROM SatelliteCore.dbo.TBMAnalisisHebra WHERE  NumeroAnalisis = @NumeroLote " +
                 "INSERT INTO WH_ItemProtocolo (Item, NumeroLote, ItemNumeroParte, Secuencia, FechaAnalisis, Prueba, Especificacion, Metodologia, Valor, TipoDato, " +
                 "Minimo, Maximo, Rechazado, Aprobado, Estado, ConclusionFlag, Comentarios, UltimoUsuario, UltimaFechaModif) " +
-                "VALUES(@Item, @NumeroLote, @ItemNumeroParte, @Secuencia, @fechaAnalisis, @Prueba, @Especificacion, @Metodologia, @Valor, @TipoDato, @Minimo, @Maximo, @Rechazado, " +
+                "VALUES(@Item, @NumeroLote, @ItemNumeroDeParte, @Secuencia, @fechaAnalisis, @Prueba, @Especificacion, @Metodologia, @Valor, @TipoDato, @Minimo, @Maximo, @Rechazado, " +
                 "@Aprobado, 'A', @conclusion, @observaciones, @Usuario, GETDATE())";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                await context.ExecuteAsync(queryDelete, new { datos.Item, datos.NumeroLote, datos.ItemNumeroParte });
+                await context.ExecuteAsync(queryDelete, new { datos.Item, datos.NumeroLote, datos.ItemNumeroDeParte });
                 await context.ExecuteAsync(query, protocolo);
             }
 

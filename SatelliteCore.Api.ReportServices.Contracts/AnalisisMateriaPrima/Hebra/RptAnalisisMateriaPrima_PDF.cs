@@ -31,7 +31,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
 
             PdfDocumentInfo docInfo = pdf.GetDocumentInfo();
             docInfo.SetTitle("Análisis Materia Prima");
-            docInfo.SetAuthor("Sistema Satelite");
+            docInfo.SetAuthor("Sistema Satélite");
 
             Document document = new Document(pdf, PageSize.A4);
             document.SetMargins(5, 15, 0, 15);
@@ -313,7 +313,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
 
             #region analisisDimensional
 
-            Paragraph seccionAnalisisDimensional = new Paragraph("ANÁLISIS DIMENSIONAL:").SetFontSize(8).SetPaddings(0, 0, 0, 10);
+            Paragraph seccionAnalisisDimensional = new Paragraph("ANÁLISIS DIMENSIONAL:").SetFontSize(8).SetPaddings(-5, 0, 0, 10);
             document.Add(seccionAnalisisDimensional);
 
             Table analisisTable;
@@ -502,10 +502,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
             Paragraph seccionObservacion = new Paragraph("II. OBSERVACIÓN").SetFontSize(8).SetBackgroundColor(new DeviceRgb(255, 230, 153));
             document.Add(seccionObservacion);
 
-            seccionObservacion = new Paragraph(datos.Cabecera.Observaciones is null ? "" : datos.Cabecera.Observaciones).SetFontSize(7).SetBorder(Border.NO_BORDER);
-
-            if (!(datos.Cabecera.Observaciones is null))
-                seccionObservacion.SetBorderBottom(new SolidBorder(0.5f));
+            seccionObservacion = new Paragraph(datos.Cabecera.Observaciones is null ? "" : datos.Cabecera.Observaciones).SetFontSize(7).SetBorder(Border.NO_BORDER).SetPadding(0).SetMargin(0);
 
             document.Add(seccionObservacion);
 
@@ -539,8 +536,8 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
 
             #region firma
 
-            string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaLiliaHurtadoDias.jpg");
-            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\FirmaVanessaAstoquilca.jpg");
+            string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloLiliaHurtadoDias.jpg");
+            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloVanessaAstoquilca.jpg");
 
             Table firmaTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout().SetMarginTop(10);
 

@@ -43,7 +43,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
                .SetTextAlignment(TextAlignment.LEFT);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
             #region estilos
 
@@ -230,6 +229,46 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             conclusionTable.AddCell(conclusionCell);
 
             document.Add(conclusionTable);
+
+            #endregion
+
+            #region firma
+
+            string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloLiliaHurtadoDias.jpg");
+            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloVanessaAstoquilca.jpg");
+
+            Table firmaTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout().SetMarginTop(10);
+
+            Image imgLilia = new Image(ImageDataFactory
+               .Create(rutaFirmaLilia))
+               .SetWidth(105)
+               .SetHeight(65)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetMarginLeft(50)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+            Image imgVanessa = new Image(ImageDataFactory
+               .Create(rutaFirmaVanessa))
+               .SetWidth(120)
+               .SetHeight(52)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetMarginLeft(60)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+
+            Cell firmaCell = new Cell(1, 1).Add(imgVanessa).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            firmaTable.AddCell(firmaCell);
+
+            firmaCell = new Cell(1, 1).Add(imgLilia).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            firmaTable.AddCell(firmaCell);
+
+            firmaTable.SetMarginTop(14);
+
+            document.Add(firmaTable);
 
             #endregion
 
