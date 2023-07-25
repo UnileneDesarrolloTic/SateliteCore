@@ -43,7 +43,6 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
                .SetTextAlignment(TextAlignment.LEFT);
 
             PdfFont fuenteNegrita = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-            PdfFont fuenteNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
             #region estilos
 
@@ -102,7 +101,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Lote:")).AddStyle(estiloCabeceraTitulo);
             cabeceraTable.AddCell(cabeceraCelda);
 
-            cabeceraCelda = new Cell(1, 1).Add(new Paragraph("230506")).AddStyle(estiloCabeceraTexto);
+            cabeceraCelda = new Cell(1, 1).Add(new Paragraph(datosReporte.Cabecera.Lote)).AddStyle(estiloCabeceraTexto);
             cabeceraTable.AddCell(cabeceraCelda);
 
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Cantidad:").SetMarginLeft(6)).AddStyle(estiloCabeceraTitulo);
@@ -184,7 +183,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             Paragraph seccionObservacion = new Paragraph("OBSERVACIONES:").SetFontSize(10).SetMarginTop(10).SetFont(fuenteNegrita);
             document.Add(seccionObservacion);
 
-            string observaciones = datosReporte.Detalle[0].Comentarios;
+            string observaciones = datosReporte.Detalle[0].Comentarios ?? "";
 
             seccionObservacion = new Paragraph(observaciones).SetFontSize(9).SetMarginTop(2).SetBorder(Border.NO_BORDER)
                 .SetBorderBottom(new SolidBorder(0.5f)).SetMinHeight(13);
@@ -198,7 +197,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             Table conclusionTable = new Table(new float[] { 20, 28, 4, 28, 4, 16 }).SetWidth(UnitValue.CreatePercentValue(100))
                .SetFixedLayout().SetMarginTop(13).SetBorder(new SolidBorder(0.5f));
 
-            string conclusion = datosReporte.Detalle[0].ConclusionFlag;
+            string conclusion = datosReporte.Detalle[0].ConclusionFlag ?? "";
 
             Cell conclusionCell = new Cell(1, 6).Add(new Paragraph("")).SetFontSize(9).SetBorder(Border.NO_BORDER).SetHeight(2);
             conclusionTable.AddCell(conclusionCell);
@@ -230,6 +229,46 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             conclusionTable.AddCell(conclusionCell);
 
             document.Add(conclusionTable);
+
+            #endregion
+
+            #region firma
+
+            string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloLiliaHurtadoDias.jpg");
+            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloVanessaAstoquilca.jpg");
+
+            Table firmaTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout().SetMarginTop(10);
+
+            Image imgLilia = new Image(ImageDataFactory
+               .Create(rutaFirmaLilia))
+               .SetWidth(105)
+               .SetHeight(65)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetMarginLeft(50)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+            Image imgVanessa = new Image(ImageDataFactory
+               .Create(rutaFirmaVanessa))
+               .SetWidth(120)
+               .SetHeight(52)
+               .SetMarginBottom(0)
+               .SetPadding(0)
+               .SetMarginLeft(60)
+               .SetTextAlignment(TextAlignment.LEFT);
+
+
+            Cell firmaCell = new Cell(1, 1).Add(imgVanessa).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            firmaTable.AddCell(firmaCell);
+
+            firmaCell = new Cell(1, 1).Add(imgLilia).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                .SetBorder(Border.NO_BORDER);
+            firmaTable.AddCell(firmaCell);
+
+            firmaTable.SetMarginTop(14);
+
+            document.Add(firmaTable);
 
             #endregion
 

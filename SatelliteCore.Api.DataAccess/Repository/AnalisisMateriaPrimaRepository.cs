@@ -61,7 +61,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task CrearAnalisisHebra(GuardarAnalisisHebraDTO analisis)
         {
             string queryCabecera = "INSERT INTO TBMAnalisisHebra (OrdenCompra, NumeroAnalisis, FechaAnalisis, Certificado, Quimica, Conclusion, " +
-                "Observaciones, UsuarioRegistro, FechaRegistro) VALUES(@OrdenCompra, @NumeroAnalisis, @FechaAnalisis, @Certificado, @Quimica, @Conclusion, @Observaciones, @UsuarioRegistro, @FechaRegistro)";
+                "Observaciones, Color, UsuarioRegistro, FechaRegistro) VALUES(@OrdenCompra, @NumeroAnalisis, @FechaAnalisis, @Certificado, @Quimica, @Conclusion, @Observaciones, @Color, @UsuarioRegistro, @FechaRegistro)";
 
             string queryDetalle = "INSERT INTO TBDAnalisisHebra (OrdenCompra, NumeroAnalisis, Numero, Longitud, Diametro, Tension) " +
                 "VALUES(@OrdenCompra, @NumeroAnalisis, @Numero, @Longitud, @Diametro, @Tension)";
@@ -76,7 +76,8 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task ActualizarAnalisisHebra(GuardarAnalisisHebraDTO analisis)
         {
             string queryCabecera = "UPDATE TBMAnalisisHebra SET FechaAnalisis = @FechaAnalisis, Certificado = @Certificado, " +
-                "Quimica = @Quimica, Conclusion = @Conclusion, Observaciones = @Observaciones, UsuarioModificacion = @UsuarioModificacion, " +
+                "Quimica = @Quimica, Conclusion = @Conclusion, Observaciones = @Observaciones, Color = @Color, " +
+                "UsuarioModificacion = @UsuarioModificacion, " +
                 "FechaModificacion = GETDATE() WHERE OrdenCompra = @OrdenCompra AND NumeroAnalisis = @NumeroAnalisis";
 
             string queryDetalle = "UPDATE TBDAnalisisHebra SET Longitud = @Longitud, Diametro = @Diametro, Tension = @Tension " +
@@ -120,22 +121,41 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             GuardarProtocoloMateriaPrimaDTO datos = protocolo.FirstOrDefault();
 
-            string queryDelete = "DELETE WH_ItemProtocolo WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @itemNumeroParte";
+            string queryDelete = "DELETE WH_ItemProtocolo WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @itemNumeroDeParte";
 
             string query = "DECLARE @fechaAnalisis DATETIME " +
                 "SELECT @fechaAnalisis = ISNULL(FechaAnalisis, GETDATE()) FROM SatelliteCore.dbo.TBMAnalisisHebra WHERE  NumeroAnalisis = @NumeroLote " +
                 "INSERT INTO WH_ItemProtocolo (Item, NumeroLote, ItemNumeroParte, Secuencia, FechaAnalisis, Prueba, Especificacion, Metodologia, Valor, TipoDato, " +
                 "Minimo, Maximo, Rechazado, Aprobado, Estado, ConclusionFlag, Comentarios, UltimoUsuario, UltimaFechaModif) " +
-                "VALUES(@Item, @NumeroLote, @ItemNumeroParte, @Secuencia, @fechaAnalisis, @Prueba, @Especificacion, @Metodologia, @Valor, @TipoDato, @Minimo, @Maximo, @Rechazado, " +
+                "VALUES(@Item, @NumeroLote, @ItemNumeroDeParte, @Secuencia, @fechaAnalisis, @Prueba, @Especificacion, @Metodologia, @Valor, @TipoDato, @Minimo, @Maximo, @Rechazado, " +
                 "@Aprobado, 'A', @conclusion, @observaciones, @Usuario, GETDATE())";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
-                await context.ExecuteAsync(queryDelete, new { datos.Item, datos.NumeroLote, datos.ItemNumeroParte });
+                await context.ExecuteAsync(queryDelete, new { datos.Item, datos.NumeroLote, datos.ItemNumeroDeParte });
                 await context.ExecuteAsync(query, protocolo);
             }
 
         }
+
+
+        public async Task ActualizarDatosCalculadosProtocolo (string item, string numeroLote, string numeroDeParte, string longitud, string diametro, string tension)
+        {
+            string query = "IF EXISTS (SELECT 1 FROM WH_ItemProtocolo WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @numeroDeParte AND Estado = 'A') BEGIN " +
+                "UPDATE WH_ItemProtocolo SET Valor = @diametro WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @numeroDeParte AND Estado = 'A' AND LEFT(Prueba, 20) = 'Diámetro de la hebra' " +
+                "UPDATE WH_ItemProtocolo SET Valor = @tension WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @numeroDeParte AND Estado = 'A' AND LEFT(Prueba, 24) = 'Resistencia a la tensión' " +
+                "UPDATE WH_ItemProtocolo SET Valor = @longitud WHERE Item = @item and NumeroLote = @numeroLote AND ItemNumeroParte = @numeroDeParte AND Estado = 'A' AND LEFT(Prueba, 20) = 'Longitud de la hebra' " +
+                "END";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                await context.ExecuteAsync(query, new { item, numeroLote, numeroDeParte, longitud, diametro, tension });
+            }
+
+        }
+
+
+
 
         public async Task<bool> ValidarRegistroAnalisisHebra(string ordenCompra, string numeroAnalisis)
         {

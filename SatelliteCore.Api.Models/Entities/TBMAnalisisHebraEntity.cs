@@ -12,6 +12,7 @@ namespace SatelliteCore.Api.Models.Entities
         public string Quimica { get; set; }
         public string Conclusion { get; set; }
         public string Observaciones { get; set; }
+        public string Color { get; set; }
         public string UsuarioRegistro { get; set; }
         public DateTime? FechaRegistro { get; set; }
         public string UsuarioModificacion { get; set; }

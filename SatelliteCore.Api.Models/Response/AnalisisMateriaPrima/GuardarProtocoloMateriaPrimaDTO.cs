@@ -4,7 +4,7 @@
     {
         public string Item { get; set; }
         public string NumeroLote { get; set; }
-        public string ItemNumeroParte { get; set; }
+        public string ItemNumeroDeParte { get; set; }
         public int Secuencia { get; set; }
         public string Prueba { get; set; }
         public string Especificacion { get; set; }
