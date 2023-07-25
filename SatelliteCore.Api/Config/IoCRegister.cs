@@ -38,6 +38,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IProgramacionOperacionesRepository, ProgramacionOperacionesRepository>();
             service.AddScoped<IAnalisisMateriaPrimaRepository, AnalisisMateriaPrimaRepository>();
             service.AddScoped<IRegistroAsistenciaRepository, RegistroAsistenciaRepository>();
+            service.AddScoped<IGestionEquipoEngasteRepository, GestionEquipoEngasteRepository>();
 
             return service;
         }
@@ -63,6 +64,8 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IProgramacionOperacionesServices, ProgramacionOperacionesServices>();
             service.AddScoped<IAnalisisMateriaPrimaServices, AnalisisMateriaPrimaServices>();
             service.AddScoped<IRegistroAsistenciaServices, RegistroAsistenciaServices>();
+            service.AddScoped<IGestionEquipoEngasteServices, GestionEquipoEngasteServices>();
+
 
             return service;
         }
