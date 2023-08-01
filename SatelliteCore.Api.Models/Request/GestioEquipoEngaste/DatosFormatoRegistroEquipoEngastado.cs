@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SatelliteCore.Api.Models.Response.GestioEquipoEngaste
+namespace SatelliteCore.Api.Models.Request.GestioEquipoEngaste
 {
     public struct DatosFormatoRegistroEquipoEngastado
     {

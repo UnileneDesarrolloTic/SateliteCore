@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.GestioEquipoEngaste;
+using SatelliteCore.Api.Models.Request.GestioEquipoEngaste;
 using SatelliteCore.Api.Services.Contracts;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -46,6 +47,8 @@ namespace SatelliteCore.Api.Services
         public async Task<ResponseModel<string>> RegistrarEquipoEngastado(DatosFormatoRegistroEquipoEngastado dato)
         {
             string resultado = "";
+            if (string.IsNullOrEmpty(dato.nombre) || string.IsNullOrEmpty(dato.Tipo) || dato.idpersona == 0)
+                throw new ValidationModelException("verificar los parametros enviados");
 
             resultado = await _gestionEquipoEngasteRepository.RegistrarEquipoEngastado(dato);
 

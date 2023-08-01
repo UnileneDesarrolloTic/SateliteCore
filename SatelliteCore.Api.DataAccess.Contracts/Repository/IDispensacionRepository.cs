@@ -15,5 +15,9 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<string> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario);
         public Task<IEnumerable<DatosFormatoHistorialDispensaccion>> HistorialDispensacionMP(string ordenFabricacion, string lote);
         public Task<DatosFormatoInformacionDispensacionPT> InformacionItem(string item, string ordenFabricacion, string secuencia);
+        public Task<IEnumerable<DatosFormatoDispensacionRecetaDetalle>> DetalleDispensacionReceta();
+        public Task<string> RegistrarRecetasGlobal(IEnumerable<DatosFormatoRegistroDispensacionRecetaGlobal> dato, string usuario);
+        public Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho();
+        public Task<IEnumerable<DatosFormatoMostrarDispensacionDespacho>> MostrarDispensacionDespacho(string id);
     }
 }

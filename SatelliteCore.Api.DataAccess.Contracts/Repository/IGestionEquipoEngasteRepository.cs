@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SatelliteCore.Api.Models.Request.GestioEquipoEngaste;
 using SatelliteCore.Api.Models.Response.GestioEquipoEngaste;
 
 namespace SatelliteCore.Api.DataAccess.Contracts.Repository

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.GestioEquipoEngaste;
+using SatelliteCore.Api.Models.Request.GestioEquipoEngaste;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;

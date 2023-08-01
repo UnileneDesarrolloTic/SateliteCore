@@ -94,5 +94,78 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return resultItem;
         }
 
+        public async Task<DatosFormatoInformacionDispensacionPT> DispensacionDetalleReceta(string item, string ordenFabricacion, string secuencia)
+        {
+            DatosFormatoInformacionDispensacionPT resultItem = new DatosFormatoInformacionDispensacionPT();
+
+            string query = "SELECT a.NUMEROLOTE OrdenFabricacion, RTRIM( a.Item) Item, RTRIM(b.descripcionLocal) Descripcion, (a.CANTIDADPROGRAMADA +  ISNULL(a.CANTIDADMUESTRA,0)) CantidadTotal, dp.Cantidad CantidadParcial " +
+                           "FROM EP_PROGRAMACIONLOTE a " +
+                           "INNER JOIN WH_ITEMMAST b ON a.ITEM = b.ITEM " +
+                           "INNER join SatelliteCore..TBDDividirProgramacion dp ON a.NUMEROLOTE = dp.ordenfabricacion and a.REFERENCIANUMERO = dp.lote and dp.Estado = 'A' " +
+                           "WHERE a.ITEM = @item AND a.NUMEROLOTE = @ordenFabricacion AND dp.Secuencia = @secuencia AND dp.Estado = 'A'";
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                resultItem = await connection.QueryFirstOrDefaultAsync<DatosFormatoInformacionDispensacionPT>(query, new { item, ordenFabricacion, secuencia });
+                connection.Dispose();
+            }
+
+            return resultItem;
+        }
+
+        public async Task<IEnumerable<DatosFormatoDispensacionRecetaDetalle>> DetalleDispensacionReceta()
+        {
+
+            IEnumerable<DatosFormatoDispensacionRecetaDetalle> listado = new List<DatosFormatoDispensacionRecetaDetalle>();
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                listado = await context.QueryAsync<DatosFormatoDispensacionRecetaDetalle>("usp_Satelite_DispensacionDetalle_Global",commandType: CommandType.StoredProcedure);
+
+            }
+            return listado;
+        }
+
+        public async Task<string> RegistrarRecetasGlobal(IEnumerable<DatosFormatoRegistroDispensacionRecetaGlobal> dato, string usuario)
+        {
+            string result = "";
+            string sql = "INSERT INTO SatelliteCore.dbo.TBMDispensacionHistorica (EntregadoPor) VALUES (@usuario); SELECT SCOPE_IDENTITY();";
+            int idDispensacion = 0;
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                idDispensacion = await context.QueryFirstOrDefaultAsync<int>(sql, new { usuario }); 
+                foreach (DatosFormatoRegistroDispensacionRecetaGlobal item in dato)
+                {
+                    await context.ExecuteAsync("usp_satelite_registrar_dispensacion_MP", new { item.ordenFabricacion, item.itemTerminado, item.secuencia, item.documento, item.itemInsumo, item.itemTipo, item.unidadCodigo, item.cantidadGeneral, item.cantidadSolicitada, item.cantidadDespachada, item.cantidadIngresada, item.tipoMP, item.lote, item.entregadoPor, item.recibidoPor, usuario, idDispensacion }, commandType: CommandType.StoredProcedure);
+                }
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho()
+        {
+            IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = new List<DatosFormatoDispensacionGuiaDespacho>();
+
+            string sql = "SELECT Id, EntregadoPor, ISNULL(RecibidoPor, '') RecibidoPor, FechaRegistro, Estado, FechaDespacho FROM TBMDispensacionHistorica WHERE Estado = 'PR';";
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                listado = await context.QueryAsync<DatosFormatoDispensacionGuiaDespacho>(sql);
+                
+            }
+            return listado;
+        }
+
+        public async Task<IEnumerable<DatosFormatoMostrarDispensacionDespacho>> MostrarDispensacionDespacho(string id)
+        {
+            IEnumerable<DatosFormatoMostrarDispensacionDespacho> listado = new List<DatosFormatoMostrarDispensacionDespacho>();
+
+            string sql = "SELECT IdDispensacion, OrdenFabricacion, ItemTerminado, Documento, Secuencia, a.Item,  RTRIM(b.DescripcionLocal) DescripcionLocal, Lote, CantidadIngresada, UsuarioCreacion, FechaRegistro, CantidadSolicitada FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ITEMMAST b ON  a.Item = b.Item WHERE Id = @id";
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                listado = await context.QueryAsync<DatosFormatoMostrarDispensacionDespacho>(sql, new { id});
+
+            }
+            return listado;
+        }
     }
 }

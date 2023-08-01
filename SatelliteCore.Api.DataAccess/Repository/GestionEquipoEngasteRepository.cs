@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
+using SatelliteCore.Api.Models.Request.GestioEquipoEngaste;
 using SatelliteCore.Api.Models.Response.GestioEquipoEngaste;
 
 namespace SatelliteCore.Api.DataAccess.Repository
