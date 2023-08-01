@@ -40,9 +40,9 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpGet("listaPendienteRecepcionFisica")]
-        public async Task<IActionResult> ListaPendienteRecepcionFisica(string almacen)
+        public async Task<IActionResult> ListaPendienteRecepcionFisica(string almacen, string estado)
         {
-            ResponseModel<List<PendienteRecepcionarPtDTO>> listaPendientes = await _transferenciaPtServices.ListaPendienteRecepcionFisica(almacen);
+            ResponseModel<List<PendienteRecepcionarPtDTO>> listaPendientes = await _transferenciaPtServices.ListaPendienteRecepcionFisica(almacen, estado);
             return Ok(listaPendientes);
         }
 

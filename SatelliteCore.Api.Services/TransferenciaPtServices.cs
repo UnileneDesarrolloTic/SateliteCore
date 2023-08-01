@@ -36,12 +36,12 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>("Se ha registrado la transferencia.");
         }
 
-        public async Task<ResponseModel<List<PendienteRecepcionarPtDTO>>> ListaPendienteRecepcionFisica(string almacenCodigo)
+        public async Task<ResponseModel<List<PendienteRecepcionarPtDTO>>> ListaPendienteRecepcionFisica(string almacenCodigo, string estado)
         {
-            if(string.IsNullOrWhiteSpace(almacenCodigo))
+            if(string.IsNullOrWhiteSpace(almacenCodigo) || string.IsNullOrWhiteSpace(estado))
                 throw new ValidationModelException();
 
-            List<PendienteRecepcionarPtDTO> lista = await _transferenciaPtRepository.ListaPendienteRecepcionFisica(almacenCodigo);
+            List<PendienteRecepcionarPtDTO> lista = await _transferenciaPtRepository.ListaPendienteRecepcionFisica(almacenCodigo, estado);
 
             return new ResponseModel<List<PendienteRecepcionarPtDTO>>(lista);
         }

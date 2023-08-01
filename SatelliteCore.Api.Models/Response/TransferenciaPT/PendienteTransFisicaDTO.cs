@@ -19,5 +19,6 @@ namespace SatelliteCore.Api.Models.Response.TransferenciaPT
         public string AlmacenCodigo { get; set; }
         public decimal? CantidadEntregada { get; set; }
         public decimal? CantidadAceptada { get; set; }
+        public decimal? CantidadPendiente { get; set; }
     }
 }

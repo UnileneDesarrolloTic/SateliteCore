@@ -40,13 +40,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
         }
 
-        public async Task<List<PendienteRecepcionarPtDTO>> ListaPendienteRecepcionFisica(string almacenCodigo)
+        public async Task<List<PendienteRecepcionarPtDTO>> ListaPendienteRecepcionFisica(string almacenCodigo, string estado)
         {
             IEnumerable<PendienteRecepcionarPtDTO> result = new List<PendienteRecepcionarPtDTO>();
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await context.QueryAsync<PendienteRecepcionarPtDTO>("SP_ListaRecepcionarTransferenciaPT", new { almacenCodigo }, commandType: CommandType.StoredProcedure);
+                result = await context.QueryAsync<PendienteRecepcionarPtDTO>("SP_ListaRecepcionarTransferenciaPT", new { almacenCodigo, estado }, commandType: CommandType.StoredProcedure);
             }
 
             return result.ToList();
