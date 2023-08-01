@@ -64,5 +64,44 @@ namespace SatelliteCore.Api.Controllers
             ResponseModel<DatosFormatoInformacionDispensacionPT> clasificacionArea = await _dispensacionServices.InformacionItem(item, ordenFabricacion, secuencia);
             return Ok(clasificacionArea);
         }
+
+        [HttpGet("DetalleDispensacionReceta")]
+        public async Task<IActionResult> DetalleDispensacionReceta()
+        {
+            IEnumerable< DatosFormatoDispensacionRecetaDetalle > detalleRecetaDispensacion = await _dispensacionServices.DetalleDispensacionReceta();
+            return Ok(detalleRecetaDispensacion);
+        }
+
+        [HttpPost("RegistrarRecetasGlobal")]
+        public async Task<IActionResult> RegistrarRecetasGlobal(List<DatosFormatoRegistroDispensacionRecetaGlobal> dato)
+        {
+            string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
+            ResponseModel<string> respuesta = await _dispensacionServices.RegistrarRecetasGlobal(dato, usuario);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("DispensacionGuiaDespacho")]
+        public async Task<IActionResult> DispensacionGuiaDespacho()
+        {
+            IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = await _dispensacionServices.DispensacionGuiaDespacho();
+            return Ok(listado);
+        }
+
+
+        [HttpGet("MostrarDispensacionDespacho")]
+        public async Task<IActionResult> MostrarDispensacionDespacho(string id)
+        {
+            IEnumerable<DatosFormatoMostrarDispensacionDespacho> listado = await _dispensacionServices.MostrarDispensacionDespacho(id);
+            return Ok(listado);
+        }
+
+        [HttpGet("GeneracionPdfDespacho")]
+        public ResponseModel<string> GeneracionPdfDespacho(string id)
+        {
+            ResponseModel<string> listado =  _dispensacionServices.GeneracionPdfDespacho(id);
+            return listado;
+        }
+
+
     }
 }

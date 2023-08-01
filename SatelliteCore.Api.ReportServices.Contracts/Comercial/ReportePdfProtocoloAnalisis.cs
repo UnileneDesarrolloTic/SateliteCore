@@ -161,17 +161,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 3).Add(new Paragraph(protocolo.Cabecera.ItemDescripcion).AddStyle(estiloTexto))
+            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(protocolo.Cabecera.ItemDescripcion).AddStyle(estiloTexto))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetBorderRight(Border.NO_BORDER)
                 .SetBorderLeft(Border.NO_BORDER)
                 .SetBorderBottom(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
+            /*cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
                 .SetBorderRight(Border.NO_BORDER)
                 .SetBorderBottom(Border.NO_BORDER)
                 .SetBorderLeft(Border.NO_BORDER);
@@ -181,7 +180,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
                .SetBorderBottom(Border.NO_BORDER)
                .SetBorderLeft(Border.NO_BORDER);
-            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);*/
 
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentación:").AddStyle(estiloNegrita))
                 .SetTextAlignment(TextAlignment.LEFT)
@@ -602,17 +601,16 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 5).Add(new Paragraph(protocolo.Cabecera.ItemDescripcion).AddStyle(estiloTexto))
+            cellDatosCabecera = new Cell(1, 7).Add(new Paragraph(protocolo.Cabecera.ItemDescripcion).AddStyle(estiloTexto))
                 .SetTextAlignment(TextAlignment.LEFT)
                 .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .SetBorderRight(Border.NO_BORDER)
                 .SetBorderLeft(Border.NO_BORDER)
                 .SetBorderBottom(Border.NO_BORDER);
 
             tablaDatosdeCabecera.AddCell(cellDatosCabecera);
 
-            cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
+            /*cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
                 .SetBorderRight(Border.NO_BORDER)
                 .SetBorderBottom(Border.NO_BORDER)
                 .SetBorderLeft(Border.NO_BORDER);
@@ -622,7 +620,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.Comercial
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph(""))
                .SetBorderBottom(Border.NO_BORDER)
                .SetBorderLeft(Border.NO_BORDER);
-            tablaDatosdeCabecera.AddCell(cellDatosCabecera);
+            tablaDatosdeCabecera.AddCell(cellDatosCabecera);*/
 
             cellDatosCabecera = new Cell(1, 1).Add(new Paragraph("Presentation:").AddStyle(estiloNegrita))
                 .SetTextAlignment(TextAlignment.LEFT)

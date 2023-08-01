@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.Dispensacion;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.Dispensacion;
+using SatelliteCore.Api.ReportServices.Contracts.Dispensacion;
 using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,17 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> RegistrarDispensacionMP(DatosFormatoDispensacionMateriaPrima dato, string usuario)
         {
+            if (dato.detalleDispensacion.Count == 0)
+                return new ResponseModel<string>(false, "No hay información para registrar", "");
+
+
+            dato.detalleDispensacion.ForEach(x =>
+            {
+                if (x.cantidadSolicitada < (x.cantidadDespachada + x.cantidadIngresada)) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+            });
+
+
             string result = await _dispensacionRepository.RegistrarDispensacionMP(dato, usuario);
             return new ResponseModel<string>(true, "Registrado", "");
         }
@@ -58,5 +70,47 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<DatosFormatoInformacionDispensacionPT>(true, Constante.MESSAGE_SUCCESS, lista);
         }
 
+        public async Task<IEnumerable<DatosFormatoDispensacionRecetaDetalle>> DetalleDispensacionReceta()
+        {
+            IEnumerable<DatosFormatoDispensacionRecetaDetalle> resultado = new List<DatosFormatoDispensacionRecetaDetalle>();
+            resultado = await _dispensacionRepository.DetalleDispensacionReceta();
+            return resultado;
+        }
+
+        public async Task<ResponseModel<string>> RegistrarRecetasGlobal(List<DatosFormatoRegistroDispensacionRecetaGlobal> dato, string usuario)
+        {
+            if(dato.Count == 0)
+               return new ResponseModel<string>(false, "No hay información para registrar", "");
+
+            dato.ForEach(x =>
+            {
+                if (x.cantidadSolicitada < (x.cantidadDespachada + x.cantidadIngresada)) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+            });
+
+            IEnumerable<DatosFormatoRegistroDispensacionRecetaGlobal> registrado  =  new List<DatosFormatoRegistroDispensacionRecetaGlobal>();
+            registrado = dato.Where(x => x.cantidadIngresada > 0);
+
+            await _dispensacionRepository.RegistrarRecetasGlobal(registrado, usuario);
+            return new ResponseModel<string>(true, "Registrado", "");
+        }
+
+        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho()
+        {
+            return await _dispensacionRepository.DispensacionGuiaDespacho();
+        }
+
+        public async Task<IEnumerable<DatosFormatoMostrarDispensacionDespacho>> MostrarDispensacionDespacho(string id)
+        {
+            return await _dispensacionRepository.MostrarDispensacionDespacho(id);
+        }
+
+        public ResponseModel<string> GeneracionPdfDespacho(string id)
+        {
+            CodigoBarraGuiaDespacho_PDF claseReporte = new CodigoBarraGuiaDespacho_PDF();
+            string reporte = claseReporte.Exportar(id);
+
+            return new ResponseModel<string>(true,"generador de codigo barra", reporte);
+        }
     }
 }
