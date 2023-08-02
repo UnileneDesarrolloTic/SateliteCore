@@ -5,6 +5,7 @@ using SatelliteCore.Api.Models.Request;
 using SatelliteCore.Api.Models.Request.ProgramacionOperaciones;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.ProgramacionOperaciones;
+using SatelliteCore.Api.ReportServices.Contracts.ProgramacionOperaciones;
 using SatelliteCore.Api.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,45 @@ namespace SatelliteCore.Api.Services
             await _programacionOperacionesRepository.RegistrarDivisionProgramacion(dato, usuario);
 
             return new ResponseModel<string>(true, "Registrado", "");
+        }
+
+
+        public async Task<ResponseModel<string>> ExportarExcelProgramacion(DatosFormatoProgramacionOperaciones dato)
+        {
+            
+            IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion> listadoProgramado = new List<DatosFormatoProgramacionOperacionesOrdenFabricacion>();
+            IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion> listadoNoProgramado = new List<DatosFormatoProgramacionOperacionesOrdenFabricacion>();
+
+            DatosFormatoProgramacionOperaciones noProgramado = new DatosFormatoProgramacionOperaciones();
+            noProgramado.gerencia = dato.gerencia;
+            noProgramado.ordenFabricacion = dato.ordenFabricacion;
+            noProgramado.lote = dato.lote;
+            noProgramado.venta = dato.venta;
+            noProgramado.agrupador = dato.agrupador;
+            noProgramado.fechaInicio = null;
+            noProgramado.fechaFinal = null;
+            noProgramado.estado = "NPR";
+
+
+            StringBuilder unionAgrupador = new StringBuilder();
+
+            foreach (int valor in dato.agrupador)
+            {
+                unionAgrupador.Append($"{valor},");
+            }
+
+            listadoProgramado = await _programacionOperacionesRepository.ObtenerProgramacionOrdenFabricacion(dato, unionAgrupador.ToString());
+            listadoNoProgramado = await _programacionOperacionesRepository.ObtenerProgramacionOrdenFabricacion(noProgramado, unionAgrupador.ToString());
+
+            if (listadoProgramado.Count() == 0 && listadoNoProgramado.Count() == 0)
+                return new ResponseModel<string>(false, "No hay información a mostrar en el excel", "");
+
+            string reporte = "";
+            ProgramacionExcel programacionOperaciones = new ProgramacionExcel();
+            reporte = programacionOperaciones.Programacion(listadoProgramado, listadoNoProgramado);
+
+
+            return new ResponseModel<string>(true, "Mostrar  información en excel", reporte);
         }
     }
 }

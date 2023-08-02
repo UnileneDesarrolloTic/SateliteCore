@@ -14,5 +14,6 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<IEnumerable<DatosFormatoProgramacionOperacionesOrdenFabricacion>>> ObtenerProgramacionOrdenFabricacion(DatosFormatoProgramacionOperaciones dato);
         public Task<ResponseModel<string>> ActualizarFechaProgramada(DatosFormatoRegistrarFechaProgramacion dato, string usuario);
         public Task<ResponseModel<string>> RegistrarDivisionProgramacion(DatosFormatoDividirRegistroProgramacion dato, string usuario);
+        public Task<ResponseModel<string>> ExportarExcelProgramacion(DatosFormatoProgramacionOperaciones dato);
     }
 }

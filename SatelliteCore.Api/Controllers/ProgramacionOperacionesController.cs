@@ -56,5 +56,12 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
+        [HttpPost("ExportarExcelProgramacion")]
+        public async Task<IActionResult> ExportarExcelProgramacion(DatosFormatoProgramacionOperaciones dato)
+        {               
+            ResponseModel<string> respuesta = await _programacionOperacionesServices.ExportarExcelProgramacion(dato);
+            return Ok(respuesta);
+        }
+
     }
 }

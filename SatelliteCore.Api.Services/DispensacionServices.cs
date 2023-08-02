@@ -49,7 +49,7 @@ namespace SatelliteCore.Api.Services
             dato.detalleDispensacion.ForEach(x =>
             {
                 if (x.cantidadSolicitada < (x.cantidadDespachada + x.cantidadIngresada)) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
-                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor deber ser mayor a 1");
             });
 
 
@@ -85,7 +85,7 @@ namespace SatelliteCore.Api.Services
             dato.ForEach(x =>
             {
                 if (x.cantidadSolicitada < (x.cantidadDespachada + x.cantidadIngresada)) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
-                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor del ingreso excede a la cantidad solicitada");
+                if (x.cantidadIngresada <= 0) throw new ValidationModelException("El valor deber ser mayor a 1");
             });
 
             IEnumerable<DatosFormatoRegistroDispensacionRecetaGlobal> registrado  =  new List<DatosFormatoRegistroDispensacionRecetaGlobal>();
