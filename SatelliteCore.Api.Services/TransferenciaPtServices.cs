@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.TransferenciaPT;
+using SatelliteCore.Api.ReportServices.Contracts.Transferencias;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -54,7 +55,16 @@ namespace SatelliteCore.Api.Services
             string mensaje = await _transferenciaPtRepository.RegistraRecepcionPT(recepcion);
 
             return new ResponseModel<string>(mensaje);
+        }
 
+        public async Task<ResponseModel<string>> ReporteTransferencia()
+        {
+            List<DatosRptTransferenciaPT> datosReporte = await _transferenciaPtRepository.DatosReporteTransferencia();
+
+            TransferenciaProduccionPT_Excel plantilla = new TransferenciaProduccionPT_Excel();
+            string reporte = plantilla.GenerarReporte(datosReporte);
+
+            return new ResponseModel<string>(reporte);
         }
 
     }

@@ -63,5 +63,16 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return mensaje;
         }
 
+        public async Task<List<DatosRptTransferenciaPT>> DatosReporteTransferencia()
+        {
+            IEnumerable<DatosRptTransferenciaPT> lista = new List<DatosRptTransferenciaPT>();
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+                lista = await context.QueryAsync<DatosRptTransferenciaPT>("usp_Reporte_Transferencia", null, commandType: CommandType.StoredProcedure);
+            }
+
+            return lista.ToList();
+        }
+
     }
 }
