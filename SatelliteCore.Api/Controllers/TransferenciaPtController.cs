@@ -55,5 +55,12 @@ namespace SatelliteCore.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("reporteTransferencia")]
+        public async Task<IActionResult> ReporteTransferencia()
+        {
+            ResponseModel<string> result = await _transferenciaPtServices.ReporteTransferencia();
+            return Ok(result);
+        }
     }
 }
