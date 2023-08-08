@@ -6,6 +6,7 @@ namespace SatelliteCore.Api.Models.Response.CompraAguja
 {
     public struct DatosFormatoTransitoPendienteOC
     {
+       public int secuencia { get; set;}
        public string Item { get; set; }
        public string NumeroOrden { get; set; }
        public string Proveedor { get; set; }
