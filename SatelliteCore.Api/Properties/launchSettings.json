@@ -12,17 +12,17 @@
         "IIS Express": {
             "commandName": "IISExpress",
             "launchUrl": "weatherforecast",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Production"
-            }
+          "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+          }
         },
         "SatelliteCore.Api": {
             "commandName": "Project",
             "launchBrowser": true,
             "launchUrl": "weatherforecast",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Production"
-            },
+          "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+          },
             "applicationUrl": "http://localhost:50040"
         }
     }
