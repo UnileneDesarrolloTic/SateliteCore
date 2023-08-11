@@ -30,12 +30,26 @@ namespace SatelliteCore.Api.Services
 
         public async Task<ResponseModel<string>> RegistrarFechaPrometida(DatosFormatoRegistrarFecha dato, string usuario)
         {
-            if (string.IsNullOrWhiteSpace(dato.item) || string.IsNullOrWhiteSpace(dato.documento) || string.IsNullOrWhiteSpace(dato.comentario))
+            if (string.IsNullOrWhiteSpace(dato.comentario))
                 throw new ValidationModelException("verificar los parametros enviados");
+            if (dato.detalle.Count == 0)
+                return new ResponseModel<string>(false, Constante.MODEL_VALIDATION_FAILED, "debe elegir uno codigo o mas Item");
 
-             await _comprobanteOrdenCompraRepository.RegistrarFechaPrometida(dato, usuario);
+            await _comprobanteOrdenCompraRepository.RegistrarFechaPrometida(dato, usuario);
 
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "registrado");
+        }
+
+        public async Task<IEnumerable<DatosFormatoDetalleOrdenCompra>> MostrarDetalleOrdenCompra(string ordenCompra, string item, string secuencia)
+        {
+            if (string.IsNullOrWhiteSpace(ordenCompra))
+                throw new ValidationModelException("verificar los parametros enviados");
+
+            IEnumerable<DatosFormatoDetalleOrdenCompra> listado = new List<DatosFormatoDetalleOrdenCompra>();
+
+            listado = await _comprobanteOrdenCompraRepository.MostrarDetalleOrdenCompra(ordenCompra, item, secuencia);
+
+            return listado;
         }
 
     }

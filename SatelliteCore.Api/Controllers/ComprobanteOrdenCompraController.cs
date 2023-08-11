@@ -33,11 +33,18 @@ namespace SatelliteCore.Api.Controllers
         }
 
         [HttpPost("RegistrarFechaPrometida")]
-        public async Task<ActionResult> RegistrarFechaPrometida(DatosFormatoRegistrarFecha  dato)
+        public async Task<ActionResult> RegistrarFechaPrometida(DatosFormatoRegistrarFecha dato)
         {
             string usuario = Shared.ObtenerUsuarioSpring(HttpContext.User.Identity);
             ResponseModel<string> listado = await _comprobanteOrdenCompraServices.RegistrarFechaPrometida(dato, usuario);
 
+            return Ok(listado);
+        }
+
+        [HttpGet("MostrarDetalleOrdenCompra")]
+        public async Task<ActionResult> MostrarDetalleOrdenCompra(string ordenCompra, string item, string secuencia)
+        {           
+            IEnumerable<DatosFormatoDetalleOrdenCompra> listado = await _comprobanteOrdenCompraServices.MostrarDetalleOrdenCompra(ordenCompra, item, secuencia);
             return Ok(listado);
         }
 

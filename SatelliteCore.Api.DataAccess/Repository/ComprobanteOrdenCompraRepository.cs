@@ -36,15 +36,35 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
         public async Task<string> RegistrarFechaPrometida(DatosFormatoRegistrarFecha dato, string usuario)
-        {
+            {
    
-            string sql = "INSERT INTO TBDHistorialFechaOrdenCompra (NumeroDocumento, Secuencia,  Item, Comentarios, Reprogramacion, Usuario) VALUES (@documento, @secuencia, @item, @comentario, @prometida, @usuario );";
+            string sql = "INSERT INTO TBDHistorialFechaOrdenCompra (NumeroDocumento, Secuencia,  Item, Comentarios, Reprogramacion, Usuario) VALUES (@ordenCompra, @secuencia, @item, @comentario, @prometida, @usuario );";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
-            {
-                await context.ExecuteAsync(sql, new { dato.documento, dato.secuencia, dato.item, dato.comentario, dato.prometida, usuario });
+            {   
+                foreach(DatosFormatoDetalleOrdenCompraRequest item in dato.detalle)
+                await context.ExecuteAsync(sql, new { dato.ordenCompra, item.secuencia, item.item, dato.comentario, dato.prometida, usuario });
             }
             return "";
+        }
+
+
+        public async Task<IEnumerable<DatosFormatoDetalleOrdenCompra>> MostrarDetalleOrdenCompra(string ordenCompra, string item, string secuencia)
+        {
+            IEnumerable<DatosFormatoDetalleOrdenCompra> listado = new List<DatosFormatoDetalleOrdenCompra>();
+
+            string sql = ";WITH Temp_OrdenCompraItem AS (" +
+                         " SELECT CAST(1 AS BIT) Seleccionar, NumeroOrden Documento, RTRIM(Item) Item, Secuencia, RTRIM(Descripcion) Descripcion " +
+                         " FROM WH_OrdenCompraDetalle WHERE NumeroOrden = @ordenCompra AND Secuencia = @secuencia AND  Item = @item) " +
+                         " SELECT ISNULL(b.Seleccionar, CAST(0 AS BIT)) Seleccionar, a.NumeroOrden Documento, RTRIM(a.Item) Item, a.Secuencia, RTRIM(a.Descripcion) Descripcion  " +
+                         " FROM WH_OrdenCompraDetalle a LEFT JOIN Temp_OrdenCompraItem b ON a.NumeroOrden = b.Documento AND a.Item = b.Item AND a.Secuencia = b.Secuencia " +
+                         " WHERE NumeroOrden = @ordenCompra  AND Estado IN ('PE','PR') ORDER BY Secuencia ASC ";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            {
+               listado = await context.QueryAsync<DatosFormatoDetalleOrdenCompra>(sql, new { ordenCompra, item, secuencia });
+            }
+            return listado;
         }
     }
 }
