@@ -36,6 +36,11 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IDispensacionRepository, DispensacionRepository>();
             service.AddScoped<IProgramacionOperacionesRepository, ProgramacionOperacionesRepository>();
             service.AddScoped<IAnalisisMateriaPrimaRepository, AnalisisMateriaPrimaRepository>();
+            service.AddScoped<IEncajadoRespository, EncajadoRespository>();
+            service.AddScoped<IRegistroAsistenciaRepository, RegistroAsistenciaRepository>();
+            service.AddScoped<IGestionEquipoEngasteRepository, GestionEquipoEngasteRepository>();
+            service.AddScoped<ITransferenciaPtRepository, TransferenciaPtRepository>();
+            service.AddScoped<IComprobanteOrdenCompraRepository, ComprobanteOrdenCompraRepository>();
 
             return service;
         }
