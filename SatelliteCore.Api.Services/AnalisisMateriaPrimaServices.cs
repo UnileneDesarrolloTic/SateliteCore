@@ -1,5 +1,4 @@
-﻿
-using SatelliteCore.Api.DataAccess.Contracts;
+﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.AnalisisMateriaPrima;
 using SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.General;

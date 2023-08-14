@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SatelliteCore.Api.DataAccess.Contracts
+namespace SatelliteCore.Api.DataAccess.Contracts.Repository
 {
     public interface IAnalisisMateriaPrimaRepository
     {
