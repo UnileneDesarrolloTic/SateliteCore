@@ -68,7 +68,7 @@ namespace SatelliteCore.Api.Controllers
         [HttpGet("DetalleDispensacionReceta")]
         public async Task<IActionResult> DetalleDispensacionReceta()
         {
-            IEnumerable< DatosFormatoDispensacionRecetaDetalle > detalleRecetaDispensacion = await _dispensacionServices.DetalleDispensacionReceta();
+            DatosFormatoDispensacionDetalle detalleRecetaDispensacion = await _dispensacionServices.DetalleDispensacionReceta();
             return Ok(detalleRecetaDispensacion);
         }
 
@@ -80,10 +80,10 @@ namespace SatelliteCore.Api.Controllers
             return Ok(respuesta);
         }
 
-        [HttpGet("DispensacionGuiaDespacho")]
-        public async Task<IActionResult> DispensacionGuiaDespacho()
+        [HttpPost("DispensacionGuiaDespacho")]
+        public async Task<IActionResult> DispensacionGuiaDespacho(DatosFormatoFiltroDispensacion dato)
         {
-            IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = await _dispensacionServices.DispensacionGuiaDespacho();
+            IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = await _dispensacionServices.DispensacionGuiaDespacho(dato);
             return Ok(listado);
         }
 

@@ -70,9 +70,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<DatosFormatoInformacionDispensacionPT>(true, Constante.MESSAGE_SUCCESS, lista);
         }
 
-        public async Task<IEnumerable<DatosFormatoDispensacionRecetaDetalle>> DetalleDispensacionReceta()
+        public async Task<DatosFormatoDispensacionDetalle> DetalleDispensacionReceta()
         {
-            IEnumerable<DatosFormatoDispensacionRecetaDetalle> resultado = new List<DatosFormatoDispensacionRecetaDetalle>();
+            DatosFormatoDispensacionDetalle resultado = new DatosFormatoDispensacionDetalle();
             resultado = await _dispensacionRepository.DetalleDispensacionReceta();
             return resultado;
         }
@@ -95,9 +95,9 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, "Registrado", "");
         }
 
-        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho()
+        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho(DatosFormatoFiltroDispensacion dato)
         {
-            return await _dispensacionRepository.DispensacionGuiaDespacho();
+            return await _dispensacionRepository.DispensacionGuiaDespacho(dato);
         }
 
         public async Task<IEnumerable<DatosFormatoMostrarDispensacionDespacho>> MostrarDispensacionDespacho(string id)
