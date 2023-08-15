@@ -1,4 +1,5 @@
 ﻿using SatelliteCore.Api.Models.Encajado;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace SatelliteCore.Api.DataAccess.Contracts.Repository
         public Task<(decimal, decimal, List<AsignacionEncajadoDTO>)> ListraAsignacionesEncajePorEtapa( int idEncaje, int etapa);
         public Task<int> RegistrarAsignacionEncaje(DatosRegistrarAsignacionDTO asignacion);
         public Task ActualizaEstadoAsignacion(int id, string estado, string usuario);
+        public Task<List<DatosReporteEncajadoDTO>> DatosReporteAsignacion(DateTime fechaInicio, DateTime fechaFin);
     }
 }

@@ -1,7 +1,10 @@
-﻿using SatelliteCore.Api.DataAccess.Contracts.Repository;
+﻿using SatelliteCore.Api.CrossCutting.Helpers;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Encajado;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.ReportServices.Contracts.Encajado;
 using SatelliteCore.Api.Services.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
@@ -95,6 +98,26 @@ namespace SatelliteCore.Api.Services
             await _encajadoRespository.ActualizaEstadoAsignacion(id, estado, usuario);
 
             return new ResponseModel<string>(null);
+        }
+        public async Task<ResponseModel<string>> ReporteAsignacion(DateTime fechaInicio, DateTime fechaFin)
+        {
+            if(!Shared.ValidarFecha(fechaInicio) || !Shared.ValidarFecha(fechaFin))
+                throw new ValidationModelException();
+
+            List<DatosReporteEncajadoDTO> datosReporte = await _encajadoRespository.DatosReporteAsignacion(fechaInicio, fechaFin);
+
+            if(datosReporte.Count < 1)
+                return new ResponseModel<string>(false, "No se ha encontrado registros...", null);
+
+            ReporteEncajado_Excel reporte = new ReporteEncajado_Excel();
+            string reporteBase64 = reporte.GenerarReporte(datosReporte);
+
+            if (string.IsNullOrWhiteSpace(reporteBase64))
+                throw new Exception("Error al generar el reporte.");
+
+            return new ResponseModel<string>(reporteBase64);
+
+
         }
     }
 }
