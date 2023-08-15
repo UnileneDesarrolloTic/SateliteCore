@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using SatelliteCore.Api.DataAccess.Contracts;
+using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Response.AnalisisMateriaPrima;

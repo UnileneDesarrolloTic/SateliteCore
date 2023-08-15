@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SatelliteCore.Api.DataAccess.Contracts;
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.DataAccess.Repository;
 using SatelliteCore.Api.Models.Config;
@@ -37,6 +36,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IDispensacionRepository, DispensacionRepository>();
             service.AddScoped<IProgramacionOperacionesRepository, ProgramacionOperacionesRepository>();
             service.AddScoped<IAnalisisMateriaPrimaRepository, AnalisisMateriaPrimaRepository>();
+            service.AddScoped<IEncajadoRespository, EncajadoRespository>();
             service.AddScoped<IRegistroAsistenciaRepository, RegistroAsistenciaRepository>();
             service.AddScoped<IGestionEquipoEngasteRepository, GestionEquipoEngasteRepository>();
             service.AddScoped<ITransferenciaPtRepository, TransferenciaPtRepository>();
@@ -65,6 +65,7 @@ namespace SatelliteCore.Api.Config
             service.AddScoped<IDispensacionServices, DispensacionServices>();
             service.AddScoped<IProgramacionOperacionesServices, ProgramacionOperacionesServices>();
             service.AddScoped<IAnalisisMateriaPrimaServices, AnalisisMateriaPrimaServices>();
+            service.AddScoped<IEncajadoServices, EncajadoServices>();
             service.AddScoped<IRegistroAsistenciaServices, RegistroAsistenciaServices>();
             service.AddScoped<IGestionEquipoEngasteServices, GestionEquipoEngasteServices>();
             service.AddScoped<ITransferenciaPtServices, TransferenciaPtServices>();
