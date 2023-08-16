@@ -2,6 +2,7 @@
 using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Encajado;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -127,6 +128,25 @@ namespace SatelliteCore.Api.DataAccess.Repository
             }
         }
 
+
+        public async Task<List<DatosReporteEncajadoDTO>> DatosReporteAsignacion(DateTime fechaInicio, DateTime fechaFin)
+        {
+            IEnumerable<DatosReporteEncajadoDTO> lista = new List<DatosReporteEncajadoDTO>();
+            string query = "SELECT a.Id, a.OrdenFabricacion, a.CantidadTransferida, a.FechaRegistro, " +
+                "CASE b.Etapa WHEN 1 THEN 'ARMADO CAJA' WHEN 2 THEN 'ENCAJADO' WHEN 3 THEN 'SELLADO' WHEN 4 THEN 'EMBALADO' ELSE '' END Etapa, " +
+                "RTRIM(c.NombreCompleto) UsuarioAsignado, b.Cantidad CantidadAsignada, b.FechaRegistro FechaAsignada, " +
+                "CASE b.Estado WHEN 'C' THEN 'Completado' WHEN 'A' THEN 'Asignado' ELSE '' END Estado " +
+                "FROM TBMEncaje a WITH(NOLOCK) INNER JOIN TBDEncaje b WITH(NOLOCK) ON a.Id = b.IdEncaje " +
+                "INNER JOIN PROD_UNILENE2..PersonaMast c WITH(NOLOCK) ON b.Usuario = c.Persona AND c.EsEmpleado = 'S' " +
+                "WHERE b.Estado IN ('A','C')";
+
+            using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
+            {
+                lista = await context.QueryAsync<DatosReporteEncajadoDTO>(query, new { fechaInicio, fechaFin });
+            }
+
+            return lista.ToList();
+        }
 
     }
 }
