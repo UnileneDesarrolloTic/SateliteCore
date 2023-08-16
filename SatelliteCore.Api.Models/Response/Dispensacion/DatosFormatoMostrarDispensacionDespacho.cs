@@ -18,5 +18,6 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public string UsuarioCreacion { get; set; }
         public DateTime FechaRegistro { get; set; }
         public decimal CantidadSolicitada { get; set; }
+        public string Estado { get; set; }
     }
 }

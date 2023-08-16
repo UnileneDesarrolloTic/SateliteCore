@@ -8,5 +8,6 @@ namespace SatelliteCore.Api.Models.Request.Dispensacion
     {
         public string fechaInicio { get; set; }
         public string fechaFin { get; set; }
+        public string estado { get; set; }
     }
 }

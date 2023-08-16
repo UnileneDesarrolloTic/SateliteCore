@@ -154,10 +154,10 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = new List<DatosFormatoDispensacionGuiaDespacho>();
 
-            string sql = "SELECT Id, EntregadoPor, ISNULL(RecibidoPor, '') RecibidoPor, FechaRegistro, Estado, FechaDespacho FROM TBMDispensacionHistorica WHERE 1 = 1 " + (dato.fechaInicio == null ? "" : "AND CONVERT(varchar, FechaRegistro, 23)  BETWEEN @fechaInicio AND @fechaFin ");
+            string sql = "SELECT Id, EntregadoPor, ISNULL(RecibidoPor, '') RecibidoPor, FechaRegistro, Estado, FechaDespacho FROM TBMDispensacionHistorica WHERE Estado = @estado " + (dato.fechaInicio == null ? "" : "AND CONVERT(varchar, FechaRegistro, 23)  BETWEEN @fechaInicio AND @fechaFin ");
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                listado = await context.QueryAsync<DatosFormatoDispensacionGuiaDespacho>(sql, new { dato.fechaInicio, dato.fechaFin });
+                listado = await context.QueryAsync<DatosFormatoDispensacionGuiaDespacho>(sql, new { dato.fechaInicio, dato.fechaFin, dato.estado });
                 
             }
             return listado;
@@ -167,7 +167,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMostrarDispensacionDespacho> listado = new List<DatosFormatoMostrarDispensacionDespacho>();
 
-            string sql = "SELECT IdDispensacion, OrdenFabricacion, ItemTerminado, Documento, Secuencia, a.Item, RTRIM(b.DescripcionLocal) DescripcionLocal, Lote, CantidadIngresada, UsuarioCreacion, FechaRegistro, CantidadSolicitada FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ITEMMAST b ON  a.Item = b.Item WHERE Id = @id";
+            string sql = "SELECT IdDispensacion, OrdenFabricacion, ItemTerminado, Documento, Secuencia, a.Item, RTRIM(b.DescripcionLocal) DescripcionLocal, Lote, CantidadIngresada, UsuarioCreacion, FechaRegistro, CantidadSolicitada, IIF(a.Estado = 'PR', 'PREPARACION', 'APROBADO') Estado FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ITEMMAST b ON  a.Item = b.Item WHERE Id = @id";
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 listado = await context.QueryAsync<DatosFormatoMostrarDispensacionDespacho>(sql, new { id});

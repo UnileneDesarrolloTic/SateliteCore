@@ -9,7 +9,9 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -156,13 +158,25 @@ namespace SatelliteCore.Api.DataAccess.Repository
         }
 
 
-        public async Task<IEnumerable<DatosFormatoPersonaAsignacionExportModel>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal)
+        public async Task<IEnumerable<DatosFormatoPersonaAsignacionExportModel>> ExportarExcelPersonaAsignacion(DatosFormatoFiltroAsignacionPersona dato)
         {
             IEnumerable<DatosFormatoPersonaAsignacionExportModel> result = new List<DatosFormatoPersonaAsignacionExportModel>();
 
             using (var connection = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                result = await connection.QueryAsync<DatosFormatoPersonaAsignacionExportModel>("usp_Reporte_Asistencias", new { FechaInicio, FechaFinal }, commandType: CommandType.StoredProcedure);
+                result = await connection.QueryAsync<DatosFormatoPersonaAsignacionExportModel>("usp_Reporte_Asistencias", new { dato.fechaInicio, dato.fechaFin }, commandType: CommandType.StoredProcedure);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DatosFormatoListadoPersonalAsignacion>> ExportarExcelListadoPersonal(DatosFormatoFiltroAsignacionPersona dato)
+        {
+            IEnumerable<DatosFormatoListadoPersonalAsignacion> result = new List<DatosFormatoListadoPersonalAsignacion>();
+
+            using (var connection = new SqlConnection(_appConfig.contextSpring))
+            {
+                result = await connection.QueryAsync<DatosFormatoListadoPersonalAsignacion>("usp_Satelite_Reporte_Listado_Personal", new { dato.fechaInicio, dato.fechaFin }, commandType: CommandType.StoredProcedure);
             }
 
             return result;
