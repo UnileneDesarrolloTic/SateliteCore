@@ -513,7 +513,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
             #region conclusion
 
             //Paragraph seccionConlusion = new Paragraph("III. CONCLUSIÓN").SetFontSize(8).SetPadding(1).SetBackgroundColor(new DeviceRgb(255, 230, 153));
-            //document.Add(seccionConlusion);
+            //document.Add(seccionConlusion);//
 
             Table conclusionTable = new Table(new float[] { 25, 15, 4, 18, 4, 36  }).SetWidth(UnitValue.CreatePercentValue(100))
                .SetFixedLayout().SetHorizontalAlignment(HorizontalAlignment.CENTER).SetBackgroundColor(new DeviceRgb(255, 230, 153));
