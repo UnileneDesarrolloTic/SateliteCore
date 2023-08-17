@@ -12,7 +12,7 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public int Secuencia { get; set; }
         public string Documento { get; set; }
         public string ItemInsumo { get; set; }
-        public string DescripcionLocal { get; set; }
+        public string DescripcionLocal { get; set; } 
         public string ItemTipo { get; set; }
         public string UnidadCodigo { get; set; }
         public decimal CantidadGeneral { get; set; }
@@ -20,6 +20,8 @@ namespace SatelliteCore.Api.Models.Response.Dispensacion
         public decimal CantidadDespachada { get; set; }
         public string TipoMP { get; set; }
         public string Lote { get; set; }
+        public string NombresubFamilia { get; set; }
+        public string CodigoSubFamilia { get; set; }
         public int EntregadoPor { get; set; }
         public string RecibidoPor { get; set; }
         public decimal CantidadIngresada { get; set; }

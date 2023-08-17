@@ -10,6 +10,7 @@ using SatelliteCore.Api.Models.Response.Logistica;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteCore.Api.DataAccess.Repository
@@ -120,17 +121,17 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return resultItem;
         }
 
-        public async Task<IEnumerable<DatosFormatoDispensacionRecetaDetalle>> DetalleDispensacionReceta()
+        public async Task<DatosFormatoDispensacionDetalle> DetalleDispensacionReceta()
         {
-
-            IEnumerable<DatosFormatoDispensacionRecetaDetalle> listado = new List<DatosFormatoDispensacionRecetaDetalle>();
-
-            using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
+            DatosFormatoDispensacionDetalle result = new DatosFormatoDispensacionDetalle();
+            using (SqlConnection connection = new SqlConnection(_appConfig.contextSpring))
             {
-                listado = await context.QueryAsync<DatosFormatoDispensacionRecetaDetalle>("usp_Satelite_DispensacionDetalle_Global",commandType: CommandType.StoredProcedure);
+                using SqlMapper.GridReader multi = await connection.QueryMultipleAsync("usp_Satelite_DispensacionDetalle_Global", commandType: CommandType.StoredProcedure);
+                result.DetalleDispensacion = multi.Read<DatosFormatoDispensacionRecetaDetalle>().ToList();
+                result.SubFamilia = multi.Read<SubFamiliaDispensacion>().ToList();
 
             }
-            return listado;
+            return result;
         }
 
         public async Task<string> RegistrarRecetasGlobal(IEnumerable<DatosFormatoRegistroDispensacionRecetaGlobal> dato, string usuario)
@@ -149,14 +150,14 @@ namespace SatelliteCore.Api.DataAccess.Repository
             return result;
         }
 
-        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho()
+        public async Task<IEnumerable<DatosFormatoDispensacionGuiaDespacho>> DispensacionGuiaDespacho(DatosFormatoFiltroDispensacion dato)
         {
             IEnumerable<DatosFormatoDispensacionGuiaDespacho> listado = new List<DatosFormatoDispensacionGuiaDespacho>();
 
-            string sql = "SELECT Id, EntregadoPor, ISNULL(RecibidoPor, '') RecibidoPor, FechaRegistro, Estado, FechaDespacho FROM TBMDispensacionHistorica WHERE Estado = 'PR';";
+            string sql = "SELECT Id, EntregadoPor, ISNULL(RecibidoPor, '') RecibidoPor, FechaRegistro, Estado, FechaDespacho FROM TBMDispensacionHistorica WHERE Estado = @estado " + (dato.fechaInicio == null ? "" : "AND CONVERT(varchar, FechaRegistro, 23)  BETWEEN @fechaInicio AND @fechaFin ");
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
-                listado = await context.QueryAsync<DatosFormatoDispensacionGuiaDespacho>(sql);
+                listado = await context.QueryAsync<DatosFormatoDispensacionGuiaDespacho>(sql, new { dato.fechaInicio, dato.fechaFin, dato.estado });
                 
             }
             return listado;
@@ -166,7 +167,7 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             IEnumerable<DatosFormatoMostrarDispensacionDespacho> listado = new List<DatosFormatoMostrarDispensacionDespacho>();
 
-            string sql = "SELECT IdDispensacion, OrdenFabricacion, ItemTerminado, Documento, Secuencia, a.Item,  RTRIM(b.DescripcionLocal) DescripcionLocal, Lote, CantidadIngresada, UsuarioCreacion, FechaRegistro, CantidadSolicitada FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ITEMMAST b ON  a.Item = b.Item WHERE Id = @id";
+            string sql = "SELECT IdDispensacion, OrdenFabricacion, ItemTerminado, Documento, Secuencia, a.Item, RTRIM(b.DescripcionLocal) DescripcionLocal, Lote, CantidadIngresada, UsuarioCreacion, FechaRegistro, CantidadSolicitada, IIF(a.Estado = 'PR', 'PREPARACION', 'APROBADO') Estado FROM TBDDispensacionHistorica a INNER JOIN PROD_UNILENE2..WH_ITEMMAST b ON  a.Item = b.Item WHERE Id = @id";
             using (SqlConnection context = new SqlConnection(_appConfig.contextSatelliteDB))
             {
                 listado = await context.QueryAsync<DatosFormatoMostrarDispensacionDespacho>(sql, new { id});

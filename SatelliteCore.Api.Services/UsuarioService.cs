@@ -4,11 +4,14 @@ using SatelliteCore.Api.DataAccess.Contracts.Repository;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response;
+using SatelliteCore.Api.Models.Response.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using SatelliteCore.Api.ReportServices.Contracts.Administracion;
 using SatelliteCore.Api.Services.Contracts;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SystemsIntegration.Api.Models.Exceptions;
 
@@ -83,12 +86,19 @@ namespace SatelliteCore.Api.Services
             return new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, "Liberado con exito");
         }
 
-        public async Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal)
+        public async Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(DatosFormatoFiltroAsignacionPersona dato)
         {
-            IEnumerable<DatosFormatoPersonaAsignacionExportModel> Listar = await _usuarioRepository.ExportarExcelPersonaAsignacion(FechaInicio, FechaFinal);
+            if (dato.reporteAsistencia == false && dato.listadoPersonal == false)
+                return new ResponseModel<string>(false, "Debe elegir 1 o mas reportes", "");
+
+            IEnumerable<DatosFormatoPersonaAsignacionExportModel> Listar = await _usuarioRepository.ExportarExcelPersonaAsignacion(dato);
+            IEnumerable<DatosFormatoListadoPersonalAsignacion> ListaDePersonal = await _usuarioRepository.ExportarExcelListadoPersonal(dato);
+
+            if(Listar.Count() == 0 && ListaDePersonal.Count() == 0)
+                return new ResponseModel<string>(false, "No hay información para mostrar en el excel", "");
 
             ReporteAsignacionPersonal Exporte = new ReporteAsignacionPersonal();
-            string reporte = Exporte.GenerarReporte(Listar);
+            string reporte = Exporte.GenerarReporte(Listar, ListaDePersonal, dato.reporteAsistencia, dato.listadoPersonal);
 
             ResponseModel<string> Respuesta = new ResponseModel<string>(true, Constante.MESSAGE_SUCCESS, reporte);
 

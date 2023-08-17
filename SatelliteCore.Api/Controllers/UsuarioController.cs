@@ -5,6 +5,7 @@ using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using SatelliteCore.Api.Services.Contracts;
@@ -129,10 +130,10 @@ namespace SatelliteCore.Api.Controllers
         }
 
 
-        [HttpGet("ExportarExcelPersonaAsignacion")]
-        public async Task<ActionResult> ExportarExcelPersonaAsignacion(string FechaInicio , string FechaFinal)
+        [HttpPost("ExportarExcelPersonaAsignacion")]
+        public async Task<ActionResult> ExportarExcelPersonaAsignacion(DatosFormatoFiltroAsignacionPersona  dato)
         {   
-            ResponseModel<string> response = await _usuarioService.ExportarExcelPersonaAsignacion(FechaInicio, FechaFinal);
+            ResponseModel<string> response = await _usuarioService.ExportarExcelPersonaAsignacion(dato);
             return Ok(response);
         }
 

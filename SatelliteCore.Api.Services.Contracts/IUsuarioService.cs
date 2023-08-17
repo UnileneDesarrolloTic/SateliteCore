@@ -1,6 +1,7 @@
 ﻿using SatelliteCore.Api.Models.Entities;
 using SatelliteCore.Api.Models.Generic;
 using SatelliteCore.Api.Models.Request;
+using SatelliteCore.Api.Models.Request.AsignacionPersonal;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.RRHH.AsignacionPersonal;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace SatelliteCore.Api.Services.Contracts
         public Task<ResponseModel<string>> RegistrarPersonaLaboralMasiva(DatosFormatoAsignacionPersonalModel dato,int idUsuario);
         public Task<IEnumerable<DatosFormatoFiltrarTrabajadorAreaModel>> FiltrarAreaPersona(int idArea,string NombrePersona);
         public Task<ResponseModel<string>> LiberalPersona(int IdAsignacion);
-        public Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(string FechaInicio, string FechaFinal);
+        public Task<ResponseModel<string>> ExportarExcelPersonaAsignacion(DatosFormatoFiltroAsignacionPersona dato);
         public Task<ResponseModel<AreaPersonalLaboralEntity>> RegistrarEditarArea(int IdArea, string Descripcion);
         public Task<ResponseModel<string>> EliminarAreaProduccion(int IdArea);
         public Task<IEnumerable<DatosFormatoListarPersonaTecnica>> ListarPersonaTecnico();
