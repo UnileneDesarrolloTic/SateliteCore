@@ -340,8 +340,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
             analisisCell = new Cell(1, 2).Add(new Paragraph("Tensión (N)")).AddStyle(estiloCabeceraAnalisis);
             analisisTable.AddCell(analisisCell);
 
-            analisisCell = new Cell(1, 1).Add(new Paragraph(datos.Datos.Longitud.ToString("##0.#").Replace(".", ","))).AddStyle(estiloCabeceraAnalisis);
-            analisisTable.AddCell(analisisCell);
+            if (datos.Datos.RegistroLongitud)
+            {
+                analisisCell = new Cell(1, 1).Add(new Paragraph(datos.Datos.Longitud.ToString("##0.#").Replace(".", ","))).AddStyle(estiloCabeceraAnalisis);
+                analisisTable.AddCell(analisisCell);
+            }
 
             analisisCell = new Cell(1, 1).Add(new Paragraph(datos.Datos.MinimoDiametro.ToString("##0.###").Replace(".", ",") + " - " + datos.Datos.MaximoDiametro.ToString("##0.###").Replace(".", ","))).AddStyle(estiloCabeceraAnalisis);
             analisisTable.AddCell(analisisCell);
