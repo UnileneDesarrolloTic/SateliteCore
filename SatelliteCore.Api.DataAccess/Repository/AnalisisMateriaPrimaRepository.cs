@@ -30,9 +30,13 @@ namespace SatelliteCore.Api.DataAccess.Repository
                     "INNER JOIN WH_ControlCalidadDetalle b ON a.CompaniaSocio = b.CompaniaSocio AND a.ControlNumero = b.ControlNumero " +
                     "INNER JOIN WH_ItemMast c ON b.Item = c.Item " +
                     "INNER JOIN WH_ClaseSubFamilia d ON d.Linea = 'I' AND d.Familia = 'ST' AND c.SubFamilia = d.SubFamilia " +
-                 "WHERE a.CompaniaSocio = '01000000' " +
-                    "AND a.NumeroOrden = IIF(ISNULL(@OrdenCompra, '') = '', a.NumeroOrden, @OrdenCompra) " +
-                    "AND b.Lote = IIF(ISNULL(@codigoAnalisis, '') = '', b.Lote, @codigoAnalisis)";
+                 "WHERE a.CompaniaSocio = '01000000' ";
+            
+            if (!string.IsNullOrWhiteSpace(ordenCompra))
+                query = query + "AND a.NumeroOrden = @OrdenCompra ";
+
+            if (!string.IsNullOrWhiteSpace(codigoAnalisis))
+                query = query + "AND b.Lote = @codigoAnalisis";
 
             using (SqlConnection context = new SqlConnection(_appConfig.contextSpring))
             {
@@ -61,7 +65,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         public async Task CrearAnalisisHebra(GuardarAnalisisHebraDTO analisis)
         {
             string queryCabecera = "INSERT INTO TBMAnalisisHebra (OrdenCompra, NumeroAnalisis, FechaAnalisis, Certificado, Quimica, Conclusion, " +
-                "Observaciones, Color, UsuarioRegistro, FechaRegistro) VALUES(@OrdenCompra, @NumeroAnalisis, @FechaAnalisis, @Certificado, @Quimica, @Conclusion, @Observaciones, @Color, @UsuarioRegistro, @FechaRegistro)";
+                "Observaciones, Color, UsuarioRegistro, FechaRegistro, Balanza, Estufa, Micrometro, Regla, Dinamometro, Soporte) " +
+                "VALUES(@OrdenCompra, @NumeroAnalisis, @FechaAnalisis, @Certificado, @Quimica, @Conclusion, @Observaciones, @Color, @UsuarioRegistro, " +
+                "@FechaRegistro, @Balanza, @Estufa, @Micrometro, @Regla, @Dinamometro, @Soporte)";
 
             string queryDetalle = "INSERT INTO TBDAnalisisHebra (OrdenCompra, NumeroAnalisis, Numero, Longitud, Diametro, Tension) " +
                 "VALUES(@OrdenCompra, @NumeroAnalisis, @Numero, @Longitud, @Diametro, @Tension)";
@@ -77,8 +83,9 @@ namespace SatelliteCore.Api.DataAccess.Repository
         {
             string queryCabecera = "UPDATE TBMAnalisisHebra SET FechaAnalisis = @FechaAnalisis, Certificado = @Certificado, " +
                 "Quimica = @Quimica, Conclusion = @Conclusion, Observaciones = @Observaciones, Color = @Color, " +
-                "UsuarioModificacion = @UsuarioModificacion, " +
-                "FechaModificacion = GETDATE() WHERE OrdenCompra = @OrdenCompra AND NumeroAnalisis = @NumeroAnalisis";
+                "UsuarioModificacion = @UsuarioModificacion, FechaModificacion = GETDATE(), Balanza = @Balanza, Estufa = @Estufa, " +
+                "Micrometro = @Micrometro, Regla = @Regla, Dinamometro = @Dinamometro, Soporte = @Soporte " +
+                "WHERE OrdenCompra = @OrdenCompra AND NumeroAnalisis = @NumeroAnalisis";
 
             string queryDetalle = "UPDATE TBDAnalisisHebra SET Longitud = @Longitud, Diametro = @Diametro, Tension = @Tension " +
                 "WHERE OrdenCompra = @OrdenCompra AND NumeroAnalisis = @NumeroAnalisis AND Numero = @Numero";

@@ -101,7 +101,7 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Genera
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Lote:")).AddStyle(estiloCabeceraTitulo);
             cabeceraTable.AddCell(cabeceraCelda);
 
-            cabeceraCelda = new Cell(1, 1).Add(new Paragraph(datosReporte.Cabecera.Lote)).AddStyle(estiloCabeceraTexto);
+            cabeceraCelda = new Cell(1, 1).Add(new Paragraph(datosReporte.Cabecera.Lote??"")).AddStyle(estiloCabeceraTexto);
             cabeceraTable.AddCell(cabeceraCelda);
 
             cabeceraCelda = new Cell(1, 1).Add(new Paragraph("Cantidad:").SetMarginLeft(6)).AddStyle(estiloCabeceraTitulo);

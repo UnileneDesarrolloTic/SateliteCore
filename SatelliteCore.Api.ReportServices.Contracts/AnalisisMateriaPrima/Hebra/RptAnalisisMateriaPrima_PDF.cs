@@ -414,10 +414,12 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
             document.Add(seccionQuimica);
 
 
-            Table quimicaTable = new Table(new float[] { 20, 16, 5, 24, 5, 19, 5, 6 }).SetWidth(UnitValue.CreatePercentValue(70))
+            Table quimicaTable = new Table(new float[] { 27, 15, 4, 21, 4, 18, 4, 7 }).SetWidth(UnitValue.CreatePercentValue(80))
                 .SetFixedLayout().SetHorizontalAlignment(HorizontalAlignment.CENTER);
 
-            Cell quimicaCell = new Cell(1, 1).Add(new Paragraph(datos.Cabecera.Color == "C" ? "Con color extractable" : "Sin color extractable"))
+            string textoAnalisisQuimico = datos.Datos.Producto.ToUpper().Contains("CATGUT") ? "Compuestos solubles de cromo" : datos.Cabecera.Color == "C" ? "Con color extractable" : "Sin color extractable";
+
+            Cell quimicaCell = new Cell(1, 1).Add(new Paragraph(textoAnalisisQuimico))
                     .AddStyle(estiloAnalisisQuimica);
             quimicaTable.AddCell(quimicaCell);
           
@@ -460,19 +462,19 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
                 equipoTable = new Table(new float[] { 20, 20, 20, 20, 20 }).SetWidth(UnitValue.CreatePercentValue(100))
                 .SetFixedLayout().SetHorizontalAlignment(HorizontalAlignment.CENTER);
 
-                equipoCell = new Cell(1, 1).Add(new Paragraph("* Balanza Analítica : CCBA-06")).AddStyle(estiloEquipo);
+                equipoCell = new Cell(1, 1).Add(new Paragraph("* Balanza Analítica : " + datos.Cabecera.Balanza)).AddStyle(estiloEquipo);
                 equipoTable.AddCell(equipoCell);
 
-                equipoCell = new Cell(1, 1).Add(new Paragraph("* Estufa: CCES-06")).AddStyle(estiloEquipo);
+                equipoCell = new Cell(1, 1).Add(new Paragraph("* Estufa: " + datos.Cabecera.Estufa)).AddStyle(estiloEquipo);
                 equipoTable.AddCell(equipoCell);
 
-                equipoCell = new Cell(1, 1).Add(new Paragraph("* Micrómetro: CCMI-01")).AddStyle(estiloEquipo);
+                equipoCell = new Cell(1, 1).Add(new Paragraph("* Micrómetro: " + datos.Cabecera.Micrometro)).AddStyle(estiloEquipo);
                 equipoTable.AddCell(equipoCell);
 
-                equipoCell = new Cell(1, 1).Add(new Paragraph("* Regla metalica : RM-010")).AddStyle(estiloEquipo);
+                equipoCell = new Cell(1, 1).Add(new Paragraph("* Regla metalica : " + datos.Cabecera.Regla)).AddStyle(estiloEquipo);
                 equipoTable.AddCell(equipoCell);
 
-                equipoCell = new Cell(1, 1).Add(new Paragraph("*Dinamómetro: CCTE - 162\n* Soporte vertical : CCSV-01")).AddStyle(estiloEquipo);
+                equipoCell = new Cell(1, 1).Add(new Paragraph($"*Dinamómetro: {datos.Cabecera.Dinamometro} \n* Soporte vertical : {datos.Cabecera.Soporte}")).AddStyle(estiloEquipo);
                 equipoTable.AddCell(equipoCell);
 
                 
@@ -510,22 +512,25 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
 
             #region conclusion
 
-            Paragraph seccionConlusion = new Paragraph("III. CONCLUSIÓN").SetFontSize(8).SetPadding(1).SetBackgroundColor(new DeviceRgb(255, 230, 153));
-            document.Add(seccionConlusion);
+            //Paragraph seccionConlusion = new Paragraph("III. CONCLUSIÓN").SetFontSize(8).SetPadding(1).SetBackgroundColor(new DeviceRgb(255, 230, 153));
+            //document.Add(seccionConlusion);
 
-            Table conclusionTable = new Table(new float[] { 33, 10, 33, 10, 14  }).SetWidth(UnitValue.CreatePercentValue(40))
-               .SetFixedLayout().SetHorizontalAlignment(HorizontalAlignment.CENTER);
+            Table conclusionTable = new Table(new float[] { 25, 15, 4, 18, 4, 36  }).SetWidth(UnitValue.CreatePercentValue(100))
+               .SetFixedLayout().SetHorizontalAlignment(HorizontalAlignment.CENTER).SetBackgroundColor(new DeviceRgb(255, 230, 153));
 
-            Cell conclusionCell = new Cell(1, 1).Add(new Paragraph("APROBADO:")).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetFont(fuenteNegrita).SetFontSize(7);
+            Cell conclusionCell = new Cell(1, 1).Add(new Paragraph("III. CONCLUSIÓN:")).SetTextAlignment(TextAlignment.LEFT).SetBorder(Border.NO_BORDER).SetFontSize(8);
             conclusionTable.AddCell(conclusionCell);
 
-            conclusionCell = new Cell(1, 1).Add(new Paragraph(datos.Cabecera.Conclusion == "A" ? "X" : "")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(7);
+            conclusionCell = new Cell(1, 1).Add(new Paragraph("APROBADO:")).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetFont(fuenteNegrita).SetFontSize(7);
+            conclusionTable.AddCell(conclusionCell);
+
+            conclusionCell = new Cell(1, 1).Add(new Paragraph(datos.Cabecera.Conclusion == "A" ? "X" : "")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(8);
             conclusionTable.AddCell(conclusionCell);
 
             conclusionCell = new Cell(1, 1).Add(new Paragraph("RECHAZADO:")).SetTextAlignment(TextAlignment.RIGHT).SetFont(fuenteNegrita).SetFontSize(7).SetBorder(Border.NO_BORDER);
             conclusionTable.AddCell(conclusionCell);
 
-            conclusionCell = new Cell(1, 1).Add(new Paragraph(datos.Cabecera.Conclusion == "R" ? "X" : "")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(7);
+            conclusionCell = new Cell(1, 1).Add(new Paragraph(datos.Cabecera.Conclusion == "R" ? "X" : "")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(8);
             conclusionTable.AddCell(conclusionCell);
 
             conclusionCell = new Cell(1, 1).Add(new Paragraph("")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(6).SetBorder(Border.NO_BORDER);
@@ -536,22 +541,22 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
 
             #region firma
 
-            string rutaFirmaLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloLiliaHurtadoDias.jpg");
-            string rutaFirmaVanessa = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloVanessaAstoquilca.jpg");
+            string rutaSelloLilia = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloLilia_JefeCC.jpg");
+            string rutaSelloFavio = System.IO.Path.GetFullPath(Directory.GetCurrentDirectory() + "\\images\\SelloFavio_AnalistaCC.jpg");
 
             Table firmaTable = new Table(new float[] { 50, 50 }).SetWidth(UnitValue.CreatePercentValue(100)).SetFixedLayout().SetMarginTop(10);
 
-            Image img = new Image(ImageDataFactory
-               .Create(rutaFirmaLilia))
-               .SetWidth(105)
-               .SetHeight(65)
+            Image imgLilia = new Image(ImageDataFactory
+               .Create(rutaSelloLilia))
+               .SetWidth(120)
+               .SetHeight(57)
                .SetMarginBottom(0)
                .SetPadding(0)
                .SetMarginLeft(50)
                .SetTextAlignment(TextAlignment.LEFT);
 
-            Image imgVanessa = new Image(ImageDataFactory
-               .Create(rutaFirmaVanessa))
+            Image imgFabio = new Image(ImageDataFactory
+               .Create(rutaSelloFavio))
                .SetWidth(120)
                .SetHeight(52)
                .SetMarginBottom(0)
@@ -560,11 +565,11 @@ namespace SatelliteCore.Api.ReportServices.Contracts.AnalisisMateriaPrima.Hebra
                .SetTextAlignment(TextAlignment.LEFT);
 
 
-            Cell firmaCell = new Cell(1, 1).Add(imgVanessa).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            Cell firmaCell = new Cell(1, 1).Add(imgFabio).SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetBorder(Border.NO_BORDER);
             firmaTable.AddCell(firmaCell);
 
-            firmaCell = new Cell(1, 1).Add(img).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+            firmaCell = new Cell(1, 1).Add(imgLilia).SetHorizontalAlignment(HorizontalAlignment.CENTER)
                 .SetBorder(Border.NO_BORDER);
             firmaTable.AddCell(firmaCell);
 

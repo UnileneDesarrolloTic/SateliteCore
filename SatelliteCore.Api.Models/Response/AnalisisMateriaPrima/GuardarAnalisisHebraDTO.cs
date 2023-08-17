@@ -8,7 +8,6 @@ namespace SatelliteCore.Api.Models.Response.AnalisisMateriaPrima
         public TBMAnalisisHebraEntity Cabecera { get; set; }
         public List<TBDAnalisisHebraEntity> Detalle { get; set; }
 
-
         public string Item { get; set; }
         public string NumeroLote { get; set; }
         public string NumeroDeParte { get; set; }

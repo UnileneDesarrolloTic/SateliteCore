@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SatelliteCore.Api.CrossCutting.Helpers;
 using SatelliteCore.Api.Models.Config;
 using SatelliteCore.Api.Models.Response;
 using SatelliteCore.Api.Models.Response.AnalisisMateriaPrima;
